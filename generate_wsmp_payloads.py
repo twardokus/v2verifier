@@ -75,7 +75,30 @@ def generatePayloadBytes():
     #headerByteString = "".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
     headerByteString = "\\x" + headerByteString
 
-    payloadByteString = "030000"
+    payloadByteString = ""
+
+    # IEEE 1609.2 Header
+    
+    # Version
+    payloadByteString += "03"
+
+    # ContentType (unsecured data = 00, signed data = 01)
+    payloadByteString += "01"
+
+    payloadByteString += "00"
+
+    # Unsigned data
+
+    # HashID (SHA-256 -> 00)
+    payloadByteString += "00"
+
+    # Payload
+    payloadByteString += "00"
+
+
+    payloadByteString += "000000"
+
+    #payloadByteString = "030000"
 
     payloadByteString = "\\x".join(payloadByteString[i:i+2] for i in range(0, len(payloadByteString), 2))
     payloadByteString = "\\x" + payloadByteString
