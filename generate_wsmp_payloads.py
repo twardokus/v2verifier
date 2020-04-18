@@ -58,9 +58,9 @@ def generatePayloadBytes():
     #llc_control = "03"
     headerByteString += "03"
     #llc_org_code = "000000"
-    headerByteString += "000000"
+    headerByteString += "00\\x00\\x00"
     #llc_type = "88dc"
-    headerByteString += "88dc"
+    headerByteString += "88\\xdc"
     #wsmp_n_subtype_opt_version = "03"
     headerByteString += "03"
     #wsmp_n_tpid = "00"
@@ -70,12 +70,10 @@ def generatePayloadBytes():
     #wsmp_t_length = "00"
     headerByteString += "00"    
 
-    #headerByteString = "\\x".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
+    headerByteString = "\\x".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
     
-    headerByteString = "".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
-    #headerByteString = "\\x" + headerByteString
-    #headerByteString = "\\x" + headerByteString
-    #print headerByteString
+    #headerByteString = "".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
+    headerByteString = "\\x" + headerByteString
 
     payloadByteString = ""
 
