@@ -45,7 +45,7 @@ def printTraces(traces):
         for item in vehicle:
             print(item)
             
-def generatePayloadBytes(x,y):
+def generatePayloadBytes():
     
     # Header fields individually set for easy configuration changes
     headerByteString = ""
@@ -82,7 +82,7 @@ def generatePayloadBytes(x,y):
 
     return pduPayload
 
-def buildPacketQueue(traces):
+def writeVehicleTraces(traces):
     
     outfiles = [
     os.getcwd() + "/v0path",
@@ -107,12 +107,12 @@ def sendPacketStream(vehicleNo):
         print "Error - invalid vehicle number. Must be between 0 and 5. Exiting"
         exit()
     for i in range(0,500):
-        os.system("echo -n -e $(cat v0path) | nc -w1 -u localhost 52001")
-        sleep(1)
+        os.system("echo -n -e " + generatePayloadBytes() + " | nc -w1 -u localhost 52001")
+        time.sleep(2)
+
 
 # Execution hook
 if __name__ == "__main__":
     traces = loadTraces()
-#    print(traces[0])
-#    exit()
-    buildPacketQueue(traces)
+    #writeVehicleTraces(traces)
+    sendPacketStream(0)
