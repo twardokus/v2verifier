@@ -87,18 +87,24 @@ def generatePayloadBytes():
 
     payloadByteString += "00"
 
-    # Unsigned data
-
+    # Signed data
     # HashID (SHA-256 -> 00)
     payloadByteString += "00"
 
-    # Payload
+    # tbsData
+    # payload
+    payloadByteString += "00"
+    # headerInfo
+    # PSID
     payloadByteString += "00"
 
+    # Signer
+    payloadByteString += "03"
 
-    payloadByteString += "000000"
+    # Signature
 
-    #payloadByteString = "030000"
+
+
 
     payloadByteString = "\\x".join(payloadByteString[i:i+2] for i in range(0, len(payloadByteString), 2))
     payloadByteString = "\\x" + payloadByteString
