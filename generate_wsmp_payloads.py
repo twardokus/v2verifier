@@ -66,7 +66,7 @@ def generatePayloadBytes():
     #wsmp_n_tpid = "00"
     headerByteString += "00"
     #wsmp_t_headerLengthAndPSID = "00"
-    headerByteString += "00"
+    headerByteString += "20"
     #wsmp_t_length = "00"
     headerByteString += "00"    
 
@@ -75,7 +75,10 @@ def generatePayloadBytes():
     #headerByteString = "".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
     headerByteString = "\\x" + headerByteString
 
-    payloadByteString = ""
+    payloadByteString = "030000"
+
+    payloadByteString = "\\x".join(payloadByteString[i:i+2] for i in range(0, len(payloadByteString), 2))
+    payloadByteString = "\\x" + payloadByteString
 
     pduPayload = headerByteString + payloadByteString
 
