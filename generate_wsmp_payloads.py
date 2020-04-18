@@ -3,6 +3,7 @@
 # Imports
 import os
 import csv
+import time
 from collections import OrderedDict
 
 # Constants
@@ -44,7 +45,7 @@ def printTraces(traces):
         for item in vehicle:
             print(item)
             
-def generatePayloadBytes():
+def generatePayloadBytes(x,y):
     
     # Header fields individually set for easy configuration changes
     headerByteString = ""
@@ -73,10 +74,45 @@ def generatePayloadBytes():
     headerByteString = "".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
     #headerByteString = "\\x" + headerByteString
     #headerByteString = "\\x" + headerByteString
-    print headerByteString
+    #print headerByteString
+
+    payloadByteString = ""
+
+    pduPayload = headerByteString + payloadByteString
+
+    return pduPayload
+
+def buildPacketQueue(traces):
+    
+    outfiles = [
+    os.getcwd() + "/v0path",
+    os.getcwd() + "/v1path",
+    os.getcwd() + "/v2path",
+    os.getcwd() + "/v3path",
+    os.getcwd() + "/v4path",
+    os.getcwd() + "/v5path"
+    ]
+
+    for vehicle in range (0,6):
+        with open(outfiles[vehicle], 'w') as outfile:
+            for trace in traces:
+                for position in trace:
+                   if position[0] == str(vehicle):
+                       print position[0]
+                       outfile.write(str(position[2]) + "," + str(position[3]) + "\n")
+            outfile.close()
+
+def sendPacketStream(vehicleNo):
+    if vehicleNo < 0 or vehicleNo > 5:
+        print "Error - invalid vehicle number. Must be between 0 and 5. Exiting"
+        exit()
+    for i in range(0,500):
+        os.system("echo -n -e $(cat v0path) | nc -w1 -u localhost 52001")
+        sleep(1)
 
 # Execution hook
 if __name__ == "__main__":
     traces = loadTraces()
-    generatePayloadBytes()
-    ##printTraces(traces)
+#    print(traces[0])
+#    exit()
+    buildPacketQueue(traces)
