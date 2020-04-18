@@ -107,7 +107,7 @@ def sendPacketStream(vehicleNo):
         print "Error - invalid vehicle number. Must be between 0 and 5. Exiting"
         exit()
     for i in range(0,500):
-        os.system("echo -n -e " + generatePayloadBytes() + " | nc -w1 -u localhost 52001")
+        os.system("echo -e " + generatePayloadBytes() + " | nc -w1 -u localhost 52001")
         time.sleep(2)
 
 
