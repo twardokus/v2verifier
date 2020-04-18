@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Wifi Tx
-# Generated: Sat Apr 18 12:46:27 2020
+# Generated: Sat Apr 18 12:53:07 2020
 ##################################################
 
 if __name__ == '__main__':
@@ -67,7 +67,7 @@ class wifi_tx(gr.top_block, Qt.QWidget):
         ##################################################
         # Variables
         ##################################################
-        self.tx_gain = tx_gain = 0.9
+        self.tx_gain = tx_gain = 0.97
         self.samp_rate = samp_rate = 10e6
         self.pdu_length = pdu_length = 500
         self.out_buf_size = out_buf_size = 96000
@@ -79,7 +79,7 @@ class wifi_tx(gr.top_block, Qt.QWidget):
         ##################################################
         # Blocks
         ##################################################
-        self._tx_gain_range = Range(0, 1, 0.01, 0.9, 200)
+        self._tx_gain_range = Range(0, 1, 0.01, 0.97, 200)
         self._tx_gain_win = RangeWidget(self._tx_gain_range, self.set_tx_gain, "tx_gain", "counter_slider", float)
         self.top_grid_layout.addWidget(self._tx_gain_win)
         self._samp_rate_options = [1e6, 5e6, 10e6, 20e6]
