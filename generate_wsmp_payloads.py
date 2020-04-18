@@ -43,8 +43,29 @@ def printTraces(traces):
         for item in vehicle:
             print(item)
             
+def generatePayloadBytes():
+    
+    headerFields = {
+    "llc_dsap":"aa",
+    "llc_ssap":"aa",
+    "llc_control":"03",
+    "llc_org_code":"00\\x00\\x00",
+    "llc_type":"88\\xdc",
+    "wsmp_n_subtype_opt_version":"03",
+    "wsmp_n_tpid":"00",
+    "wsmp_t_headerLengthAndPSID":"00",
+    "wsmp_t_length":"00"
+    }
+
+    headerByteString = ""
+
+    for field in headerFields:
+        headerByteString += "\\x" + headerFields[field]
+
+    print headerByteString
 
 # Execution hook
 if __name__ == "__main__":
     traces = loadTraces()
-    printTraces(traces)
+    generatePayloadBytes()
+    #printTraces(traces)
