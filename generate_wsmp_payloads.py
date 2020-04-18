@@ -68,8 +68,11 @@ def generatePayloadBytes():
     #wsmp_t_length = "00"
     headerByteString += "00"    
 
-    headerByteString = "\\x".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
-    headerByteString = "\\x" + headerByteString
+    #headerByteString = "\\x".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
+    
+    headerByteString = "".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
+    #headerByteString = "\\x" + headerByteString
+    #headerByteString = "\\x" + headerByteString
     print headerByteString
 
 # Execution hook
