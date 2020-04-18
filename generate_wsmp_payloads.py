@@ -3,6 +3,7 @@
 # Imports
 import os
 import csv
+from collections import OrderedDict
 
 # Constants
 pathToDataFile = os.getcwd() + "/traces.txt"
@@ -45,27 +46,34 @@ def printTraces(traces):
             
 def generatePayloadBytes():
     
-    headerFields = {
-    "llc_dsap":"aa",
-    "llc_ssap":"aa",
-    "llc_control":"03",
-    "llc_org_code":"00\\x00\\x00",
-    "llc_type":"88\\xdc",
-    "wsmp_n_subtype_opt_version":"03",
-    "wsmp_n_tpid":"00",
-    "wsmp_t_headerLengthAndPSID":"00",
-    "wsmp_t_length":"00"
-    }
-
+    # Header fields individually set for easy configuration changes
     headerByteString = ""
 
-    for field in headerFields:
-        headerByteString += "\\x" + headerFields[field]
+    # llc_dsap
+    headerByteString += "aa"
+    #llc_ssap = "aa"
+    headerByteString += "aa"
+    #llc_control = "03"
+    headerByteString += "03"
+    #llc_org_code = "000000"
+    headerByteString += "000000"
+    #llc_type = "88dc"
+    headerByteString += "88dc"
+    #wsmp_n_subtype_opt_version = "03"
+    headerByteString += "03"
+    #wsmp_n_tpid = "00"
+    headerByteString += "00"
+    #wsmp_t_headerLengthAndPSID = "00"
+    headerByteString += "00"
+    #wsmp_t_length = "00"
+    headerByteString += "00"    
 
+    headerByteString = "\\x".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
+    headerByteString = "\\x" + headerByteString
     print headerByteString
 
 # Execution hook
 if __name__ == "__main__":
     traces = loadTraces()
     generatePayloadBytes()
-    #printTraces(traces)
+    ##printTraces(traces)
