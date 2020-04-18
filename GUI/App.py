@@ -12,12 +12,14 @@ except ImportError:
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
 root.state("zoomed")  # makes full screen
+
 topFrame = Frame(root, width=1400, height=800)  # Added "container" Frame.
-topFrame.pack()  # side=RIGHT, fill=X, expand=1, anchor=N)
+topFrame.pack(side=tk.LEFT)  # side=RIGHT, fill=X, expand=1, anchor=N)
 # create the drawing canvas
 #canvas = tk.Canvas(root, width=900, height=800, bg='#25343F')
 canvas = tk.Canvas(topFrame, width=900, height=800, bg='#25343F')
 canvas.pack()
+
 # draw horizontal lines
 x1 = 0
 x2 = 900
@@ -32,5 +34,10 @@ for k in range(0, 900, 50):
     x1 = k
     x2 = k
     canvas.create_line(x1, y1, x2, y2, fill="#B8CAD6")
+
+textWidget = tk.Text(root, height=800, width=500)
+textWidget.pack(side=tk.RIGHT)
+textWidget.insert(tk.END, "Testing 123")
+
 
 root.mainloop()
