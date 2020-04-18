@@ -646,7 +646,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>0.75</value>
+      <value>0.97</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -699,53 +699,6 @@
     <param>
       <key>widget</key>
       <value>counter_slider</value>
-    </param>
-  </block>
-  <block>
-    <key>blocks_message_strobe</key>
-    <param>
-      <key>alias</key>
-      <value></value>
-    </param>
-    <param>
-      <key>comment</key>
-      <value></value>
-    </param>
-    <param>
-      <key>affinity</key>
-      <value></value>
-    </param>
-    <param>
-      <key>_enabled</key>
-      <value>True</value>
-    </param>
-    <param>
-      <key>_coordinate</key>
-      <value>(168, 164)</value>
-    </param>
-    <param>
-      <key>_rotation</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>id</key>
-      <value>blocks_message_strobe_0_0</value>
-    </param>
-    <param>
-      <key>maxoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>msg</key>
-      <value>pmt.intern("".join("x" for i in range(pdu_length)))</value>
-    </param>
-    <param>
-      <key>minoutbuf</key>
-      <value>0</value>
-    </param>
-    <param>
-      <key>period</key>
-      <value>interval</value>
     </param>
   </block>
   <block>
@@ -874,7 +827,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(232, 264)</value>
+      <value>(192, 196)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1905,12 +1858,6 @@
       <value>0.56</value>
     </param>
   </block>
-  <connection>
-    <source_block_id>blocks_message_strobe_0_0</source_block_id>
-    <sink_block_id>ieee802_11_mac_0</sink_block_id>
-    <source_key>strobe</source_key>
-    <sink_key>app in</sink_key>
-  </connection>
   <connection>
     <source_block_id>blocks_multiply_const_vxx_0</source_block_id>
     <sink_block_id>foo_packet_pad2_0</sink_block_id>
