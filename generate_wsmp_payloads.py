@@ -81,24 +81,58 @@ def generatePayloadBytes():
     # Protocol Version
     payloadByteString += "03"
 
-    # ContentType (unsecured data = 00, signed data = 01)
+    # ContentType ( signed data = 81)
     payloadByteString += "81"
 
+    # HashID (SHA256 = 00)
     payloadByteString += "00"
     
+    # Data
+    payloadByteString += "40"
 
+    # Protocol Version
+    payloadByteString += "03"
 
+    # Content - Unsecured Data
+    payloadByteString += "80"
 
+    # Length of Unsecured Data
+    payloadByteString += "0f"
+
+    # unsecuredData
+    payloadByteString += "5468697320697320612042534d0d0a"
+
+    # headerInfo
+    payloadByteString += "4001"
+
+    # PSID (BSM = 20)
+    payloadByteString += "20"
+
+    # generationTime (8 bytes)
+    payloadByteString += "1112131415161718"
+
+    # signer
+    payloadByteString += "80"
+
+    # Digest (8 bytes)
+    payloadByteString += "2122232425262728"
+
+    # signature (ecdsaNistP256Signature = 80)
+    payloadByteString += "80"
+
+    # ecdsaNistP256Signature (r: compressed-y-0 = 82)
+    payloadByteString += "82"
+
+    # compressed-y-0 (32 bytes)
+    payloadByteString += "3132333435363738313233343536373831323334353637383132333435363738"
+
+    # s (32 bytes)
+    payloadByteString += "4142434445464748414243444546474841424344454647484142434445464748"
 
     """
     # Sample valid payload from "Implementation of the WAVE 1609.2 Security Services Standard and Encountered Issues and Challenges", Mandy/Mahgoub IEEE paper
     payloadByteString += "4003800f5468697320697320612042534d0d0a4001201112131415161718802122232425262728808231323334353637383132333435363738313233343536373831323334353637384142434445464748414243444546474841424344454647484142434445464748"
     """
-
-    payloadByteString += "4003800f5468697320697320612042534d0d0a4001201112131415161718802122232425262728808231323334353637383132333435363738313233343536373831323334353637384142434445464748414243444546474841424344454647484142434445464748"
-
-
-
 
     payloadByteString = "\\x".join(payloadByteString[i:i+2] for i in range(0, len(payloadByteString), 2))
     payloadByteString = "\\x" + payloadByteString
