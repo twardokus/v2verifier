@@ -1,15 +1,8 @@
 from tkinter.ttk import Frame
 import tkinter as tk
 from PIL import Image
-import ImageTk
 from PIL import ImageTk
 
-# try:
-#     # Python2
-#     import Tkinter as tk
-# except ImportError:
-#     # Python3
-#     #import tkinter as tk
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
 root.state("zoomed")  # makes full screen
@@ -36,11 +29,11 @@ for k in range(0, 900, 50):
     canvas.create_line(x1, y1, x2, y2, fill="#B8CAD6")
 
 #  img = ImageTK.PhotoImage(Image.open("./pic/Car1.jpg"))
-img = ImageTk.PhotoImage(Image.open("./pic/Car1.png"))
+img = ImageTk.PhotoImage(Image.open("pic/Car1N.png"))
 #  load = Image.open("./pic/Car1.jpg")
 canvas.create_image(50, 50, image=img, anchor=tk.CENTER)
 
-Car2 = ImageTk.PhotoImage(Image.open("./pic/Car2.png"))
+Car2 = ImageTk.PhotoImage(Image.open("pic/Car3NE.png"))
 canvas.create_image(700, 450, image=Car2, anchor=tk.CENTER)
 
 #adds output panel on right
