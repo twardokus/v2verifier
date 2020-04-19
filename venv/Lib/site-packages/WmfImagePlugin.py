@@ -1,0 +1,1 @@
+from PIL.WmfImagePlugin import *

@@ -1,0 +1,10 @@
+Metadata-Version: 1.0
+Name: Pillow-PIL
+Version: 0.1.dev0
+Summary: Pillow wrapper for PIL compatibility
+Home-page: https://github.com/yinpeng/pillow-pil
+Author: Yin Peng
+Author-email: yinpeng99@gmail.com
+License: UNKNOWN
+Description: UNKNOWN
+Platform: UNKNOWN
