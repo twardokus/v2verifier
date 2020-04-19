@@ -86,7 +86,7 @@ def generatePayloadBytes():
     payloadByteString += "81"
 
     payloadByteString += "00"
-
+"""
     # Signed data
     # HashID (SHA-256 -> 00)
     payloadByteString += "00"
@@ -97,7 +97,8 @@ def generatePayloadBytes():
     # protocolVersion
     payloadByteString += "03"
 
-
+"""
+    payloadByteString += "4003800f5468697320697320612042534d0d0a4001201112131415161718802122232425262728808231323334353637383132333435363738313233343536373831323334353637384142434445464748414243444546474841424344454647484142434445464748"
 
 
     payloadByteString = "\\x".join(payloadByteString[i:i+2] for i in range(0, len(payloadByteString), 2))
