@@ -82,7 +82,7 @@ def generatePayloadBytes():
     payloadByteString += "03"
 
     # ContentType (unsecured data = 00, signed data = 01)
-    payloadByteString += "71"
+    payloadByteString += "81"
 
     payloadByteString += "00"
     
