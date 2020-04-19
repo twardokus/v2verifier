@@ -83,25 +83,19 @@ def generatePayloadBytes():
     payloadByteString += "03"
 
     # ContentType (unsecured data = 00, signed data = 01)
-    payloadByteString += "01"
+    payloadByteString += "81"
 
     payloadByteString += "00"
 
     # Signed data
     # HashID (SHA-256 -> 00)
     payloadByteString += "00"
-
+    
     # tbsData
     # payload
-    payloadByteString += "00"
-    # headerInfo
-    # PSID
-    payloadByteString += "00"
-
-    # Signer
+    # data
+    # protocolVersion
     payloadByteString += "03"
-
-    # Signature
 
 
 
