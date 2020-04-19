@@ -75,33 +75,29 @@ def generatePayloadBytes():
     #headerByteString = "".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
     headerByteString = "\\x" + headerByteString
 
+    # IEEE1609Dot2Data 
     payloadByteString = ""
-
-    # IEEE 1609.2 Header
-    
-    # Version
+        
+    # Protocol Version
     payloadByteString += "03"
 
     # ContentType (unsecured data = 00, signed data = 01)
-    payloadByteString += "81"
+    payloadByteString += "71"
 
     payloadByteString += "00"
     
-    """
-    # Signed data
-    # HashID (SHA-256 -> 00)
-    payloadByteString += "00"
-    
-    # tbsData
-    # payload
-    # data
-    # protocolVersion
-    payloadByteString += "03"
+
+
+
 
     """
-    
     # Sample valid payload from "Implementation of the WAVE 1609.2 Security Services Standard and Encountered Issues and Challenges", Mandy/Mahgoub IEEE paper
     payloadByteString += "4003800f5468697320697320612042534d0d0a4001201112131415161718802122232425262728808231323334353637383132333435363738313233343536373831323334353637384142434445464748414243444546474841424344454647484142434445464748"
+    """
+
+    payloadByteString += "4003800f5468697320697320612042534d0d0a4001201112131415161718802122232425262728808231323334353637383132333435363738313233343536373831323334353637384142434445464748414243444546474841424344454647484142434445464748"
+
+
 
 
     payloadByteString = "\\x".join(payloadByteString[i:i+2] for i in range(0, len(payloadByteString), 2))
