@@ -46,6 +46,21 @@ def whatPos(c, x, y):
         setPicCoord(c, c.name + "S.png", x, y)
 
 
+# adds to new car to dictionary if not been seen before
+# sends to whatPos function to update x, y and pic
+# modelled after trace file in mycourses
+def newPacket(carid, message, x, y):
+    if carid in carDict:
+        whatPos(carDict[carid], x, y)
+    else:
+        length = len(carDict) + 1
+        name = Car + str(length)
+        pic = name + "N.png"
+        c = Car(carid, name, x, y, pic)
+        whatPos(carDict[carid], x, y)
+
+
+
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
 root.state("zoomed")  # makes full screen
