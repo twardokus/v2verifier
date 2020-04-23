@@ -19,13 +19,6 @@ class Car:
 # key: Car ID, value: Car object
 carDict = {}
 
-# UDP_IP = "127.0.0.1"
-# UDP_PORT = 5005
-# sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-# sock.bind((UDP_IP, UDP_PORT))
-# while True:
-#     data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
-#     print ("received message:", data)
 
 
 # helper function for whatPos
@@ -56,25 +49,6 @@ def whatPos(c, x, y):
     else:
         setPicCoord(c, "pic/" + c.name + "S.png", x, y)
     return c
-
-
-# adds to new car to dictionary if not been seen before
-# sends to whatPos function to update x, y and pic
-# modelled after trace file in mycourses
-def newPacket(carid, message, x, y):
-    c = Car()
-    if carid in carDict:
-        canvas.delete(c.i)
-        c = whatPos(carDict[carid], x, y)
-        canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
-    else:
-        length = len(carDict) + 1
-        name = "Car" + str(length)
-        pic = name + "N.png"
-        c = Car(carid, "pic/" + name + "N.png", x, y, pic)
-        c.i = ImageTk.PhotoImage(Image.open(c.name))
-        canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
-
 
 
 
@@ -124,4 +98,33 @@ textWidget.insert(tk.END, "Car:2 message has authenticated\n", "orange")
 textWidget.insert(tk.END, "Car:2 is located at (700,450)\n", "orange")
 
 
+# adds to new car to dictionary if not been seen before
+# sends to whatPos function to update x, y and pic
+# modelled after trace file in mycourses
+def newPacket(carid, message, x, y):
+    c = Car()
+    if carid in carDict:
+        canvas.delete(c.i)
+        c = whatPos(carDict[carid], x, y)
+        canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
+        textWidget.insert(tk.END, "Car:" + carid + " is at location (" + x +"," + y + ")")
+    else:
+        length = len(carDict) + 1
+        name = "Car" + str(length)
+        pic = name + "N.png"
+        c = Car(carid, "pic/" + name + "N.png", x, y, pic)
+        c.i = ImageTk.PhotoImage(Image.open(c.name))
+        canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
+        textWidget.insert(tk.END, "Car:" + carid + " is at location (" + x + "," + y + ")")
+
+
 root.mainloop()
+
+
+UDP_IP = "127.0.0.1"
+UDP_PORT = 5005
+sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+sock.bind((UDP_IP, UDP_PORT))
+while True:
+    data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
+    print ("received message:", data)
