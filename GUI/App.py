@@ -3,19 +3,29 @@ import tkinter as tk
 from PIL import Image
 from PIL import ImageTk
 import time
+import socket
 
 
 class Car:
-    def __init__(self, CarID, name, x, y, pic):
+    def __init__(self, CarID, name, x, y, pic, i):
         self.CarID = CarID
         self.name = name
         self.x = x
         self.y = y
         self.pic = pic
+        self.i = i
 
 # used to determine if a new car has been added
 # key: Car ID, value: Car object
 carDict = {}
+
+# UDP_IP = "127.0.0.1"
+# UDP_PORT = 5005
+# sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# sock.bind((UDP_IP, UDP_PORT))
+# while True:
+#     data, addr = sock.recvfrom(1024) # buffer size is 1024 bytes
+#     print ("received message:", data)
 
 
 # helper function for whatPos
@@ -23,41 +33,48 @@ def setPicCoord(c, pic, x, y):
     c.pic = pic
     c.x = x
     c.y = y
+    c.i = ImageTk.PhotoImage(Image.open(c.name))
 
 
 # updates the coordinates and picture of the Car object
 # based on the direction it has moved.
 def whatPos(c, x, y):
     if c.x < x and c.y < y:
-        setPicCoord(c, c.name + "NE.png", x, y)
+        setPicCoord(c, "pic/" + c.name + "NE.png", x, y)
     elif c.x > x and c.y < y:
-        setPicCoord(c, c.name + "NW.png", x, y)
+        setPicCoord(c, "pic/" + c.name + "NW.png", x, y)
     elif c.x < x and c.y > y:
-        setPicCoord(c, c.name + "SE.png", x, y)
+        setPicCoord(c, "pic/" + c.name + "SE.png", x, y)
     elif c.x > x and c.y > y:
-        setPicCoord(c, c.name + "SW.png", x, y)
+        setPicCoord(c, "pic/" + c.name + "SW.png", x, y)
     elif c.x < x and c.y == y:
-        setPicCoord(c, c.name + "E.png", x, y)
+        setPicCoord(c, "pic/" + c.name + "E.png", x, y)
     elif c.x > x and c.y == y:
-        setPicCoord(c, c.name + "W.png", x, y)
+        setPicCoord(c, "pic/" + c.name + "W.png", x, y)
     elif c.x == x and c.y < y:
-        setPicCoord(c, c.name + "N.png", x, y)
+        setPicCoord(c, "pic/" + c.name + "N.png", x, y)
     else:
-        setPicCoord(c, c.name + "S.png", x, y)
+        setPicCoord(c, "pic/" + c.name + "S.png", x, y)
+    return c
 
 
 # adds to new car to dictionary if not been seen before
 # sends to whatPos function to update x, y and pic
 # modelled after trace file in mycourses
 def newPacket(carid, message, x, y):
+    c = Car()
     if carid in carDict:
-        whatPos(carDict[carid], x, y)
+        canvas.delete(c.i)
+        c = whatPos(carDict[carid], x, y)
+        canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
     else:
         length = len(carDict) + 1
-        name = Car + str(length)
+        name = "Car" + str(length)
         pic = name + "N.png"
-        c = Car(carid, name, x, y, pic)
-        whatPos(carDict[carid], x, y)
+        c = Car(carid, "pic/" + name + "N.png", x, y, pic)
+        c.i = ImageTk.PhotoImage(Image.open(c.name))
+        canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
+
 
 
 
