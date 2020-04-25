@@ -6,6 +6,9 @@ import csv
 import time
 from collections import OrderedDict
 import subprocess
+from fastecdsa import keys, ecdsa
+from fastecdsa.keys import import_key
+from hashlib import sha256
 
 # Constants
 pathToDataFile = os.getcwd() + "/traces.txt"
@@ -99,7 +102,8 @@ def generatePayloadBytes(vehicleDataString):
 
     # Length of Unsecured Data
     payloadByteString += "0"
-    payloadByteString += str(hex(len(vehicleDataString)).split("x")[1])
+    vehicleData = str(hex(len(vehicleDataString)).split("x")[1])
+    payloadByteString += vehicleData
 
     # unsecuredData
     payloadByteString += vehicleDataString.encode('hex')
@@ -125,11 +129,17 @@ def generatePayloadBytes(vehicleDataString):
     # ecdsaNistP256Signature (r: compressed-y-0 = 82)
     payloadByteString += "82"
 
+    private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")
+    r, s = ecdsa.sign(vehicleData, private, hashfunc=sha256)
+
     # compressed-y-0 (32 bytes)
-    payloadByteString += "3132333435363738313233343536373831323334353637383132333435363738"
+#   payloadByteString += "3132333435363738313233343536373831323334353637383132333435363738"
+    payloadByteString += str(r)
 
     # s (32 bytes)
-    payloadByteString += "4142434445464748414243444546474841424344454647484142434445464748"
+#   payloadByteString += "4142434445464748414243444546474841424344454647484142434445464748"
+    payloadByteString += str(s)
+
 
     #####################################################################
     
