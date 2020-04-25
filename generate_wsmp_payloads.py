@@ -141,6 +141,11 @@ def generatePayloadBytes(vehicleDataString):
     print str(r)
     print str(s)
 
+    r = hex(r)
+    s = hex(s)
+    r = r.split("x")[1][:len(r)-2]
+    s = s.split("x")[1][:len(s)-2]
+
     # compressed-y-0 (32 bytes)
 #   payloadByteString += "3132333435363738313233343536373831323334353637383132333435363738"
     payloadByteString += str(r)
