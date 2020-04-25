@@ -132,19 +132,20 @@ def generatePayloadBytes(vehicleDataString):
     # 82 -> compressed-y-0
     # 83 -> compressed-y-1
     # 84 -> uncompressed
-    payloadByteString += "84"
+    payloadByteString += "80"
 
     private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")
     r, s = ecdsa.sign(vehicleData, private, hashfunc=sha256)
     
-    #debug
-    print str(r)
-    print str(s)
+    
 
     r = hex(r)
     s = hex(s)
-    r = r.split("x")[1][:len(r)-2]
-    s = s.split("x")[1][:len(s)-2]
+    r = r.split("x")[1][:len(r)-3]
+    s = s.split("x")[1][:len(s)-3]
+
+    print(r)
+    print(s)
 
     # compressed-y-0 (32 bytes)
 #   payloadByteString += "3132333435363738313233343536373831323334353637383132333435363738"
