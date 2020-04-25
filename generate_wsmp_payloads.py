@@ -46,7 +46,7 @@ def printTraces(traces):
         for item in vehicle:
             print(item)
             
-def generatePayloadBytes():
+def generatePayloadBytes(vehicleDataString):
     
     # Header fields individually set for easy configuration changes
     headerByteString = ""
@@ -74,8 +74,9 @@ def generatePayloadBytes():
     
     #headerByteString = "".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
     headerByteString = "\\x" + headerByteString
-
-    # IEEE1609Dot2Data 
+    
+    ####################################################
+    # IEEE1609Dot2Data Structure
     payloadByteString = ""
         
     # Protocol Version
@@ -100,8 +101,8 @@ def generatePayloadBytes():
     payloadByteString += "0f"
 
     # unsecuredData
-    payloadByteString += "5468697320697320612042534d0d0a"
-
+    payloadByteString += vehicleDataString.encode('hex')
+    
     # headerInfo
     payloadByteString += "4001"
 
@@ -129,6 +130,8 @@ def generatePayloadBytes():
     # s (32 bytes)
     payloadByteString += "4142434445464748414243444546474841424344454647484142434445464748"
 
+    #####################################################################
+    
     """
     # Sample valid payload from "Implementation of the WAVE 1609.2 Security Services Standard and Encountered Issues and Challenges", Mandy/Mahgoub IEEE paper
     payloadByteString += "4003800f5468697320697320612042534d0d0a4001201112131415161718802122232425262728808231323334353637383132333435363738313233343536373831323334353637384142434445464748414243444546474841424344454647484142434445464748"
@@ -165,9 +168,10 @@ def sendPacketStream(vehicleNo):
     if vehicleNo < 0 or vehicleNo > 5:
         print "Error - invalid vehicle number. Must be between 0 and 5. Exiting"
         exit()
-    for i in range(0,500):
-        #os.system("echo -e " + generatePayloadBytes() + " | nc -w1 -u localhost 52001")
-        loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes()), stdout=subprocess.PIPE)
+    trace = open("v"+str(vehicleNo)+"path")
+    for i in range(0,400):
+        vehicleData = str(vehicleNo) + trace.readline()
+        loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes(vehicleData)), stdout=subprocess.PIPE)
         sender = subprocess.check_output(("nc","-w1","-u","localhost","52001"),stdin=loader.stdout)
         time.sleep(0.5)
 
