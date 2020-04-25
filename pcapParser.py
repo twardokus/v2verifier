@@ -33,12 +33,22 @@ def extractData(payload):
 
 	# split into r and s
 
-	r = signature[:65]
-	s = signature[64:]
+	r = signature[:64]
+        s = signature[64:128]
+        
+        #print r
+        #print s
+
+        #print str(int(r,16))
+        #print str(int(s,16))
+
 
 	# convert from string into ten-bit integer
 	r = int(r,16)
 	s = int(s,16)
+
+#        print hex(r)
+#        print hex(s)
 
 	r = int(str(r))
 	s = int(str(s))
@@ -50,8 +60,6 @@ def parsePcapFile(pcapPath):
    	packets = rdpcap(pcapPath)
 
 	return packets
-
-
 
 
 
