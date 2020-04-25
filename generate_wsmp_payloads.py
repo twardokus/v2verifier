@@ -98,7 +98,7 @@ def generatePayloadBytes(vehicleDataString):
     payloadByteString += "80"
 
     # Length of Unsecured Data
-    payloadByteString += "0f"
+    payloadByteString += len(vehicleDataString.encode('hex').encode('hex')
 
     # unsecuredData
     payloadByteString += vehicleDataString.encode('hex')
