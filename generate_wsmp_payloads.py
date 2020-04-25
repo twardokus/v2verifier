@@ -98,7 +98,8 @@ def generatePayloadBytes(vehicleDataString):
     payloadByteString += "80"
 
     # Length of Unsecured Data
-    payloadByteString += len(vehicleDataString.encode('hex').encode('hex')
+    payloadByteString += "0"
+    payloadByteString += str(hex(len(vehicleDataString)).split("x")[1])
 
     # unsecuredData
     payloadByteString += vehicleDataString.encode('hex')
@@ -170,7 +171,7 @@ def sendPacketStream(vehicleNo):
         exit()
     trace = open("v"+str(vehicleNo)+"path")
     for i in range(0,400):
-        vehicleData = str(vehicleNo) + trace.readline()
+        vehicleData = str(vehicleNo) + "," + trace.readline()
         loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes(vehicleData)), stdout=subprocess.PIPE)
         sender = subprocess.check_output(("nc","-w1","-u","localhost","52001"),stdin=loader.stdout)
         time.sleep(0.5)
