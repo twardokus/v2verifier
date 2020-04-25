@@ -137,6 +137,9 @@ def generatePayloadBytes(vehicleDataString):
     private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")
     r, s = ecdsa.sign(vehicleData, private, hashfunc=sha256)
     
+    print r
+    print s
+
     r = hex(r)
     s = hex(s)
     r = r.split("x")[1][:len(r)-3]
