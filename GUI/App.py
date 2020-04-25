@@ -3,7 +3,8 @@ import tkinter as tk
 from PIL import Image
 from PIL import ImageTk
 import time
-import socket
+from socket import AF_INET, socket, SOCK_STREAM
+from threading import Thread
 
 
 class Car:
@@ -19,6 +20,16 @@ class Car:
 # key: Car ID, value: Car object
 carDict = {}
 
+
+# https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
+def receive():
+    """Handles receiving of messages."""
+    while True:
+        try:
+            msg = client_socket.recv(BUFSIZ).decode("utf8")
+            msg.insert(tk.END, msg)
+        except OSError:  # Possibly disconnected?
+            break
 
 
 # helper function for whatPos
@@ -118,13 +129,33 @@ def newPacket(carid, message, x, y):
         textWidget.insert(tk.END, "Car:" + carid + " is at location (" + x + "," + y + ")")
 
 
+HOST = input('Enter host: ')
+PORT = input('Enter port: ')
+if not PORT:
+    PORT = 33000
+else:
+    PORT = int(PORT)
+
+BUFSIZ = 1024
+ADDR = (HOST, PORT)
+
+client_socket = socket(AF_INET, SOCK_STREAM)
+client_socket.connect(ADDR)
+
+receive_thread = Thread(target=receive)
+receive_thread.start()
+
+
 root.mainloop()
 
+#print ("test")
 
-UDP_IP = "127.0.0.1"
-UDP_PORT = 5005
-sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-sock.bind((UDP_IP, UDP_PORT))
-while True:
-    data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
-    print ("received message:", data)
+# UDP_IP = "127.0.0.1"
+# UDP_PORT = 5005
+# sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+# sock.bind((UDP_IP, UDP_PORT))
+# while True:
+#     data, addr = sock.recvfrom(1024)  # buffer size is 1024 bytes
+#     print("received message:", data)
+#
+
