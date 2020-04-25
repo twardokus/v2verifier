@@ -140,6 +140,9 @@ def generatePayloadBytes(vehicleDataString):
     print r
     print s
 
+    print str(int(r,16))
+    print str(int(s,16))
+
     r = hex(r)
     s = hex(s)
     r = r.split("x")[1][:len(r)-3]
