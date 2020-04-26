@@ -31,8 +31,6 @@ def extractData(payload):
 	# drop the two field identification bytes at the start of the block
 	signature = signature[4:]
     
-        print signature
-
 	# split into r and s
 
 	r = signature[:64]
