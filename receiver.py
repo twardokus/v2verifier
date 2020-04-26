@@ -15,22 +15,28 @@ pcapFileLocation = "/home/administrator/Desktop/out.pcap"
 # load the public key
 publicKey = keys.import_key("/home/administrator/v2v-capstone/keys/other_p256.pub",curve=curve.P256, public=True)
 
-def processPacket(payload):
+def processPacket(payload,s):
     data = extractData(payload)
     status = verifyMessage(data[1],data[2],data[0],publicKey)
     statusText = "valid" if status else "invalid"
 
     result = "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
 
-    s = socket.socket()
-    s.connect(('127.0.0.1',6666))
+    #s = socket.socket()
+    #s.connect(('127.0.0.1',6666))
+    
     s.send(result.encode())
-    s.close()
+    
+    #s.shutdown(socket.SHUT_RDWR)
+    #s.close()
 
+
+s = socket.socket()
+s.connect(('127.0.0.1',6666))
 
 
 #    print "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
 
-sniff(iface="lo", filter="udp and port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:]))
+sniff(iface="lo", filter="udp and port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:],s))
 
 
