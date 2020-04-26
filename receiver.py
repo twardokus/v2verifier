@@ -19,4 +19,6 @@ for packet in packets:
     payload = str(binascii.hexlify(packet[Raw].load))
     data = extractData(payload)
 
-    print verifyMessage(data[1],data[2],data[0],publicKey)
+    status = verifyMessage(data[1],data[2],data[0],publicKey)
+
+
