@@ -135,8 +135,16 @@ def generatePayloadBytes(vehicleDataString):
     payloadByteString += "80"
 
     private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")
-    r, s = ecdsa.sign(vehicleData, private, hashfunc=sha256)
-    
+
+    ############### DEBUG ####################
+    #print "Data going into signature:"
+    #print vehicleDataString.encode('hex')
+    #print ""
+
+    r, s = ecdsa.sign(vehicleDataString.encode('hex'), private, hashfunc=sha256)
+
+
+
 
     r = hex(r)
     s = hex(s)
