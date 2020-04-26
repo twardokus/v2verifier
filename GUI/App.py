@@ -65,7 +65,7 @@ def whatPos(c, x, y):
 
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
-root.state("zoomed")  # makes full screen
+#root.state("zoomed")  # makes full screen
 
 topFrame = Frame(root, width=1400, height=800)  # Added "container" Frame.
 topFrame.pack(side=tk.LEFT)
@@ -144,7 +144,6 @@ client_socket.connect(ADDR)
 
 receive_thread = Thread(target=receive)
 receive_thread.start()
-
 
 root.mainloop()
 
