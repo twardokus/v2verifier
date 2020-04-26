@@ -22,14 +22,14 @@ carDict = {}
 
 
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
-def receive():
-    """Handles receiving of messages."""
-    while True:
-        try:
-            msg = client_socket.recv(BUFSIZ).decode("utf8")
-            msg.insert(tk.END, msg)
-        except OSError:  # Possibly disconnected?
-            break
+# def receive():
+#     """Handles receiving of messages."""
+#     while True:
+#         try:
+#             msg = client_socket.recv(BUFSIZ).decode("utf8")
+#             msg.insert(tk.END, msg)
+#         except OSError:  # Possibly disconnected?
+#             break
 
 
 # helper function for whatPos
@@ -88,66 +88,53 @@ for k in range(0, 900, 50):
     x2 = k
     canvas.create_line(x1, y1, x2, y2, fill="#B8CAD6")
 
-#  img = ImageTK.PhotoImage(Image.open("./pic/Car1.jpg"))
-img = ImageTk.PhotoImage(Image.open("pic/Car1N.png"))
-#  load = Image.open("./pic/Car1.jpg")
-canvas.create_image(50, 50, image=img, anchor=tk.CENTER)
 
-Car2 = ImageTk.PhotoImage(Image.open("pic/Car3NE.png"))
-canvas.create_image(700, 450, image=Car2, anchor=tk.CENTER)
-
-#adds output panel on right
+# adds output panel on right
 textWidget = tk.Text(root, height=800, width=500, font=36)
 textWidget.pack(side=tk.RIGHT)
-
-textWidget.tag_configure("green", foreground="green")
-textWidget.insert(tk.END, "Car:1 message has authenticated\n", "green")
-textWidget.insert(tk.END, "Car:1 is located at (50,50)\n", "green")
-
-textWidget.tag_configure("orange", foreground="purple")
-textWidget.insert(tk.END, "Car:2 message has authenticated\n", "orange")
-textWidget.insert(tk.END, "Car:2 is located at (700,450)\n", "orange")
 
 
 # adds to new car to dictionary if not been seen before
 # sends to whatPos function to update x, y and pic
 # modelled after trace file in mycourses
 def newPacket(carid, message, x, y):
-    c = Car()
     if carid in carDict:
-        canvas.delete(c.i)
+        canvas.delete(carDict[carid].i)
         c = whatPos(carDict[carid], x, y)
         canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
-        textWidget.insert(tk.END, "Car:" + carid + " is at location (" + x +"," + y + ")")
+        textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
     else:
         length = len(carDict) + 1
         name = "Car" + str(length)
         pic = name + "N.png"
-        c = Car(carid, "pic/" + name + "N.png", x, y, pic)
-        c.i = ImageTk.PhotoImage(Image.open(c.name))
+        c = Car(carid, "pic/" + name + "N.png", x, y, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")))
+        carDict[carid] = c
         canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
-        textWidget.insert(tk.END, "Car:" + carid + " is at location (" + x + "," + y + ")")
+        textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
 
 
-HOST = input('Enter host: ')
-PORT = input('Enter port: ')
-if not PORT:
-    PORT = 33000
-else:
-    PORT = int(PORT)
+newPacket(1, "hello", 50, 40)
+newPacket(2, "hello2", 90, 100)
 
-BUFSIZ = 1024
-ADDR = (HOST, PORT)
-
-client_socket = socket(AF_INET, SOCK_STREAM)
-client_socket.connect(ADDR)
-
-receive_thread = Thread(target=receive)
-receive_thread.start()
+newPacket(1, "bye", 400, 500)
+newPacket(2, "bye2", 350, 200)
+# HOST = input('Enter host: ')
+# PORT = input('Enter port: ')
+# if not PORT:
+#     PORT = 33000
+# else:
+#     PORT = int(PORT)
+# BUFSIZ = 1024
+# ADDR = (HOST, PORT)
+#
+# client_socket = socket(AF_INET, SOCK_STREAM)
+# client_socket.connect(ADDR)
+#
+# receive_thread = Thread(target=receive)
+# receive_thread.start()
 
 root.mainloop()
 
-#print ("test")
 
 # UDP_IP = "127.0.0.1"
 # UDP_PORT = 5005
