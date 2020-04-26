@@ -26,12 +26,21 @@ def receive():
     """Handles receiving of messages."""
     while True:
         try:
-            print("Entered receive block")
+#            print("Entered receive block")
             msg = c.recv(BUFSIZ).decode()
-            print("Received data")
+            # msg "0,9999,9999"
+            # msg "0,9999,99990,9999,9999"
+            # msg "0,10000,10000"
+            if len(msg) > 15:
+                break
             print(msg)
-            #msg.insert(tk.END, msg)
-            print("Exiting try block")
+            print("Received data")
+            data = msg.split(",")
+            print(data[1])
+            print(data[2])
+            newPacket(int(data[0]),"",data[1],data[2])
+#textWidget.insert(tk.END, msg)
+#            print("Exiting try block")
         except Exception as e:
             print(type(e))
 
@@ -109,6 +118,24 @@ textWidget.pack(side=tk.RIGHT)
 # sends to whatPos function to update x, y and pic
 # modelled after trace file in mycourses
 def newPacket(carid, message, x, y):
+    
+    print("x and y into newPacket")
+    print(x)
+    print(y)
+    print("==============")
+
+    x = int(x)
+    y = int(y)
+
+#    print(str(x))
+#    print(str(y))
+
+    x = (x - 8500)/2
+    y = (y - 8000)/2
+
+#    print(str(x))
+#    print(str(y))
+
     print("Entered newPacket")
     if carid in carDict:
         canvas.delete(carDict[carid].i)
@@ -145,7 +172,7 @@ if not PORT:
 else:
     PORT = int(PORT)
 """
-BUFSIZ = 1024
+BUFSIZ = 105
 """
 ADDR = (HOST, PORT)
 
