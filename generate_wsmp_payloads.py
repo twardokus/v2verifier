@@ -6,6 +6,9 @@ import csv
 import time
 from collections import OrderedDict
 import subprocess
+from fastecdsa import keys, ecdsa
+from fastecdsa.keys import import_key
+from hashlib import sha256
 
 # Constants
 pathToDataFile = os.getcwd() + "/traces.txt"
@@ -46,7 +49,7 @@ def printTraces(traces):
         for item in vehicle:
             print(item)
             
-def generatePayloadBytes():
+def generatePayloadBytes(vehicleDataString):
     
     # Header fields individually set for easy configuration changes
     headerByteString = ""
@@ -74,8 +77,9 @@ def generatePayloadBytes():
     
     #headerByteString = "".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
     headerByteString = "\\x" + headerByteString
-
-    # IEEE1609Dot2Data 
+    
+    ####################################################
+    # IEEE1609Dot2Data Structure
     payloadByteString = ""
         
     # Protocol Version
@@ -97,11 +101,13 @@ def generatePayloadBytes():
     payloadByteString += "80"
 
     # Length of Unsecured Data
-    payloadByteString += "0f"
+    payloadByteString += "0"
+    vehicleData = str(hex(len(vehicleDataString)).split("x")[1])
+    payloadByteString += vehicleData
 
     # unsecuredData
-    payloadByteString += "5468697320697320612042534d0d0a"
-
+    payloadByteString += vehicleDataString.encode('hex')
+    
     # headerInfo
     payloadByteString += "4001"
 
@@ -121,14 +127,40 @@ def generatePayloadBytes():
     payloadByteString += "80"
 
     # ecdsaNistP256Signature (r: compressed-y-0 = 82)
-    payloadByteString += "82"
+    # 80 -> x-only
+    # 81 -> fill (NULL)
+    # 82 -> compressed-y-0
+    # 83 -> compressed-y-1
+    # 84 -> uncompressed
+    payloadByteString += "80"
 
-    # compressed-y-0 (32 bytes)
-    payloadByteString += "3132333435363738313233343536373831323334353637383132333435363738"
+    private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")
+
+    ############### DEBUG ####################
+    #print "Data going into signature:"
+    #print vehicleDataString.encode('hex')
+    #print ""
+
+    r, s = ecdsa.sign(vehicleDataString.encode('hex'), private, hashfunc=sha256)
+
+
+
+
+    r = hex(r)
+    s = hex(s)
+    
+    r = r.split("x")[1][:len(r)-3]
+    s = s.split("x")[1][:len(s)-3]
+
+    # r (32 bytes)
+    payloadByteString += str(r)
 
     # s (32 bytes)
-    payloadByteString += "4142434445464748414243444546474841424344454647484142434445464748"
+    payloadByteString += str(s)
 
+
+    #####################################################################
+    
     """
     # Sample valid payload from "Implementation of the WAVE 1609.2 Security Services Standard and Encountered Issues and Challenges", Mandy/Mahgoub IEEE paper
     payloadByteString += "4003800f5468697320697320612042534d0d0a4001201112131415161718802122232425262728808231323334353637383132333435363738313233343536373831323334353637384142434445464748414243444546474841424344454647484142434445464748"
@@ -165,9 +197,10 @@ def sendPacketStream(vehicleNo):
     if vehicleNo < 0 or vehicleNo > 5:
         print "Error - invalid vehicle number. Must be between 0 and 5. Exiting"
         exit()
-    for i in range(0,500):
-        #os.system("echo -e " + generatePayloadBytes() + " | nc -w1 -u localhost 52001")
-        loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes()), stdout=subprocess.PIPE)
+    trace = open("v"+str(vehicleNo)+"path")
+    for i in range(0,400):
+        vehicleData = str(vehicleNo) + "," + trace.readline()
+        loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes(vehicleData)), stdout=subprocess.PIPE)
         sender = subprocess.check_output(("nc","-w1","-u","localhost","52001"),stdin=loader.stdout)
         time.sleep(0.5)
 
