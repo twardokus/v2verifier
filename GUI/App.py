@@ -22,14 +22,14 @@ carDict = {}
 
 
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
-def receive():
-    """Handles receiving of messages."""
-    while True:
-        try:
-            msg = client_socket.recv(BUFSIZ).decode("utf8")
-            msg.insert(tk.END, msg)
-        except OSError:  # Possibly disconnected?
-            break
+# def receive():
+#     """Handles receiving of messages."""
+#     while True:
+#         try:
+#             msg = client_socket.recv(BUFSIZ).decode("utf8")
+#             msg.insert(tk.END, msg)
+#         except OSError:  # Possibly disconnected?
+#             break
 
 
 # helper function for whatPos
@@ -102,7 +102,7 @@ def newPacket(carid, message, x, y):
         canvas.delete(carDict[carid].i)
         c = whatPos(carDict[carid], x, y)
         canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
-        textWidget.insert(tk.END, "Car:" + carid + " is at location (" + x + "," + y + ")\n")
+        textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
     else:
         length = len(carDict) + 1
         name = "Car" + str(length)
@@ -115,20 +115,23 @@ def newPacket(carid, message, x, y):
 
 newPacket(1, "hello", 50, 40)
 newPacket(2, "hello2", 90, 100)
-HOST = input('Enter host: ')
-PORT = input('Enter port: ')
-if not PORT:
-    PORT = 33000
-else:
-    PORT = int(PORT)
-BUFSIZ = 1024
-ADDR = (HOST, PORT)
 
-client_socket = socket(AF_INET, SOCK_STREAM)
-client_socket.connect(ADDR)
-
-receive_thread = Thread(target=receive)
-receive_thread.start()
+newPacket(1, "bye", 400, 500)
+newPacket(2, "bye2", 350, 200)
+# HOST = input('Enter host: ')
+# PORT = input('Enter port: ')
+# if not PORT:
+#     PORT = 33000
+# else:
+#     PORT = int(PORT)
+# BUFSIZ = 1024
+# ADDR = (HOST, PORT)
+#
+# client_socket = socket(AF_INET, SOCK_STREAM)
+# client_socket.connect(ADDR)
+#
+# receive_thread = Thread(target=receive)
+# receive_thread.start()
 
 
 root.mainloop()
