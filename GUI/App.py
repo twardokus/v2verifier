@@ -26,14 +26,25 @@ def receive():
     """Handles receiving of messages."""
     while True:
         try:
-            msg = s.recv(BUFSIZ).decode("utf8")
-            msg.insert(tk.END, msg)
-        except OSError:  # Possibly disconnected?
-            break
+            print("Entered receive block")
+            msg = c.recv(BUFSIZ).decode()
+            print("Received data")
+            print(msg)
+            #msg.insert(tk.END, msg)
+            print("Exiting try block")
+        except Exception as e:
+            print(type(e))
+
+#        except OSError:  # Possibly disconnected?
+#            print("Hit EXCEPT block - possible OSError")
+#        finally:
+#            print("Error!! in finally block of receive()")
+#            exit(1)
 
 
 # helper function for whatPos
 def setPicCoord(c, pic, x, y):
+    print("Entered setPicCoord")
     c.pic = pic
     c.x = x
     c.y = y
@@ -43,6 +54,7 @@ def setPicCoord(c, pic, x, y):
 # updates the coordinates and picture of the Car object
 # based on the direction it has moved.
 def whatPos(c, x, y):
+    print("Entered whatPos")
     if c.x < x and c.y < y:
         setPicCoord(c, "pic/" + c.name + "NE.png", x, y)
     elif c.x > x and c.y < y:
@@ -61,12 +73,10 @@ def whatPos(c, x, y):
         setPicCoord(c, "pic/" + c.name + "S.png", x, y)
     return c
 
-
-
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
 #root.state("zoomed")  # makes full screen
-
+print("Line 75")
 topFrame = Frame(root, width=1400, height=800)  # Added "container" Frame.
 topFrame.pack(side=tk.LEFT)
 # create the drawing canvas
@@ -80,6 +90,7 @@ for k in range(0, 800, 50):
     y1 = k
     y2 = k
     canvas.create_line(x1, y1, x2, y2, fill="#B8CAD6")
+
 # draw vertical lines
 y1 = 0
 y2 = 800
@@ -98,6 +109,7 @@ textWidget.pack(side=tk.RIGHT)
 # sends to whatPos function to update x, y and pic
 # modelled after trace file in mycourses
 def newPacket(carid, message, x, y):
+    print("Entered newPacket")
     if carid in carDict:
         canvas.delete(carDict[carid].i)
         c = whatPos(carDict[carid], x, y)
@@ -112,12 +124,12 @@ def newPacket(carid, message, x, y):
         canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
 
-
 s = socket()
 port = 6666
 s.bind(('127.0.0.1',port))
-s.listen(0)
+s.listen(4)
 c, addr = s.accept()
+
 
 """
 newPacket(1, "hello", 50, 40)
@@ -145,7 +157,6 @@ receive_thread = Thread(target=receive)
 receive_thread.start()
 
 root.mainloop()
-
 
 # UDP_IP = "127.0.0.1"
 # UDP_PORT = 5005
