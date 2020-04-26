@@ -19,17 +19,15 @@ def processPacket(payload):
     data = extractData(payload)
     status = verifyMessage(data[1],data[2],data[0],publicKey)
     statusText = "valid" if status else "invalid"
-    
-    serversocket = socket.socket(AF_INET, SOCK_STREAM)
 
-    host = "127.0.0.1"
-    port = "6666"
-
-    serversocket.bind((host, port))
-    
     result = "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
 
-    serversocket.send(result)
+    s = socket.socket()
+    s.connect(('127.0.0.1',6666))
+    s.send(result.encode())
+    s.close()
+
+
 
 #    print "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
 

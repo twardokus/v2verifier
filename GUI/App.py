@@ -26,7 +26,7 @@ def receive():
     """Handles receiving of messages."""
     while True:
         try:
-            msg = client_socket.recv(BUFSIZ).decode("utf8")
+            msg = s.recv(BUFSIZ).decode("utf8")
             msg.insert(tk.END, msg)
         except OSError:  # Possibly disconnected?
             break
@@ -113,22 +113,33 @@ def newPacket(carid, message, x, y):
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
 
 
+s = socket()
+port = 6666
+s.bind(('127.0.0.1',port))
+s.listen(0)
+c, addr = s.accept()
+
+"""
 newPacket(1, "hello", 50, 40)
 newPacket(2, "hello2", 90, 100)
 
 newPacket(1, "bye", 400, 500)
 newPacket(2, "bye2", 350, 200)
+
 HOST = '127.0.0.1'
 PORT = 6666
 if not PORT:
     PORT = 33000
 else:
     PORT = int(PORT)
+"""
 BUFSIZ = 1024
+"""
 ADDR = (HOST, PORT)
 
 client_socket = socket(AF_INET, SOCK_STREAM)
 client_socket.connect(ADDR)
+"""
 
 receive_thread = Thread(target=receive)
 receive_thread.start()
