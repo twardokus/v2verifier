@@ -16,14 +16,8 @@ def processPacket(payload):
     #payload = str(binascii.hexlify(packet[Raw].load))
     data = extractData(payload)
     status = verifyMessage(data[1],data[2],data[0],publicKey)
+    statusText = "valid" if status else "invalid"
+    print "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
 
-    print "Message " + data[0].decode('hex').replace("\n","") + "\" is " + "valid" if status else "invalid"
+sniff(iface="lo", filter="udp and not icmp and port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:]))
 
-sniff(iface="lo", filter="udp and port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:]))
-
-
-"""
-print "Listening for traffic on port 4444"
-
-sniff(iface="lo", filter="udp and port 4444", prn=lambda x: processPacket(x))
-"""
