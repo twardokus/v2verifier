@@ -32,12 +32,12 @@ def receive():
             # msg "0,9999,99990,9999,9999"
             # msg "0,10000,10000"
             if len(msg) > 15:
-                break
-            print(msg)
-            print("Received data")
+                continue
+            #print(msg)
+            #print("Received data")
             data = msg.split(",")
-            print(data[1])
-            print(data[2])
+            #print(data[1])
+            #print(data[2])
             newPacket(int(data[0]),"",data[1],data[2])
 #textWidget.insert(tk.END, msg)
 #            print("Exiting try block")
@@ -133,8 +133,8 @@ def newPacket(carid, message, x, y):
     x = (x - 8500)/2
     y = (y - 8000)/2
 
-#    print(str(x))
-#    print(str(y))
+    print(str(x))
+    print(str(y))
 
     print("Entered newPacket")
     if carid in carDict:
@@ -148,7 +148,7 @@ def newPacket(carid, message, x, y):
         pic = name + "N.png"
         c = Car(carid, "pic/" + name + "N.png", x, y, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")))
         carDict[carid] = c
-        canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
+        canvas.create_image(carDict[carID].x, carDict[carID].y, image=carDict[carID].i, anchor=tk.CENTER)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
 
 s = socket()

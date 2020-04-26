@@ -21,11 +21,23 @@ def processPacket(payload,s):
     statusText = "valid" if status else "invalid"
 
     result = "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
+    
 
+
+    vehicleData = data[0].decode('hex').replace("\n","")
+#    print vehicleData
+
+#    fields = vehicleData.split(",")
+
+#    print(fields)
+
+#    result = carID, mssafge, x, y
+#    fields = data[0].split(",")
+    
     #s = socket.socket()
     #s.connect(('127.0.0.1',6666))
     
-    s.send(result.encode())
+    s.send(vehicleData.encode())
     
     #s.shutdown(socket.SHUT_RDWR)
     #s.close()
