@@ -22,14 +22,14 @@ carDict = {}
 
 
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
-# def receive():
-#     """Handles receiving of messages."""
-#     while True:
-#         try:
-#             msg = client_socket.recv(BUFSIZ).decode("utf8")
-#             msg.insert(tk.END, msg)
-#         except OSError:  # Possibly disconnected?
-#             break
+def receive():
+    """Handles receiving of messages."""
+    while True:
+        try:
+            msg = client_socket.recv(BUFSIZ).decode("utf8")
+            msg.insert(tk.END, msg)
+        except OSError:  # Possibly disconnected?
+            break
 
 
 # helper function for whatPos
@@ -118,20 +118,20 @@ newPacket(2, "hello2", 90, 100)
 
 newPacket(1, "bye", 400, 500)
 newPacket(2, "bye2", 350, 200)
-# HOST = input('Enter host: ')
-# PORT = input('Enter port: ')
-# if not PORT:
-#     PORT = 33000
-# else:
-#     PORT = int(PORT)
-# BUFSIZ = 1024
-# ADDR = (HOST, PORT)
-#
-# client_socket = socket(AF_INET, SOCK_STREAM)
-# client_socket.connect(ADDR)
-#
-# receive_thread = Thread(target=receive)
-# receive_thread.start()
+HOST = '127.0.0.1'
+PORT = 6666
+if not PORT:
+    PORT = 33000
+else:
+    PORT = int(PORT)
+BUFSIZ = 1024
+ADDR = (HOST, PORT)
+
+client_socket = socket(AF_INET, SOCK_STREAM)
+client_socket.connect(ADDR)
+
+receive_thread = Thread(target=receive)
+receive_thread.start()
 
 
 root.mainloop()
