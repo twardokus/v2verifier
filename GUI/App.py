@@ -54,10 +54,10 @@ def receive():
 # helper function for whatPos
 def setPicCoord(c, pic, x, y):
     print("Entered setPicCoord")
-    c.pic = pic
-    c.x = x
-    c.y = y
-    c.i = ImageTk.PhotoImage(Image.open(c.name))
+    carDict[c].pic = pic
+    carDict[c].x = x
+    carDict[c].y = y
+    carDict[c].i = ImageTk.PhotoImage(Image.open(c.name))
 
 
 # updates the coordinates and picture of the Car object
@@ -65,22 +65,22 @@ def setPicCoord(c, pic, x, y):
 def whatPos(c, x, y):
     print("Entered whatPos")
     if c.x < x and c.y < y:
-        setPicCoord(c, "pic/" + c.name + "NE.png", x, y)
+        setPicCoord(c, "pic/" + carDict[c].name + "NE.png", x, y)
     elif c.x > x and c.y < y:
-        setPicCoord(c, "pic/" + c.name + "NW.png", x, y)
+        setPicCoord(c, "pic/" + carDict[c].name + "NW.png", x, y)
     elif c.x < x and c.y > y:
-        setPicCoord(c, "pic/" + c.name + "SE.png", x, y)
+        setPicCoord(c, "pic/" + carDict[c].name + "SE.png", x, y)
     elif c.x > x and c.y > y:
-        setPicCoord(c, "pic/" + c.name + "SW.png", x, y)
+        setPicCoord(c, "pic/" + carDict[c].name + "SW.png", x, y)
     elif c.x < x and c.y == y:
-        setPicCoord(c, "pic/" + c.name + "E.png", x, y)
+        setPicCoord(c, "pic/" + carDict[c].name + "E.png", x, y)
     elif c.x > x and c.y == y:
-        setPicCoord(c, "pic/" + c.name + "W.png", x, y)
+        setPicCoord(c, "pic/" + carDict[c].name + "W.png", x, y)
     elif c.x == x and c.y < y:
-        setPicCoord(c, "pic/" + c.name + "N.png", x, y)
+        setPicCoord(c, "pic/" + carDict[c].name + "N.png", x, y)
     else:
-        setPicCoord(c, "pic/" + c.name + "S.png", x, y)
-    return c
+        setPicCoord(c, "pic/" + carDict[c].name + "S.png", x, y)
+
 
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
@@ -111,6 +111,7 @@ for k in range(0, 900, 50):
 
 # adds output panel on right
 textWidget = tk.Text(root, height=800, width=500, font=36)
+textWidget.yview_pickplace("end")
 textWidget.pack(side=tk.RIGHT)
 
 
@@ -139,8 +140,8 @@ def newPacket(carid, message, x, y):
     print("Entered newPacket")
     if carid in carDict:
         canvas.delete(carDict[carid].i)
-        c = whatPos(carDict[carid], x, y)
-        canvas.create_image(c.x, c.y, image=c.i, anchor=tk.CENTER)
+        whatPos(carid, x, y)
+        canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
     else:
         length = len(carDict) + 1
@@ -148,7 +149,7 @@ def newPacket(carid, message, x, y):
         pic = name + "N.png"
         c = Car(carid, "pic/" + name + "N.png", x, y, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")))
         carDict[carid] = c
-        canvas.create_image(carDict[carID].x, carDict[carID].y, image=carDict[carID].i, anchor=tk.CENTER)
+        canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
 
 s = socket()
