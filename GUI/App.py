@@ -20,7 +20,7 @@ class Car:
 # key: Car ID, value: Car object
 carDict = {}
 
-
+'''
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 def receive():
     """Handles receiving of messages."""
@@ -49,6 +49,8 @@ def receive():
 #        finally:
 #            print("Error!! in finally block of receive()")
 #            exit(1)
+
+'''
 
 
 # helper function for whatPos
@@ -110,7 +112,6 @@ for k in range(0, 900, 50):
 
 # adds output panel on right
 textWidget = tk.Text(root, height=800, width=500, font=36)
-textWidget.yview_pickplace("end")
 textWidget.pack(side=tk.RIGHT)
 
 
@@ -134,6 +135,7 @@ def newPacket(carid, message, x, y):
         canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
         print("image: " + carDict[carid].name)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
+        textWidget.see(tk.END)
     else:
         length = len(carDict) + 1
         name = "Car" + str(length)
@@ -142,8 +144,9 @@ def newPacket(carid, message, x, y):
         carDict[carid] = c
         canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
+        textWidget.see(tk.END)
 
-
+'''
 s = socket()
 port = 6666
 s.bind(('127.0.0.1',port))
@@ -171,7 +174,12 @@ client_socket.connect(ADDR)
 
 receive_thread = Thread(target=receive)
 receive_thread.start()
+'''
 
+newPacket(1, "hello", 9786, 8105)
+newPacket(2, "hello", 10283, 8216)
+newPacket(1, "hello", 9374, 9000)
+newPacket(2, "hello", 8666, 8105)
 root.mainloop()
 
 
