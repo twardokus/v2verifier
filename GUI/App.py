@@ -8,19 +8,21 @@ from threading import Thread
 
 
 class Car:
-    def __init__(self, CarID, name, x, y, pic, i):
+    def __init__(self, CarID, name, x, y, pic, i, tag):
         self.CarID = CarID
         self.name = name
         self.x = x
         self.y = y
         self.pic = pic
         self.i = i
+        self.tag = tag  # color for text
 
 # used to determine if a new car has been added
 # key: Car ID, value: Car object
 carDict = {}
+colors = ["green", "orange", "purple", "blue", "black", "red"]
 
-'''
+
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 def receive():
     """Handles receiving of messages."""
@@ -50,7 +52,7 @@ def receive():
 #            print("Error!! in finally block of receive()")
 #            exit(1)
 
-'''
+
 
 
 # helper function for whatPos
@@ -122,9 +124,6 @@ def newPacket(carid, message, x, y):
     newx = int(x)
     newy = int(y)
 
-#    print(str(x))
-#    print(str(y))
-
     newx = (newx - 8500)/2
     newy = (newy - 8000)/2
 
@@ -134,19 +133,22 @@ def newPacket(carid, message, x, y):
         whatPos(carid, newx, newy)
         canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
         print("image: " + carDict[carid].name)
-        textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
+        textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
+        textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
     else:
+        colortag = colors[len(carDict)]
         length = len(carDict) + 1
         name = "Car" + str(length)
         pic = name + "N.png"
-        c = Car(carid, name, newx, newy, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")))
+        c = Car(carid, name, newx, newy, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")), colortag)
         carDict[carid] = c
         canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
-        textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n")
+        textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
+        textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
 
-'''
+
 s = socket()
 port = 6666
 s.bind(('127.0.0.1',port))
@@ -174,12 +176,13 @@ client_socket.connect(ADDR)
 
 receive_thread = Thread(target=receive)
 receive_thread.start()
-'''
 
+'''
 newPacket(1, "hello", 9786, 8105)
 newPacket(2, "hello", 10283, 8216)
 newPacket(1, "hello", 9374, 9000)
 newPacket(2, "hello", 8666, 8105)
+'''
 root.mainloop()
 
 
