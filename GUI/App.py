@@ -131,8 +131,7 @@ def newPacket(carid, message, x, y):
     """
 
     newx = abs(int(x))
-    newy = int(y) % 3500
-
+    newy = int(y) % 3563
     print ("x: " + str(newx))
     print ("y: " + str(newy))
 
