@@ -22,7 +22,7 @@ class Car:
 carDict = {}
 colors = ["green", "orange", "purple", "blue", "black", "red"]
 
-
+'''
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 def receive():
     """Handles receiving of messages."""
@@ -52,7 +52,7 @@ def receive():
 #            print("Error!! in finally block of receive()")
 #            exit(1)
 
-
+'''
 
 
 # helper function for whatPos
@@ -89,10 +89,10 @@ def whatPos(c, x, y):
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
 #root.state("zoomed")  # makes full screen
-topFrame = Frame(root, width=1400, height=800)  # Added "container" Frame.
+topFrame = Frame(root, width=700, height=300)  # Added "container" Frame.
 topFrame.pack(side=tk.LEFT)
 # create the drawing canvas
-canvas = tk.Canvas(topFrame, width=900, height=800, bg='#25343F')
+canvas = tk.Canvas(topFrame, width=300, height=300, bg='#25343F')
 canvas.pack()
 
 # draw horizontal lines
@@ -130,8 +130,11 @@ def newPacket(carid, message, x, y):
     newy = (newy - 8000)/2
     """
 
-    newx = math.abs(int(x))
+    newx = abs(int(x))
     newy = int(y) % 3500
+
+    print ("x: " + str(newx))
+    print ("y: " + str(newy))
 
     print("Entered newPacket")
     if carid in carDict:
@@ -154,7 +157,7 @@ def newPacket(carid, message, x, y):
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
 
-
+'''
 s = socket()
 port = 6666
 s.bind(('127.0.0.1',port))
@@ -184,11 +187,11 @@ receive_thread = Thread(target=receive)
 receive_thread.start()
 
 '''
-newPacket(1, "hello", 9786, 8105)
-newPacket(2, "hello", 10283, 8216)
-newPacket(1, "hello", 9374, 9000)
-newPacket(2, "hello", 8666, 8105)
-'''
+newPacket(1, "hello", -293, 3779)
+# newPacket(2, "hello", 10283, 8216)
+newPacket(1, "hello", -185, 3776)
+# newPacket(2, "hello", 8666, 8105)
+
 root.mainloop()
 
 
