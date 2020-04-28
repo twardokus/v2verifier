@@ -11,7 +11,7 @@ from fastecdsa.keys import import_key
 from hashlib import sha256
 
 # Constants
-pathToDataFile = os.getcwd() + "/traces.txt"
+pathToDataFile = os.getcwd() + "/traces.csv"
 
 # Functions
 def loadTraces():
@@ -24,7 +24,7 @@ def loadTraces():
     v5Trace = []
 
     with open(pathToDataFile) as infile:
-        data = csv.reader(infile, delimiter="\t")
+        data = csv.reader(infile, delimiter=",")
         for row in data:
             if int(row[0]) == 0:
                 v0Trace.append(row) 
@@ -189,8 +189,8 @@ def writeVehicleTraces(traces):
             for trace in traces:
                 for position in trace:
                    if position[0] == str(vehicle):
-                       print position[0]
-                       outfile.write(str(position[2]) + "," + str(position[3]) + "\n")
+#                      print position[0]
+                       outfile.write(str(position[1]) + "," + str(position[2]) + "\n")
             outfile.close()
 
 def sendPacketStream(vehicleNo):
@@ -208,5 +208,5 @@ def sendPacketStream(vehicleNo):
 # Execution hook
 if __name__ == "__main__":
     traces = loadTraces()
-    #writeVehicleTraces(traces)
+    writeVehicleTraces(traces)
     sendPacketStream(0)
