@@ -5,7 +5,7 @@ from PIL import ImageTk
 import time
 from socket import AF_INET, socket, SOCK_STREAM
 from threading import Thread
-
+import math
 
 class Car:
     def __init__(self, CarID, name, x, y, pic, i, tag):
@@ -88,7 +88,7 @@ def whatPos(c, x, y):
 
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
-root.state("zoomed")  # makes full screen
+#root.state("zoomed")  # makes full screen
 topFrame = Frame(root, width=1400, height=800)  # Added "container" Frame.
 topFrame.pack(side=tk.LEFT)
 # create the drawing canvas
@@ -121,11 +121,17 @@ textWidget.pack(side=tk.RIGHT)
 # sends to whatPos function to update x, y and pic
 # modelled after trace file in mycourses
 def newPacket(carid, message, x, y):
+    
+    """
     newx = int(x)
     newy = int(y)
 
     newx = (newx - 8500)/2
     newy = (newy - 8000)/2
+    """
+
+    newx = math.abs(int(x))
+    newy = int(y) % 3500
 
     print("Entered newPacket")
     if carid in carDict:
