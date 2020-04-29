@@ -45,9 +45,9 @@ def runSelf(vehicleNo, socket, lock):
         #vehicleData = ",".join(data)
 
         with lock:
-            print "Sending own data "
-            print vehicleData
-            socket.send(vehicleData.encode())
+#            print "Sending own data "
+#            print vehicleData
+            socket.send(vehicleData.replace("\n","").encode())
 
 def listen(s,lock):
 

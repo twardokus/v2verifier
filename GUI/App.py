@@ -26,17 +26,18 @@ colors = ["green", "orange", "purple", "blue", "black", "red"]
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 def receive():
     """Handles receiving of messages."""
+    messageCounter = 1
     while True:
         try:
             msg = c.recv(BUFSIZ).decode()
-
+            messageCounter += 1 
             # Throw out invalid length messages - occasional result of TCP segments
             # being received too close together and thrown in same buffer
            # if len(msg) > 25:
             #    continue
-            
-            data = msg.split(",")
-            newPacket(int(data[0]),bool(data[3]),data[1],data[2])
+            if messageCounter % 2 == 0:
+                data = msg.split(",")
+                newPacket(int(data[0]),bool(data[3]),data[1],data[2])
         except Exception as e:
             print(type(e))
 
@@ -150,7 +151,7 @@ def newPacket(carid, valid, x, y):
         pic = name + "N.png"
         c = Car(carid, name, newx, newy, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")), colortag)
         carDict[carid] = c
-        canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
+        #canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
         isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
