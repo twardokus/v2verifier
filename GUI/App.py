@@ -37,14 +37,14 @@ def receive():
             #    continue
             if messageCounter % 2 == 0:
                 data = msg.split(",")
-                newPacket(int(data[0]),bool(data[3]),data[1],data[2])
+                newPacket(int(data[0]),True if data[3] == "True" else False,data[1],data[2])
         except Exception as e:
             print(type(e))
+            print(e)
 
 
 # helper function for whatPos
 def setPicCoord(c, pic, x, y):
-    print("Entered setPicCoord")
     carDict[c].pic = pic
     carDict[c].x = x
     carDict[c].y = y
@@ -54,7 +54,6 @@ def setPicCoord(c, pic, x, y):
 # updates the coordinates and picture of the Car object
 # based on the direction it has moved.
 def whatPos(c, x, y):
-    print("Entered whatPos")
     if carDict[c].x < x and carDict[c].y < y:
         setPicCoord(c, "pic/" + carDict[c].name + "NW.png", x, y)
     elif carDict[c].x > x and carDict[c].y < y:
@@ -131,15 +130,16 @@ def newPacket(carid, valid, x, y):
     newy = int(y) - 3561
     newx = newx * 2
     newy = newy * 2
-    print ("x: " + str(newx))
-    print ("y: " + str(newy))
-
-    print("Entered newPacket")
+    #print ("x: " + str(newx))
+    #print ("y: " + str(newy))
+    #print ("Valid? " + str(valid))
+    #print("Entered newPacket")
     if carid in carDict:
-        canvas.delete(carDict[carid].i)
-        whatPos(carid, newx, newy)
-        canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
-        print("image: " + carDict[carid].name)
+        if valid:
+            canvas.delete(carDict[carid].i)
+            whatPos(carid, newx, newy)
+            canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
+            print("image: " + carDict[carid].name)
         isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(newx) + "," + str(newy) + ")\n", carDict[carid].tag)
