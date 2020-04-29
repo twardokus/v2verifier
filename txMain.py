@@ -6,5 +6,5 @@ if __name__ == "__main__":
 
 
     traces = loadTracesFromFile(os.getcwd() + "/traces.csv")
-    writeVehicleTraces(traces)
+    writeVehicleTraceFiles(traces)
     sendPacketStream(0)
