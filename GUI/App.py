@@ -56,21 +56,21 @@ def setPicCoord(c, pic, x, y):
 def whatPos(c, x, y):
     print("Entered whatPos")
     if carDict[c].x < x and carDict[c].y < y:
-        setPicCoord(c, "pic/" + carDict[c].name + "NE.png", x, y)
-    elif carDict[c].x > x and carDict[c].y < y:
         setPicCoord(c, "pic/" + carDict[c].name + "NW.png", x, y)
+    elif carDict[c].x > x and carDict[c].y < y:
+        setPicCoord(c, "pic/" + carDict[c].name + "NE.png", x, y)
     elif carDict[c].x < x and carDict[c].y > y:
-        setPicCoord(c, "pic/" + carDict[c].name + "SE.png", x, y)
-    elif carDict[c].x > x and carDict[c].y > y:
         setPicCoord(c, "pic/" + carDict[c].name + "SW.png", x, y)
+    elif carDict[c].x > x and carDict[c].y > y:
+        setPicCoord(c, "pic/" + carDict[c].name + "SE.png", x, y)
     elif carDict[c].x < x and carDict[c].y == y:
-        setPicCoord(c, "pic/" + carDict[c].name + "E.png", x, y)
-    elif carDict[c].x > x and carDict[c].y == y:
         setPicCoord(c, "pic/" + carDict[c].name + "W.png", x, y)
+    elif carDict[c].x > x and carDict[c].y == y:
+        setPicCoord(c, "pic/" + carDict[c].name + "E.png", x, y)
     elif carDict[c].x == x and carDict[c].y < y:
-        setPicCoord(c, "pic/" + carDict[c].name + "N.png", x, y)
-    else:
         setPicCoord(c, "pic/" + carDict[c].name + "S.png", x, y)
+    else:
+        setPicCoord(c, "pic/" + carDict[c].name + "N.png", x, y)
 
 
 root = tk.Tk()

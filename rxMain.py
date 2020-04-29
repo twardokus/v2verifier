@@ -21,7 +21,7 @@ if __name__ == "__main__":
     s = socket.socket()
     s.connect(('127.0.0.1',6666))
 
-    ownVehicleID = 1
+    ownVehicleID = 2
 
     lock = threading.Lock()
 
