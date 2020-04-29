@@ -11,10 +11,10 @@ from fastecdsa.keys import import_key
 from hashlib import sha256
 
 # Constants
-pathToDataFile = os.getcwd() + "/traces.csv"
+
 
 # Functions
-def loadTraces():
+def loadTracesFromFile(pathToDataFile):
 
     v0Trace = []
     v1Trace = []
@@ -22,7 +22,7 @@ def loadTraces():
     v3Trace = []
     v4Trace = []
     v5Trace = []
-
+    
     with open(pathToDataFile) as infile:
         data = csv.reader(infile, delimiter=",")
         for row in data:
@@ -136,15 +136,7 @@ def generatePayloadBytes(vehicleDataString):
 
     private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")
 
-    ############### DEBUG ####################
-    #print "Data going into signature:"
-    #print vehicleDataString.encode('hex')
-    #print ""
-
     r, s = ecdsa.sign(vehicleDataString.encode('hex'), private, hashfunc=sha256)
-
-
-
 
     r = hex(r)
     s = hex(s)
@@ -158,14 +150,6 @@ def generatePayloadBytes(vehicleDataString):
     # s (32 bytes)
     payloadByteString += str(s)
 
-
-    #####################################################################
-    
-    """
-    # Sample valid payload from "Implementation of the WAVE 1609.2 Security Services Standard and Encountered Issues and Challenges", Mandy/Mahgoub IEEE paper
-    payloadByteString += "4003800f5468697320697320612042534d0d0a4001201112131415161718802122232425262728808231323334353637383132333435363738313233343536373831323334353637384142434445464748414243444546474841424344454647484142434445464748"
-    """
-
     payloadByteString = "\\x".join(payloadByteString[i:i+2] for i in range(0, len(payloadByteString), 2))
     payloadByteString = "\\x" + payloadByteString
 
@@ -173,7 +157,7 @@ def generatePayloadBytes(vehicleDataString):
 
     return pduPayload
 
-def writeVehicleTraces(traces):
+def writeVehicleTraceFiles(traces):
     
     outfiles = [
     os.getcwd() + "/v0path",
@@ -189,7 +173,6 @@ def writeVehicleTraces(traces):
             for trace in traces:
                 for position in trace:
                    if position[0] == str(vehicle):
-#                      print position[0]
                        outfile.write(str(position[1]) + "," + str(position[2]) + "\n")
             outfile.close()
 
