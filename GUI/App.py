@@ -106,8 +106,10 @@ def isValid(valid, carid):
     check = u'\u2713'
     nope = u'\u2716'
     if valid:
+        textWidget.insert(tk.END, "===================================\n","valid")
         textWidget.insert(tk.END, check + " Message from Car:" + str(carid) + " has been successfully authenticated\n","valid")
     else:
+        textWidget.insert(tk.END, "===================================\n","invalid")
         textWidget.insert(tk.END, nope + " Message from Car:" + str(carid) + " has failed authentication\n","invalid")
 
 # adds to new car to dictionary if not been seen before
