@@ -42,13 +42,13 @@ def processPacket(payload,s):
     #s.shutdown(socket.SHUT_RDWR)
     #s.close()
 
+def runReceiver():
 
-s = socket.socket()
-s.connect(('127.0.0.1',6666))
+    s = socket.socket()
+    s.connect(('127.0.0.1',6666))
 
 
-#    print "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
+    #    print "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
 
-sniff(iface="lo", filter="udp and port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:],s))
-
+    sniff(iface="lo", filter="udp and port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:],s))
 
