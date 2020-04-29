@@ -28,31 +28,17 @@ def receive():
     """Handles receiving of messages."""
     while True:
         try:
-#            print("Entered receive block")
             msg = c.recv(BUFSIZ).decode()
-            # msg "0,9999,9999"
-            # msg "0,9999,99990,9999,9999"
-            # msg "0,10000,10000"
+
+            # Throw out invalid length messages - occasional result of TCP segments
+            # being received too close together and thrown in same buffer
             if len(msg) > 15:
                 continue
-            #print(msg)
-            #print("Received data")
+            
             data = msg.split(",")
-            #print(data[1])
-            #print(data[2])
-            newPacket(int(data[0]),"",data[1],data[2])
-#textWidget.insert(tk.END, msg)
-#            print("Exiting try block")
+            newPacket(int(data[0]),bool(data[3]),data[1],data[2])
         except Exception as e:
             print(type(e))
-
-#        except OSError:  # Possibly disconnected?
-#            print("Hit EXCEPT block - possible OSError")
-#        finally:
-#            print("Error!! in finally block of receive()")
-#            exit(1)
-
-
 
 
 # helper function for whatPos

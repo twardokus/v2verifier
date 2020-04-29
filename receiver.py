@@ -25,6 +25,9 @@ def processPacket(payload,s):
 
 
     vehicleData = data[0].decode('hex').replace("\n","")
+    vehicleData += "," + str(result)
+
+
 #    print vehicleData
 
 #    fields = vehicleData.split(",")
@@ -46,9 +49,6 @@ def runReceiver():
 
     s = socket.socket()
     s.connect(('127.0.0.1',6666))
-
-
-    #    print "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
 
     sniff(iface="lo", filter="udp and port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:],s))
 
