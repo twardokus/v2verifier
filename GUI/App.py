@@ -55,13 +55,13 @@ def setPicCoord(c, pic, x, y):
 # based on the direction it has moved.
 def whatPos(c, x, y):
     if carDict[c].x < x and carDict[c].y < y:
-        setPicCoord(c, "pic/" + carDict[c].name + "NW.png", x, y)
-    elif carDict[c].x > x and carDict[c].y < y:
-        setPicCoord(c, "pic/" + carDict[c].name + "NE.png", x, y)
-    elif carDict[c].x < x and carDict[c].y > y:
         setPicCoord(c, "pic/" + carDict[c].name + "SW.png", x, y)
-    elif carDict[c].x > x and carDict[c].y > y:
+    elif carDict[c].x > x and carDict[c].y < y:
         setPicCoord(c, "pic/" + carDict[c].name + "SE.png", x, y)
+    elif carDict[c].x < x and carDict[c].y > y:
+        setPicCoord(c, "pic/" + carDict[c].name + "NW.png", x, y)
+    elif carDict[c].x > x and carDict[c].y > y:
+        setPicCoord(c, "pic/" + carDict[c].name + "NE.png", x, y)
     elif carDict[c].x < x and carDict[c].y == y:
         setPicCoord(c, "pic/" + carDict[c].name + "W.png", x, y)
     elif carDict[c].x > x and carDict[c].y == y:
@@ -101,16 +101,20 @@ for k in range(0, 800, 50):
 # adds output panel on right
 textWidget = tk.Text(root, height=800, width=500, font=36)
 textWidget.pack(side=tk.RIGHT)
+textWidget.tag_configure("valid", foreground="green")
+textWidget.tag_configure("invalid", foreground="red")
+
+
 
 def isValid(valid, carid):
     check = u'\u2713'
     nope = u'\u2716'
     if valid:
         textWidget.insert(tk.END, check + " Message from Car:" + str(carid) + " has been successfully authenticated\n",
-                          carDict[carid].tag)
+                          "valid")
     else:
         textWidget.insert(tk.END, nope + " Message from Car:" + str(carid) + " has failed authentication\n",
-                          carDict[carid].tag)
+                          "invalid")
 
 
 # adds to new car to dictionary if not been seen before
@@ -145,8 +149,8 @@ def newPacket(carid, valid, x, y):
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(newx) + "," + str(newy) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
     else:
-        colortag = colors[len(carDict)]
-        length = len(carDict) + 1
+        colortag = colors[len(carDict)+2]
+        length = len(carDict) + 3
         name = "Car" + str(length)
         pic = name + "N.png"
         c = Car(carid, name, newx, newy, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")), colortag)
