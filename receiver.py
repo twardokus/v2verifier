@@ -23,7 +23,7 @@ def processPacket(payload,s,lock):
     result = "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
     
     vehicleData = data[0].decode('hex').replace("\n","")
-    vehicleData += "," + str(status)
+    vehicleData += "," + str(int(status))
 
     with lock:
         s.send(vehicleData.encode())
@@ -33,7 +33,7 @@ def runSelf(vehicleNo, socket, lock):
     trace = open("v" + str(vehicleNo) + "path")
     for i in range(0,400):
         vehicleData = str(vehicleNo) + "," + trace.readline()
-        vehicleData += ",True"
+        vehicleData += ",False"
 
         #data = vehicleData.split(",")
 
