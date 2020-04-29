@@ -139,7 +139,7 @@ def newPacket(carid, valid, x, y):
             canvas.delete(carDict[carid].i)
             whatPos(carid, newx, newy)
             canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
-            print("image: " + carDict[carid].name)
+            #print("image: " + carDict[carid].name)
         isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(newx) + "," + str(newy) + ")\n", carDict[carid].tag)
@@ -154,7 +154,7 @@ def newPacket(carid, valid, x, y):
         #canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
         isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
-        textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
+        textWidget.insert(tk.END, "Car " + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
 
 
