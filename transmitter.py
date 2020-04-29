@@ -185,7 +185,7 @@ def sendPacketStream(vehicleNo):
         vehicleData = str(vehicleNo) + "," + trace.readline()
         loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes(vehicleData)), stdout=subprocess.PIPE)
         sender = subprocess.check_output(("nc","-w1","-u","localhost","52001"),stdin=loader.stdout)
-        time.sleep(0.5)
+        time.sleep(0.1)
 
 
 # Execution hook
