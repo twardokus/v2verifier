@@ -1,4 +1,4 @@
-from functions import *
+from transmitter import *
 
 import os
 
