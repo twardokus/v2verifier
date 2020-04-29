@@ -22,7 +22,7 @@ class Car:
 carDict = {}
 colors = ["green", "orange", "purple", "blue", "black", "red"]
 
-'''
+
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 def receive():
     """Handles receiving of messages."""
@@ -52,7 +52,7 @@ def receive():
 #            print("Error!! in finally block of receive()")
 #            exit(1)
 
-'''
+
 
 
 # helper function for whatPos
@@ -83,21 +83,21 @@ def whatPos(c, x, y):
     elif carDict[c].x == x and carDict[c].y < y:
         setPicCoord(c, "pic/" + carDict[c].name + "N.png", x, y)
     else:
-        setPicCoord(c, carDict[c].name + "S.png", x, y)
+        setPicCoord(c, "pic/" + carDict[c].name + "S.png", x, y)
 
 
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
-#root.state("zoomed")  # makes full screen
+root.state("zoomed")  # makes full screen
 topFrame = Frame(root, width=700, height=300)  # Added "container" Frame.
 topFrame.pack(side=tk.LEFT)
 # create the drawing canvas
-canvas = tk.Canvas(topFrame, width=300, height=300, bg='#25343F')
+canvas = tk.Canvas(topFrame, width=800, height=800, bg='#25343F')
 canvas.pack()
 
 # draw horizontal lines
 x1 = 0
-x2 = 900
+x2 = 800
 for k in range(0, 800, 50):
     y1 = k
     y2 = k
@@ -106,7 +106,7 @@ for k in range(0, 800, 50):
 # draw vertical lines
 y1 = 0
 y2 = 800
-for k in range(0, 900, 50):
+for k in range(0, 800, 50):
     x1 = k
     x2 = k
     canvas.create_line(x1, y1, x2, y2, fill="#B8CAD6")
@@ -116,12 +116,22 @@ for k in range(0, 900, 50):
 textWidget = tk.Text(root, height=800, width=500, font=36)
 textWidget.pack(side=tk.RIGHT)
 
+def isValid(valid, carid):
+    check = u'\u2713'
+    nope = u'\u2716'
+    if valid:
+        textWidget.insert(tk.END, check + " Message from Car:" + str(carid) + " has been successfully authenticated\n",
+                          carDict[carid].tag)
+    else:
+        textWidget.insert(tk.END, nope + " Message from Car:" + str(carid) + " has failed authentication\n",
+                          carDict[carid].tag)
+
 
 # adds to new car to dictionary if not been seen before
 # sends to whatPos function to update x, y and pic
 # modelled after trace file in mycourses
-def newPacket(carid, message, x, y):
-    
+def newPacket(carid, valid, x, y):
+
     """
     newx = int(x)
     newy = int(y)
@@ -130,8 +140,10 @@ def newPacket(carid, message, x, y):
     newy = (newy - 8000)/2
     """
 
-    newx = abs(int(x))
-    newy = int(y) % 3563
+    newx = abs(int(x)) -150
+    newy = int(y) - 3561
+    newx = newx * 2
+    newy = newy * 2
     print ("x: " + str(newx))
     print ("y: " + str(newy))
 
@@ -141,6 +153,7 @@ def newPacket(carid, message, x, y):
         whatPos(carid, newx, newy)
         canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
         print("image: " + carDict[carid].name)
+        isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
@@ -152,11 +165,12 @@ def newPacket(carid, message, x, y):
         c = Car(carid, name, newx, newy, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")), colortag)
         carDict[carid] = c
         canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
+        isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
 
-'''
+
 s = socket()
 port = 6666
 s.bind(('127.0.0.1',port))
@@ -186,11 +200,11 @@ receive_thread = Thread(target=receive)
 receive_thread.start()
 
 '''
-newPacket(1, "hello", -293, 3779)
-# newPacket(2, "hello", 10283, 8216)
-newPacket(1, "hello", -185, 3776)
-# newPacket(2, "hello", 8666, 8105)
-
+newPacket(1, True, -293, 3779)
+newPacket(2, False, -285, 3638)
+newPacket(1, False, -293, 3776)
+newPacket(2, True, -283, 3642)
+'''
 root.mainloop()
 
 
