@@ -1,6 +1,7 @@
-from receiver import runReceiver
+from receiver import *
 
 import os
+import socket
 
 def checkIfRoot():
     if os.geteuid() != 0:
@@ -10,4 +11,8 @@ def checkIfRoot():
 
 if __name__ == "__main__":
     checkIfRoot()
-    runReceiver()
+    
+    s = socket.socket()
+    s.connect(('127.0.0.1',6666))
+    
+    listen(s)

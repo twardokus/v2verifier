@@ -22,33 +22,23 @@ def processPacket(payload,s):
 
     result = "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
     
-
-
     vehicleData = data[0].decode('hex').replace("\n","")
     vehicleData += "," + str(result)
 
-
-#    print vehicleData
-
-#    fields = vehicleData.split(",")
-
-#    print(fields)
-
-#    result = carID, mssafge, x, y
-#    fields = data[0].split(",")
-    
-    #s = socket.socket()
-    #s.connect(('127.0.0.1',6666))
-    
     s.send(vehicleData.encode())
-    
-    #s.shutdown(socket.SHUT_RDWR)
-    #s.close()
 
-def runReceiver():
+def startOwnVehicle(vehicleNo, socket):
 
-    s = socket.socket()
-    s.connect(('127.0.0.1',6666))
+    print ""
+
+def runSelf():
+
+    print ""
+
+def listen(s):
+
+#    s = socket.socket()
+#    s.connect(('127.0.0.1',6666))
 
     sniff(iface="lo", filter="udp and port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:],s))
 
