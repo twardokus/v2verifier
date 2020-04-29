@@ -32,8 +32,8 @@ def receive():
 
             # Throw out invalid length messages - occasional result of TCP segments
             # being received too close together and thrown in same buffer
-            if len(msg) > 15:
-                continue
+           # if len(msg) > 25:
+            #    continue
             
             data = msg.split(",")
             newPacket(int(data[0]),bool(data[3]),data[1],data[2])
@@ -141,7 +141,7 @@ def newPacket(carid, valid, x, y):
         print("image: " + carDict[carid].name)
         isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
-        textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
+        textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(newx) + "," + str(newy) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
     else:
         colortag = colors[len(carDict)]

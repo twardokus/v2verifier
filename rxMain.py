@@ -9,5 +9,5 @@ def checkIfRoot():
 
 
 if __name__ == "__main__":
-#    checkIfRoot()
+    checkIfRoot()
     runReceiver()
