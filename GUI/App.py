@@ -22,7 +22,6 @@ class Car:
 carDict = {}
 colors = ["green", "orange", "purple", "blue", "black", "red"]
 
-
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 def receive():
     """Handles receiving of messages."""
@@ -41,7 +40,6 @@ def receive():
         except Exception as e:
             print(type(e))
             print(e)
-
 
 # helper function for whatPos
 def setPicCoord(c, pic, x, y):
@@ -104,18 +102,13 @@ textWidget.pack(side=tk.RIGHT)
 textWidget.tag_configure("valid", foreground="green")
 textWidget.tag_configure("invalid", foreground="red")
 
-
-
 def isValid(valid, carid):
     check = u'\u2713'
     nope = u'\u2716'
     if valid:
-        textWidget.insert(tk.END, check + " Message from Car:" + str(carid) + " has been successfully authenticated\n",
-                          "valid")
+        textWidget.insert(tk.END, check + " Message from Car:" + str(carid) + " has been successfully authenticated\n","valid")
     else:
-        textWidget.insert(tk.END, nope + " Message from Car:" + str(carid) + " has failed authentication\n",
-                          "invalid")
-
+        textWidget.insert(tk.END, nope + " Message from Car:" + str(carid) + " has failed authentication\n","invalid")
 
 # adds to new car to dictionary if not been seen before
 # sends to whatPos function to update x, y and pic
@@ -151,11 +144,15 @@ def newPacket(carid, valid, x, y):
     else:
         colortag = colors[len(carDict)+2]
         length = len(carDict) + 3
+#        colortag = colors[len(carDict)]
+#        length = len(carDict) + 1
+        
         name = "Car" + str(length)
         pic = name + "N.png"
         c = Car(carid, name, newx, newy, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")), colortag)
         carDict[carid] = c
         #canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
+        
         isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
         textWidget.insert(tk.END, "Car " + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
@@ -190,12 +187,6 @@ client_socket.connect(ADDR)
 receive_thread = Thread(target=receive)
 receive_thread.start()
 
-'''
-newPacket(1, True, -293, 3779)
-newPacket(2, False, -285, 3638)
-newPacket(1, False, -293, 3776)
-newPacket(2, True, -283, 3642)
-'''
 root.mainloop()
 
 
