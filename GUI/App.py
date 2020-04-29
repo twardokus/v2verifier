@@ -88,7 +88,7 @@ def whatPos(c, x, y):
 
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
-root.state("zoomed")  # makes full screen
+#root.state("zoomed")  # makes full screen
 topFrame = Frame(root, width=700, height=300)  # Added "container" Frame.
 topFrame.pack(side=tk.LEFT)
 # create the drawing canvas
