@@ -22,7 +22,11 @@ class Car:
 carDict = {}
 colors = ["green", "orange", "purple", "blue", "black", "red"]
 
+<<<<<<< HEAD
 '''
+=======
+
+>>>>>>> 045b2f4693dc9913f0eed4a1def3794c10bd7ccc
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 def receive():
     """Handles receiving of messages."""
@@ -41,7 +45,11 @@ def receive():
         except Exception as e:
             print(type(e))
             print(e)
+<<<<<<< HEAD
 '''
+=======
+
+>>>>>>> 045b2f4693dc9913f0eed4a1def3794c10bd7ccc
 
 # helper function for whatPos
 def setPicCoord(c, pic, x, y):
@@ -101,18 +109,28 @@ for k in range(0, 800, 50):
 # adds output panel on right
 textWidget = tk.Text(root, height=800, width=500, font=36)
 textWidget.pack(side=tk.RIGHT)
+<<<<<<< HEAD
 textWidget.tag_configure("valid", foreground="green")
 textWidget.tag_configure("invalid", foreground="red")
+=======
+>>>>>>> 045b2f4693dc9913f0eed4a1def3794c10bd7ccc
 
 def isValid(valid, carid):
     check = u'\u2713'
     nope = u'\u2716'
     if valid:
         textWidget.insert(tk.END, check + " Message from Car:" + str(carid) + " has been successfully authenticated\n",
+<<<<<<< HEAD
                           "valid")
     else:
         textWidget.insert(tk.END, nope + " Message from Car:" + str(carid) + " has failed authentication\n",
                           "invalid")
+=======
+                          carDict[carid].tag)
+    else:
+        textWidget.insert(tk.END, nope + " Message from Car:" + str(carid) + " has failed authentication\n",
+                          carDict[carid].tag)
+>>>>>>> 045b2f4693dc9913f0eed4a1def3794c10bd7ccc
 
 
 # adds to new car to dictionary if not been seen before
@@ -147,19 +165,32 @@ def newPacket(carid, valid, x, y):
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(newx) + "," + str(newy) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
     else:
+<<<<<<< HEAD
         colortag = colors[len(carDict)+2]
         length = len(carDict) + 3
+=======
+        colortag = colors[len(carDict)]
+        length = len(carDict) + 1
+>>>>>>> 045b2f4693dc9913f0eed4a1def3794c10bd7ccc
         name = "Car" + str(length)
         pic = name + "N.png"
         c = Car(carid, name, newx, newy, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")), colortag)
         carDict[carid] = c
+<<<<<<< HEAD
         canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
+=======
+        #canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
+>>>>>>> 045b2f4693dc9913f0eed4a1def3794c10bd7ccc
         isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
         textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
 
+<<<<<<< HEAD
 '''
+=======
+
+>>>>>>> 045b2f4693dc9913f0eed4a1def3794c10bd7ccc
 s = socket()
 port = 6666
 s.bind(('127.0.0.1',port))
@@ -193,7 +224,11 @@ newPacket(1, True, -293, 3779)
 newPacket(2, False, -285, 3638)
 newPacket(1, False, -293, 3776)
 newPacket(2, True, -283, 3642)
+<<<<<<< HEAD
 
+=======
+'''
+>>>>>>> 045b2f4693dc9913f0eed4a1def3794c10bd7ccc
 root.mainloop()
 
 
