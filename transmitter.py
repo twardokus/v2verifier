@@ -1,19 +1,19 @@
-# Geoff Twardokus
-
-# Imports
 import os
 import csv
 import time
-from collections import OrderedDict
 import subprocess
 from fastecdsa import keys, ecdsa
 from fastecdsa.keys import import_key
 from hashlib import sha256
 
-# Constants
+"""
+Function to load vehicle traces from the centralized CSV file. 
+The file "traces.csv" included with this repo outlines the required format
 
+Inputs:
 
-# Functions
+pathToDataFile - the filepath to the CSV file containing all traces
+"""
 def loadTracesFromFile(pathToDataFile):
 
     v0Trace = []
@@ -44,11 +44,33 @@ def loadTracesFromFile(pathToDataFile):
     allTraces = [v0Trace, v1Trace, v2Trace, v3Trace, v4Trace, v5Trace]
     return allTraces
 
+"""
+A debugging function to print out loaded traces for the purpose of confirming
+accuracy. Intended to be used accepting the output of loadTracesFromFile()
+"""
 def printTraces(traces):
     for vehicle in traces:
         for item in vehicle:
             print(item)
-            
+
+"""
+Function to generate a hexidecimal string representation of the bytes composing 
+everything above layer 2. 
+
+Details: The wifi_tx.py file, as modified by us and included
+in this repo, directly encapsulates the bytes received on a UDP listener within
+a standard 802.11p frame. This function generates the bytes that compose a simple
+WSMP message and an IEEE1609Dot2Data cryptographic structure embedded in the WSMP
+message. The format of the WSMP message is compliant with the IEEE 1609.3 standard,
+and the IEEE 1609.2 structure is compliant with the IEEE 1609.2b (2019) standard 
+with the exception that certificates and PKI are not implemented here.
+
+Inputs:
+
+vehicleDataString - a string containing simple CSV data like
+                    "vehicleIDNumber,x-coord,y-coord" for use with the GUI application.
+
+"""
 def generatePayloadBytes(vehicleDataString):
     
     # Header fields individually set for easy configuration changes
@@ -114,13 +136,13 @@ def generatePayloadBytes(vehicleDataString):
     # PSID (BSM = 20)
     payloadByteString += "20"
 
-    # generationTime (8 bytes)
+    # generationTime (8 bytes) - this is a dummy value
     payloadByteString += "1112131415161718"
 
     # signer
     payloadByteString += "80"
 
-    # Digest (8 bytes)
+    # Digest (8 bytes) - this is also a dummy value
     payloadByteString += "2122232425262728"
 
     # signature (ecdsaNistP256Signature = 80)
@@ -157,6 +179,16 @@ def generatePayloadBytes(vehicleDataString):
 
     return pduPayload
 
+"""
+Function to write vehicle traces loaded from a master CSV file to individual 
+files for each vehicle. This is more efficient at run time as only the files 
+for the specific vehicles appearing in the simulation need to be loaded.
+
+Inputs:
+
+traces -    a list containing sequential coordinate pairs. Intended to be the output
+            from loadTracesFromFile()
+"""
 def writeVehicleTraceFiles(traces):
     
     outfiles = [
@@ -168,14 +200,26 @@ def writeVehicleTraceFiles(traces):
     os.getcwd() + "/v5path"
     ]
 
+    # We support up to six vehicles, but more can be added by changing the 
+    # loop maximum to a higher integer.
     for vehicle in range (0,6):
         with open(outfiles[vehicle], 'w') as outfile:
             for trace in traces:
                 for position in trace:
-                   if position[0] == str(vehicle):
-                       outfile.write(str(position[1]) + "," + str(position[2]) + "\n")
+                    # position[0] is the vehicleID
+                    if position[0] == str(vehicle):
+                        # only one vehicle in the output file, so only write the coords
+                        outfile.write(str(position[1]) + "," + str(position[2]) + "\n")
             outfile.close()
 
+"""
+Function to transmit the crafted WSMP messages to the GNURadio listner on port 444
+that will encapsulate the WSMP message in an 802.11p frame and send it over the USRP.
+
+Inputs:
+
+vehicleNo - the ID number of the vehicle whose trace will be used
+"""
 def sendPacketStream(vehicleNo):
     if vehicleNo < 0 or vehicleNo > 5:
         print "Error - invalid vehicle number. Must be between 0 and 5. Exiting"
@@ -183,8 +227,12 @@ def sendPacketStream(vehicleNo):
     trace = open("v"+str(vehicleNo)+"path")
     for i in range(0,400):
         vehicleData = str(vehicleNo) + "," + trace.readline()
+        
+        # Use the native echo utility to send the crafted message payload into a pipe 
         loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes(vehicleData)), stdout=subprocess.PIPE)
+        # Send the contents of the pipe to GNURadio using the native Netcat (nc) utility
         sender = subprocess.check_output(("nc","-w1","-u","localhost","52001"),stdin=loader.stdout)
+        # Pause 100ms to emulate the pulse rate of real BSMs
         time.sleep(0.1)
 
 
