@@ -9,6 +9,7 @@ from time import sleep
 
 from socket import AF_INET, SOCK_STREAM
 import math
+import random
 
 # load the public key of the other "vehicle" (the host connected to the other USRP)
 publicKey = keys.import_key("/home/administrator/v2v-capstone/keys/other_p256.pub",curve=curve.P256, public=True)
@@ -61,6 +62,39 @@ def runSelf(vehicleNo, socket, lock):
         with lock:
             socket.send(vehicleData.replace("\n","").encode())
 
+def runSelfAndOthers(socket, lock):
+
+    NUM_VEHICLES = 2
+    vehicleIDs = []
+
+    for i in range(0,NUM_VEHICLES + 1):
+        vehicleIDs.append(i)    
+
+    traces = []
+    for i in range(0,NUM_VEHICLES + 1):
+        traceFile = open("v" + str(i) + "path")
+        trace = []
+        for j in range(0,400):
+            vehicleData = str(i) + "," + traceFile.readline().replace("\n","") + ",True"
+            trace.append(vehicleData)
+        traces.append(trace)
+
+#    print traces
+    for i in range(0,400):
+        random.shuffle(vehicleIDs)
+#        print vehicleIDs
+#        print str(len(traces))
+#        print str(len(traces[0]))
+#        print str(len(traces[1]))
+#        print str(len(traces[2]))
+        sleep(0.5)
+        for currentID in vehicleIDs:
+            with lock:
+                print traces[currentID][i]
+                socket.send(traces[currentID][i].encode())
+        
+
+
 def listen(s,lock):
 
     # print a console message to confirm the network connection is active
@@ -70,3 +104,5 @@ def listen(s,lock):
     # received packets are passed to processPacket() for data extraction
     sniff(iface="lo", filter="udp and port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:],s,lock))
 
+if __name__ == "__main__":
+    runSelfAndOthers(None, None)

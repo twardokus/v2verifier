@@ -39,9 +39,12 @@ if __name__ == "__main__":
     
     # This is the thread that updates the "vehicle" that is represented by
     # by the receiving USRP. No actual transmission for this vehicle.
-    run = threading.Thread(target=runSelf, args=(ownVehicleID, s, lock,))
+#    run = threading.Thread(target=runSelf, args=(ownVehicleID, s, lock,))
+#    run.start()
+
+    run = threading.Thread(target=runSelfAndOthers, args=(s, lock,))
     run.start()
-    
+
     # This is the thread that accepts data from the other vehicle (via USRP)
     # and sends it to the GUI
     listen = threading.Thread(target=listen, args=(s,lock,))

@@ -29,6 +29,7 @@ def receive():
     while True:
         try:
             msg = c.recv(BUFSIZ).decode()
+            print(msg)
             messageCounter += 1 
             # Throw out invalid length messages - occasional result of TCP segments
             # being received too close together and thrown in same buffer
@@ -107,10 +108,10 @@ def isValid(valid, carid):
     nope = u'\u2716'
     if valid:
         textWidget.insert(tk.END, "===================================\n","valid")
-        textWidget.insert(tk.END, check + " Message from Car:" + str(carid) + " has been successfully authenticated\n","valid")
+        textWidget.insert(tk.END, check + " Message from Car " + str(carid) + " has been successfully authenticated\n","valid")
     else:
         textWidget.insert(tk.END, "===================================\n","invalid")
-        textWidget.insert(tk.END, nope + " Message from Car:" + str(carid) + " has failed authentication\n","invalid")
+        textWidget.insert(tk.END, nope + " Message from Car " + str(carid) + " is unsigned or incorrectly formatted. Ignoring message!\n","invalid")
 
 # adds to new car to dictionary if not been seen before
 # sends to whatPos function to update x, y and pic
