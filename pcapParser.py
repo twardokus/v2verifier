@@ -1,6 +1,15 @@
 from scapy.all import *
 import binascii
 
+"""
+Function to extract the message string and signature parameters from the 
+IEEE1609Dot2Data structure within the WSMP message.
+
+Inputs:
+
+payload -   a hexidecimal string representation of the bytes making up 
+            everything above the LLC layer (i.e. the WSMP message)
+"""
 def extractData(payload):
 	
 	# The first 8 bytes are WSMP N/T headers that do not change size
