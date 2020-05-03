@@ -64,7 +64,7 @@ def runSelf(vehicleNo, socket, lock):
 
 def runSelfAndOthers(socket, lock):
 
-    NUM_VEHICLES = 2
+    NUM_VEHICLES = 3
     vehicleIDs = []
 
     for i in range(0,NUM_VEHICLES + 1):
@@ -87,8 +87,8 @@ def runSelfAndOthers(socket, lock):
 #        print str(len(traces[0]))
 #        print str(len(traces[1]))
 #        print str(len(traces[2]))
-        sleep(0.5)
         for currentID in vehicleIDs:
+            sleep(0.1)
             with lock:
                 print traces[currentID][i]
                 socket.send(traces[currentID][i].encode())
