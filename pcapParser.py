@@ -1,9 +1,6 @@
 from scapy.all import *
 import binascii
 
-#PCAP file location
-pcapPath = "/home/administrator/Desktop/out.pcap"
-
 def extractData(payload):
 	
 	# The first 8 bytes are WSMP N/T headers that do not change size
@@ -44,12 +41,3 @@ def extractData(payload):
 	s = int(str(s))
 
 	return (unsecuredData,r,s)
-
-
-def parsePcapFile(pcapPath):
-   	packets = rdpcap(pcapPath)
-
-	return packets
-
-
-
