@@ -10,18 +10,17 @@ from time import sleep
 from socket import AF_INET, SOCK_STREAM
 import math
 
-pcapFileLocation = "/home/administrator/Desktop/out.pcap"
-
-# load the public key
+# load the public key of the other "vehicle" (the host connected to the other USRP)
 publicKey = keys.import_key("/home/administrator/v2v-capstone/keys/other_p256.pub",curve=curve.P256, public=True)
 
+
 def processPacket(payload,s,lock):
+    
     data = extractData(payload)
+    
     status = verifyMessage(data[1],data[2],data[0],publicKey)
     statusText = "valid" if status else "invalid"
 
-    result = "Message is " + statusText + ", contents: " + data[0].decode('hex').replace("\n","")
-    
     vehicleData = data[0].decode('hex').replace("\n","")
     vehicleData += "," + "True" if int(status) else "False"
 
