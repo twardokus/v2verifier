@@ -1,6 +1,14 @@
+"""
+This file is the master execution script for the host playing the part of "receiver."
+The host that is running "wifi_rx.py" should run this script along with the GUI 
+application (see the README).
+"""
+
+# Local imports
 from receiver import *
 from transmitter import loadTracesFromFile, writeVehicleTraceFiles
 
+# Library imports
 import os
 import socket
 import threading
