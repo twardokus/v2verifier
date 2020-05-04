@@ -76,16 +76,19 @@ def generatePayloadBytes(vehicleDataString):
     # Header fields individually set for easy configuration changes
     headerByteString = ""
 
-    # llc_dsap
+    # Logical Link Control fields
+    #llc_dsap = "aa" to indicate SNAP extension in use (for protocol identification)
     headerByteString += "aa"
-    #llc_ssap = "aa"
+    #llc_ssap = "aa" to indicate SNAP extension in use  (for protocol identification)
     headerByteString += "aa"
-    #llc_control = "03"
+    #llc_control = "03" for unacknowledged, connectionless mode
     headerByteString += "03"
-    #llc_org_code = "000000"
+    #llc_org_code = "000000" as we have no assigned OUI
     headerByteString += "000000"
-    #llc_type = "88dc" for WAVE Simple Message Protocol
+    #llc_type = "88dc" to indicate WAVE Simple Message Protocol
     headerByteString += "88dc"
+    
+    # WSMP N-Header and T-Header fields
     #wsmp_n_subtype_opt_version = "03"
     headerByteString += "03"
     #wsmp_n_tpid = "00"
@@ -95,6 +98,7 @@ def generatePayloadBytes(vehicleDataString):
     #wsmp_t_length = "00"
     headerByteString += "00"    
 
+    
     headerByteString = "\\x".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
     
     #headerByteString = "".join(headerByteString[i:i+2] for i in range(0, len(headerByteString), 2))
