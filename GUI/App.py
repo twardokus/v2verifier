@@ -62,9 +62,9 @@ def whatPos(c, x, y):
     elif carDict[c].x > x and carDict[c].y > y:
         setPicCoord(c, "pic/" + carDict[c].name + "NE.png", x, y)
     elif carDict[c].x < x and carDict[c].y == y:
-        setPicCoord(c, "pic/" + carDict[c].name + "W.png", x, y)
-    elif carDict[c].x > x and carDict[c].y == y:
         setPicCoord(c, "pic/" + carDict[c].name + "E.png", x, y)
+    elif carDict[c].x > x and carDict[c].y == y:
+        setPicCoord(c, "pic/" + carDict[c].name + "W.png", x, y)
     elif carDict[c].x == x and carDict[c].y < y:
         setPicCoord(c, "pic/" + carDict[c].name + "S.png", x, y)
     else:
@@ -77,7 +77,9 @@ root.title("Secure V2V Communication Simulator")
 topFrame = Frame(root, width=700, height=300)  # Added "container" Frame.
 topFrame.pack(side=tk.LEFT)
 # create the drawing canvas
-canvas = tk.Canvas(topFrame, width=800, height=800, bg='#25343F')
+#canvas = tk.Canvas(topFrame, width=800, height=800, bg='#25343F')
+canvas = tk.Canvas(topFrame, width=800, height=800, bg='#7E7E7E')
+canvas.pack()
 canvas.pack()
 
 # draw horizontal lines
@@ -86,7 +88,9 @@ x2 = 800
 for k in range(0, 800, 50):
     y1 = k
     y2 = k
-    canvas.create_line(x1, y1, x2, y2, fill="#B8CAD6")
+    #canvas.create_line(x1, y1, x2, y2, fill="#B8CAD6")
+
+    canvas.create_line(x1, y1, x2, y2, fill="#000000")
 
 # draw vertical lines
 y1 = 0
@@ -94,7 +98,7 @@ y2 = 800
 for k in range(0, 800, 50):
     x1 = k
     x2 = k
-    canvas.create_line(x1, y1, x2, y2, fill="#B8CAD6")
+    canvas.create_line(x1, y1, x2, y2, fill="#000000")
 
 
 # adds output panel on right
@@ -142,13 +146,12 @@ def newPacket(carid, valid, x, y):
             #print("image: " + carDict[carid].name)
         isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
-        textWidget.insert(tk.END, "Car:" + str(carid) + " is at location (" + str(newx) + "," + str(newy) + ")\n", carDict[carid].tag)
+        textWidget.insert(tk.END, "Car " + str(carid) + " is at location (" + str(newx) + "," + str(newy) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
     else:
-        colortag = colors[len(carDict)+2]
-        length = len(carDict) + 3
-#        colortag = colors[len(carDict)]
-#        length = len(carDict) + 1
+        # to help you out, future people, "git blame...."
+        colortag = colors[len(carDict) + 1] 
+        length = len(carDict) + 2
         
         name = "Car" + str(length)
         pic = name + "N.png"

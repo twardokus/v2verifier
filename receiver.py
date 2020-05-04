@@ -64,17 +64,20 @@ def runSelf(vehicleNo, socket, lock):
 
 def runSelfAndOthers(socket, lock):
 
-    NUM_VEHICLES = 3
+    NUM_VEHICLES = 4
     vehicleIDs = []
 
-    for i in range(0,NUM_VEHICLES + 1):
+    for i in range(1,NUM_VEHICLES):
         vehicleIDs.append(i)    
 
     traces = []
-    for i in range(0,NUM_VEHICLES + 1):
+    for i in range(1,NUM_VEHICLES):
         traceFile = open("v" + str(i) + "path")
         trace = []
         for j in range(0,400):
+            #if j % 10 == 0 and i == 2:
+            #    vehicleData = str(i) + "," + traceFile.readline().replace("\n","") + ",False"
+            #else:
             vehicleData = str(i) + "," + traceFile.readline().replace("\n","") + ",True"
             trace.append(vehicleData)
         traces.append(trace)
@@ -82,16 +85,12 @@ def runSelfAndOthers(socket, lock):
 #    print traces
     for i in range(0,400):
         random.shuffle(vehicleIDs)
-#        print vehicleIDs
-#        print str(len(traces))
-#        print str(len(traces[0]))
-#        print str(len(traces[1]))
-#        print str(len(traces[2]))
         for currentID in vehicleIDs:
+            print vehicleIDs
             sleep(0.1)
             with lock:
-                print traces[currentID][i]
-                socket.send(traces[currentID][i].encode())
+                print traces[currentID-1][i]
+                socket.send(traces[currentID-1][i].encode())
         
 
 
