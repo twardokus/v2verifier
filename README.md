@@ -2,7 +2,7 @@
 Repo to hold capstone project dev work
 
 ## Overview
-__TO BE ADDED__
+
 We do not include specific python library dependencies as this list is likely to change. Simply install the standard Ubuntu packaged version of any Python libraries that are errored as missing, and you should be good to go. We assume if you are at this level of software design, you should understand how to use Pip to quickly install python libraries.
 
 ## Requirements
