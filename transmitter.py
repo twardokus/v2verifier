@@ -137,19 +137,60 @@ def generatePayloadBytes(vehicleDataString):
 
 	return pduPayload
 
+def loadTrace():
+	trace = []
+	with open("path") as traceFile:	
+		trace = traceFile.read().splitlines()
+	return trace
+
 """
-Function to transmit the crafted WSMP messages to the GNURadio listner on port 444
+Function to transmit the crafted WSMP messages to the GNURadio listner on port 4444
 that will encapsulate the WSMP message in an 802.11p frame and send it over the USRP.
 
 Inputs:
 
 vehicleNo - the ID number of the vehicle whose trace will be used
 """
-def sendPacketStream():
-	trace = open("path")
-	for i in range(0,400):
+def calculateHeading(now, next):
+	xNow, yNow = now.split(",")
+	xNow = int(xNow)
+	yNow = int(yNow)
 
-		vehicleData = trace.readline()
+	xNext, yNext = next.split(",")
+	xNext = int(xNext)
+	yNext = int(yNext)
+
+	if xNext == xNow and yNext == yNow:
+		return "none"
+	else:
+		if xNext > xNow:
+			if yNext > yNow:
+				return "southeast"
+			elif yNext == yNow:
+				return "east"
+			else:
+				return "northeast"
+		elif xNext == xNow:
+			return "south" if yNext > yNow else "north"
+		elif xNext < xNow:
+			if yNext > yNow:
+				return "southwest"
+			elif yNext == yNow:
+				return "west"
+			else:
+				return "northwest"
+			
+
+
+
+
+def sendPacketStream():
+	trace = loadTrace()
+	for i in range(0,len(trace)-2):
+
+		heading = calculateHeading(trace[i],trace[i+1])		
+
+		vehicleData = trace[i] + "," + heading
 		
 		# Use the native echo utility to send the crafted message payload into a pipe 
 		loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes(vehicleData)), stdout=subprocess.PIPE)
