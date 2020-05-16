@@ -20,7 +20,7 @@ class Car:
 # used to determine if a new car has been added
 # key: Car ID, value: Car object
 carDict = {}
-colors = ["green", "orange", "purple", "blue", "black", "red"]
+colors = ["red"]
 
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 def receive():
@@ -37,7 +37,7 @@ def receive():
             #    continue
             if messageCounter % 2 == 0:
                 data = msg.split(",")
-                newPacket(1,True if data[2] == "True" else False,data[0],data[1])
+                newPacket(0,data[2],True if data[3] == "True" else False,data[0],data[1])
         except Exception as e:
             print(type(e))
             print(e)
@@ -52,23 +52,8 @@ def setPicCoord(c, pic, x, y):
 
 # updates the coordinates and picture of the Car object
 # based on the direction it has moved.
-def whatPos(c, x, y):
-    if carDict[c].x < x and carDict[c].y < y:
-        setPicCoord(c, "pic/" + carDict[c].name + "SW.png", x, y)
-    elif carDict[c].x > x and carDict[c].y < y:
-        setPicCoord(c, "pic/" + carDict[c].name + "SE.png", x, y)
-    elif carDict[c].x < x and carDict[c].y > y:
-        setPicCoord(c, "pic/" + carDict[c].name + "NW.png", x, y)
-    elif carDict[c].x > x and carDict[c].y > y:
-        setPicCoord(c, "pic/" + carDict[c].name + "NE.png", x, y)
-    elif carDict[c].x < x and carDict[c].y == y:
-        setPicCoord(c, "pic/" + carDict[c].name + "E.png", x, y)
-    elif carDict[c].x > x and carDict[c].y == y:
-        setPicCoord(c, "pic/" + carDict[c].name + "W.png", x, y)
-    elif carDict[c].x == x and carDict[c].y < y:
-        setPicCoord(c, "pic/" + carDict[c].name + "S.png", x, y)
-    else:
-        setPicCoord(c, "pic/" + carDict[c].name + "N.png", x, y)
+def whatPos(c, x, y, heading):
+    setPicCoord(c, "pic/" + heading + ".png", x, y)
 
 
 root = tk.Tk()
@@ -119,34 +104,28 @@ def isValid(valid, carid):
 # adds to new car to dictionary if not been seen before
 # sends to whatPos function to update x, y and pic
 # modelled after trace file in mycourses
-def newPacket(carid, valid, x, y):
+def newPacket(carid, heading, valid, x, y):
 
-
-    #newx = abs(int(x)) -150
-    #newy = int(y) - 3561
-    #newx = newx * 2
-    #newy = newy * 2
-
-    carid = 1
     newx = x
     newy = y
 
     if carid in carDict:
         if valid:
             canvas.delete(carDict[carid].i)
-            whatPos(carid, newx, newy)
+            whatPos(carid, newx, newy, heading)
             canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
         isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
         textWidget.insert(tk.END, "Car " + str(carid) + " is at location (" + str(newx) + "," + str(newy) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
     else:
-        colortag = colors[len(carDict) + 1] 
-        length = len(carDict) + 2
+        print("Here")
+        colortag = colors[0] 
+        length = 0
         
         name = "Car" + str(length)
-        pic = name + "N.png"
-        c = Car(carid, name, newx, newy, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")), colortag)
+        pic = "pic/" + heading + ".png"
+        c = Car(carid, name, newx, newy, pic, ImageTk.PhotoImage(Image.open(pic)), colortag)
         carDict[carid] = c
         
         isValid(valid, carid)
