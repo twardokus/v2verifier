@@ -75,7 +75,7 @@ def runSelfAndOthers(socket, lock):
         traceFile = open("v" + str(i) + "path")
         trace = []
         for j in range(0,400):
-            #if j % 10 == 0 and i == 2:
+            #if j % random.randint(1,10) == 0 and i == random.randint(1,NUM_VEHICLES):
             #    vehicleData = str(i) + "," + traceFile.readline().replace("\n","") + ",False"
             #else:
             vehicleData = str(i) + "," + traceFile.readline().replace("\n","") + ",True"
