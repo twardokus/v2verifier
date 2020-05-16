@@ -144,7 +144,6 @@ def newPacket(carid, valid, x, y):
         pic = name + "N.png"
         c = Car(carid, name, newx, newy, pic, ImageTk.PhotoImage(Image.open("pic/" + name + "N.png")), colortag)
         carDict[carid] = c
-        #canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
         
         isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
