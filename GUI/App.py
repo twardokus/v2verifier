@@ -88,7 +88,6 @@ x2 = 800
 for k in range(0, 800, 50):
     y1 = k
     y2 = k
-    #canvas.create_line(x1, y1, x2, y2, fill="#B8CAD6")
 
     canvas.create_line(x1, y1, x2, y2, fill="#000000")
 
@@ -122,34 +121,22 @@ def isValid(valid, carid):
 # modelled after trace file in mycourses
 def newPacket(carid, valid, x, y):
 
-    """
-    newx = int(x)
-    newy = int(y)
-
-    newx = (newx - 8500)/2
-    newy = (newy - 8000)/2
-    """
 
     newx = abs(int(x)) -150
     newy = int(y) - 3561
     newx = newx * 2
     newy = newy * 2
-    #print ("x: " + str(newx))
-    #print ("y: " + str(newy))
-    #print ("Valid? " + str(valid))
-    #print("Entered newPacket")
+
     if carid in carDict:
         if valid:
             canvas.delete(carDict[carid].i)
             whatPos(carid, newx, newy)
             canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
-            #print("image: " + carDict[carid].name)
         isValid(valid, carid)
         textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
         textWidget.insert(tk.END, "Car " + str(carid) + " is at location (" + str(newx) + "," + str(newy) + ")\n", carDict[carid].tag)
         textWidget.see(tk.END)
     else:
-        # to help you out, future people, "git blame...."
         colortag = colors[len(carDict) + 1] 
         length = len(carDict) + 2
         
@@ -171,24 +158,7 @@ s.bind(('127.0.0.1',port))
 s.listen(4)
 c, addr = s.accept()
 
-
-"""
-
-
-HOST = '127.0.0.1'
-PORT = 6666
-if not PORT:
-    PORT = 33000
-else:
-    PORT = int(PORT)
-"""
 BUFSIZ = 105
-"""
-ADDR = (HOST, PORT)
-
-client_socket = socket(AF_INET, SOCK_STREAM)
-client_socket.connect(ADDR)
-"""
 
 receive_thread = Thread(target=receive)
 receive_thread.start()
