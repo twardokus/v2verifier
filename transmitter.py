@@ -6,17 +6,6 @@ from fastecdsa import keys, ecdsa
 from fastecdsa.keys import import_key
 from hashlib import sha256
 
-"""
-ADD NEW DESCRIPTION
-"""
-def loadTrace(pathToDataFile):
-	
-	trace = []
-	
-	with open(pathToDataFile) as infile:
-		data = csv.reader(infile, delimiter=",")
-		for item in data:
-			print item
 
 """
 Function to generate a hexidecimal string representation of the bytes composing 
@@ -149,39 +138,6 @@ def generatePayloadBytes(vehicleDataString):
 	return pduPayload
 
 """
-Function to write vehicle traces loaded from a master CSV file to individual 
-files for each vehicle. This is more efficient at run time as only the files 
-for the specific vehicles appearing in the simulation need to be loaded.
-
-Inputs:
-
-traces -	a list containing sequential coordinate pairs. Intended to be the output
-			from loadTracesFromFile()
-"""
-def writeVehicleTraceFiles(traces):
-	
-	outfiles = [
-	os.getcwd() + "/v0path",
-	os.getcwd() + "/v1path",
-	os.getcwd() + "/v2path",
-	os.getcwd() + "/v3path",
-	os.getcwd() + "/v4path",
-	os.getcwd() + "/v5path"
-	]
-
-	# We support up to six vehicles, but more can be added by changing the 
-	# loop maximum to a higher integer.
-	for vehicle in range (0,6):
-		with open(outfiles[vehicle], 'w') as outfile:
-			for trace in traces:
-				for position in trace:
-					# position[0] is the vehicleID
-					if position[0] == str(vehicle):
-						# only one vehicle in the output file, so only write the coords
-						outfile.write(str(position[1]) + "," + str(position[2]) + "\n")
-			outfile.close()
-
-"""
 Function to transmit the crafted WSMP messages to the GNURadio listner on port 444
 that will encapsulate the WSMP message in an 802.11p frame and send it over the USRP.
 
@@ -189,13 +145,11 @@ Inputs:
 
 vehicleNo - the ID number of the vehicle whose trace will be used
 """
-def sendPacketStream(vehicleNo):
-	if vehicleNo < 0 or vehicleNo > 5:
-		print "Error - invalid vehicle number. Must be between 0 and 5. Exiting"
-		exit()
-	trace = open("v"+str(vehicleNo)+"path")
+def sendPacketStream():
+	trace = open("path")
 	for i in range(0,400):
-		vehicleData = str(vehicleNo) + "," + trace.readline()
+
+		vehicleData = trace.readline()
 		
 		# Use the native echo utility to send the crafted message payload into a pipe 
 		loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes(vehicleData)), stdout=subprocess.PIPE)
@@ -207,6 +161,5 @@ def sendPacketStream(vehicleNo):
 
 # Execution hook
 if __name__ == "__main__":
-	traces = loadTraces()
-	writeVehicleTraces(traces)
-	sendPacketStream(0)
+	print "You executed the wrong file. Please run txMain.py instead."
+	exit(0)
