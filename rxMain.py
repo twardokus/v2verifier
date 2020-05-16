@@ -6,7 +6,6 @@ application (see the README).
 
 # Local imports
 from receiver import *
-from transmitter import loadTracesFromFile, writeVehicleTraceFiles
 
 # Library imports
 import os
@@ -24,8 +23,8 @@ if __name__ == "__main__":
     # This script needs root access in order to connect to a TCP socket
     checkIfRoot()
     
-    traces = loadTracesFromFile(os.getcwd() + "/traces.csv")
-    writeVehicleTraceFiles(traces)
+    #traces = loadTracesFromFile(os.getcwd() + "/traces.csv")
+    #writeVehicleTraceFiles(traces)
 
     # TCP connection to the GUI application's listener
     s = socket.socket()
@@ -33,7 +32,7 @@ if __name__ == "__main__":
 
     # Change this at will - can be any positive integer as long as that vehicle
     # has a trace in the traces.csv file
-    ownVehicleID = 2
+    #ownVehicleID = 2
 
     lock = threading.Lock()
     
@@ -42,8 +41,8 @@ if __name__ == "__main__":
 #    run = threading.Thread(target=runSelf, args=(ownVehicleID, s, lock,))
 #    run.start()
 
-    run = threading.Thread(target=runSelfAndOthers, args=(s, lock,))
-    run.start()
+    #run = threading.Thread(target=runSelfAndOthers, args=(s, lock,))
+    #run.start()
 
     # This is the thread that accepts data from the other vehicle (via USRP)
     # and sends it to the GUI
