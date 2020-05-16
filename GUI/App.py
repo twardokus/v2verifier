@@ -37,7 +37,7 @@ def receive():
             #    continue
             if messageCounter % 2 == 0:
                 data = msg.split(",")
-                newPacket(int(data[0]),True if data[3] == "True" else False,data[1],data[2])
+                newPacket(1,True if data[2] == "True" else False,data[0],data[1])
         except Exception as e:
             print(type(e))
             print(e)
@@ -122,10 +122,14 @@ def isValid(valid, carid):
 def newPacket(carid, valid, x, y):
 
 
-    newx = abs(int(x)) -150
-    newy = int(y) - 3561
-    newx = newx * 2
-    newy = newy * 2
+    #newx = abs(int(x)) -150
+    #newy = int(y) - 3561
+    #newx = newx * 2
+    #newy = newy * 2
+
+    carid = 1
+    newx = x
+    newy = y
 
     if carid in carDict:
         if valid:
