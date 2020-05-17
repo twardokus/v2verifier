@@ -30,42 +30,31 @@ def receive():
 			msg = c.recv(BUFSIZ).decode()
 			print(msg)
 			messageCounter += 1 
-			# Throw out invalid length messages - occasional result of TCP segments
-			# being received too close together and thrown in same buffer
-		   # if len(msg) > 25:
-			#	continue
+
 			if messageCounter % 2 == 0:
 				data = msg.split(",")
 				print(data)
-				newPacket(0,data[2],True if data[3] == "True" else False,data[0],data[1])
+
+				valid = True if data[3] == "True" else False
+
+				update = Thread(target=newPacket, args=(0,data[2],valid,data[0],data[1],))
+				update.start()
+
 		except Exception as e:
+			print("=====================================================================================")
+			print("Error processing packet. Exception type:")
 			print(type(e))
+			print("")
+			print("Error message:")
 			print(e)
-
-# helper function for whatPos
-def setPicCoord(c, pic, x, y):
-	carDict[c].pic = pic
-	carDict[c].x = x
-	carDict[c].y = y
-	carDict[c].i = ImageTk.PhotoImage(Image.open(carDict[c].pic))
-
-
-# updates the coordinates and picture of the Car object
-# based on the direction it has moved.
-def whatPos(c, x, y, heading, valid):
-	if valid:
-		setPicCoord(c, "pic/" + heading + ".png", x, y)
-	else:
-		setPicCoord(c, "pic/phantom/" + heading + ".png", x, y)
-
+			print("End error message")
+			print("=====================================================================================")
 
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
-#root.state("zoomed")  # makes full screen
 topFrame = Frame(root, width=700, height=300)  # Added "container" Frame.
 topFrame.pack(side=tk.LEFT)
 # create the drawing canvas
-#canvas = tk.Canvas(topFrame, width=800, height=800, bg='#25343F')
 canvas = tk.Canvas(topFrame, width=800, height=800, bg='#7E7E7E')
 canvas.pack()
 canvas.pack()
@@ -94,47 +83,34 @@ textWidget.pack(side=tk.RIGHT)
 textWidget.tag_configure("valid", foreground="green")
 textWidget.tag_configure("invalid", foreground="red")
 
-def isValid(valid, carid):
+def isValid(valid):
 	check = u'\u2713'
 	nope = u'\u2716'
+	textWidget.insert(tk.END, "===================================\n","valid" if valid else "invalid")
 	if valid:
-		textWidget.insert(tk.END, "===================================\n","valid")
-		textWidget.insert(tk.END, check + " Message from Car " + str(carid) + " has been successfully authenticated\n","valid")
+		
+		textWidget.insert(tk.END, check + " Message successfully authenticated\n","valid")
 	else:
-		textWidget.insert(tk.END, "===================================\n","invalid")
-		textWidget.insert(tk.END, nope + " Message from Car " + str(carid) + " is unsigned or incorrectly formatted. Ignoring message!\n","invalid")
+		textWidget.insert(tk.END, nope + " Message is unsigned or incorrectly formatted. Ignoring message!\n","invalid")
 
-# adds to new car to dictionary if not been seen before
-# sends to whatPos function to update x, y and pic
-# modelled after trace file in mycourses
+
 def newPacket(carid, heading, valid, x, y):
 
-	newx = x
-	newy = y
+	isValid(valid)
 
-	if carid in carDict:
-		canvas.delete(carDict[carid].i)
-		whatPos(carid, newx, newy, heading,valid)
-		canvas.create_image(carDict[carid].x, carDict[carid].y, image=carDict[carid].i, anchor=tk.CENTER)
-		isValid(valid, carid)
-		textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
-		textWidget.insert(tk.END, "Car " + str(carid) + " is at location (" + str(newx) + "," + str(newy) + ")\n", carDict[carid].tag)
-		textWidget.see(tk.END)
+	i = None
+	if valid:
+		i = ImageTk.PhotoImage(Image.open("pic/" + heading + ".png"))
 	else:
-		print("Here")
-		colortag = "red"
-		length = 0
-		
-		name = "Car" + str(length)
-		pic = "pic/" + heading + ".png"
-		c = Car(carid, name, newx, newy, pic, ImageTk.PhotoImage(Image.open(pic)), colortag)
-		carDict[carid] = c
-		
-		isValid(valid, carid)
-		textWidget.tag_configure(carDict[carid].tag, foreground=carDict[carid].tag)
-		textWidget.insert(tk.END, "Car " + str(carid) + " is at location (" + str(x) + "," + str(y) + ")\n", carDict[carid].tag)
-		textWidget.see(tk.END)
+		i = ImageTk.PhotoImage(Image.open("pic/phantom/" + heading + ".png"))
 
+	canvas.create_image(x, y, image=i, anchor=tk.CENTER)
+
+	textWidget.insert(tk.END, "Incoming BSM: vehicle located at (" + str(x) + "," + str(y) + "), traveling " + heading + "\n", "valid" if valid else "invalid")
+	textWidget.insert(tk.END, "===================================\n","valid" if valid else "invalid")
+
+	time.sleep(3)
+	canvas.delete(i)
 
 s = socket()
 port = 6666
