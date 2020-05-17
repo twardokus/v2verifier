@@ -5,6 +5,8 @@ import subprocess
 from fastecdsa import keys, ecdsa
 from fastecdsa.keys import import_key
 from hashlib import sha256
+from datetime import datetime
+import math
 
 
 """
@@ -94,8 +96,22 @@ def generatePayloadBytes(vehicleDataString):
 	# PSID (BSM = 20)
 	payloadByteString += "20"
 
-	# generationTime (8 bytes) - this is a dummy value
-	payloadByteString += "1112131415161718"
+	# generationTime (8 bytes)
+	#payloadByteString += "1112131415161718"
+	
+	# IEEE 1609.2 defines timestamps as an estimate of the microseconds elapsed since
+	# 12:00 AM on January 1, 2004
+	origin = datetime(2004, 1, 1, 0, 0, 0, 0)
+	
+	# get the offset since the origin time in microseconds
+	offset = (datetime.now() - origin).total_seconds() * 1000
+	timestr = hex(int(math.floor(offset)))
+	timestr = timestr[2:]
+	if len(timestr) < 16:
+		for i in range(0, 16 - len(timestr)):
+			timestr = "0" + timestr
+	
+	payloadByteString += timestr
 
 	# signer
 	payloadByteString += "80"
