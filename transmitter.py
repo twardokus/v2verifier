@@ -92,7 +92,7 @@ def generatePayloadBytes(vehicleDataString):
 	
 	# extDataHash
 	payloadByteString += "40"
-	payloadByteString += "FF"*32
+	payloadByteString += "
 
 	# headerInfo
 	payloadByteString += "4001"

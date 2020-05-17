@@ -34,7 +34,7 @@ def processPacket(payload,s,lock):
     statusText = "valid" if status else "invalid"
 
     vehicleData = data[0].decode('hex').replace("\n","")
-    vehicleData += "," + "True" if int(status) else "False"
+    vehicleData += ",True" if int(status) else ",False"
 
     with lock:
         s.send(vehicleData.encode())

@@ -37,6 +37,7 @@ def receive():
             #    continue
             if messageCounter % 2 == 0:
                 data = msg.split(",")
+                print(data)
                 newPacket(0,data[2],True if data[3] == "True" else False,data[0],data[1])
         except Exception as e:
             print(type(e))
