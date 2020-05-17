@@ -5,8 +5,13 @@ wifi_tx.py should run this script.
 
 from transmitter import *
 
+from threading import Thread
 import os
 
 if __name__ == "__main__":
 
-    sendPacketStream()
+    attacker = Thread(target=sendPacketStream, args=("attacker",))
+    attacker.start()
+
+    normal = Thread(target=sendPacketStream, args=("normal",))
+    normal.start()

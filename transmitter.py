@@ -165,9 +165,9 @@ def generatePayloadBytes(vehicleDataString):
 
 	return pduPayload
 
-def loadTrace():
-	trace = []
-	with open("path") as traceFile:	
+def loadTrace(option):
+        trace = []
+	with open("path" if option == "normal" else "attacker_path") as traceFile:	
 		trace = traceFile.read().splitlines()
 	return trace
 
@@ -211,11 +211,9 @@ def calculateHeading(now, next):
 
 
 
-
-def sendPacketStream():
-	trace = loadTrace()
-	print trace
-	print len(trace)
+#option should either be "attacker" or "normal"
+def sendPacketStream(option):
+	trace = loadTrace(option)
 	for i in range(0,len(trace)-2):
 
 		heading = calculateHeading(trace[i],trace[i+1])		
