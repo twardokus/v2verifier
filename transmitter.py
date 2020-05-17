@@ -27,7 +27,7 @@ vehicleDataString - a string containing simple CSV data like
 					"vehicleIDNumber,x-coord,y-coord" for use with the GUI application.
 
 """
-def generatePayloadBytes(vehicleDataString):
+def generatePayloadBytes(vehicleDataString,option):
 	
 	# Header fields individually set for easy configuration changes
 	headerByteString = ""
@@ -141,17 +141,22 @@ def generatePayloadBytes(vehicleDataString):
 	# 83 -> compressed-y-1
 	# 84 -> uncompressed
 	payloadByteString += "80"
-
-	private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")
-
-	r, s = ecdsa.sign(vehicleDataString.encode('hex'), private, hashfunc=sha256)
-
-	r = hex(r)
-	s = hex(s)
+        
+        r = None
+        s = None
+        private = None
+        public = None
+        if option == "normal":
+        	private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")
+	        r, s = ecdsa.sign(vehicleDataString.encode('hex'), private, hashfunc=sha256)
+                r = hex(r)
+	        s = hex(s)
 	
-	r = r.split("x")[1][:len(r)-3]
-	s = s.split("x")[1][:len(s)-3]
-
+	        r = r.split("x")[1][:len(r)-3]
+	        s = s.split("x")[1][:len(s)-3]
+        else:
+            r = "00"*32
+            s = "00"*32
 	# r (32 bytes)
 	payloadByteString += str(r)
 
@@ -221,7 +226,7 @@ def sendPacketStream(option):
 		vehicleData = trace[i] + "," + heading
 		print vehicleData
 		# Use the native echo utility to send the crafted message payload into a pipe 
-		loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes(vehicleData)), stdout=subprocess.PIPE)
+		loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes(vehicleData,option)), stdout=subprocess.PIPE)
 		# Send the contents of the pipe to GNURadio using the native Netcat (nc) utility
 		sender = subprocess.check_output(("nc","-w1","-u","localhost","52001"),stdin=loader.stdout)
 		# Pause 100ms to emulate the pulse rate of real BSMs
