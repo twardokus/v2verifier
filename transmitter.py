@@ -90,6 +90,10 @@ def generatePayloadBytes(vehicleDataString):
 	# unsecuredData
 	payloadByteString += vehicleDataString.encode('hex')
 	
+	# extDataHash
+	payloadByteString += "40"
+	payloadByteString += "FF"*32
+
 	# headerInfo
 	payloadByteString += "4001"
 
