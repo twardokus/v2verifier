@@ -118,7 +118,7 @@ def generatePayloadBytes(vehicleDataString,option):
 	# get the offset since the origin time in microseconds
 	offset = (datetime.now() - origin).total_seconds() * 1000
 	timestr = hex(int(math.floor(offset)))
-	timestr = timestr[2:]
+        timestr  = timestr[2:]
 	if len(timestr) < 16:
 		for i in range(0, 16 - len(timestr)):
 			timestr = "0" + timestr
@@ -154,10 +154,15 @@ def generatePayloadBytes(vehicleDataString,option):
 	
 	        r = r.split("x")[1][:len(r)-3]
 	        s = s.split("x")[1][:len(s)-3]
+                print "Valid r:\t" + str(r)
+                print "Valid s:\t" + str(s)
         else:
-            r = "00"*32
-            s = "00"*32
-	# r (32 bytes)
+                r = "00"*32
+                s = "00"*32
+                print "Attack r:\t" + str(r)
+                print "Attack s:\t" + str(s)
+	
+        # r (32 bytes)
 	payloadByteString += str(r)
 
 	# s (32 bytes)
