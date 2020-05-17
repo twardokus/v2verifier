@@ -33,6 +33,7 @@ def processPacket(payload,s,lock):
     status = verifyMessage(data[1],data[2],data[0],publicKey)
     statusText = "valid" if status else "invalid"
 
+
     vehicleData = data[0].decode('hex').replace("\n","")
     vehicleData += ",True" if int(status) else ",False"
 
