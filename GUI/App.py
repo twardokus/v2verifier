@@ -17,10 +17,6 @@ class Car:
 		self.i = i
 		self.tag = tag  # color for text
 
-# used to determine if a new car has been added
-# key: Car ID, value: Car object
-carDict = {}
-
 # https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 def receive():
 	"""Handles receiving of messages."""
@@ -108,8 +104,9 @@ def newPacket(carid, heading, valid, x, y):
 
 	textWidget.insert(tk.END, "Incoming BSM: vehicle located at (" + str(x) + "," + str(y) + "), traveling " + heading + "\n", "valid" if valid else "invalid")
 	textWidget.insert(tk.END, "===================================\n","valid" if valid else "invalid")
+	textWidget.see(tk.END)
 
-	time.sleep(3)
+	time.sleep(1)
 	canvas.delete(i)
 
 s = socket()
