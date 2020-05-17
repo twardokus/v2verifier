@@ -83,16 +83,24 @@ def generatePayloadBytes(vehicleDataString):
 	payloadByteString += "80"
 
 	# Length of Unsecured Data
+	"""
 	payloadByteString += "0"
+	print vehicleDataString
+	print str(hex(len(vehicleDataString)))
+	"""	
 	vehicleData = str(hex(len(vehicleDataString)).split("x")[1])
+	if len(vehicleData) == 1:
+		payloadByteString += "0"
 	payloadByteString += vehicleData
 
 	# unsecuredData
 	payloadByteString += vehicleDataString.encode('hex')
 	
+	"""
 	# extDataHash
-	payloadByteString += "40"
+	payloadByteString += "8020"
 	payloadByteString += "FF"*32
+	"""
 
 	# headerInfo
 	payloadByteString += "4001"
@@ -206,12 +214,14 @@ def calculateHeading(now, next):
 
 def sendPacketStream():
 	trace = loadTrace()
+	print trace
+	print len(trace)
 	for i in range(0,len(trace)-2):
 
 		heading = calculateHeading(trace[i],trace[i+1])		
 
 		vehicleData = trace[i] + "," + heading
-		
+		print vehicleData
 		# Use the native echo utility to send the crafted message payload into a pipe 
 		loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes(vehicleData)), stdout=subprocess.PIPE)
 		# Send the contents of the pipe to GNURadio using the native Netcat (nc) utility
