@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Wifi Tx
-# Generated: Sun May 17 14:09:07 2020
+# Generated: Wed May 20 15:15:05 2020
 ##################################################
 
 if __name__ == '__main__':
@@ -73,7 +73,7 @@ class wifi_tx(gr.top_block, Qt.QWidget):
         self.out_buf_size = out_buf_size = 96000
         self.lo_offset = lo_offset = 0
         self.interval = interval = 300
-        self.freq = freq = 5910000000
+        self.freq = freq = 5920000000
         self.encoding = encoding = 0
 
         ##################################################

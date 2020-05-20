@@ -10,8 +10,8 @@ import os
 
 if __name__ == "__main__":
 
-    attacker = Thread(target=sendPacketStream, args=("attacker",))
-    attacker.start()
+    #attacker = Thread(target=sendPacketStream, args=("attacker",True,))
+    #attacker.start()
 
-    normal = Thread(target=sendPacketStream, args=("normal",))
+    normal = Thread(target=sendPacketStream, args=("normal",False))
     normal.start()

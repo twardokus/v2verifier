@@ -154,13 +154,13 @@ def generatePayloadBytes(vehicleDataString,option):
 	
 	        r = r.split("x")[1][:len(r)-3]
 	        s = s.split("x")[1][:len(s)-3]
-                print "Valid r:\t" + str(r)
-                print "Valid s:\t" + str(s)
+                #print "Valid r:\t" + str(r)
+                #print "Valid s:\t" + str(s)
         else:
                 r = "00"*32
                 s = "00"*32
-                print "Attack r:\t" + str(r)
-                print "Attack s:\t" + str(s)
+                #print "Attack r:\t" + str(r)
+                #print "Attack s:\t" + str(s)
 	
         # r (32 bytes)
 	payloadByteString += str(r)
@@ -217,25 +217,33 @@ def calculateHeading(now, next):
 				return "west"
 			else:
 				return "northwest"
-			
-
-
 
 #option should either be "attacker" or "normal"
-def sendPacketStream(option):
+def sendPacketStream(option,replay=False):
 	trace = loadTrace(option)
 	for i in range(0,len(trace)-2):
 
 		heading = calculateHeading(trace[i],trace[i+1])		
 
 		vehicleData = trace[i] + "," + heading
-		print vehicleData
-		# Use the native echo utility to send the crafted message payload into a pipe 
-		loader = subprocess.Popen(("echo","-n","-e",generatePayloadBytes(vehicleData,option)), stdout=subprocess.PIPE)
-		# Send the contents of the pipe to GNURadio using the native Netcat (nc) utility
-		sender = subprocess.check_output(("nc","-w1","-u","localhost","52001"),stdin=loader.stdout)
-		# Pause 100ms to emulate the pulse rate of real BSMs
-		time.sleep(0.1)
+		
+		dataToSend = generatePayloadBytes(vehicleData,option)
+		if replay:
+			for j in range(0,30):
+				# Use the native echo utility to send the crafted message payload into a pipe 
+				loader = subprocess.Popen(("echo","-n","-e",dataToSend), stdout=subprocess.PIPE)
+				# Send the contents of the pipe to GNURadio using the native Netcat (nc) utility
+				sender = subprocess.check_output(("nc","-w1","-u","localhost","52001"),stdin=loader.stdout)
+				# Pause 100ms to emulate the pulse rate of real BSMs
+				time.sleep(0.1)	
+			exit(0)
+		else:
+			# Use the native echo utility to send the crafted message payload into a pipe 
+			loader = subprocess.Popen(("echo","-n","-e",dataToSend), stdout=subprocess.PIPE)
+			# Send the contents of the pipe to GNURadio using the native Netcat (nc) utility
+			sender = subprocess.check_output(("nc","-w1","-u","localhost","52001"),stdin=loader.stdout)
+			# Pause 100ms to emulate the pulse rate of real BSMs
+			time.sleep(0.1)
 
 
 # Execution hook
