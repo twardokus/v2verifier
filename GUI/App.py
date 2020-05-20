@@ -4,6 +4,7 @@ from PIL import Image
 from PIL import ImageTk
 import time
 from socket import AF_INET, socket, SOCK_STREAM
+import threading
 from threading import Thread
 import math
 
@@ -100,24 +101,27 @@ def newPacket(carid, heading, valid, x, y, microseconds):
 	else:
 		i = ImageTk.PhotoImage(Image.open("pic/phantom/" + heading + ".png"))
 
-	canvas.create_image(x, y, image=i, anchor=tk.CENTER, tags="car")
+	canvas.create_image(x, y, image=i, anchor=tk.CENTER, tags="car" + str(threading.currentThread().ident))
 	
 	# print results
 
 	check = u'\u2713'
-	nope = u'\u2716'
+	rejected = u'\u2716'
 
 	textWidget.insert(tk.END, "==========================================\n","black")
 	if valid:
 		
 		textWidget.insert(tk.END, check + "Message successfully authenticated\n","valid")
 	else:
-		textWidget.insert(tk.END, nope + "Invalid signature!\n","attack")
+		textWidget.insert(tk.END, rejected + "Invalid signature!\n","attack")
 	
 	if recent:
 		textWidget.insert(tk.END, check + "Message is recent: " + str(round(microseconds,2)) + " micoseconds elapsed since transmission\n","valid")
 	else:	
-		textWidget.insert(tk.END, nope + "Message out-of-date: " + str(round(microseconds,2)) + " micoseconds elapsed since transmission\n","information")
+		textWidget.insert(tk.END, rejected + "Message out-of-date: " + str(round(microseconds,2)) + " micoseconds elapsed since transmission\n","information")
+	
+	if not valid and not recent:
+		textWidget.insert(tk.END, rejected + "!!!--- Invalid signature AND message expired: replay attack likely! ---!!!\n","attack")
 	
 	textWidget.insert(tk.END, "Vehicle reports location at (" + str(x) + "," + str(y) + "), traveling " + heading + "\n", "black")
 
@@ -125,7 +129,7 @@ def newPacket(carid, heading, valid, x, y, microseconds):
 	textWidget.see(tk.END)
 	
 	time.sleep(1)
-	canvas.delete("car")
+	canvas.delete("car" + str(threading.currentThread().ident))
 
 s = socket()
 port = 6666
