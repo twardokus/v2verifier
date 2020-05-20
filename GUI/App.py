@@ -76,7 +76,7 @@ textWidget = tk.Text(root, height=800, width=500, font=36)
 textWidget.pack(side=tk.RIGHT)
 textWidget.tag_configure("valid", foreground="green")
 textWidget.tag_configure("attack", foreground="red")
-textWidget.tag_configure("information", foreground="yellow")
+textWidget.tag_configure("information", foreground="orange")
 
 # TODO
 def isIntact(intact):
