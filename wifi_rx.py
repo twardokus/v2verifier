@@ -3,7 +3,7 @@
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Wifi Rx
-# Generated: Sun May 17 14:10:34 2020
+# Generated: Wed May 20 12:28:09 2020
 ##################################################
 
 if __name__ == '__main__':
@@ -70,7 +70,7 @@ class wifi_rx(gr.top_block, Qt.QWidget):
         self.window_size = window_size = 48
         self.sync_length = sync_length = 320
         self.samp_rate = samp_rate = 10e6
-        self.lo_offset = lo_offset = 6e6
+        self.lo_offset = lo_offset = 0
         self.gain = gain = .98
         self.freq = freq = 5910000000
         self.chan_est = chan_est = 0

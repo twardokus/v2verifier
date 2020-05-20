@@ -17,7 +17,6 @@ class Car:
 		self.i = i
 		self.tag = tag  # color for text
 
-# https://medium.com/swlh/lets-write-a-chat-app-in-python-f6783a9ac170
 def receive():
 	"""Handles receiving of messages."""
 	messageCounter = 1
@@ -33,7 +32,7 @@ def receive():
 
 				valid = True if data[3] == "True" else False
 
-				update = Thread(target=newPacket, args=(0,data[2],valid,data[0],data[1],))
+				update = Thread(target=newPacket, args=(0,data[2],valid,data[0],data[1],data[4],))
 				update.start()
 
 		except Exception as e:
@@ -52,7 +51,6 @@ topFrame = Frame(root, width=700, height=300)  # Added "container" Frame.
 topFrame.pack(side=tk.LEFT)
 # create the drawing canvas
 canvas = tk.Canvas(topFrame, width=800, height=800, bg='#7E7E7E')
-canvas.pack()
 canvas.pack()
 
 # draw horizontal lines
@@ -77,37 +75,57 @@ for k in range(0, 800, 50):
 textWidget = tk.Text(root, height=800, width=500, font=36)
 textWidget.pack(side=tk.RIGHT)
 textWidget.tag_configure("valid", foreground="green")
-textWidget.tag_configure("invalid", foreground="red")
+textWidget.tag_configure("attack", foreground="red")
+textWidget.tag_configure("information", foreground="orange")
 
-def isValid(valid):
-	check = u'\u2713'
-	nope = u'\u2716'
-	textWidget.insert(tk.END, "===================================\n","valid" if valid else "invalid")
-	if valid:
-		
-		textWidget.insert(tk.END, check + " Message successfully authenticated\n","valid")
-	else:
-		textWidget.insert(tk.END, nope + " Message is unsigned or incorrectly formatted. Ignoring message!\n","invalid")
+# TODO
+def isIntact(intact):
+	print("")
 
+# TODO
+def isRecent(time):
+	time = float(time)
+	return time < 100
 
-def newPacket(carid, heading, valid, x, y):
+def newPacket(carid, heading, valid, x, y, microseconds):
 
-	isValid(valid)
+	recent = isRecent(microseconds)
+	microseconds = float(microseconds)
+	#intact = isIntact()	
 
 	i = None
+
 	if valid:
 		i = ImageTk.PhotoImage(Image.open("pic/" + heading + ".png"))
 	else:
 		i = ImageTk.PhotoImage(Image.open("pic/phantom/" + heading + ".png"))
 
-	canvas.create_image(x, y, image=i, anchor=tk.CENTER)
+	canvas.create_image(x, y, image=i, anchor=tk.CENTER, tags="car")
+	
+	# print results
 
-	textWidget.insert(tk.END, "Incoming BSM: vehicle located at (" + str(x) + "," + str(y) + "), traveling " + heading + "\n", "valid" if valid else "invalid")
-	textWidget.insert(tk.END, "===================================\n","valid" if valid else "invalid")
+	check = u'\u2713'
+	nope = u'\u2716'
+
+	textWidget.insert(tk.END, "==========================================\n","black")
+	if valid:
+		
+		textWidget.insert(tk.END, check + "Message successfully authenticated\n","valid")
+	else:
+		textWidget.insert(tk.END, nope + "Invalid signature!\n","attack")
+	
+	if recent:
+		textWidget.insert(tk.END, check + "Message is recent: " + str(round(microseconds,2)) + " micoseconds elapsed since transmission\n","valid")
+	else:	
+		textWidget.insert(tk.END, nope + "Message out-of-date: " + str(round(microseconds,2)) + " micoseconds elapsed since transmission\n","information")
+	
+	textWidget.insert(tk.END, "Vehicle reports location at (" + str(x) + "," + str(y) + "), traveling " + heading + "\n", "black")
+
+	textWidget.insert(tk.END, "==========================================\n","black")
 	textWidget.see(tk.END)
-
+	
 	time.sleep(1)
-	canvas.delete(i)
+	canvas.delete("car")
 
 s = socket()
 port = 6666

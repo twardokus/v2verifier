@@ -17,22 +17,14 @@ def checkIfRoot():
         print "Error - you must be root! Try running with sudo"
         exit(1)
 
-
 if __name__ == "__main__":
     
     # This script needs root access in order to connect to a TCP socket
     checkIfRoot()
-    
-    #traces = loadTracesFromFile(os.getcwd() + "/traces.csv")
-    #writeVehicleTraceFiles(traces)
 
     # TCP connection to the GUI application's listener
     s = socket.socket()
     s.connect(('127.0.0.1',6666))
-
-    # Change this at will - can be any positive integer as long as that vehicle
-    # has a trace in the traces.csv file
-    #ownVehicleID = 2
 
     lock = threading.Lock()
     

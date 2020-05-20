@@ -23,6 +23,9 @@ def extractData(payload):
 	unsecuredDataLength = int(ieee1609Dot2Data[12:14],16)*2
 	unsecuredData = ieee1609Dot2Data[14:14+(unsecuredDataLength)]
 
+	timePostition = 14 + unsecuredDataLength + 6
+	time = ieee1609Dot2Data[timePostition:timePostition+16]
+
 	# Next extract the signature components r,s
 	# total IEEE1609Dot2Data size is 93 bytes plus length of unsecured data
 	totalSize = (93*2) + unsecuredDataLength
@@ -49,4 +52,4 @@ def extractData(payload):
 	r = int(str(r))
 	s = int(str(s))
 
-	return (unsecuredData,r,s)
+	return (unsecuredData,r,s,time)
