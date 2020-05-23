@@ -19,17 +19,17 @@ class GUI:
 		CANVAS_WIDTH = 800
 
 		# create the drawing canvas
-		canvas = tk.Canvas(root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH, bg='#7E7E7E')
+		self.canvas = tk.Canvas(root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH, bg='#7E7E7E')
 
 		# create textbox to display messages
-		textWidget = tk.Text(root, height=300,font=36, bg="white", borderwidth=2)
+		self.textWidget = tk.Text(root, height=300,font=36, bg="white", borderwidth=2)
 
-		textWidget.tag_configure("valid", foreground="green")
-		textWidget.tag_configure("attack", foreground="red")
-		textWidget.tag_configure("information", foreground="orange")
+		self.textWidget.tag_configure("valid", foreground="green")
+		self.textWidget.tag_configure("attack", foreground="red")
+		self.textWidget.tag_configure("information", foreground="orange")
 
 		# create another textbox to display counters
-		counters = tk.Text(root,font=36,bg="white",borderwidth=2).grid(row=0,column=1,sticky="n")
+		self.counters = tk.Text(root,font=36,bg="white",borderwidth=2).grid(row=0,column=1,sticky="n")
 		# draw horizontal lines on the canvas
 		x1 = 0
 		x2 = CANVAS_WIDTH
@@ -37,7 +37,7 @@ class GUI:
 			y1 = k
 			y2 = k
 
-			canvas.create_line(x1, y1, x2, y2, fill="#000000")
+			self.canvas.create_line(x1, y1, x2, y2, fill="#000000")
 
 		# draw vertical lines
 		y1 = 0
@@ -45,10 +45,10 @@ class GUI:
 		for k in range(0, CANVAS_WIDTH, 50):
 			x1 = k
 			x2 = k
-			canvas.create_line(x1, y1, x2, y2, fill="#000000")
+			self.canvas.create_line(x1, y1, x2, y2, fill="#000000")
 
-		textWidget.grid(row=1,column=0)
-		canvas.grid(row=0,column=0)
+		self.textWidget.grid(row=1,column=0)
+		self.canvas.grid(row=0,column=0)
 
 		receive_thread = Thread(target=self.receive)
 		receive_thread.start()
@@ -66,7 +66,7 @@ class GUI:
 	def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver)
 
 	"""
-	def receive():
+	def receive(self):
 
 		while True:
 			try:
@@ -76,7 +76,7 @@ class GUI:
 				data = json.loads(msg)
 
 				#newPacket(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'])
-				update = Thread(target=newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
+				update = Thread(target=self.newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
 				update.start()
 
 
@@ -91,7 +91,7 @@ class GUI:
 				print("=====================================================================================")
 
 
-	def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
+	def newPacket(self, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
 
 		# cast coordinates to integers
 		x = int(x)
@@ -107,34 +107,34 @@ class GUI:
 			else:
 				i = ImageTk.PhotoImage(Image.open("pic/phantom/" + heading + ".png"))
 
-		canvas.create_image(x, y, image=i, anchor=tk.CENTER, tags="car" + str(threading.currentThread().ident))
+		self.canvas.create_image(x, y, image=i, anchor=tk.CENTER, tags="car" + str(threading.currentThread().ident))
 		
 		# print results
 		if not isReceiver:
 			check = u'\u2713'
 			rejected = u'\u2716'
 			
-			textWidget.insert(tk.END, "==========================================\n","black")
+			self.textWidget.insert(tk.END, "==========================================\n","black")
 			if isValid:
 				
-				textWidget.insert(tk.END, check + "Message successfully authenticated\n","valid")
+				self.textWidget.insert(tk.END, check + "Message successfully authenticated\n","valid")
 			else:
-				textWidget.insert(tk.END, rejected + "Invalid signature!\n","attack")
+				self.textWidget.insert(tk.END, rejected + "Invalid signature!\n","attack")
 			
 			if isRecent:
-				textWidget.insert(tk.END, check + "Message is recent: " + str(round(elapsedTime,2)) + " micoseconds elapsed since transmission\n","valid")
+				self.textWidget.insert(tk.END, check + "Message is recent: " + str(round(elapsedTime,2)) + " micoseconds elapsed since transmission\n","valid")
 			else:	
-				textWidget.insert(tk.END, rejected + "Message out-of-date: " + str(round(elapsedTime,2)) + " micoseconds elapsed since transmission\n","information")
+				self.textWidget.insert(tk.END, rejected + "Message out-of-date: " + str(round(elapsedTime,2)) + " micoseconds elapsed since transmission\n","information")
 			
 			if not isValid and not isRecent:
-				textWidget.insert(tk.END, rejected + "!!!--- Invalid signature AND message expired: replay attack likely! ---!!!\n","attack")
+				self.textWidget.insert(tk.END, rejected + "!!!--- Invalid signature AND message expired: replay attack likely! ---!!!\n","attack")
 			
-			textWidget.insert(tk.END, "Vehicle reports location at (" + str(x) + "," + str(y) + "), traveling " + heading + "\n", "black")
+			self.textWidget.insert(tk.END, "Vehicle reports location at (" + str(x) + "," + str(y) + "), traveling " + heading + "\n", "black")
 
-			textWidget.insert(tk.END, "==========================================\n","black")
-			textWidget.see(tk.END)
+			self.textWidget.insert(tk.END, "==========================================\n","black")
+			self.textWidget.see(tk.END)
 		
-		canvas.delete("car" + str(threading.currentThread().ident))
+		self.canvas.delete("car" + str(threading.currentThread().ident))
 
 
 if __name__=="__main__":
