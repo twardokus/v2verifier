@@ -1,6 +1,7 @@
 from verify import verifySignature
 from pcapParser import *
 from fastecdsa import keys, curve
+from transmitter import calculateHeading
 
 from scapy.all import *
 import binascii
@@ -70,17 +71,20 @@ lock		- a thread lock passed from rxMain.py
 """
 def runSelf(socket, lock):
 
-	trace = open("v" + str(vehicleNo) + "path")
+	trace = None
+	with open("receiver_path") as traceFile:
+		trace = traceFile.read().splitlines()
+		for i in range(0,len(trace)-2):
+			vehicleData = trace[i]
+			vehicleData += "," + calculateHeading(trace[i],trace[i+1])
+			vehicleData += ",True"
+			vehicleData += ",0"
+			vehicleData += ",True"
+			# sleeping for 0.5 seconds keeps the display update rate reasonable
+			sleep(0.5)
 
-	for i in range(0,400):
-		vehicleData = str(vehicleNo) + "," + trace.readline()
-		vehicleData += ",True"
-
-		# sleeping for 0.5 seconds keeps the display update rate reasonable
-		sleep(0.5)
-
-		with lock:
-			socket.send(vehicleData.replace("\n","").encode())
+			with lock:
+				socket.send(vehicleData.replace("\n","").encode())
 
 
 def listen(s,lock):
