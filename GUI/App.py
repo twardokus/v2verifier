@@ -50,6 +50,9 @@ class GUI:
 		textWidget.grid(row=1,column=0)
 		canvas.grid(row=0,column=0)
 
+		receive_thread = Thread(target=self.receive)
+		receive_thread.start()
+
 	"""
 	Receive a JSON string 
 
@@ -143,11 +146,8 @@ if __name__=="__main__":
 
 	BUFSIZ = 200
 
-	root = Tk()
+	root = tk.Tk()
 	gui = GUI(root)
 	root.mainloop()
-	print("Started loop and continuing")
-	receive_thread = Thread(target=receive)
-	receive_thread.start()
 
 	
