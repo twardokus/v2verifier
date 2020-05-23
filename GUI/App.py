@@ -53,9 +53,9 @@ def receive():
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
 topFrame = Frame(root, width=700, height=300)  # Added "container" Frame.
-topFrame.pack(side=tk.LEFT)
+topFrame.pack(side=tk.TOP)
 # create the drawing canvas
-canvas = tk.Canvas(topFrame, width=800, height=800, bg='#7E7E7E')
+canvas = tk.Canvas(topFrame, width=800, height=600, bg='#7E7E7E')
 canvas.pack()
 
 # draw horizontal lines
@@ -77,8 +77,8 @@ for k in range(0, 800, 50):
 
 
 # adds output panel on right
-textWidget = tk.Text(root, height=800, width=500, font=36)
-textWidget.pack(side=tk.RIGHT)
+textWidget = tk.Text(root, height=200, width=1000, font=36)
+textWidget.pack(side=tk.BOTTOM)
 textWidget.tag_configure("valid", foreground="green")
 textWidget.tag_configure("attack", foreground="red")
 textWidget.tag_configure("information", foreground="orange")
