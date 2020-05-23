@@ -62,20 +62,6 @@ def generatePayloadBytes(vehicleDataString,option):
 	
 	####################################################
 	# IEEE1609Dot2Data Structure
-
-	### Calculate timestamp first so that hash of timestamp can be used in message
-	### to include the timestamp in the signature verification
-	# IEEE 1609.2 defines timestamps as an estimate of the microseconds elapsed since
-	# 12:00 AM on January 1, 2004
-	origin = datetime(2004, 1, 1, 0, 0, 0, 0)
-	
-	# get the offset since the origin time in microseconds
-	offset = (datetime.now() - origin).total_seconds() * 1000
-	timestr = hex(int(math.floor(offset)))
-        timestr  = timestr[2:]
-	if len(timestr) < 16:
-		for i in range(0, 16 - len(timestr)):
-			timestr = "0" + timestr
 	
 	# begin assembling structure
 	payloadByteString = ""
@@ -110,7 +96,7 @@ def generatePayloadBytes(vehicleDataString,option):
 	payloadByteString += vehicleData
 
 	# unsecuredData
-	payloadByteString += (vehicleDataString + ",").encode('hex') + timestr[:8]
+	payloadByteString += vehicleDataString.encode('hex')
 	
 	"""
 	# extDataHash
@@ -125,6 +111,19 @@ def generatePayloadBytes(vehicleDataString,option):
 	payloadByteString += "20"
 
 	# generationTime (8 bytes)
+	
+	# IEEE 1609.2 defines timestamps as an estimate of the microseconds elapsed since
+	# 12:00 AM on January 1, 2004
+	origin = datetime(2004, 1, 1, 0, 0, 0, 0)
+	
+	# get the offset since the origin time in microseconds
+	offset = (datetime.now() - origin).total_seconds() * 1000
+	timestr = hex(int(math.floor(offset)))
+        timestr  = timestr[2:]
+	if len(timestr) < 16:
+		for i in range(0, 16 - len(timestr)):
+			timestr = "0" + timestr
+
 	payloadByteString += timestr
 
 	# signer
