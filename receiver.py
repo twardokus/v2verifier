@@ -96,16 +96,24 @@ def runSelf(socket, lock):
 	with open("receiver_path") as traceFile:
 		trace = traceFile.read().splitlines()
 		for i in range(0,len(trace)-2):
-			vehicleData = trace[i]
-			vehicleData += "," + calculateHeading(trace[i],trace[i+1])
-			vehicleData += ",True"
-			vehicleData += ",0"
-			vehicleData += ",True"
+
+			vehicleData = {}
+
+			vehicleData['x'], vehicleData['y'] = trace[i].split(",")
+			vehicleData['heading'] = calculateHeading(trace[i],trace[i+1])
+			vehicleData['sig'] = True
+			vehicleData['recent'] = True
+			vehicleData['receiver'] = True
+
+			vehicleDataJSON = json.dumps(vehicleData)
+			
+			print "vehicleDataJSON: " + vehicleDataJSON
+
 			# sleeping for 0.5 seconds keeps the display update rate reasonable
 			sleep(0.5)
 
 			with lock:
-				socket.send(vehicleData.replace("\n","").encode())
+				socket.send(vehicleDataJSON.encode())
 
 
 def listen(s,lock):
