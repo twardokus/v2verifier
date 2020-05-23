@@ -53,7 +53,8 @@ def processPacket(payload,s,lock):
 	# extract the elements "r,s,vehicleData,timestamp" from the 1609.2 structure
 	data = extractData(payload)
 
-	isRecent = verifyTime(calculateElapsedTime(data[3]))
+	elapsedMicroseconds = calculateElapsedTime(data[3])
+	isRecent = verifyTime(elapsedMicroseconds)
 	
 	# verify the signature
 	isValidSig = verifySignature(data[1],data[2],data[0],publicKey)
@@ -65,6 +66,7 @@ def processPacket(payload,s,lock):
 	decodedData['y'] = BSMData[1]
 	decodedData['heading'] = BSMData[2]
 	decodedData['sig'] = isValidSig
+	decodedData['elapsed'] = elapsedMicroseconds
 	decodedData['recent'] = isRecent
 	decodedData['receiver'] = False
 	
@@ -104,6 +106,7 @@ def runSelf(socket, lock):
 			vehicleData['sig'] = True
 			vehicleData['recent'] = True
 			vehicleData['receiver'] = True
+			vehicleData['elapsed'] = 0
 
 			vehicleDataJSON = json.dumps(vehicleData)
 			

@@ -43,9 +43,9 @@ def receive():
 			data = json.loads(msg)
 			
 			print("JSON decoded message: ",end="")
-			print data
+			print(data)
 
-			update = Thread(target=newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'],))
+			update = Thread(target=newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
 			update.start()
 
 			"""
@@ -107,7 +107,7 @@ textWidget.tag_configure("valid", foreground="green")
 textWidget.tag_configure("attack", foreground="red")
 textWidget.tag_configure("information", foreground="orange")
 
-def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver):
+def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
 
 	# cast coordinates to integers
 	x = int(x)
@@ -118,7 +118,7 @@ def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver):
 	if isReceiver:
 		i = ImageTk.PhotoImage(Image.open("pic/receiver/" + heading + ".png"))
 	else:
-		if valid:
+		if isValid:
 			i = ImageTk.PhotoImage(Image.open("pic/" + heading + ".png"))
 		else:
 			i = ImageTk.PhotoImage(Image.open("pic/phantom/" + heading + ".png"))
@@ -131,16 +131,16 @@ def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver):
 		rejected = u'\u2716'
 		
 		textWidget.insert(tk.END, "==========================================\n","black")
-		if valid:
+		if isValid:
 			
 			textWidget.insert(tk.END, check + "Message successfully authenticated\n","valid")
 		else:
 			textWidget.insert(tk.END, rejected + "Invalid signature!\n","attack")
 		
 		if isRecent:
-			textWidget.insert(tk.END, check + "Message is recent: " + str(round(microseconds,2)) + " micoseconds elapsed since transmission\n","valid")
+			textWidget.insert(tk.END, check + "Message is recent: " + str(round(elapsedTime,2)) + " micoseconds elapsed since transmission\n","valid")
 		else:	
-			textWidget.insert(tk.END, rejected + "Message out-of-date: " + str(round(microseconds,2)) + " micoseconds elapsed since transmission\n","information")
+			textWidget.insert(tk.END, rejected + "Message out-of-date: " + str(round(elapsedTime,2)) + " micoseconds elapsed since transmission\n","information")
 		
 		if not isValid and not isRecent:
 			textWidget.insert(tk.END, rejected + "!!!--- Invalid signature AND message expired: replay attack likely! ---!!!\n","attack")
@@ -159,7 +159,7 @@ s.bind(('127.0.0.1',port))
 s.listen(4)
 c, addr = s.accept()
 
-BUFSIZ = 105
+BUFSIZ = 200
 
 receive_thread = Thread(target=receive)
 receive_thread.start()
