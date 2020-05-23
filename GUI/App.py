@@ -42,7 +42,8 @@ def receive():
 			# decode the JSON string
 			data = json.loads(msg)
 			
-			print("JSON decoded message: " + data)
+			print("JSON decoded message: ",end="")
+			print data
 
 			update = Thread(target=newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'],))
 			update.start()
