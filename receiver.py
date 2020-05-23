@@ -13,10 +13,12 @@ import math
 import random
 from datetime import datetime
 
+import json
+
 # load the public key of the other "vehicle" (the host connected to the other USRP)
 publicKey = keys.import_key("/home/administrator/v2v-capstone/keys/other_p256.pub",curve=curve.P256, public=True)
 
-def verifyTime(timeInMicroSeconds):
+def calculateElapsedTime(timeInMicroSeconds):
 	unpaddedTimeInMicroseconds = ""
 	for i in range(0,len(timeInMicroSeconds)):
 		if timeInMicroSeconds[i] != "0":
@@ -27,11 +29,10 @@ def verifyTime(timeInMicroSeconds):
 	origin = datetime(2004, 1, 1, 0, 0, 0, 0)
 	now = (datetime.now() - origin).total_seconds() * 1000
 
-	#print "Microseconds from packet: " + str(unpaddedTimeInMicroseconds)
-	#print "Now, in microseconds: " + str(now)
-	#print "Microseconds since transmission: " + str(now - unpaddedTimeInMicroseconds)
-
 	return now - unpaddedTimeInMicroseconds
+
+def verifyTime(elapsedMicroseconds):
+	return elapsedMicroseconds < 100
 
 """
 Function to extract the data string (format id,x-coord,y-coord) from the 
@@ -44,21 +45,41 @@ payload -   the hexadecimal string representing everything above Layer 2,
 s -a TCP socket connected to the GUI application
 lock	-   a thread lock passed from rxMain.py
 """
-
 def processPacket(payload,s,lock):
 	
+	# create a dictionary to pack and send
+	decodedData = {}	
+	
+	# extract the elements "r,s,vehicleData,timestamp" from the 1609.2 structure
 	data = extractData(payload)
 
-	time = verifyTime(data[3])
+	isRecent = verifyTime(calculateElapsedTime(data[3]))
 	
-	status = verifySignature(data[1],data[2],data[0],publicKey)
+	# verify the signature
+	isValidSig = verifySignature(data[1],data[2],data[0],publicKey)
 
-	vehicleData = data[0].decode('hex').replace("\n","")
-	vehicleData += ",True" if int(status) else ",False"
-	vehicleData += "," + str(time)
+	# decode and break up the BSM data string "x,y"
+	BSMData = data[0].decode('hex').replace("\n","").split(",")
+	
+	decodedData['x'] = BSMData[0]
+	decodedData['y'] = BSMData[1]
+	decodedData['heading'] = BSMData[2]
+	decodedData['sig'] = isValidSig
+	decodedData['recent'] = isRecent
+	decodedData['receiver'] = False
+	
+	#vehicleData = data[0].decode('hex').replace("\n","")
+	#vehicleData += ",True" if int(status) else ",False"
+	#vehicleData += "," + str(time)
+
+	vehicleDataJSON = json.dumps(decodedData)
+
+	print "vehicleDataJSON: " + vehicleDataJSON
 
 	with lock:
-		s.send(vehicleData.encode())
+		s.send(vehicleDataJSON.encode())
+	
+	
 
 """
 Function to send data about the receiver's "vehicle" to the GUI application

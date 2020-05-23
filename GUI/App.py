@@ -7,6 +7,7 @@ from socket import AF_INET, socket, SOCK_STREAM
 import threading
 from threading import Thread
 import math
+import json
 
 class Car:
 	def __init__(self, CarID, name, x, y, pic, i, tag):
@@ -17,14 +18,36 @@ class Car:
 		self.pic = pic
 		self.i = i
 		self.tag = tag  # color for text
+"""
+Receive a JSON string 
 
+	decodedData['x'] = BSMData[0]
+	decodedData['y'] = BSMData[1]
+	decodedData['heading'] = BSMData[2]
+	decodedData['sig'] = isValidSig
+	decodedData['recent'] = isRecent
+	decodedData['receiver'] = False
+
+def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver)
+
+"""
 def receive():
-	"""Handles receiving of messages."""
-	messageCounter = 1
+
 	while True:
 		try:
 			msg = c.recv(BUFSIZ).decode()
-			print(msg)
+
+			print("Message received: " + msg)
+			
+			# decode the JSON string
+			data = json.loads(msg)
+			
+			print("JSON decoded message: " + data)
+
+			update = Thread(target=newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'],))
+			update.start()
+
+			"""
 			messageCounter += 1 
 
 			if messageCounter % 2 == 0:
@@ -39,7 +62,7 @@ def receive():
 				else:
 					update = Thread(target=newPacket, args=(0,data[2],valid,data[0],data[1],data[4],))
 				update.start()
-
+			"""
 		except Exception as e:
 			print("=====================================================================================")
 			print("Error processing packet. Exception type:")
@@ -57,7 +80,7 @@ topFrame.pack(side=tk.TOP)
 # create the drawing canvas
 canvas = tk.Canvas(topFrame, width=800, height=600, bg='#7E7E7E')
 canvas.pack()
-
+x`
 # draw horizontal lines
 x1 = 0
 x2 = 800
@@ -83,23 +106,17 @@ textWidget.tag_configure("valid", foreground="green")
 textWidget.tag_configure("attack", foreground="red")
 textWidget.tag_configure("information", foreground="orange")
 
-# TODO
-def isIntact(intact):
-	print("")
 
-# TODO
-def isRecent(time):
-	time = float(time)
-	return time < 100
 
-def newPacket(carid, heading, valid, x, y, microseconds, receiver=False):
+def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver):
 
-	recent = isRecent(microseconds)
-	microseconds = float(microseconds)
-	#intact = isIntact()	
-
+	# cast coordinates to integers
+	x = int(x)
+	y = int(y)
+	
+	# load the appropriate image, depending on signature validation and whether the packet is local
 	i = None
-	if receiver:
+	if isReceiver:
 		i = ImageTk.PhotoImage(Image.open("pic/receiver/" + heading + ".png"))
 	else:
 		if valid:
@@ -110,7 +127,7 @@ def newPacket(carid, heading, valid, x, y, microseconds, receiver=False):
 	canvas.create_image(x, y, image=i, anchor=tk.CENTER, tags="car" + str(threading.currentThread().ident))
 	
 	# print results
-	if not receiver:
+	if not isReceiver:
 		check = u'\u2713'
 		rejected = u'\u2716'
 		
@@ -121,12 +138,12 @@ def newPacket(carid, heading, valid, x, y, microseconds, receiver=False):
 		else:
 			textWidget.insert(tk.END, rejected + "Invalid signature!\n","attack")
 		
-		if recent:
+		if isRecent:
 			textWidget.insert(tk.END, check + "Message is recent: " + str(round(microseconds,2)) + " micoseconds elapsed since transmission\n","valid")
 		else:	
 			textWidget.insert(tk.END, rejected + "Message out-of-date: " + str(round(microseconds,2)) + " micoseconds elapsed since transmission\n","information")
 		
-		if not valid and not recent:
+		if not isValid and not isRecent:
 			textWidget.insert(tk.END, rejected + "!!!--- Invalid signature AND message expired: replay attack likely! ---!!!\n","attack")
 		
 		textWidget.insert(tk.END, "Vehicle reports location at (" + str(x) + "," + str(y) + "), traveling " + heading + "\n", "black")
