@@ -80,7 +80,7 @@ topFrame.pack(side=tk.TOP)
 # create the drawing canvas
 canvas = tk.Canvas(topFrame, width=800, height=600, bg='#7E7E7E')
 canvas.pack()
-x`
+
 # draw horizontal lines
 x1 = 0
 x2 = 800
@@ -105,8 +105,6 @@ textWidget.pack(side=tk.BOTTOM)
 textWidget.tag_configure("valid", foreground="green")
 textWidget.tag_configure("attack", foreground="red")
 textWidget.tag_configure("information", foreground="orange")
-
-
 
 def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver):
 
