@@ -40,8 +40,10 @@ def receive():
 			# decode the JSON string
 			data = json.loads(msg)
 
+			#newPacket(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'])
 			update = Thread(target=newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
 			update.start()
+
 
 		except Exception as e:
 			print("=====================================================================================")
@@ -53,18 +55,30 @@ def receive():
 			print("End error message")
 			print("=====================================================================================")
 
+
 root = tk.Tk()
 root.title("Secure V2V Communication Simulator")
-topFrame = Frame(root, width=700, height=300)  # Added "container" Frame.
-topFrame.pack(side=tk.TOP)
-# create the drawing canvas
-canvas = tk.Canvas(topFrame, width=800, height=600, bg='#7E7E7E')
-canvas.pack()
 
-# draw horizontal lines
+CANVAS_HEIGHT = 600
+CANVAS_WIDTH = 800
+
+# create the drawing canvas
+canvas = tk.Canvas(root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH, bg='#7E7E7E')
+
+# create textbox to display messages
+textWidget = tk.Text(root, height=300,font=36, bg="white", borderwidth=2)
+
+textWidget.tag_configure("valid", foreground="green")
+textWidget.tag_configure("attack", foreground="red")
+textWidget.tag_configure("information", foreground="orange")
+
+# create another textbox to display counters
+counters = tk.Text(root,font=36,bg="white",borderwidth=2).grid(row=0,column=1,sticky="n")
+
+# draw horizontal lines on the canvas
 x1 = 0
-x2 = 800
-for k in range(0, 800, 50):
+x2 = CANVAS_WIDTH
+for k in range(0, CANVAS_HEIGHT, 50):
 	y1 = k
 	y2 = k
 
@@ -72,23 +86,14 @@ for k in range(0, 800, 50):
 
 # draw vertical lines
 y1 = 0
-y2 = 800
-for k in range(0, 800, 50):
+y2 = CANVAS_HEIGHT
+for k in range(0, CANVAS_WIDTH, 50):
 	x1 = k
 	x2 = k
 	canvas.create_line(x1, y1, x2, y2, fill="#000000")
 
-
-# adds output panel at bottom
-textWidget = tk.Text(root, height=200, width=1000, font=36)
-textWidget.pack(side=tk.BOTTOM)
-textWidget.tag_configure("valid", foreground="green")
-textWidget.tag_configure("attack", foreground="red")
-textWidget.tag_configure("information", foreground="orange")
-
-# add counter panel on left
-counters = tk.Text(root, height=600, width=200, font=36)
-counters.pack(side=tk.RIGHT)
+textWidget.grid(row=1,column=0)
+canvas.grid(row=0,column=0)
 
 
 def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
@@ -134,20 +139,19 @@ def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
 		textWidget.insert(tk.END, "==========================================\n","black")
 		textWidget.see(tk.END)
 	
-	time.sleep(1)
 	canvas.delete("car" + str(threading.currentThread().ident))
 
-s = socket()
-port = 6666
-s.bind(('127.0.0.1',port))
-s.listen(4)
-c, addr = s.accept()
 
-BUFSIZ = 200
+if __name__=="__main__":
+	s = socket()
+	port = 6666
+	s.bind(('127.0.0.1',port))
+	s.listen(4)
+	c, addr = s.accept()
 
-receive_thread = Thread(target=receive)
-receive_thread.start()
+	BUFSIZ = 200
 
-root.mainloop()
+	receive_thread = Thread(target=receive)
+	receive_thread.start()
 
-
+	root.mainloop()
