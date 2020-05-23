@@ -69,10 +69,6 @@ def processPacket(payload,s,lock):
 	decodedData['elapsed'] = elapsedMicroseconds
 	decodedData['recent'] = isRecent
 	decodedData['receiver'] = False
-	
-	#vehicleData = data[0].decode('hex').replace("\n","")
-	#vehicleData += ",True" if int(status) else ",False"
-	#vehicleData += "," + str(time)
 
 	vehicleDataJSON = json.dumps(decodedData)
 
@@ -118,7 +114,6 @@ def runSelf(socket, lock):
 			with lock:
 				socket.send(vehicleDataJSON.encode())
 
-
 def listen(s,lock):
 
 	# print a console message to confirm the network connection is active
@@ -129,4 +124,5 @@ def listen(s,lock):
 	sniff(iface="lo", filter="udp and port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:],s,lock))
 
 if __name__ == "__main__":
-	runSelf(None, None)
+	print "You executed the wrong file. Please run rxMain.py"
+	exit(0)

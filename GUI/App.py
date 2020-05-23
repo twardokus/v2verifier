@@ -36,34 +36,13 @@ def receive():
 	while True:
 		try:
 			msg = c.recv(BUFSIZ).decode()
-
-			print("Message received: " + msg)
 			
 			# decode the JSON string
 			data = json.loads(msg)
-			
-			print("JSON decoded message: ",end="")
-			print(data)
 
 			update = Thread(target=newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
 			update.start()
 
-			"""
-			messageCounter += 1 
-
-			if messageCounter % 2 == 0:
-				data = msg.split(",")
-				print(data)
-
-				valid = True if data[3] == "True" else False
-				update = None
-				if len(data) > 5:
-					isReceiver = True if data[5] == "True" else False
-					update = Thread(target=newPacket, args=(0,data[2],valid,data[0],data[1],data[4],isReceiver,))
-				else:
-					update = Thread(target=newPacket, args=(0,data[2],valid,data[0],data[1],data[4],))
-				update.start()
-			"""
 		except Exception as e:
 			print("=====================================================================================")
 			print("Error processing packet. Exception type:")
@@ -100,12 +79,17 @@ for k in range(0, 800, 50):
 	canvas.create_line(x1, y1, x2, y2, fill="#000000")
 
 
-# adds output panel on right
+# adds output panel at bottom
 textWidget = tk.Text(root, height=200, width=1000, font=36)
 textWidget.pack(side=tk.BOTTOM)
 textWidget.tag_configure("valid", foreground="green")
 textWidget.tag_configure("attack", foreground="red")
 textWidget.tag_configure("information", foreground="orange")
+
+# add counter panel on left
+counters = tk.Text(root, height=600, width=200, font=36)
+counters.pack(side=tk.RIGHT)
+
 
 def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
 
