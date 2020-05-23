@@ -13,7 +13,7 @@ import json
 class GUI:
 	def __init__(self, root):
 		self.root = root
-		root.title("Secure V2V Communication Simulator")
+		root.title("V2X Communications - Security Testbed")
 
 		CANVAS_HEIGHT = 600
 		CANVAS_WIDTH = 800
@@ -75,9 +75,9 @@ class GUI:
 				# decode the JSON string
 				data = json.loads(msg)
 
-				#newPacket(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'])
-				update = Thread(target=self.newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
-				update.start()
+				self.newPacket(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'])
+				#update = Thread(target=self.newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
+				#update.start()
 
 
 			except Exception as e:
