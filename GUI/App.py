@@ -62,9 +62,13 @@ class GUI:
 			self.canvas.create_line(x1, y1, x2, y2, fill="#000000")
 
 
-		self.counters = LabelFrame(root)
-		self.test1 = Label(self.counters, text="Test")		
-		self.test1.grid(row=0, column=0, sticky="w")
+		self.counters = LabelFrame(root, text="Packet Statistics", padx=5, padx=4)
+		self.receivedPacketCountLabel = Label(self.counters, text="Packets Received: " + str(self.receivedPacketCount))	
+				
+		self.test1.grid(row=0, column=0)
+
+
+
 
 		self.textWidget.grid(row=1,column=0,columnspan=2,)
 		self.canvas.grid(row=0,column=0,sticky="nw")
