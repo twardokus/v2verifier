@@ -27,6 +27,17 @@ class GUI:
 		self.authenticatedPacketCountText = tk.StringVar()
 		self.intactPacketCountText = tk.StringVar()
 		self.ontimePacketCountText = tk.StringVar()
+		self.receivedPacketCountValueText = tk.StringVar()
+		self.processedPacketCountValueText = tk.StringVar()
+		self.authenticatedPacketCountValueText = tk.StringVar()
+		self.intactPacketCountValueText = tk.StringVar()
+		self.ontimePacketCountValueText = tk.StringVar()
+		self.receivedPacketCountPercentageText = tk.StringVar()
+		self.processedPacketCountPercentageText = tk.StringVar()
+		self.authenticatedPacketCountPercentageText = tk.StringVar()
+		self.intactPacketCountPercentageText = tk.StringVar()
+		self.ontimePacketCountPercentageText = tk.StringVar()
+
 
 		labelThread = Thread(target=self.updateLabels)
 		labelThread.start()
@@ -72,11 +83,24 @@ class GUI:
 
 
 		self.counters = LabelFrame(root, text="Packet Statistics")
+		
 		self.receivedPacketCountLabel = Label(self.counters, textvariable=self.receivedPacketCountText)	
 		self.processedPacketCountLabel = Label(self.counters, textvariable=self.processedPacketCountText)	
 		self.authenticatedPacketCountLabel = Label(self.counters, textvariable=self.authenticatedPacketCountText)	
 		self.intactPacketCountLabel = Label(self.counters, textvariable=self.intactPacketCountText)	
 		self.ontimePacketCountLabel = Label(self.counters, textvariable=self.ontimePacketCountText)
+
+		self.receivedPacketCountValue = Label(self.counters, textvariable=self.receivedPacketCountValueText)	
+		self.processedPacketCountValue = Label(self.counters, textvariable=self.processedPacketCountValueText)	
+		self.authenticatedPacketCountValue = Label(self.counters, textvariable=self.authenticatedPacketCountValueText)	
+		self.intactPacketCountValue = Label(self.counters, textvariable=self.intactPacketCountValueText)	
+		self.ontimePacketCountValue = Label(self.counters, textvariable=self.ontimePacketCountValueText)
+
+		self.receivedPacketCountPercentage = Label(self.counters, textvariable=self.receivedPacketCountPercentageText)	
+		self.processedPacketCountPercentage = Label(self.counters, textvariable=self.processedPacketCountPercentageText)	
+		self.authenticatedPacketCountPercentage = Label(self.counters, textvariable=self.authenticatedPacketCountPercentageText)	
+		self.intactPacketCountPercentage = Label(self.counters, textvariable=self.intactPacketCountPercentageText)	
+		self.ontimePacketCountPercentage = Label(self.counters, textvariable=self.ontimePacketCountPercentageText)
 
 		self.receivedPacketCountLabel.grid(row=0, column=0)
 		self.processedPacketCountLabel.grid(row=1, column=0)
@@ -84,6 +108,17 @@ class GUI:
 		self.intactPacketCountLabel.grid(row=3, column=0)
 		self.ontimePacketCountLabel.grid(row=4, column=0)
 
+		self.receivedPacketCountValue.grid(row=0, column=1, padx=(10,10))
+		self.processedPacketCountValue.grid(row=1, column=1, padx=(10,10))
+		self.authenticatedPacketCountValue.grid(row=2, column=1, padx=(10,10))
+		self.intactPacketCountValue.grid(row=3, column=1, padx=(10,10))
+		self.ontimePacketCountValue.grid(row=4, column=1, padx=(10,10))
+
+		self.receivedPacketCountPercentage.grid(row=0, column=2)
+		self.processedPacketCountPercentage.grid(row=1, column=2)
+		self.authenticatedPacketCountPercentage.grid(row=2, column=2)
+		self.intactPacketCountPercentage.grid(row=3, column=2)
+		self.ontimePacketCountPercentage.grid(row=4, column=2)
 
 		self.textWidget.grid(row=1,column=0,columnspan=2,)
 		self.canvas.grid(row=0,column=0,sticky="nw")
@@ -201,11 +236,24 @@ class GUI:
 		while True:
 			if self.receivedPacketCount == 0:
 				continue
-			self.receivedPacketCountText.set("Received:\t" + str(self.receivedPacketCount) + "\t" + str(round((self.receivedPacketCount/self.receivedPacketCount)*100,2)) + "%")
-			self.processedPacketCountText.set("Processed:\t" + str(self.processedPacketCount) + "\t" + str(round((self.processedPacketCount/self.receivedPacketCount)*100,2)) + "%")
-			self.authenticatedPacketCountText.set("Authentic:\t" + str(self.authenticatedPacketCount) + "\t" + str(round((self.authenticatedPacketCount/self.receivedPacketCount)*100,2)) + "%")
-			self.intactPacketCountText.set("Intact:\t\t" + str(self.intactPacketCount) + "\t" + str(round((self.intactPacketCount/self.receivedPacketCount)*100,2)) + "%")
-			self.ontimePacketCountText.set("On time:\t\t" + str(self.ontimePacketCount) + "\t" + str(round((self.ontimePacketCount/self.receivedPacketCount)*100,2)) + "%")
+			self.receivedPacketCountText.set("Received:")
+			self.processedPacketCountText.set("Processed:")
+			self.authenticatedPacketCountText.set("Authentic:")
+			self.intactPacketCountText.set("Intact:")
+			self.ontimePacketCountText.set("On time:")
+
+			self.receivedPacketCountValueText.set(str(self.receivedPacketCount))
+			self.processedPacketCountValueText.set(str(self.processedPacketCount))
+			self.authenticatedPacketCountValueText.set(str(self.authenticatedPacketCount))
+			self.intactPacketCountValueText.set(str(self.intactPacketCount))
+			self.ontimePacketCountValueText.set(str(self.ontimePacketCount))
+			
+			self.receivedPacketCountPercentageText.set(str(round((self.receivedPacketCount/self.receivedPacketCount)*100,2)) + "%")
+			self.processedPacketCountPercentageText.set(str(round((self.processedPacketCount/self.receivedPacketCount)*100,2)) + "%")
+			self.authenticatedPacketCountPercentageText.set(str(round((self.authenticatedPacketCount/self.receivedPacketCount)*100,2)) + "%")
+			self.intactPacketCountPercentageText.set(str(round((self.intactPacketCount/self.receivedPacketCount)*100,2)) + "%")
+			self.ontimePacketCountPercentageText.set(str(round((self.ontimePacketCount/self.receivedPacketCount)*100,2)) + "%")
+
 			time.sleep(0.1)
 
 
