@@ -52,7 +52,7 @@ class GUI:
 		CANVAS_WIDTH = 800
 
 		# create the drawing canvas
-		self.canvas = tk.Canvas(root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH, bg='#7E7E7E')
+		self.canvas = tk.Canvas(root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH, bg='#247000')
 
 		# create textbox to display messages
 		self.textWidget = tk.Text(root, height=300,font=36, bg="white", borderwidth=2)
@@ -64,6 +64,7 @@ class GUI:
 		# create another textbox to display counters
 		#self.counters = tk.Text(root,font=36,bg="white",borderwidth=2)
 
+		"""
 		# draw horizontal lines on the canvas
 		x1 = 0
 		x2 = CANVAS_WIDTH
@@ -80,8 +81,27 @@ class GUI:
 			x1 = k
 			x2 = k
 			self.canvas.create_line(x1, y1, x2, y2, fill="#000000")
+		"""
 
+		# draw roads
+		self.canvas.create_rectangle(0,20,800,70,fill="#999999")
+		self.canvas.create_line(0,20,300,20, fill="black")
+		self.canvas.create_line(350,20,800,20, fill="black")
+		self.canvas.create_line(0,45,800,45, fill="white", dash=(4,2))
+		self.canvas.create_line(0,70,300,70, fill="black")
+		self.canvas.create_line(350,70,800,70, fill="black")
 
+		self.canvas.create_rectangle(0,520,800,570,fill="#999999")
+		self.canvas.create_line(0,520,800,520, fill="black")
+		self.canvas.create_line(0,545,800,545, fill="white", dash=(4,2))
+		self.canvas.create_line(0,570,800,570, fill="black")
+
+		self.canvas.create_rectangle(300,70,350,520,fill="#999999")
+		self.canvas.create_line(300,70,300,520,fill="black")
+		self.canvas.create_line(325,70,325,520,fill="white", dash=(4,2))
+		self.canvas.create_line(350,70,350,520,fill="black")
+
+		# build the counter window
 		self.counters = LabelFrame(root, text="Packet Statistics")
 		
 		self.receivedPacketCountLabel = Label(self.counters, textvariable=self.receivedPacketCountText)	
@@ -184,8 +204,8 @@ class GUI:
 	def newPacket(self, lock, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
 		
 		# cast coordinates to integers
-		x = int(x)
-		y = int(y)
+		x = float(x)
+		y = float(y)
 		
 		# load the appropriate image, depending on signature validation and whether the packet is local
 		i = None

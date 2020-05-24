@@ -149,7 +149,10 @@ def generatePayloadBytes(vehicleDataString,option):
         public = None
         if option == "normal":
         	private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")
-	        r, s = ecdsa.sign((vehicleDataString + timestr).encode('hex'), private, hashfunc=sha256)
+		print [vehicleDataString]
+		print [timestr]
+		print [(vehicleDataString + timestr).encode('hex')]	        
+		r, s = ecdsa.sign((vehicleDataString + timestr).encode('hex'), private, hashfunc=sha256)
                 r = hex(r)
 	        s = hex(s)
 	
@@ -192,12 +195,12 @@ vehicleNo - the ID number of the vehicle whose trace will be used
 """
 def calculateHeading(now, next):
 	xNow, yNow = now.split(",")
-	xNow = int(xNow)
-	yNow = int(yNow)
+	xNow = float(xNow)
+	yNow = float(yNow)
 
 	xNext, yNext = next.split(",")
-	xNext = int(xNext)
-	yNext = int(yNext)
+	xNext = float(xNext)
+	yNext = float(yNext)
 
 	if xNext == xNow and yNext == yNow:
 		return "none"
