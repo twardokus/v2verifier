@@ -42,7 +42,7 @@ class GUI:
 		self.textWidget.tag_configure("information", foreground="orange")
 
 		# create another textbox to display counters
-		self.counters = tk.Text(root,font=36,bg="white",borderwidth=2)
+		#self.counters = tk.Text(root,font=36,bg="white",borderwidth=2)
 
 		# draw horizontal lines on the canvas
 		x1 = 0
@@ -61,9 +61,15 @@ class GUI:
 			x2 = k
 			self.canvas.create_line(x1, y1, x2, y2, fill="#000000")
 
+
+		self.counters = LabelFrame(root)
+		self.test1 = Label(counters, sticky="nw")		
+		self.text1.pack()
+
 		self.textWidget.grid(row=1,column=0,columnspan=2,)
 		self.canvas.grid(row=0,column=0,sticky="nw")
 		self.counters.grid(row=0,column=1,sticky="n")
+		#self.counters.grid(row=0,column=1,sticky="n")
 
 		receive_thread = Thread(target=self.receive)
 		receive_thread.start()
