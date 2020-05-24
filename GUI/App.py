@@ -22,6 +22,15 @@ class GUI:
 		self.intactPacketCount = 0
 		self.ontimePacketCount = 0
 
+		self.receivedPacketCountText = tk.StringVar()
+		self.processedPacketCountText = tk.StringVar()
+		self.authenticatedPacketCountText = tk.StringVar()
+		self.intactPacketCountText = tk.StringVar()
+		self.ontimePacketCountText = tk.StringVar()
+
+		labelThread = Thread(target=self.updateLabels)
+		labelThread.start()
+		
 		self.root = root
 		root.title("V2X Communications - Security Testbed")	
 
@@ -62,10 +71,10 @@ class GUI:
 			self.canvas.create_line(x1, y1, x2, y2, fill="#000000")
 
 
-		self.counters = LabelFrame(root, text="Packet Statistics", padx=5, padx=4)
-		self.receivedPacketCountLabel = Label(self.counters, text="Packets Received: " + str(self.receivedPacketCount))	
+		self.counters = LabelFrame(root, text="Packet Statistics")
+		self.receivedPacketCountLabel = Label(self.counters, textvariable=self.receivedPacketCountText)	
 				
-		self.test1.grid(row=0, column=0)
+		self.receivedPacketCountLabel.grid(row=0, column=0)
 
 
 
@@ -181,6 +190,16 @@ class GUI:
 			time.sleep(0.5)
 		self.canvas.delete("car" + str(threading.currentThread().ident))
 		self.processedPacketCount += 1
+
+	def updateLabels(self):
+		while True:
+			self.receivedPacketCountText.set(str(self.receivedPacketCount))
+			self.processedPacketCountText.set(str(self.processedPacketCount))
+			self.authenticatedPacketCountText.set(str(self.authenticatedPacketCount))
+			self.intactPacketCountText.set(str(self.intactPacketCount))
+			self.ontimePacketCountText.set(str(self.ontimePacketCount))
+			time.sleep(0.1)
+
 
 	def printCounters(self):
 		while True:
