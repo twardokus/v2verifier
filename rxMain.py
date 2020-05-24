@@ -33,8 +33,8 @@ if __name__ == "__main__":
 #    run = threading.Thread(target=runSelf, args=(ownVehicleID, s, lock,))
 #    run.start()
 
-    #run = threading.Thread(target=runSelf, args=(s, lock,))
-    #run.start()
+    run = threading.Thread(target=runSelf, args=(s, lock,))
+    run.start()
 
     # This is the thread that accepts data from the other vehicle (via USRP)
     # and sends it to the GUI
