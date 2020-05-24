@@ -148,11 +148,8 @@ def generatePayloadBytes(vehicleDataString,option):
         private = None
         public = None
         if option == "normal":
-        	private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")
-		print [vehicleDataString]
-		print [timestr]
-		print [(vehicleDataString + timestr).encode('hex')]	        
-		r, s = ecdsa.sign((vehicleDataString + timestr).encode('hex'), private, hashfunc=sha256)
+        	private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")        
+		r, s = ecdsa.sign(vehicleDataString.encode('hex'), private, hashfunc=sha256)
                 r = hex(r)
 	        s = hex(s)
 	

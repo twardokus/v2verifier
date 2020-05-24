@@ -57,12 +57,7 @@ def processPacket(payload,s,lock):
 	isRecent = verifyTime(elapsedMicroseconds)
 	
 	# verify the signature
-	print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	print [data[0]]
-	print [data[3]]
-	print [data[0] + data[3].encode('hex')]
-	print "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!"
-	isValidSig = verifySignature(data[1],data[2],(data[0] + data[3]),publicKey)
+	isValidSig = verifySignature(data[1],data[2],data[0],publicKey)
 
 	# decode and break up the BSM data string "x,y"
 	BSMData = data[0].decode('hex').replace("\n","").split(",")
