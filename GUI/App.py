@@ -110,12 +110,12 @@ class GUI:
 				if data['recent']:
 					self.ontimePacketCount += 1
 
-				update = Thread(target=self.newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],self.threadlock,))
+				update = Thread(target=self.newPacket, args=(self.threadlock, 0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
 				update.start()
 
-				
 
 			except json.decoder.JSONDecodeError as jsonError:
+				print(msg)
 				print("JSON decoding error - invalid data. Discarding.")
 			except Exception as e:
 				print("=====================================================================================")
@@ -128,7 +128,7 @@ class GUI:
 				print("=====================================================================================")
 
 
-	def newPacket(self, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime, lock):
+	def newPacket(self, lock, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
 		
 		# cast coordinates to integers
 		x = int(x)
@@ -171,7 +171,10 @@ class GUI:
 
 				self.textWidget.insert(tk.END, "==========================================\n","black")
 				self.textWidget.see(tk.END)
-		time.sleep(1)
+		if isReceiver:
+			time.sleep(0.1)
+		else:		
+			time.sleep(0.5)
 		self.canvas.delete("car" + str(threading.currentThread().ident))
 		self.processedPacketCount += 1
 

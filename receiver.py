@@ -108,8 +108,7 @@ def runSelf(socket, lock):
 			
 			print "vehicleDataJSON: " + vehicleDataJSON
 
-			# sleeping for 0.5 seconds keeps the display update rate reasonable
-			sleep(0.5)
+			sleep(0.1)
 
 			with lock:
 				socket.send(vehicleDataJSON.encode())
