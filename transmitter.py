@@ -149,7 +149,7 @@ def generatePayloadBytes(vehicleDataString,option):
         public = None
         if option == "normal":
         	private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")
-	        r, s = ecdsa.sign(vehicleDataString.encode('hex'), private, hashfunc=sha256)
+	        r, s = ecdsa.sign((vehicleDataString + timestr).encode('hex'), private, hashfunc=sha256)
                 r = hex(r)
 	        s = hex(s)
 	
@@ -235,7 +235,7 @@ def sendPacketStream(option):
 		# Send the contents of the pipe to GNURadio using the native Netcat (nc) utility
 		sender = subprocess.check_output(("nc","-w1","-u","localhost","52001"),stdin=loader.stdout)
 		# Pause 100ms to emulate the pulse rate of real BSMs
-		time.sleep(0.1)
+		#time.sleep(0.1)
 
 
 # Execution hook
