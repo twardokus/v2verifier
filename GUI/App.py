@@ -73,10 +73,16 @@ class GUI:
 
 		self.counters = LabelFrame(root, text="Packet Statistics")
 		self.receivedPacketCountLabel = Label(self.counters, textvariable=self.receivedPacketCountText)	
-				
+		self.processedPacketCountLabel = Label(self.counters, textvariable=self.processedPacketCountText)	
+		self.authenticatedPacketCountLabel = Label(self.counters, textvariable=self.authenticatedPacketCountText)	
+		self.intactPacketCountLabel = Label(self.counters, textvariable=self.intactPacketCountText)	
+		self.ontimePacketCountLabel = Label(self.counters, textvariable=self.ontimePacketCountText)
+
 		self.receivedPacketCountLabel.grid(row=0, column=0)
-
-
+		self.processedPacketCountLabel.grid(row=1, column=0)
+		self.authenticatedPacketCountLabel.grid(row=2, column=0)
+		self.intactPacketCountLabel.grid(row=3, column=0)
+		self.ontimePacketCountLabel.grid(row=4, column=0)
 
 
 		self.textWidget.grid(row=1,column=0,columnspan=2,)
@@ -193,11 +199,13 @@ class GUI:
 
 	def updateLabels(self):
 		while True:
-			self.receivedPacketCountText.set(str(self.receivedPacketCount))
-			self.processedPacketCountText.set(str(self.processedPacketCount))
-			self.authenticatedPacketCountText.set(str(self.authenticatedPacketCount))
-			self.intactPacketCountText.set(str(self.intactPacketCount))
-			self.ontimePacketCountText.set(str(self.ontimePacketCount))
+			if self.receivedPacketCount == 0:
+				continue
+			self.receivedPacketCountText.set("Received:\t" + str(self.receivedPacketCount) + "\t" + str(round((self.receivedPacketCount/self.receivedPacketCount)*100,2)) + "%")
+			self.processedPacketCountText.set("Processed:\t" + str(self.processedPacketCount) + "\t" + str(round((self.processedPacketCount/self.receivedPacketCount)*100,2)) + "%")
+			self.authenticatedPacketCountText.set("Authentic:\t" + str(self.authenticatedPacketCount) + "\t" + str(round((self.authenticatedPacketCount/self.receivedPacketCount)*100,2)) + "%")
+			self.intactPacketCountText.set("Intact:\t\t" + str(self.intactPacketCount) + "\t" + str(round((self.intactPacketCount/self.receivedPacketCount)*100,2)) + "%")
+			self.ontimePacketCountText.set("On time:\t\t" + str(self.ontimePacketCount) + "\t" + str(round((self.ontimePacketCount/self.receivedPacketCount)*100,2)) + "%")
 			time.sleep(0.1)
 
 
