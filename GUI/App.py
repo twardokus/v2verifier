@@ -1,4 +1,4 @@
-from tkinter.ttk import Frame
+from tkinter.ttk import *
 import tkinter as tk
 from PIL import Image
 from PIL import ImageTk
@@ -63,8 +63,8 @@ class GUI:
 
 
 		self.counters = LabelFrame(root)
-		self.test1 = Label(counters, sticky="nw")		
-		self.text1.pack()
+		self.test1 = Label(self.counters, text="Test")		
+		self.test1.grid(row=0, column=0, sticky="w")
 
 		self.textWidget.grid(row=1,column=0,columnspan=2,)
 		self.canvas.grid(row=0,column=0,sticky="nw")
