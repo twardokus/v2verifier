@@ -48,7 +48,7 @@ class GUI:
 			self.canvas.create_line(x1, y1, x2, y2, fill="#000000")
 
 		self.textWidget.grid(row=1,column=0)
-		self.canvas.grid(row=0,column=0)
+		self.canvas.grid(row=0,column=0,sticky="nw")
 
 		receive_thread = Thread(target=self.receive)
 		receive_thread.start()
@@ -71,15 +71,17 @@ class GUI:
 		while True:
 			try:
 				msg = c.recv(BUFSIZ).decode()
-				
+				#print(msg)
+				#print("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
 				# decode the JSON string
 				data = json.loads(msg)
 
-				self.newPacket(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'])
-				#update = Thread(target=self.newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
-				#update.start()
+				#self.newPacket(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'])
+				update = Thread(target=self.newPacket, args=(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
+				update.start()
 
-
+			except json.decoder.JSONDecodeError as jsonError:
+				print("JSON decoding error - invalid data. Discarding.")
 			except Exception as e:
 				print("=====================================================================================")
 				print("Error processing packet. Exception type:")
@@ -92,7 +94,7 @@ class GUI:
 
 
 	def newPacket(self, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
-
+		
 		# cast coordinates to integers
 		x = int(x)
 		y = int(y)
@@ -133,7 +135,7 @@ class GUI:
 
 			self.textWidget.insert(tk.END, "==========================================\n","black")
 			self.textWidget.see(tk.END)
-		
+		time.sleep(1)
 		self.canvas.delete("car" + str(threading.currentThread().ident))
 
 
