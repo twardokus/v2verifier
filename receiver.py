@@ -1,7 +1,7 @@
 from verify import verifySignature
 from pcapParser import *
 from fastecdsa import keys, curve
-from transmitter import calculateHeading
+from transmitter import calculateHeading, calcSpeed
 
 from scapy.all import *
 import binascii
@@ -69,6 +69,7 @@ def processPacket(payload,s,lock):
 	decodedData['elapsed'] = elapsedMicroseconds
 	decodedData['recent'] = isRecent
 	decodedData['receiver'] = False
+	vehicleData['speed'] = calcSpeed(trace[i], trace[i+1])
 
 	vehicleDataJSON = json.dumps(decodedData)
 
@@ -103,6 +104,7 @@ def runSelf(socket, lock):
 			vehicleData['recent'] = True
 			vehicleData['receiver'] = True
 			vehicleData['elapsed'] = 0
+			vehicleData['speed'] = calcSpeed(trace[i], trace[i+1])
 
 			vehicleDataJSON = json.dumps(vehicleData)
 			

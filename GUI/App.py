@@ -22,6 +22,8 @@ class GUI:
 		self.intactPacketCount = 0
 		self.ontimePacketCount = 0
 
+		self.vehicleSpeed = 0
+
 		self.receivedPacketCountText = tk.StringVar()
 		self.processedPacketCountText = tk.StringVar()
 		self.authenticatedPacketCountText = tk.StringVar()
@@ -38,6 +40,8 @@ class GUI:
 		self.intactPacketCountPercentageText = tk.StringVar()
 		self.ontimePacketCountPercentageText = tk.StringVar()
 
+		self.speedLabelText = tk.StringVar()
+		self.speedLabelValueText = tk.StringVar()
 
 		labelThread = Thread(target=self.updateLabels)
 		labelThread.start()
@@ -61,28 +65,6 @@ class GUI:
 		self.textWidget.tag_configure("attack", foreground="red")
 		self.textWidget.tag_configure("information", foreground="orange")
 
-		# create another textbox to display counters
-		#self.counters = tk.Text(root,font=36,bg="white",borderwidth=2)
-
-		"""
-		# draw horizontal lines on the canvas
-		x1 = 0
-		x2 = CANVAS_WIDTH
-		for k in range(0, CANVAS_HEIGHT, 50):
-			y1 = k
-			y2 = k
-
-			self.canvas.create_line(x1, y1, x2, y2, fill="#000000")
-
-		# draw vertical lines
-		y1 = 0
-		y2 = CANVAS_HEIGHT
-		for k in range(0, CANVAS_WIDTH, 50):
-			x1 = k
-			x2 = k
-			self.canvas.create_line(x1, y1, x2, y2, fill="#000000")
-		"""
-
 		# draw roads
 		self.canvas.create_rectangle(0,20,800,70,fill="#999999")
 		self.canvas.create_line(0,20,300,20, fill="black")
@@ -96,10 +78,15 @@ class GUI:
 		self.canvas.create_line(0,545,800,545, fill="white", dash=(4,2))
 		self.canvas.create_line(0,570,800,570, fill="black")
 
-		self.canvas.create_rectangle(300,70,350,520,fill="#999999")
-		self.canvas.create_line(300,70,300,520,fill="black")
-		self.canvas.create_line(325,70,325,520,fill="white", dash=(4,2))
-		self.canvas.create_line(350,70,350,520,fill="black")
+		self.canvas.create_rectangle(200,70,250,520,fill="#999999")
+		self.canvas.create_line(200,70,200,520,fill="black")
+		self.canvas.create_line(225,70,225,520,fill="white", dash=(4,2))
+		self.canvas.create_line(250,70,250,520,fill="black")
+
+		self.canvas.create_rectangle(600,70,650,520,fill="#999999")
+		self.canvas.create_line(600,70,600,520,fill="black")
+		self.canvas.create_line(625,70,625,520,fill="white", dash=(4,2))
+		self.canvas.create_line(650,70,650,520,fill="black")
 
 		# build the counter window
 		self.counters = LabelFrame(root, text="Packet Statistics")
@@ -140,9 +127,21 @@ class GUI:
 		self.intactPacketCountPercentage.grid(row=3, column=2)
 		self.ontimePacketCountPercentage.grid(row=4, column=2)
 
-		self.textWidget.grid(row=1,column=0,columnspan=2,)
+		
+		
+		self.vehicleInfo = LabelFrame(root, text="Vehicle information")
+
+		self.speedLabel = Label(self.vehicleInfo, textvariable=self.speedLabelText)
+		self.speedLabelValue = Label(self.vehicleInfo, textvariable=self.speedLabelValueText)
+
+		self.speedLabel.grid(row=0,column=0)
+		self.speedLabelValue.grid(row=0, column=0)
+
+		# place all sections on the canvas
+		self.textWidget.grid(row=1,column=0,sticky="e")
 		self.canvas.grid(row=0,column=0,sticky="nw")
 		self.counters.grid(row=0,column=1,sticky="n")
+		self.vehicleInfo.grid(row=1,column=1,sticky="w")
 
 		receive_thread = Thread(target=self.receive)
 		receive_thread.start()
@@ -183,7 +182,7 @@ class GUI:
 				if data['recent']:
 					self.ontimePacketCount += 1
 
-				update = Thread(target=self.newPacket, args=(self.threadlock, 0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
+				update = Thread(target=self.newPacket, args=(self.threadlock, 0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],data['speed'],))
 				update.start()
 
 
@@ -201,12 +200,14 @@ class GUI:
 				print("=====================================================================================")
 
 
-	def newPacket(self, lock, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
+	def newPacket(self, lock, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime, speed):
 		
 		# cast coordinates to integers
 		x = float(x)
 		y = float(y)
-		
+
+		self.vehicleSpeed = str(round(speed/1000,2)) + " kph"
+
 		# load the appropriate image, depending on signature validation and whether the packet is local
 		i = None
 		if isReceiver:
@@ -272,6 +273,9 @@ class GUI:
 			self.authenticatedPacketCountPercentageText.set(str(round((self.authenticatedPacketCount/self.receivedPacketCount)*100,2)) + "%")
 			self.intactPacketCountPercentageText.set(str(round((self.intactPacketCount/self.receivedPacketCount)*100,2)) + "%")
 			self.ontimePacketCountPercentageText.set(str(round((self.ontimePacketCount/self.receivedPacketCount)*100,2)) + "%")
+
+			self.speedLabelText.set("Speed: ")
+			self.speedLabelValueText.set(self.vehicleSpeed)
 
 			time.sleep(0.1)
 
