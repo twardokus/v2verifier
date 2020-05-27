@@ -41,7 +41,7 @@ def generatePayloadBytes(vehicleDataString,option):
 	headerByteString += "03"
 	#llc_org_code = "000000" as we have no assigned OUI
 	headerByteString += "000000"
-	#llc_type = "88dc" to indicate WAVE Simple Message Protocol
+	#llc_type = "88dc" to indicate WAVE Short Message Protocol
 	headerByteString += "88dc"
 	
 	# WSMP N-Header and T-Header fields
