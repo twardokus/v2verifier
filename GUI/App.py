@@ -96,10 +96,15 @@ class GUI:
 		self.canvas.create_line(0,545,800,545, fill="white", dash=(4,2))
 		self.canvas.create_line(0,570,800,570, fill="black")
 
-		self.canvas.create_rectangle(300,70,350,520,fill="#999999")
-		self.canvas.create_line(300,70,300,520,fill="black")
-		self.canvas.create_line(325,70,325,520,fill="white", dash=(4,2))
-		self.canvas.create_line(350,70,350,520,fill="black")
+		self.canvas.create_rectangle(200,70,250,520,fill="#999999")
+		self.canvas.create_line(200,70,200,520,fill="black")
+		self.canvas.create_line(225,70,225,520,fill="white", dash=(4,2))
+		self.canvas.create_line(250,70,250,520,fill="black")
+
+		self.canvas.create_rectangle(500,70,550,520,fill="#999999")
+		self.canvas.create_line(500,70,500,520,fill="black")
+		self.canvas.create_line(525,70,525,520,fill="white", dash=(4,2))
+		self.canvas.create_line(550,70,550,520,fill="black")
 
 		# build the counter window
 		self.counters = LabelFrame(root, text="Packet Statistics")
