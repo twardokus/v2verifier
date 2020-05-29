@@ -102,27 +102,48 @@ class GUI:
 
 	"""
 	def receive(self):
-
+		messageCounter = 0
 		while True:
 			try:
 				msg = c.recv(BUFSIZ).decode()
-
-				self.receivedPacketCount += 1
-
 				# decode the JSON string
 				data = json.loads(msg)
+				if data['receiver']:
+					
+					self.receivedPacketCount += 1
 
-				self.intactPacketCount += 1
+					self.intactPacketCount += 1
 
-				#self.newPacket(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'])
+					#self.newPacket(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'])
 
-				if data['sig']:
-					self.authenticatedPacketCount += 1
-				if data['recent']:
-					self.ontimePacketCount += 1
+					if data['sig']:
+						self.authenticatedPacketCount += 1
+					if data['recent']:
+						self.ontimePacketCount += 1
 
-				update = Thread(target=self.newPacket, args=(self.threadlock, 0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
-				update.start()
+
+					update = Thread(target=self.newPacket, args=(self.threadlock, 0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
+					update.start()
+				else:
+					if messageCounter % 2 == 1:
+					
+						self.receivedPacketCount += 1
+
+						self.intactPacketCount += 1
+
+						#self.newPacket(0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'])
+
+						if data['sig']:
+							self.authenticatedPacketCount += 1
+						if data['recent']:
+							self.ontimePacketCount += 1
+
+
+						update = Thread(target=self.newPacket, args=(self.threadlock, 0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
+						update.start()
+						messageCounter += 1
+					else:
+						messageCounter += 1
 
 
 			except json.decoder.JSONDecodeError as jsonError:

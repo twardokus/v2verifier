@@ -120,7 +120,7 @@ def listen(s,lock):
 
 	# listen on localhost:4444 which is the UDP sink from GNURadio in wifi_rx.py
 	# received packets are passed to processPacket() for data extraction
-	sniff(iface="lo", filter="udp and dst port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:],s,lock))
+	sniff(iface="lo", filter="dst port 4444", prn=lambda x: processPacket(str(binascii.hexlify(x.load))[130:],s,lock))
 
 if __name__ == "__main__":
 	print "You executed the wrong file. Please run rxMain.py"
