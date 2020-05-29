@@ -182,10 +182,8 @@ class GUI:
 
 				self.textWidget.insert(tk.END, "==========================================\n","black")
 				self.textWidget.see(tk.END)
-		if isReceiver:
-			time.sleep(0.1)
-		else:		
-			time.sleep(0.5)
+		time.sleep(0.1)
+
 		self.canvas.delete("car" + str(threading.currentThread().ident))
 		self.processedPacketCount += 1
 
