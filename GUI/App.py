@@ -16,6 +16,7 @@ class GUI:
 	def __init__(self, root):
 
 		self.threadlock = threading.Lock()
+
 		self.receivedPacketCount = 0
 		self.processedPacketCount = 0
 		self.authenticatedPacketCount = 0
@@ -39,7 +40,7 @@ class GUI:
 		self.ontimePacketCountPercentageText = tk.StringVar()
 
 
-		labelThread = Thread(target=self.updateLabels)
+		labelThread = Thread(target=self.updateStatisticsLabels)
 		labelThread.start()
 		
 		self.root = root
@@ -52,7 +53,8 @@ class GUI:
 		CANVAS_WIDTH = 800
 
 		# create the drawing canvas
-		self.canvas = tk.Canvas(root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH, bg='#247000')
+		#self.canvas = tk.Canvas(root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH, bg='#247000')
+		self.canvas = tk.Canvas(root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH)
 
 		# create textbox to display messages
 		self.textWidget = tk.Text(root, height=300,font=36, bg="white", borderwidth=2)
@@ -61,90 +63,21 @@ class GUI:
 		self.textWidget.tag_configure("attack", foreground="red")
 		self.textWidget.tag_configure("information", foreground="orange")
 
-		# create another textbox to display counters
-		#self.counters = tk.Text(root,font=36,bg="white",borderwidth=2)
-
-		"""
-		# draw horizontal lines on the canvas
-		x1 = 0
-		x2 = CANVAS_WIDTH
-		for k in range(0, CANVAS_HEIGHT, 50):
-			y1 = k
-			y2 = k
-
-			self.canvas.create_line(x1, y1, x2, y2, fill="#000000")
-
-		# draw vertical lines
-		y1 = 0
-		y2 = CANVAS_HEIGHT
-		for k in range(0, CANVAS_WIDTH, 50):
-			x1 = k
-			x2 = k
-			self.canvas.create_line(x1, y1, x2, y2, fill="#000000")
-		"""
+		background = ImageTk.PhotoImage(Image.open("pic/test_background.png"))
+		self.backgroundImage = background
+		self.canvas.create_image(400, 300, image=self.backgroundImage, anchor=tk.CENTER)
 
 		# draw roads
-		self.canvas.create_rectangle(0,20,800,70,fill="#999999")
-		self.canvas.create_line(0,20,300,20, fill="black")
-		self.canvas.create_line(350,20,800,20, fill="black")
-		self.canvas.create_line(0,45,800,45, fill="white", dash=(4,2))
-		self.canvas.create_line(0,70,300,70, fill="black")
-		self.canvas.create_line(350,70,800,70, fill="black")
+		#self.drawRoads(self.canvas)
 
-		self.canvas.create_rectangle(0,520,800,570,fill="#999999")
-		self.canvas.create_line(0,520,800,520, fill="black")
-		self.canvas.create_line(0,545,800,545, fill="white", dash=(4,2))
-		self.canvas.create_line(0,570,800,570, fill="black")
-
-		self.canvas.create_rectangle(200,70,250,520,fill="#999999")
-		self.canvas.create_line(200,70,200,520,fill="black")
-		self.canvas.create_line(225,70,225,520,fill="white", dash=(4,2))
-		self.canvas.create_line(250,70,250,520,fill="black")
-
-		self.canvas.create_rectangle(500,70,550,520,fill="#999999")
-		self.canvas.create_line(500,70,500,520,fill="black")
-		self.canvas.create_line(525,70,525,520,fill="white", dash=(4,2))
-		self.canvas.create_line(550,70,550,520,fill="black")
+		# draw "buildings"
+		#self.drawBuildings(self.canvas)
 
 		# build the counter window
 		self.counters = LabelFrame(root, text="Packet Statistics")
-		
-		self.receivedPacketCountLabel = Label(self.counters, textvariable=self.receivedPacketCountText)	
-		self.processedPacketCountLabel = Label(self.counters, textvariable=self.processedPacketCountText)	
-		self.authenticatedPacketCountLabel = Label(self.counters, textvariable=self.authenticatedPacketCountText)	
-		self.intactPacketCountLabel = Label(self.counters, textvariable=self.intactPacketCountText)	
-		self.ontimePacketCountLabel = Label(self.counters, textvariable=self.ontimePacketCountText)
+		self.buildStatisticsLabelFrame()
 
-		self.receivedPacketCountValue = Label(self.counters, textvariable=self.receivedPacketCountValueText)	
-		self.processedPacketCountValue = Label(self.counters, textvariable=self.processedPacketCountValueText)	
-		self.authenticatedPacketCountValue = Label(self.counters, textvariable=self.authenticatedPacketCountValueText)	
-		self.intactPacketCountValue = Label(self.counters, textvariable=self.intactPacketCountValueText)	
-		self.ontimePacketCountValue = Label(self.counters, textvariable=self.ontimePacketCountValueText)
-
-		self.receivedPacketCountPercentage = Label(self.counters, textvariable=self.receivedPacketCountPercentageText)	
-		self.processedPacketCountPercentage = Label(self.counters, textvariable=self.processedPacketCountPercentageText)	
-		self.authenticatedPacketCountPercentage = Label(self.counters, textvariable=self.authenticatedPacketCountPercentageText)	
-		self.intactPacketCountPercentage = Label(self.counters, textvariable=self.intactPacketCountPercentageText)	
-		self.ontimePacketCountPercentage = Label(self.counters, textvariable=self.ontimePacketCountPercentageText)
-
-		self.receivedPacketCountLabel.grid(row=0, column=0)
-		self.processedPacketCountLabel.grid(row=1, column=0)
-		self.authenticatedPacketCountLabel.grid(row=2, column=0)
-		self.intactPacketCountLabel.grid(row=3, column=0)
-		self.ontimePacketCountLabel.grid(row=4, column=0)
-
-		self.receivedPacketCountValue.grid(row=0, column=1, padx=(10,10))
-		self.processedPacketCountValue.grid(row=1, column=1, padx=(10,10))
-		self.authenticatedPacketCountValue.grid(row=2, column=1, padx=(10,10))
-		self.intactPacketCountValue.grid(row=3, column=1, padx=(10,10))
-		self.ontimePacketCountValue.grid(row=4, column=1, padx=(10,10))
-
-		self.receivedPacketCountPercentage.grid(row=0, column=2)
-		self.processedPacketCountPercentage.grid(row=1, column=2)
-		self.authenticatedPacketCountPercentage.grid(row=2, column=2)
-		self.intactPacketCountPercentage.grid(row=3, column=2)
-		self.ontimePacketCountPercentage.grid(row=4, column=2)
-
+		# Place core elements on canvas
 		self.textWidget.grid(row=1,column=0,columnspan=2,)
 		self.canvas.grid(row=0,column=0,sticky="nw")
 		self.counters.grid(row=0,column=1,sticky="n")
@@ -256,7 +189,33 @@ class GUI:
 		self.canvas.delete("car" + str(threading.currentThread().ident))
 		self.processedPacketCount += 1
 
-	def updateLabels(self):
+	def drawRoads(self, canvas):
+		canvas.create_rectangle(0,20,800,70,fill="#999999")
+		canvas.create_line(0,20,300,20, fill="black")
+		canvas.create_line(350,20,800,20, fill="black")
+		canvas.create_line(0,45,800,45, fill="white", dash=(4,2))
+		canvas.create_line(0,70,300,70, fill="black")
+		canvas.create_line(350,70,800,70, fill="black")
+
+		canvas.create_rectangle(0,520,800,570,fill="#999999")
+		canvas.create_line(0,520,800,520, fill="black")
+		canvas.create_line(0,545,800,545, fill="white", dash=(4,2))
+		canvas.create_line(0,570,800,570, fill="black")
+
+		canvas.create_rectangle(200,70,250,520,fill="#999999")
+		canvas.create_line(200,70,200,520,fill="black")
+		canvas.create_line(225,70,225,520,fill="white", dash=(4,2))
+		canvas.create_line(250,70,250,520,fill="black")
+
+		canvas.create_rectangle(500,70,550,520,fill="#999999")
+		canvas.create_line(500,70,500,520,fill="black")
+		canvas.create_line(525,70,525,520,fill="white", dash=(4,2))
+		canvas.create_line(550,70,550,520,fill="black")
+
+	def drawBuildings(self, canvas):
+		canvas.create_rectangle(150,70,200,120,fill="black")
+
+	def updateStatisticsLabels(self):
 		while True:
 			if self.receivedPacketCount == 0:
 				continue
@@ -280,6 +239,43 @@ class GUI:
 
 			time.sleep(0.1)
 
+	def buildStatisticsLabelFrame(self):
+		self.receivedPacketCountLabel = Label(self.counters, textvariable=self.receivedPacketCountText)	
+		self.processedPacketCountLabel = Label(self.counters, textvariable=self.processedPacketCountText)	
+		self.authenticatedPacketCountLabel = Label(self.counters, textvariable=self.authenticatedPacketCountText)	
+		self.intactPacketCountLabel = Label(self.counters, textvariable=self.intactPacketCountText)	
+		self.ontimePacketCountLabel = Label(self.counters, textvariable=self.ontimePacketCountText)
+
+		self.receivedPacketCountValue = Label(self.counters, textvariable=self.receivedPacketCountValueText)	
+		self.processedPacketCountValue = Label(self.counters, textvariable=self.processedPacketCountValueText)	
+		self.authenticatedPacketCountValue = Label(self.counters, textvariable=self.authenticatedPacketCountValueText)	
+		self.intactPacketCountValue = Label(self.counters, textvariable=self.intactPacketCountValueText)	
+		self.ontimePacketCountValue = Label(self.counters, textvariable=self.ontimePacketCountValueText)
+
+		self.receivedPacketCountPercentage = Label(self.counters, textvariable=self.receivedPacketCountPercentageText)	
+		self.processedPacketCountPercentage = Label(self.counters, textvariable=self.processedPacketCountPercentageText)	
+		self.authenticatedPacketCountPercentage = Label(self.counters, textvariable=self.authenticatedPacketCountPercentageText)	
+		self.intactPacketCountPercentage = Label(self.counters, textvariable=self.intactPacketCountPercentageText)	
+		self.ontimePacketCountPercentage = Label(self.counters, textvariable=self.ontimePacketCountPercentageText)
+
+		self.receivedPacketCountLabel.grid(row=0, column=0)
+		self.processedPacketCountLabel.grid(row=1, column=0)
+		self.authenticatedPacketCountLabel.grid(row=2, column=0)
+		self.intactPacketCountLabel.grid(row=3, column=0)
+		self.ontimePacketCountLabel.grid(row=4, column=0)
+
+		self.receivedPacketCountValue.grid(row=0, column=1, padx=(10,10))
+		self.processedPacketCountValue.grid(row=1, column=1, padx=(10,10))
+		self.authenticatedPacketCountValue.grid(row=2, column=1, padx=(10,10))
+		self.intactPacketCountValue.grid(row=3, column=1, padx=(10,10))
+		self.ontimePacketCountValue.grid(row=4, column=1, padx=(10,10))
+
+		self.receivedPacketCountPercentage.grid(row=0, column=2)
+		self.processedPacketCountPercentage.grid(row=1, column=2)
+		self.authenticatedPacketCountPercentage.grid(row=2, column=2)
+		self.intactPacketCountPercentage.grid(row=3, column=2)
+		self.ontimePacketCountPercentage.grid(row=4, column=2)
+	
 
 	def printCounters(self):
 		while True:
