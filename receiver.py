@@ -69,7 +69,7 @@ def processPacket(payload,s,lock):
 	decodedData['elapsed'] = elapsedMicroseconds
 	decodedData['recent'] = isRecent
 	decodedData['receiver'] = False
-	vehicleData['speed'] = BSMData[3]
+	vehicleData['speed'] = calcSpeed(trace[i], trace[i+1])
 
 	vehicleDataJSON = json.dumps(decodedData)
 

@@ -240,10 +240,6 @@ def sendPacketStream(option):
 
 		vehicleData = trace[i] + "," + heading
 		
-		speed = calcSpeed(trace[i],trace[i+1])
-
-		vehicleData += "," + str(speed)
-
 		dataToSend = generatePayloadBytes(vehicleData,option)
 
 		# Use the native echo utility to send the crafted message payload into a pipe 
