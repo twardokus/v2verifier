@@ -219,18 +219,6 @@ def calculateHeading(now, next):
 			else:
 				return "northwest"
 
-def calcSpeed(now, next):
-	xNow, yNow = now.split(",")
-	xNow = float(xNow)
-	yNow = float(yNow)
-
-	xNext, yNext = next.split(",")
-	xNext = float(xNext)
-	yNext = float(yNext)
-
-	return math.sqrt(pow(xNext-xNow,2) + pow(yNext-yNow,2)) * 3600
-
-
 #option should either be "attacker" or "normal"
 def sendPacketStream(option):
 	trace = loadTrace(option)
