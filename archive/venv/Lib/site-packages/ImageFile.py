@@ -1,0 +1,1 @@
+from PIL.ImageFile import *

@@ -1,0 +1,1 @@
+from PIL.FitsStubImagePlugin import *
