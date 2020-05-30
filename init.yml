@@ -1,0 +1,4 @@
+remoteConfig:
+   numberOfVehicles: 1
+   traceFiles:
+      - coordinates
