@@ -196,7 +196,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>5890000000</value>
+      <value>5900000000</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -295,7 +295,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>0.75</value>
+      <value>.98</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -358,7 +358,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>6e6</value>
+      <value>0</value>
     </param>
     <param>
       <key>_enabled</key>

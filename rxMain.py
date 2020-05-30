@@ -6,7 +6,6 @@ application (see the README).
 
 # Local imports
 from receiver import *
-from transmitter import loadTracesFromFile, writeVehicleTraceFiles
 
 # Library imports
 import os
@@ -18,22 +17,14 @@ def checkIfRoot():
         print "Error - you must be root! Try running with sudo"
         exit(1)
 
-
 if __name__ == "__main__":
     
     # This script needs root access in order to connect to a TCP socket
     checkIfRoot()
-    
-    traces = loadTracesFromFile(os.getcwd() + "/traces.csv")
-    writeVehicleTraceFiles(traces)
 
     # TCP connection to the GUI application's listener
     s = socket.socket()
     s.connect(('127.0.0.1',6666))
-
-    # Change this at will - can be any positive integer as long as that vehicle
-    # has a trace in the traces.csv file
-    ownVehicleID = 2
 
     lock = threading.Lock()
     
@@ -42,7 +33,7 @@ if __name__ == "__main__":
 #    run = threading.Thread(target=runSelf, args=(ownVehicleID, s, lock,))
 #    run.start()
 
-    run = threading.Thread(target=runSelfAndOthers, args=(s, lock,))
+    run = threading.Thread(target=runSelf, args=(s, lock,))
     run.start()
 
     # This is the thread that accepts data from the other vehicle (via USRP)
