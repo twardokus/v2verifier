@@ -1,1 +1,0 @@
-from PIL.GimpPaletteFile import *
