@@ -18,7 +18,7 @@ remoteVehicles = []
 try:
     for i in range(0, config["remoteConfig"]["numberOfVehicles"]):
         traceFilePath = config["remoteConfig"]["traceFiles"][i]
-        bsmQueue = util.buildBSMQueue(i, traceFilePath, "keys/" + config["remoteConfig"]["keys"][i])
+        bsmQueue = util.buildBSMQueue(i, traceFilePath, "keys/" + str(i) + "/" + config["remoteConfig"]["keys"][i])
         rv = RemoteVehicle(bsmQueue)
         remoteVehicles.append(rv)
         
