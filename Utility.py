@@ -1,6 +1,6 @@
 # a file for utility functions
 import math
-from v2verifier.wave import WAVEPacketBuilder
+from wave import WAVEPacketBuilder
 
 class Utility:
     

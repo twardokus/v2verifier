@@ -2,7 +2,7 @@ from scapy.all import sniff
 import binascii
 import json
 from fastecdsa import keys, curve
-from v2verifier import Verifier
+from Verifier import Verifier
 from threading import Thread
 
 class Receiver:

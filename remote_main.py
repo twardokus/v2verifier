@@ -5,8 +5,8 @@ This is the main execution file for the remote vehicle
 # Imports
 import yaml
 from threading import Thread
-from v2verifier.RemoteVehicle import RemoteVehicle
-from v2verifier.Utility import Utility
+from RemoteVehicle import RemoteVehicle
+from Utility import Utility
 
 util = Utility()
 
