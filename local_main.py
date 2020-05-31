@@ -29,15 +29,16 @@ if __name__=="__main__":
     gui = GUI(root)
     gui.runGUIReceiver()
     
-    """
     s2 = socket()
     s2.connect(('127.0.0.1',6666))
     
     lock = Lock()
     
     receiver = Receiver()
-    receiver.runReceiver(s2, lock)
-    """
+    
+    listener = Thread(target=receiver.listenForWSMs, args=(s2,lock,))
+    listener.start()
+    
     root.mainloop()
     
 
