@@ -3,26 +3,16 @@ import binascii
 import json
 from fastecdsa import keys, curve
 from v2verifier import Verifier
-from threading import Thread, Lock
-import socket
+from threading import Thread
 
 class Receiver:
     
     def __init__(self):
         self.verifier = Verifier()
         
-    def runReceiver(self):
-        s, lock = self.connectToGUI()
-        listener = Thread(target=self.listenForWSMs(s, lock))
+    def runReceiver(self, socketToGUI, guiLock):
+        listener = Thread(target=self.listenForWSMs(socketToGUI, guiLock))
         listener.start()
-    
-    def connectToGUI(self):
-        s = socket.socket()
-        s.connect(('127.0.0.1',6666))
-
-        lock = Lock()
-    
-        return (s, lock)
         
     def listenForWSMs(self, s, lock):
         # print a console message to confirm the network connection is active
@@ -32,6 +22,7 @@ class Receiver:
         # received packets are passed to processPacket() for data extraction
         sniff(iface="lo", filter="dst port 4444", prn=lambda x: self.processPacket(str(binascii.hexlify(x.load))[130:],s,lock))
     
+    # uses returned tuple from parseWSM to verify message and send to GUI
     def processPacket(self, payload, s, lock):
     
         # extract the elements "r,s,BSM,timestamp" from the 1609.2 structure
