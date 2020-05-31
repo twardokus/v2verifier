@@ -7,17 +7,16 @@ class Utility:
     def __init__(self):
         self.waveBuilder = WAVEPacketBuilder()
         
-    def buildBSMQueue(self, traceFilePath, key):
+    def buildBSMQueue(self, vehicleNo, traceFilePath, key):
         
         bsmQueue = []
-        
         with open(traceFilePath, "r") as infile:
             coordinateList = infile.readlines()
             
         for i in range(0, len(coordinateList) - 2):
             heading = self.calculateHeading(coordinateList[i], coordinateList[i+1])
             speed = self.calcSpeed(coordinateList[i], coordinateList[i+1])
-            bsmText = coordinateList[i].replace("\n","") + "," + heading + "," + str(round(speed,2)) + "\n"
+            bsmText = str(vehicleNo) + "," + coordinateList[i].replace("\n","") + "," + heading + "," + str(round(speed,2)) + "\n"
             bsmQueue.append(self.waveBuilder.getWSMPayload(bsmText, key))
             
         return bsmQueue
