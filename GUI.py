@@ -3,15 +3,12 @@ import tkinter as tk
 from PIL import Image
 from PIL import ImageTk
 import time
-from socket import AF_INET, socket, SOCK_STREAM
 import threading
 from threading import Thread
-import math
 import json
-
+from socket import socket
 
 class GUI:
-	
 
 	def __init__(self, root):
 
@@ -38,10 +35,6 @@ class GUI:
 		self.authenticatedPacketCountPercentageText = tk.StringVar()
 		self.intactPacketCountPercentageText = tk.StringVar()
 		self.ontimePacketCountPercentageText = tk.StringVar()
-
-
-		labelThread = Thread(target=self.updateStatisticsLabels)
-		labelThread.start()
 		
 		self.root = root
 		root.title("V2X Communications - Security Testbed")	
@@ -67,11 +60,6 @@ class GUI:
 		self.backgroundImage = background
 		self.canvas.create_image(400, 300, image=self.backgroundImage, anchor=tk.CENTER)
 
-		# draw roads
-		#self.drawRoads(self.canvas)
-
-		# draw "buildings"
-		#self.drawBuildings(self.canvas)
 
 		# build the counter window
 		self.counters = LabelFrame(root, text="Packet Statistics")
@@ -82,26 +70,27 @@ class GUI:
 		self.canvas.grid(row=0,column=0,sticky="nw")
 		self.counters.grid(row=0,column=1,sticky="n")
 
-		receive_thread = Thread(target=self.receive)
-		receive_thread.start()
+	
+	def runGUIReceiver(self):
+		# Start the GUI service on port 6666
+		self.s = socket()
+		port = 6666
+		self.s.bind(('127.0.0.1',port))
+		print("Calling receive()")
+		
+		labelThread = Thread(target=self.updateStatisticsLabels)
+		labelThread.start()
+		
+		self.receiver = Thread(target=self.receive, args=(self.s,))
+		self.receiver.start()
+		
+	def receive(self, s):
+		
+		s.listen(4)
+		c = s.accept()[0]
 
-		#counter_thread = Thread(target=self.printCounters)
-		#counter_thread.start()
-
-	"""
-	Receive a JSON string 
-
-		decodedData['x'] = BSMData[0]
-		decodedData['y'] = BSMData[1]
-		decodedData['heading'] = BSMData[2]
-		decodedData['sig'] = isValidSig
-		decodedData['recent'] = isRecent
-		decodedData['receiver'] = False
-
-	def newPacket(carid, x, y, heading, isValid, isRecent, isReceiver)
-
-	"""
-	def receive(self):
+		BUFSIZ = 200
+		
 		messageCounter = 0
 		while True:
 			try:
@@ -159,7 +148,6 @@ class GUI:
 				print("End error message")
 				print("=====================================================================================")
 
-
 	def newPacket(self, lock, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
 		
 		# cast coordinates to integers
@@ -207,32 +195,6 @@ class GUI:
 
 		self.canvas.delete("car" + str(threading.currentThread().ident))
 		self.processedPacketCount += 1
-
-	def drawRoads(self, canvas):
-		canvas.create_rectangle(0,20,800,70,fill="#999999")
-		canvas.create_line(0,20,300,20, fill="black")
-		canvas.create_line(350,20,800,20, fill="black")
-		canvas.create_line(0,45,800,45, fill="white", dash=(4,2))
-		canvas.create_line(0,70,300,70, fill="black")
-		canvas.create_line(350,70,800,70, fill="black")
-
-		canvas.create_rectangle(0,520,800,570,fill="#999999")
-		canvas.create_line(0,520,800,520, fill="black")
-		canvas.create_line(0,545,800,545, fill="white", dash=(4,2))
-		canvas.create_line(0,570,800,570, fill="black")
-
-		canvas.create_rectangle(200,70,250,520,fill="#999999")
-		canvas.create_line(200,70,200,520,fill="black")
-		canvas.create_line(225,70,225,520,fill="white", dash=(4,2))
-		canvas.create_line(250,70,250,520,fill="black")
-
-		canvas.create_rectangle(500,70,550,520,fill="#999999")
-		canvas.create_line(500,70,500,520,fill="black")
-		canvas.create_line(525,70,525,520,fill="white", dash=(4,2))
-		canvas.create_line(550,70,550,520,fill="black")
-
-	def drawBuildings(self, canvas):
-		canvas.create_rectangle(150,70,200,120,fill="black")
 
 	def updateStatisticsLabels(self):
 		while True:
@@ -295,7 +257,6 @@ class GUI:
 		self.intactPacketCountPercentage.grid(row=3, column=2)
 		self.ontimePacketCountPercentage.grid(row=4, column=2)
 	
-
 	def printCounters(self):
 		while True:
 			print(str(self.receivedPacketCount))
@@ -305,17 +266,5 @@ class GUI:
 			print(str(self.ontimePacketCount))
 			time.sleep(2)
 
-if __name__=="__main__":
-	s = socket()
-	port = 6666
-	s.bind(('127.0.0.1',port))
-	s.listen(4)
-	c, addr = s.accept()
-
-	BUFSIZ = 200
-
-	root = tk.Tk()
-	gui = GUI(root)
-	root.mainloop()
 
 	
