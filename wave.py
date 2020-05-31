@@ -6,9 +6,9 @@ import math
 
 class WAVEPacketBuilder():
     
-    def getWSMPayload(self, bsmString):
+    def getWSMPayload(self, bsmString, key):
         
-        payload = self.getLLCBytestring() + self.getWSMHeaders() + self.getIeee1609Dot2Data(bsmString)
+        payload = self.getLLCBytestring() + self.getWSMHeaders() + self.getIeee1609Dot2Data(bsmString,key)
        
         return "\\x" + "\\x".join(payload[i:i+2] for i in range(0, len(payload), 2))
     
@@ -48,7 +48,7 @@ class WAVEPacketBuilder():
         
         return bytestring
     
-    def getIeee1609Dot2Data(self, message):
+    def getIeee1609Dot2Data(self, message, key):
     
         message = message.encode("utf-8").hex()
     
@@ -124,7 +124,7 @@ class WAVEPacketBuilder():
         # 84 -> uncompressed
         bytestring += "80"
         
-        private, public = import_key("/home/administrator/v2v-capstone/keys/p256.key")        
+        private, public = import_key(key)        
         r, s = ecdsa.sign(message, private, hashfunc=sha256)
         r = hex(r)
         s = hex(s)

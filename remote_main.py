@@ -4,10 +4,10 @@ This is the main execution file for the remote vehicle
 
 # Imports
 import yaml
+import os
 from threading import Thread
 from v2verifier.RemoteVehicle import RemoteVehicle
 from v2verifier.Utility import Utility
-from v2verifier.wave import WAVEPacketBuilder
 
 util = Utility()
 
@@ -20,7 +20,7 @@ try:
     for i in range(0, config["remoteConfig"]["numberOfVehicles"]):
         traceFilePath = config["remoteConfig"]["traceFiles"][i]
         
-        bsmQueue = util.buildBSMQueue(traceFilePath)
+        bsmQueue = util.buildBSMQueue(traceFilePath, "keys/" + config["remoteConfig"]["keys"][i])
         
         rv = RemoteVehicle(bsmQueue)
         remoteVehicles.append(rv)

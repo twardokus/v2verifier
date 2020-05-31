@@ -1,4 +1,5 @@
 import subprocess
+import time
 
 class RemoteVehicle:
     
@@ -10,4 +11,4 @@ class RemoteVehicle:
         for BSM in self.bsmQueue:
                 loader = subprocess.Popen(("echo","-n","-e",BSM), stdout=subprocess.PIPE)
                 sender = subprocess.check_output(("nc","-w0","-u","localhost","52001"),stdin=loader.stdout) 
-        
+                time.sleep(0.1)

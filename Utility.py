@@ -7,7 +7,7 @@ class Utility:
     def __init__(self):
         self.waveBuilder = WAVEPacketBuilder()
         
-    def buildBSMQueue(self, traceFilePath):
+    def buildBSMQueue(self, traceFilePath, key):
         
         bsmQueue = []
         
@@ -18,7 +18,7 @@ class Utility:
             heading = self.calculateHeading(coordinateList[i], coordinateList[i+1])
             speed = self.calcSpeed(coordinateList[i], coordinateList[i+1])
             bsmText = coordinateList[i].replace("\n","") + "," + heading + "," + str(round(speed,2)) + "\n"
-            bsmQueue.append(self.waveBuilder.getWSMPayload(bsmText))
+            bsmQueue.append(self.waveBuilder.getWSMPayload(bsmText, key))
             
         return bsmQueue
         #getWSMPayload

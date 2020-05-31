@@ -2,3 +2,5 @@ remoteConfig:
    numberOfVehicles: 1
    traceFiles:
       - coordinates
+   keys:
+      - p256.key
