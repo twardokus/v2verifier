@@ -43,7 +43,6 @@ class Receiver:
 
         elapsed, isRecent = self.verifier.verifyTime(data[3])
         
-        #keys.import_key("/home/administrator/v2v-capstone/keys/other_p256.pub",curve=curve.P256, public=True)
         publicKey = keys.import_key("keys/" + decodedData['id'] + "/p256.pub",curve=curve.P256, public=True)
         
         # verify the signature
