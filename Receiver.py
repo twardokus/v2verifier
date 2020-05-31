@@ -25,11 +25,13 @@ class Receiver:
     # uses returned tuple from parseWSM to verify message and send to GUI
     def processPacket(self, payload, s, lock):
     
-        # extract the elements "r,s,BSM,timestamp" from the 1609.2 structure
+        # extract the elements "(unsecuredData,r,s,time)" from the 1609.2 structure
         data = self.parseWSM(payload)
+        print(data)
         
-        BSMData = data[0].decode('hex').replace("\n","").split(",")
-    
+        #BSMData = data[0].decode('hex').replace("\n","").split(",")
+        BSMData = bytes.fromhex(data[0]).decode('ascii').replace("\n","").split(",")
+        print(BSMData)
         # create a dictionary to pack and send
         decodedData = {}    
         
@@ -37,6 +39,7 @@ class Receiver:
         decodedData['x'] = BSMData[1]
         decodedData['y'] = BSMData[2]
         decodedData['heading'] = BSMData[3]
+        decodedData['speed'] = BSMData[4]
 
         elapsed, isRecent = self.verifier.verifyTime(data[3])
         
@@ -61,8 +64,6 @@ class Receiver:
             
         # The first 8 bytes are WSMP N/T headers that do not change in size and can be discarded
         ieee1609Dot2Data = WSM[8:]
-    	
-        print(ieee1609Dot2Data)
 
         # First item to extract is the payload in unsecured data field
     
@@ -70,19 +71,9 @@ class Receiver:
         # because this is a string of "hex numbers" so 1 byte = 2 chars
     
         unsecuredDataLength = int(ieee1609Dot2Data[14:16],16)*2
-        print("unsecuredDataLength:\t" + str(unsecuredDataLength))
         unsecuredData = ieee1609Dot2Data[16:16+(unsecuredDataLength)]
-
-        print("unsecuredData:\t" + unsecuredData)    
-
         timePostition = 16 + unsecuredDataLength + 6
         time = ieee1609Dot2Data[timePostition:timePostition+16]
-    
-        print("time: " + time)
-
-        # Next extract the signature components r,s
-        # total IEEE1609Dot2Data size is 93 bytes plus length of unsecured data
-        #totalSize = (93*2) + unsecuredDataLength
     
         # the ecdsaNistP256Signature structure is 66 bytes
         # r - 32 bytes
@@ -97,9 +88,6 @@ class Receiver:
     
         r = signature[:64]
         s = signature[64:128]
-
-        print(r)
-        print(s)
     
         # convert from string into ten-bit integer
         r = int(r,16)
