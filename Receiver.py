@@ -61,18 +61,25 @@ class Receiver:
             
         # The first 8 bytes are WSMP N/T headers that do not change in size and can be discarded
         ieee1609Dot2Data = WSM[8:]
-    
+    	
+        print(ieee1609Dot2Data)
+
         # First item to extract is the payload in unsecured data field
     
         # Note that the numbers for positions are double the byte value
         # because this is a string of "hex numbers" so 1 byte = 2 chars
     
-        unsecuredDataLength = int(ieee1609Dot2Data[12:14],16)*2
-        unsecuredData = ieee1609Dot2Data[14:14+(unsecuredDataLength)]
-    
-        timePostition = 14 + unsecuredDataLength + 6
+        unsecuredDataLength = int(ieee1609Dot2Data[14:16],16)*2
+        print("unsecuredDataLength:\t" + str(unsecuredDataLength))
+        unsecuredData = ieee1609Dot2Data[16:16+(unsecuredDataLength)]
+
+        print("unsecuredData:\t" + unsecuredData)    
+
+        timePostition = 16 + unsecuredDataLength + 6
         time = ieee1609Dot2Data[timePostition:timePostition+16]
     
+        print("time: " + time)
+
         # Next extract the signature components r,s
         # total IEEE1609Dot2Data size is 93 bytes plus length of unsecured data
         #totalSize = (93*2) + unsecuredDataLength
@@ -81,8 +88,7 @@ class Receiver:
         # r - 32 bytes
         # s - 32 bytes
         # field separators - 2 bytes
-    
-        signature = ieee1609Dot2Data[len(ieee1609Dot2Data)-(2*66):]
+        signature = ieee1609Dot2Data[len(ieee1609Dot2Data)-(2*66)-1:]
     
         # drop the two field identification bytes at the start of the block
         signature = signature[4:]
@@ -90,7 +96,10 @@ class Receiver:
         # split into r and s
     
         r = signature[:64]
-        s = signature[64:]
+        s = signature[64:128]
+
+        print(r)
+        print(s)
     
         # convert from string into ten-bit integer
         r = int(r,16)
