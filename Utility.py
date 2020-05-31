@@ -12,6 +12,8 @@ class Utility:
         bsmQueue = []
         with open(traceFilePath, "r") as infile:
             coordinateList = infile.readlines()
+        if len(coordinateList) < 3:
+            raise Exception("Your file must have at least 3 pairs of coordinates")
             
         for i in range(0, len(coordinateList) - 2):
             heading = self.calculateHeading(coordinateList[i], coordinateList[i+1])
