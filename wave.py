@@ -127,17 +127,14 @@ class WAVEPacketBuilder():
         r, s = ecdsa.sign(message, private, hashfunc=sha256)
         r = hex(r)
         s = hex(s)
-        print(str(r))
-        print(str(s))
+        
         r = r.split("x")[1][:len(r)-2]
         s = s.split("x")[1][:len(s)-2]
         
         # r (32 bytes)
         bytestring += str(r)
-        print("r:\t" + str(r))
     
         # s (32 bytes)
         bytestring += str(s)
-        print("s:\t" + str(s))
         
         return bytestring
