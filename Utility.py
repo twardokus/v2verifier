@@ -22,7 +22,16 @@ class Utility:
             
         return bsmQueue
         #getWSMPayload
-                
+        
+    # For the local vehicle, full WSMs are unnecessary as there is no communication over the SDR
+    def buildLocalQueue(self, traceFilePath):
+        with open(traceFilePath) as infile:
+            coordinates = infile.readlines()
+        messages = []
+        for i in range(0, len(coordinates)):
+            messages.append(coordinates + "," + self.calculateHeading(coordinates[i], coordinates[i+1]) + "," + self.calcSpeed(coordinates[i], coordinates[i+1]))
+        return messages
+        
     # takes in two strings "x,y" from a trace file
     # returns one- or two-character string indicating heading
     def calculateHeading(self, currentCoords, nextCoords):
