@@ -49,7 +49,7 @@ class WAVEPacketBuilder():
         return bytestring
     
     def getIeee1609Dot2Data(self, message, key):
-    
+        
         message = message.encode("utf-8").hex()
     
         # IEEE1609Dot2Data Structure
@@ -76,8 +76,7 @@ class WAVEPacketBuilder():
         bytestring += "80"
     
         # Length of Unsecured Data
-        length = hex(len(str(message))).split("x")[1]
-        
+        length = hex(int(len(str(message))/2)).split("x")[1]
         if len(length) == 1:
             bytestring += "0"
         bytestring += length
@@ -139,7 +138,3 @@ class WAVEPacketBuilder():
         bytestring += str(s)
     
         return bytestring
-        
-        
-        
-        
