@@ -28,6 +28,8 @@ class Receiver:
         # extract the elements "(unsecuredData,r,s,time)" from the 1609.2 structure
         data = self.parseWSM(payload)
         
+        elapsed, isRecent = self.verifier.verifyTime(data[3])
+        
         #BSMData = data[0].decode('hex').replace("\n","").split(",")
         BSMData = bytes.fromhex(data[0]).decode('ascii').replace("\n","").split(",")
 
@@ -40,7 +42,6 @@ class Receiver:
         decodedData['heading'] = BSMData[3]
         decodedData['speed'] = BSMData[4]
 
-        elapsed, isRecent = self.verifier.verifyTime(data[3])
         publicKey = keys.import_key("keys/" + decodedData['id'] + "/p256.pub",curve=curve.P256, public=True)
         
         # verify the signature
