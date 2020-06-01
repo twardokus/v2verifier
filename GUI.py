@@ -68,7 +68,7 @@ class GUI:
 		# Place core elements on canvas
 		self.textWidget.grid(row=1,column=0,columnspan=2,)
 		self.canvas.grid(row=0,column=0,sticky="nw")
-		self.counters.grid(row=0,column=1,sticky="n")
+		self.counters.grid(row=0,column=1,sticky="E+W")
 
 	
 	def runGUIReceiver(self):
