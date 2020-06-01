@@ -155,8 +155,12 @@ class GUI:
 					self.textWidget.insert(tk.END, rejected + "Invalid signature!\n","attack")
 				
 				if isRecent:
-					self.textWidget.insert(tk.END, check + "Message is recent: " + str(round(elapsedTime,2)) + " milliseconds elapsed since transmission\n","valid")
-				else:	
+					if elapsedTime > 0:
+						self.textWidget.insert(tk.END, check + "Message is recent: " + str(round(elapsedTime,2)) + " milliseconds elapsed since transmission\n","valid")
+					else:
+						self.textWidget.insert(tk.END, check + "Message is recent: 0 milliseconds elapsed since transmission\n","valid")
+						self.textWidget.insert(tk.END, "Message has future timestamp - check clock synchronization!\n", "information")
+				else:
 					self.textWidget.insert(tk.END, rejected + "Message out-of-date: " + str(round(elapsedTime,2)) + " milliseconds elapsed since transmission\n","information")
 				
 				if not isValid and not isRecent:
