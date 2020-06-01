@@ -28,6 +28,7 @@ if __name__=="__main__":
     root = tk.Tk()
     gui = GUI(root)
     gui.runGUIReceiver()
+    print("GUI Initialized...")
     
     s2 = socket()
     s2.connect(('127.0.0.1',6666))
@@ -38,9 +39,6 @@ if __name__=="__main__":
     
     listener = Thread(target=receiver.listenForWSMs, args=(s2,lock,))
     listener.start()
+    print("Listener running...")
     
     root.mainloop()
-    
-
-    
-    
