@@ -30,8 +30,8 @@ class Utility:
         with open(traceFilePath) as infile:
             coordinates = infile.readlines()
         messages = []
-        for i in range(0, len(coordinates)):
-            messages.append(coordinates + "," + self.calculateHeading(coordinates[i], coordinates[i+1]) + "," + self.calcSpeed(coordinates[i], coordinates[i+1]))
+        for i in range(0, len(coordinates)-2):
+            messages.append("99," + coordinates[i].replace("\n","") + "," + self.calculateHeading(coordinates[i], coordinates[i+1]) + "," + str(self.calcSpeed(coordinates[i], coordinates[i+1])))
         return messages
         
     # takes in two strings "x,y" from a trace file

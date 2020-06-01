@@ -41,4 +41,9 @@ if __name__=="__main__":
     listener.start()
     print("Listener running...")
     
+    lv = LocalVehicle(config["localConfig"]["tracefile"])
+    
+    local = Thread(target=lv.start, args=(s2,lock,))
+    local.start()
+    
     root.mainloop()

@@ -107,7 +107,7 @@ class GUI:
 					self.ontimePacketCount += 1
 
 
-				update = Thread(target=self.newPacket, args=(self.threadlock, 0, data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
+				update = Thread(target=self.newPacket, args=(self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
 				update.start()
 
 			except json.decoder.JSONDecodeError as jsonError:

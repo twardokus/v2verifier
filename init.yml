@@ -4,3 +4,6 @@ remoteConfig:
       - coords_1
       - coords_2
       - coords_3
+localConfig:
+   tracefile:
+      local_coords
