@@ -56,7 +56,7 @@ class GUI:
 		self.textWidget.tag_configure("attack", foreground="red")
 		self.textWidget.tag_configure("information", foreground="orange")
 
-		background = ImageTk.PhotoImage(Image.open("pic/basic_background.png"))
+		background = ImageTk.PhotoImage(Image.open("pic/background.jpg"))
 		self.backgroundImage = background
 		self.canvas.create_image(400, 300, image=self.backgroundImage, anchor=tk.CENTER)
 
