@@ -4,8 +4,7 @@ This is the main execution file for the remote vehicle
 
 # Imports
 import yaml
-from threading import Thread, currentThread
-from multiprocessing import Process, Pool
+from multiprocessing import Process
 from RemoteVehicle import RemoteVehicle
 from Utility import Utility
 
@@ -25,11 +24,8 @@ try:
         
 except IndexError:
     print("Error starting vehicles. Ensure you have entered enough trace files and BSM file paths in \"init.yml\" to match the number of vehicles specified in that file.")
-    
-print(remoteVehicles)    
 
-
-pool = Pool(processes=len(remoteVehicles))
 for rv in remoteVehicles:
-    pool.apply_async(rv.start())
-    
+    vehicle = Process(target=rv.start)
+    vehicle.start()
+    print("started")
