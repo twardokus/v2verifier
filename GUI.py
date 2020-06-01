@@ -408,7 +408,6 @@ class GUI:
 		self.receiverSpeed.grid(row=12,column=2)
 		
 	def updateVehicleInfoLabels(self, vehicleID, location, speed):
-		print("Entered updateVehicle with arguments:\t" + str(vehicleID) + "," + location + "," + str(speed))
 		vehicleID = int(vehicleID)
 		if vehicleID == 0:
 			self.vehicleZeroLocationText.set(location)
