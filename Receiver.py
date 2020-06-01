@@ -42,7 +42,6 @@ class Receiver:
         decodedData['speed'] = BSMData[4]
 
         elapsed, isRecent = self.verifier.verifyTime(data[3])
-        
         publicKey = keys.import_key("keys/" + decodedData['id'] + "/p256.pub",curve=curve.P256, public=True)
         
         # verify the signature

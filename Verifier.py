@@ -27,5 +27,5 @@ class Verifier:
     
         origin = datetime(2004, 1, 1, 0, 0, 0, 0)
         now = (datetime.now() - origin).total_seconds() * 1000
-    
+            
         return now - unpaddedTimeInMilliseconds
