@@ -26,8 +26,8 @@ class ReplayAttacker():
             #BSM = b'\\x' + b'\\x'.join(BSM[i:i+2] for i in range(0, len(BSM), 2))
             BSM = BSM[2:len(BSM)-2]
             BSM = "\\x" + "\\x".join(BSM[i:i+2] for i in range(0, len(BSM), 2))
-            print("replay:\t" + BSM)
+            #print("replay:\t" + BSM)
             loader = subprocess.Popen(("echo","-n","-e",BSM), stdout=subprocess.PIPE)
             sender = subprocess.check_output(("nc","-w0","-u","localhost","52001"),stdin=loader.stdout) 
-            print("Replay sent!")
+            #print("Replay sent!")
             time.sleep(0.1)
