@@ -40,8 +40,8 @@ for rv in remoteVehicles:
     print("started")
 
 # start running the replay attacker
-#replayer = ReplayAttacker()
-#replay = Process(target=replayer.replayAttack, args=(5,)) 
-#replay.start()
+replayer = ReplayAttacker()
+replay = Process(target=replayer.replayAttack, args=(5,)) 
+replay.start()
 
 
