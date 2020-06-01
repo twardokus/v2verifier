@@ -91,7 +91,9 @@ class WAVEPacketBuilder():
         bytestring += "20"
     
         # generationTime (8 bytes)
+        bytestring += "F0E0F0E0F0E0F0E0"
         
+        """
         # IEEE 1609.2 defines timestamps as an estimate of the microseconds elapsed since
         # 12:00 AM on January 1, 2004
         origin = datetime(2004, 1, 1, 0, 0, 0, 0)
@@ -106,7 +108,8 @@ class WAVEPacketBuilder():
                 timestr = "0" + timestr
     
         bytestring += timestr
-    
+        """
+        
         # signer
         bytestring += "80"
     

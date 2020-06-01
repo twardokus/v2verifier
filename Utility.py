@@ -1,6 +1,7 @@
 # a file for utility functions
 import math
 from wave import WAVEPacketBuilder
+from datetime import datetime
 
 class Utility:
     
@@ -76,3 +77,20 @@ class Utility:
         yNext = float(yNext)
         
         return math.sqrt(math.pow(xNext-xNow, 2)+math.pow(yNext-yNow, 2)) * 36
+    
+    def injectTime(self,bsm):
+        
+        # IEEE 1609.2 defines timestamps as an estimate of the microseconds elapsed since
+        # 12:00 AM on January 1, 2004
+        origin = datetime(2004, 1, 1, 0, 0, 0, 0)
+        
+        # get the offset since the origin time in microseconds
+        offset = (datetime.now() - origin).total_seconds() * 1000
+        print("milliseconds at send:\t" + str(offset))
+        timestr = hex(int(math.floor(offset)))
+        timestr  = timestr[2:]
+        if len(timestr) < 16:
+            for i in range(0, 16 - len(timestr)):
+                timestr = "0" + timestr
+        
+        return bsm.replace("\xF0\xE0\xF0\xE0\xF0\xE0\xF0\xE0",timestr)
