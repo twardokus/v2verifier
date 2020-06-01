@@ -9,6 +9,7 @@ class Receiver:
     
     def __init__(self):
         self.verifier = Verifier()
+        self.messageCounter = 1
         
     def runReceiver(self, socketToGUI, guiLock):
         listener = Thread(target=self.listenForWSMs(socketToGUI, guiLock))
@@ -20,8 +21,13 @@ class Receiver:
     
         # listen on localhost:4444 which is the UDP sink from GNURadio in wifi_rx.py
         # received packets are passed to processPacket() for data extraction
-        sniff(iface="lo", filter="dst port 4444", prn=lambda x: self.processPacket(str(binascii.hexlify(x.load))[130:],s,lock))
+        sniff(iface="lo", filter="dst port 4444", prn=lambda x: self.filterDuplicatePackets(str(binascii.hexlify(x.load))[130:],s,lock))
     
+    def filterDuplicatePackets(self, payload, s, lock):
+        if self.messageCounter % 2 == 1:
+            self.processPacket(payload, s, lock)
+        self.messageCounter += 1
+
     # uses returned tuple from parseWSM to verify message and send to GUI
     def processPacket(self, payload, s, lock):
     
