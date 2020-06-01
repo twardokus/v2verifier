@@ -159,14 +159,14 @@ class GUI:
 						self.textWidget.insert(tk.END, check + "Message is recent: " + str(round(elapsedTime,2)) + " milliseconds elapsed since transmission\n","valid")
 					else:
 						self.textWidget.insert(tk.END, check + "Message is recent: 0 milliseconds elapsed since transmission\n","valid")
-						self.textWidget.insert(tk.END, "Message has future timestamp - check clock synchronization!\n", "information")
+						#self.textWidget.insert(tk.END, "Message has future timestamp - check clock synchronization!\n", "information")
 				else:
 					self.textWidget.insert(tk.END, rejected + "Message out-of-date: " + str(round(elapsedTime,2)) + " milliseconds elapsed since transmission\n","information")
 				
 				if not isValid and not isRecent:
 					self.textWidget.insert(tk.END, rejected + "!!!--- Invalid signature AND message expired: replay attack likely! ---!!!\n","attack")
 				
-				self.textWidget.insert(tk.END, "Vehicle reports location at (" + str(x) + "," + str(y) + "), traveling " + heading + "\n", "black")
+				self.textWidget.insert(tk.END, "Vehicle reports location at (" + str(x) + "," + str(y) + "), traveling " + self.headingToDirection(heading) + "\n", "black")
 
 				self.textWidget.insert(tk.END, "==========================================\n","black")
 				self.textWidget.see(tk.END)
@@ -245,5 +245,22 @@ class GUI:
 			print(str(self.ontimePacketCount))
 			time.sleep(2)
 
+	def headingToDirection(self, heading):
+		if heading == "E":
+			return "east"
+		elif heading == "NE":
+			return "northeast"
+		elif heading == "N":
+			return "north"
+		elif heading == "NW":
+			return "northwest"
+		elif heading == "W":
+			return "west"
+		elif heading == "SW":
+			return "southwest"
+		elif heading == "S":
+			return "south"
+		elif heading == "SE":
+			return "southeast"
 
 	
