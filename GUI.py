@@ -77,7 +77,7 @@ class GUI:
 		self.canvas = tk.Canvas(root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH)
 
 		# create textbox to display messages
-		self.textWidget = tk.Text(root, height=300,font=36, bg="white", borderwidth=2)
+		self.textWidget = tk.Text(root, height=300,font=20, bg="white", borderwidth=2)
 
 		self.textWidget.tag_configure("valid", foreground="green")
 		self.textWidget.tag_configure("attack", foreground="red")
@@ -100,11 +100,14 @@ class GUI:
 		# build the report frame
 		self.report = LabelFrame(self.topRight, text="Vehicle Information")
 		self.buildReportFrame()
+		
+		self.attackLog = tk.Text(root, width=5, font=20, bg="white", borderwidth=2)
 
 		# Place core elements on canvas
-		self.textWidget.grid(row=1,column=0,columnspan=2,)
+		self.textWidget.grid(row=1,column=0,sticky="w")
 		self.canvas.grid(row=0,column=0,sticky="nw")
 		self.topRight.grid(row=0,column=1,sticky="new")
+		self.attackLog.grid(row=1,column=1, sticky="w")
 		
 		# Place subframes inside top right frame
 		#self.topRight.grid.rowconfigure(0,weight=1)
