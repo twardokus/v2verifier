@@ -273,5 +273,20 @@ class GUI:
 			return "southeast"
 
 	def buildLegendFrame(self):
-		self.test = Label(self.legend, text="Test")
-		self.test.grid(row=0,column=1)
+		self.receiverRowLabel = Label(self.legend, text="  is the receiving vehicle")
+		self.otherRowLabel = Label(self.legend, text = "  are vehicles sendings BSMs")
+		
+		self.receiverImg = ImageTk.PhotoImage(Image.open("pic/receiver/E.png"))
+		self.otherImg = ImageTk.PhotoImage(Image.open("pic/E.png"))
+		
+		self.receiverImage = Label(self.legend, image=self.receiverImg)
+		self.otherImage = Label(self.legend, image=self.otherImg)
+		
+		
+		self.receiverImage.grid(row=0,column=0)
+		self.otherImage.grid(row=1,column=0)
+		self.receiverRowLabel.grid(row=0,column=1,sticky="w")
+		self.otherRowLabel.grid(row=1,column=1,sticky="w")
+
+
+
