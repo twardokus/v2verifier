@@ -197,6 +197,7 @@ class GUI:
 				else:
 					self.textWidget.insert(tk.END, rejected + "Invalid signature!\n","attack")
 				
+				print("time:\t" + str(elapsedTime))
 				if isRecent:
 					if elapsedTime > 0:
 						self.textWidget.insert(tk.END, check + "Message is recent: " + str(round(elapsedTime,2)) + " milliseconds elapsed since transmission\n","valid")
