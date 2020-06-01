@@ -101,7 +101,9 @@ class GUI:
 		self.report = LabelFrame(self.topRight, text="Vehicle Information")
 		self.buildReportFrame()
 		
-		self.attackLog = tk.Text(root, width=5, font=20, bg="white", borderwidth=2)
+		self.attackLog = tk.Text(root, font=20, bg="white", borderwidth=2)
+		self.attackLog.tag_configure("attack", foreground="red")
+		self.attackLog.tag_configure("information", foreground="orange")
 
 		# Place core elements on canvas
 		self.textWidget.grid(row=1,column=0,sticky="w")
@@ -212,6 +214,8 @@ class GUI:
 				
 				if not isValid and not isRecent:
 					self.textWidget.insert(tk.END, rejected + "!!!--- Invalid signature AND message expired: replay attack likely! ---!!!\n","attack")
+					self.attackLog.insert(tk.END, "Expired packet received: possible replay attack\n", "information")
+					self.attackLog.see(tk.END)
 				
 				self.textWidget.insert(tk.END, "Vehicle reports location at (" + str(x) + "," + str(y) + "), traveling " + self.headingToDirection(heading) + "\n", "black")
 
