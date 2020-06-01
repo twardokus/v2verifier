@@ -60,15 +60,24 @@ class GUI:
 		self.backgroundImage = background
 		self.canvas.create_image(400, 300, image=self.backgroundImage, anchor=tk.CENTER)
 
+		self.topRight = Frame(root)
 
 		# build the counter window
-		self.counters = LabelFrame(root, text="Packet Statistics")
+		self.counters = LabelFrame(self.topRight, text="Packet Statistics")
 		self.buildStatisticsLabelFrame()
+		
+		# build the legend frame
+		self.legend = LabelFrame(self.topRight, text="Legend")
+		self.buildLegendFrame()
 
 		# Place core elements on canvas
 		self.textWidget.grid(row=1,column=0,columnspan=2,)
 		self.canvas.grid(row=0,column=0,sticky="nw")
-		self.counters.grid(row=0,column=1,sticky="new")
+		self.topRight.grid(row=0,column=1,sticky="new")
+		
+		# Place subframes inside top right frame
+		self.counters.grid(row=0,column=0,sticky="new")
+		self.legend.grid(row=1,column=0,sticky="ew")
 
 	
 	def runGUIReceiver(self):
@@ -110,7 +119,7 @@ class GUI:
 				update = Thread(target=self.newPacket, args=(self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
 				update.start()
 
-			except json.decoder.JSONDecodeError as jsonError:
+			except json.decoder.JSONDecodeError:
 				print(msg)
 				print("JSON decoding error - invalid data. Discarding.")
 			except Exception as e:
@@ -263,4 +272,6 @@ class GUI:
 		elif heading == "SE":
 			return "southeast"
 
-	
+	def buildLegendFrame(self):
+		self.test = Label(self.legend, text="Test")
+		self.test.grid(row=0,column=1)
