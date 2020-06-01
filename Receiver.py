@@ -27,11 +27,10 @@ class Receiver:
     
         # extract the elements "(unsecuredData,r,s,time)" from the 1609.2 structure
         data = self.parseWSM(payload)
-        print(data)
         
         #BSMData = data[0].decode('hex').replace("\n","").split(",")
         BSMData = bytes.fromhex(data[0]).decode('ascii').replace("\n","").split(",")
-        print(BSMData)
+
         # create a dictionary to pack and send
         decodedData = {}    
         

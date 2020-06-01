@@ -11,10 +11,10 @@ class Verifier:
     def verifySignature(self, r, s, message, publicKey):
         return ecdsa.verify((r,s), message, publicKey)
     
-    # Returns true if less than 100ms elapsed between message transmission and reception
+    # Returns true if less than 1s elapsed between message transmission and reception
     def verifyTime(self, timestamp):
         elapsed = self.calculateElapsedTime(timestamp)
-        return (elapsed, elapsed < 100)
+        return (elapsed, elapsed < 1000)
     
     # calculate the number of elapsed milliseconds since the message was transmitted
     def calculateElapsedTime(self, timeInMilliseconds):
@@ -24,8 +24,6 @@ class Verifier:
                 unpaddedTimeInMilliseconds = timeInMilliseconds[i:]
                 break
         unpaddedTimeInMilliseconds = int(unpaddedTimeInMilliseconds, 16)
-    
         origin = datetime(2004, 1, 1, 0, 0, 0, 0)
         now = (datetime.now() - origin).total_seconds() * 1000
-            
         return now - unpaddedTimeInMilliseconds
