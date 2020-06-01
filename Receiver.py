@@ -34,8 +34,6 @@ class Receiver:
         # extract the elements "(unsecuredData,r,s,time)" from the 1609.2 structure
         data = self.parseWSM(payload)
         
-        elapsed, isRecent = self.verifier.verifyTime(data[3])
-        
         #BSMData = data[0].decode('hex').replace("\n","").split(",")
         BSMData = bytes.fromhex(data[0]).decode('ascii').replace("\n","").split(",")
 
@@ -52,6 +50,8 @@ class Receiver:
         
         # verify the signature
         isValidSig = self.verifier.verifySignature(data[1],data[2],data[0],publicKey)
+        
+        elapsed, isRecent = self.verifier.verifyTime(data[3])
         
         decodedData['sig'] = isValidSig
         decodedData['elapsed'] = elapsed
