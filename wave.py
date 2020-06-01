@@ -91,24 +91,10 @@ class WAVEPacketBuilder():
         bytestring += "20"
     
         # generationTime (8 bytes)
+        
+        # this is a placeholder byte pattern that is unlikely to occur in practice, used to inject actual time
+        # when packet is transmitted
         bytestring += "F0E0F0E0F0E0F0E0"
-        
-        """
-        # IEEE 1609.2 defines timestamps as an estimate of the microseconds elapsed since
-        # 12:00 AM on January 1, 2004
-        origin = datetime(2004, 1, 1, 0, 0, 0, 0)
-        
-        # get the offset since the origin time in microseconds
-        offset = (datetime.now() - origin).total_seconds() * 1000
-        print("milliseconds at send:\t" + str(offset))
-        timestr = hex(int(math.floor(offset)))
-        timestr  = timestr[2:]
-        if len(timestr) < 16:
-            for i in range(0, 16 - len(timestr)):
-                timestr = "0" + timestr
-    
-        bytestring += timestr
-        """
         
         # signer
         bytestring += "80"
