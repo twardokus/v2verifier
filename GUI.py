@@ -7,12 +7,17 @@ import threading
 from threading import Thread
 import json
 from socket import socket
+import yaml
 
 class GUI:
 
 	def __init__(self, root):
 
 		self.threadlock = threading.Lock()
+		
+		with open("init.yml", "r") as confFile:
+			self.config = yaml.load(confFile,Loader=yaml.FullLoader)
+		self.numVehicles = self.config["remoteConfig"]["numberOfVehicles"] + 1
 
 		self.receivedPacketCount = 0
 		self.processedPacketCount = 0
@@ -35,6 +40,28 @@ class GUI:
 		self.authenticatedPacketCountPercentageText = tk.StringVar()
 		self.intactPacketCountPercentageText = tk.StringVar()
 		self.ontimePacketCountPercentageText = tk.StringVar()
+		self.vehicleZeroLocationText = tk.StringVar()
+		self.vehicleOneLocationText = tk.StringVar()
+		self.vehicleTwoLocationText = tk.StringVar()
+		self.vehicleThreeLocationText = tk.StringVar()
+		self.vehicleFourLocationText = tk.StringVar()
+		self.vehicleFiveLocationText = tk.StringVar()
+		self.vehicleSixLocationText = tk.StringVar()
+		self.vehicleSevenLocationText = tk.StringVar()
+		self.vehicleEightLocationText = tk.StringVar()
+		self.vehicleNineLocationText = tk.StringVar()
+		self.vehicleZeroSpeedText  = tk.StringVar()
+		self.vehicleOneSpeedText  = tk.StringVar()
+		self.vehicleTwoSpeedText = tk.StringVar()
+		self.vehicleThreeSpeedText = tk.StringVar()
+		self.vehicleFourSpeedText = tk.StringVar()
+		self.vehicleFiveSpeedText = tk.StringVar()
+		self.vehicleSixSpeedText = tk.StringVar()
+		self.vehicleSevenSpeedText = tk.StringVar()
+		self.vehicleEightSpeedText = tk.StringVar()
+		self.vehicleNineSpeedText = tk.StringVar()
+		self.receiverLocationText = tk.StringVar()
+		self.receiverSpeedText = tk.StringVar()
 		
 		self.root = root
 		root.title("V2X Communications - Security Testbed")	
@@ -70,14 +97,21 @@ class GUI:
 		self.legend = LabelFrame(self.topRight, text="Legend")
 		self.buildLegendFrame()
 
+		# build the report frame
+		self.report = LabelFrame(self.topRight, text="Vehicle Information")
+		self.buildReportFrame()
+
 		# Place core elements on canvas
 		self.textWidget.grid(row=1,column=0,columnspan=2,)
 		self.canvas.grid(row=0,column=0,sticky="nw")
 		self.topRight.grid(row=0,column=1,sticky="new")
 		
 		# Place subframes inside top right frame
+		#self.topRight.grid.rowconfigure(0,weight=1)
+		self.topRight.grid_columnconfigure(0,weight=1)
 		self.counters.grid(row=0,column=0,sticky="new")
 		self.legend.grid(row=1,column=0,sticky="ew")
+		self.report.grid(row=2,column=0,sticky="ew")
 
 	
 	def runGUIReceiver(self):
@@ -115,7 +149,7 @@ class GUI:
 				if data['recent']:
 					self.ontimePacketCount += 1
 
-
+				self.updateVehicleInfoLabels(data["id"],"(" + data["x"] + "," + data["y"] + ")", data["speed"])
 				update = Thread(target=self.newPacket, args=(self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
 				update.start()
 
@@ -282,11 +316,123 @@ class GUI:
 		self.receiverImage = Label(self.legend, image=self.receiverImg)
 		self.otherImage = Label(self.legend, image=self.otherImg)
 		
-		
 		self.receiverImage.grid(row=0,column=0)
 		self.otherImage.grid(row=1,column=0)
 		self.receiverRowLabel.grid(row=0,column=1,sticky="w")
 		self.otherRowLabel.grid(row=1,column=1,sticky="w")
 
+	def buildReportFrame(self):
+		self.totalVehiclesLabel = Label(self.report, text="Total vehicles: " + str(self.numVehicles))
 
+		self.vehicleZeroID = Label(self.report, text="0")
+		self.vehicleOneID = Label(self.report, text="1")
+		self.vehicleTwoID = Label(self.report, text="2")
+		self.vehicleThreeID = Label(self.report, text="3")
+		self.vehicleFourID = Label(self.report, text="4")
+		self.vehicleFiveID = Label(self.report, text="5")
+		self.vehicleSixID = Label(self.report, text="6")
+		self.vehicleSevenID = Label(self.report, text="7")
+		self.vehicleEightID = Label(self.report, text="8")
+		self.vehicleNineID = Label(self.report, text="9")
+		self.receiverID = Label(self.report, text="Rcvr.")
 
+		self.vehicleZeroLocation = Label(self.report, textvariable=self.vehicleZeroLocationText)
+		self.vehicleOneLocation = Label(self.report, textvariable=self.vehicleOneLocationText)
+		self.vehicleTwoLocation = Label(self.report, textvariable=self.vehicleTwoLocationText)
+		self.vehicleThreeLocation = Label(self.report, textvariable=self.vehicleThreeLocationText)
+		self.vehicleFourLocation = Label(self.report, textvariable=self.vehicleFourLocationText)
+		self.vehicleFiveLocation = Label(self.report, textvariable=self.vehicleFiveLocationText)
+		self.vehicleSixLocation = Label(self.report, textvariable=self.vehicleSixLocationText)
+		self.vehicleSevenLocation = Label(self.report, textvariable=self.vehicleSevenLocationText)
+		self.vehicleEightLocation = Label(self.report, textvariable=self.vehicleEightLocationText)
+		self.vehicleNineLocation = Label(self.report, textvariable=self.vehicleNineLocationText)
+		self.receiverLocation = Label(self.report, textvariable=self.receiverLocationText)
+		
+		self.vehicleZeroSpeed = Label(self.report, textvariable=self.vehicleZeroSpeedText)
+		self.vehicleOneSpeed = Label(self.report, textvariable=self.vehicleOneSpeedText)
+		self.vehicleTwoSpeed = Label(self.report, textvariable=self.vehicleTwoSpeedText)
+		self.vehicleThreeSpeed = Label(self.report, textvariable=self.vehicleThreeSpeedText)
+		self.vehicleFourSpeed = Label(self.report, textvariable=self.vehicleFourSpeedText)
+		self.vehicleFiveSpeed = Label(self.report, textvariable=self.vehicleFiveSpeedText)
+		self.vehicleSixSpeed = Label(self.report, textvariable=self.vehicleSixSpeedText)
+		self.vehicleSevenSpeed = Label(self.report, textvariable=self.vehicleSevenSpeedText)
+		self.vehicleEightSpeed = Label(self.report, textvariable=self.vehicleEightSpeedText)
+		self.vehicleNineSpeed = Label(self.report, textvariable=self.vehicleNineSpeedText)
+		self.receiverSpeed = Label(self.report, textvariable=self.receiverSpeedText)
+		
+		self.totalVehiclesLabel.grid(row=0,column=0)
+		
+		
+		
+		self.vehicleZeroID.grid(row=1,column=0)
+		self.vehicleOneID.grid(row=2,column=0)
+		self.vehicleTwoID.grid(row=3,column=0)
+		self.vehicleThreeID.grid(row=4,column=0)
+		self.vehicleFourID.grid(row=5,column=0)
+		self.vehicleFiveID.grid(row=6,column=0)
+		self.vehicleSixID.grid(row=7,column=0)
+		self.vehicleSevenID.grid(row=8,column=0)
+		self.vehicleEightID.grid(row=9,column=0)
+		self.vehicleNineID.grid(row=10,column=0)
+		self.receiverID.grid(row=11,column=0)
+
+		self.vehicleZeroLocation.grid(row=1,column=1, padx=(10,10))
+		self.vehicleOneLocation.grid(row=2,column=1, padx=(10,10))
+		self.vehicleTwoLocation.grid(row=3,column=1, padx=(10,10))
+		self.vehicleThreeLocation.grid(row=4,column=1, padx=(10,10))
+		self.vehicleFourLocation.grid(row=5,column=1, padx=(10,10))
+		self.vehicleFiveLocation.grid(row=6,column=1, padx=(10,10))
+		self.vehicleSixLocation.grid(row=7,column=1, padx=(10,10))
+		self.vehicleSevenLocation.grid(row=8,column=1, padx=(10,10))
+		self.vehicleEightLocation.grid(row=9,column=1, padx=(10,10))
+		self.vehicleNineLocation.grid(row=10,column=1, padx=(10,10))
+		self.receiverLocation.grid(row=11,column=1, padx=(10,10))
+		
+		self.vehicleZeroSpeed.grid(row=1,column=2)
+		self.vehicleOneSpeed.grid(row=2,column=2)
+		self.vehicleTwoSpeed.grid(row=3,column=2)
+		self.vehicleThreeSpeed.grid(row=4,column=2)
+		self.vehicleFourSpeed.grid(row=5,column=2)
+		self.vehicleFiveSpeed.grid(row=6,column=2)
+		self.vehicleSixSpeed.grid(row=7,column=2)
+		self.vehicleSevenSpeed.grid(row=8,column=2)
+		self.vehicleEightSpeed.grid(row=9,column=2)
+		self.vehicleNineSpeed.grid(row=10,column=2)
+		self.receiverSpeed.grid(row=11,column=2)
+		
+	def updateVehicleInfoLabels(self, vehicleID, location, speed):
+		print("Entered updateVehicle with arguments:\t" + str(vehicleID) + "," + location + "," + str(speed))
+		vehicleID = int(vehicleID)
+		if vehicleID == 0:
+			self.vehicleZeroLocationText.set(location)
+			self.vehicleZeroSpeedText.set(str(speed))
+		elif vehicleID == 1:
+			self.vehicleOneLocationText.set(location)
+			self.vehicleOneSpeedText.set(str(speed))
+		elif vehicleID == 2:
+			self.vehicleTwoLocationText.set(location)
+			self.vehicleTwoSpeedText.set(str(speed))
+		elif vehicleID == 3:
+			self.vehicleThreeLocationText.set(location)
+			self.vehicleThreeSpeedText.set(str(speed))
+		elif vehicleID == 4:
+			self.vehicleFourLocationText.set(location)
+			self.vehicleFourSpeedText.set(str(speed))
+		elif vehicleID == 5:
+			self.vehicleFiveLocationText.set(location)
+			self.vehicleFiveSpeedText.set(str(speed))
+		elif vehicleID == 6:
+			self.vehicleSixLocationText.set(location)
+			self.vehicleSixSpeedText.set(str(speed))
+		elif vehicleID == 7:
+			self.vehicleSevenLocationText.set(location)
+			self.vehicleSevenSpeedText.set(str(speed))
+		elif vehicleID == 8:
+			self.vehicleEightLocationText.set(location)
+			self.vehicleEightSpeedText.set(str(speed))
+		elif vehicleID == 9:
+			self.vehicleNineLocationText.set(location)
+			self.vehicleNineSpeedText.set(str(speed))
+		elif vehicleID == 99:
+			self.receiverLocationText.set(location)
+			self.receiverSpeedText.set(str(speed))
