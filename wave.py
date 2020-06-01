@@ -98,6 +98,7 @@ class WAVEPacketBuilder():
         
         # get the offset since the origin time in microseconds
         offset = (datetime.now() - origin).total_seconds() * 1000
+        print("milliseconds at send:\t" + str(offset))
         timestr = hex(int(math.floor(offset)))
         timestr  = timestr[2:]
         if len(timestr) < 16:
