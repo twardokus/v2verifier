@@ -145,14 +145,15 @@ class GUI:
 				# decode the JSON string
 				data = json.loads(msg)
 
-				self.receivedPacketCount += 1
+				if not data['receiver']:
+					self.receivedPacketCount += 1
 
-				self.intactPacketCount += 1
+					self.intactPacketCount += 1
 
-				if data['sig']:
-					self.authenticatedPacketCount += 1
-				if data['recent']:
-					self.ontimePacketCount += 1
+					if data['sig']:
+						self.authenticatedPacketCount += 1
+					if data['recent']:
+						self.ontimePacketCount += 1
 
 				self.updateVehicleInfoLabels(data["id"],"(" + data["x"] + "," + data["y"] + ")", data["speed"])
 				update = Thread(target=self.newPacket, args=(self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'], data['receiver'], data['elapsed'],))
@@ -224,7 +225,8 @@ class GUI:
 		time.sleep(0.1)
 
 		self.canvas.delete("car" + str(threading.currentThread().ident))
-		self.processedPacketCount += 1
+		if not isReceiver:
+			self.processedPacketCount += 1
 
 	def updateStatisticsLabels(self):
 		while True:
