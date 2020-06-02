@@ -18,7 +18,7 @@ class GUI:
 		with open("init.yml", "r") as confFile:
 			self.config = yaml.load(confFile,Loader=yaml.FullLoader)
 		self.numVehicles = self.config["remoteConfig"]["numberOfVehicles"] + 1
-		self.totalPackets = self.config["remoteConfig"]["traceLength"]
+		self.totalPackets = self.config["remoteConfig"]["traceLength"] * (self.numVehicles - 1) 
 
 		self.receivedPacketCount = 0
 		self.processedPacketCount = 0
