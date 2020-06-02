@@ -1,9 +1,11 @@
 remoteConfig:
    numberOfVehicles: 1
    traceFiles:
-      - coords_1
       - coords_2
+      - coords_1
       - coords_3
+   traceLength:
+      300
 localConfig:
    tracefile:
       local_coords
