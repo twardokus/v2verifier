@@ -18,6 +18,7 @@ class GUI:
 		with open("init.yml", "r") as confFile:
 			self.config = yaml.load(confFile,Loader=yaml.FullLoader)
 		self.numVehicles = self.config["remoteConfig"]["numberOfVehicles"] + 1
+		self.totalPackets = self.config["remoteConfig"]["traceLength"]
 
 		self.receivedPacketCount = 0
 		self.processedPacketCount = 0
@@ -244,7 +245,7 @@ class GUI:
 			self.intactPacketCountValueText.set(str(self.intactPacketCount))
 			self.ontimePacketCountValueText.set(str(self.ontimePacketCount))
 			
-			self.receivedPacketCountPercentageText.set(str(round((self.receivedPacketCount/self.receivedPacketCount)*100,2)) + "%")
+			self.receivedPacketCountPercentageText.set(str(round((self.receivedPacketCount/self.totalPackets)*100,2)) + "%")
 			self.processedPacketCountPercentageText.set(str(round((self.processedPacketCount/self.receivedPacketCount)*100,2)) + "%")
 			self.authenticatedPacketCountPercentageText.set(str(round((self.authenticatedPacketCount/self.receivedPacketCount)*100,2)) + "%")
 			self.intactPacketCountPercentageText.set(str(round((self.intactPacketCount/self.receivedPacketCount)*100,2)) + "%")
