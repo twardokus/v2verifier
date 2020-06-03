@@ -92,8 +92,6 @@ class Utility:
         if len(timestr) < 16:
             for i in range(0, 16 - len(timestr)):
                 timestr = "0" + timestr
-        print(bsm)
         timestr = "\\x" + "\\x".join(timestr[i:i+2] for i in range(0, len(timestr), 2))
         bsm = bsm.replace("\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0",timestr)
-        print(bsm)
         return bsm.replace("\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0",timestr)
