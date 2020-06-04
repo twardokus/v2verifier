@@ -11,3 +11,6 @@ remoteConfig:
 localConfig:
    tracefile:
       local_coords
+spoofer:
+   traceFile:
+      spooferCoords

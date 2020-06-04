@@ -1,6 +1,7 @@
 # a file for utility functions
 import math
 from WavePacketBuilder import WAVEPacketBuilder
+from AttackerWave import AttackerWave
 from datetime import datetime
 import time
 
@@ -8,6 +9,7 @@ class Utility:
     
     def __init__(self):
         self.waveBuilder = WAVEPacketBuilder()
+        self.attackWaveBuilder = AttackerWave()
         
     def buildBSMQueue(self, vehicleNo, traceFilePath, key):
         
@@ -25,7 +27,23 @@ class Utility:
             
         return bsmQueue
         #getWSMPayload
-        
+    
+    def buildSpoofedBSMQueue(self,vehicleNo, traceFilePath):
+        bsmQueue = []
+        with open(traceFilePath, "r") as infile:
+            coordinateList = infile.readlines()
+        if len(coordinateList) < 3:
+            raise Exception("Your file must have at least 3 pairs of coordinates")
+            
+        for i in range(0, len(coordinateList) - 2):
+            heading = self.calculateHeading(coordinateList[i], coordinateList[i+1])
+            speed = self.calcSpeed(coordinateList[i], coordinateList[i+1])
+            bsmText = str(vehicleNo) + "," + coordinateList[i].replace("\n","") + "," + heading + "," + str(round(speed,2)) + "\n"
+            bsmQueue.append(self.attackWaveBuilder.getWSMPayload(bsmText))
+            
+        return bsmQueue
+        #getWSMPayload
+    
     # For the local vehicle, full WSMs are unnecessary as there is no communication over the SDR
     def buildLocalQueue(self, traceFilePath):
         with open(traceFilePath) as infile:

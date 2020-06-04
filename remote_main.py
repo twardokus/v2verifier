@@ -10,6 +10,7 @@ from Utility import Utility
 from ReplayAttacker import ReplayAttacker
 import time
 import os
+import random
 
 if os.geteuid() != 0:
         print("Error - you must be root! Try running with sudo")
@@ -39,9 +40,18 @@ for rv in remoteVehicles:
     vehicle.start()
     print("started")
 
+"""
 # start running the replay attacker
 replayer = ReplayAttacker()
 replay = Process(target=replayer.replayAttack, args=(5,)) 
 replay.start()
+"""
+
+# start a spoofing attack
+traceFilePath = config["spoofer"]["traceFile"]
+spoofedBSMQueue = util.buildSpoofedBSMQueue(random.randint(0,10), traceFilePath)
+spoofer = RemoteVehicle(spoofedBSMQueue)
+spoofProc = Process(target=spoofer.start)
+spoofProc.start()
 
 
