@@ -14,7 +14,7 @@ class Verifier:
     # Returns true if less than 1s elapsed between message transmission and reception
     def verifyTime(self, timestamp):
         elapsed = self.calculateElapsedTime(timestamp)
-        return (elapsed, elapsed < 1000)
+        return (elapsed, elapsed < 300)
     
     # calculate the number of elapsed milliseconds since the message was transmitted
     def calculateElapsedTime(self, timeInMilliseconds):
