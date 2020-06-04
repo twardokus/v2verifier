@@ -1,6 +1,6 @@
 # a file for utility functions
 import math
-from wave import WAVEPacketBuilder
+from WavePacketBuilder import WAVEPacketBuilder
 from datetime import datetime
 import time
 
@@ -94,4 +94,5 @@ class Utility:
                 timestr = "0" + timestr
         timestr = "\\x" + "\\x".join(timestr[i:i+2] for i in range(0, len(timestr), 2))
         bsm = bsm.replace("\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0",timestr)
+
         return bsm.replace("\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0",timestr)
