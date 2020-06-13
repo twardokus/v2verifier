@@ -51,27 +51,19 @@ class WAVEPacketBuilder():
     def getIeee1609Dot2Data(self, message, key):
         
         message = message.encode("utf-8").hex()
-    
+ 
         # IEEE1609Dot2Data Structure
-        
-        # begin assembling structure
         bytestring = ""
-            
         # Protocol Version
         bytestring += "03"
-    
         # ContentType ( signed data = 81)
         bytestring += "81"
-    
         # HashID (SHA256 = 00)
         bytestring += "00"
-        
         # Data
         bytestring += "40"
-    
         # Protocol Version
         bytestring += "03"
-    
         # Content - Unsecured Data
         bytestring += "80"
     
