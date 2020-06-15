@@ -1,0 +1,16 @@
+remoteConfig:
+   numberOfVehicles: 1
+   traceFiles:
+      - coords_2
+      - coords_1
+      - coords_3
+      - coords_4
+      - coords_5
+   traceLength:
+      300
+localConfig:
+   tracefile:
+      local_coords
+spoofer:
+   traceFile:
+      spooferCoords
