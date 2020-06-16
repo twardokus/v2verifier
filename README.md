@@ -7,9 +7,12 @@ This software, and its components, are freely available for reuse **with** attri
 If this code is shared or reused, with or without modification, attribution to the 
 following authors is required. 
 
-Authors:  Geoff Twardokus
-          Samantha Baker
-          Jaime Ponicki
-          Peter Carenzo
-          Hanif Rahbari
-          Sumita Mishra
+Authors: 
+- Geoff Twardokus
+- Samantha Baker
+- Jaime Ponicki
+- Peter Carenzo
+- Hanif Rahbari
+- Sumita Mishra
+
+This file must also be included with any reused element of this project.
