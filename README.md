@@ -4,10 +4,9 @@ mechanisms using software-defined radios.
 
 ## License Information & Reuse
 This software, and its components, are freely available for reuse **with** attribution.
-If this code is shared or reused, with or without modification, attribution to the 
-following authors is required. 
+If you use this code in your research, please reference this repository with attribution
+to all of the following authors:
 
-Authors: 
 - Geoff Twardokus
 - Samantha Baker
 - Jaime Ponicki
