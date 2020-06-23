@@ -25,28 +25,9 @@ if __name__=="__main__":
         print("Error - you must be root! Try running with sudo")
         exit(1)
     
-    """   
-    root = tk.Tk()
-    gui = GUI(root)
-    gui.runGUIReceiver()
-    print("GUI Initialized...")
-    
-    s2 = socket()
-    s2.connect(('127.0.0.1',6666))
-    
-    lock = Lock()
-    """
     receiver = Recorder()
     
     listener = Thread(target=receiver.listenForWSMs)
     listener.start()
     print("Listener running...")
     
-    """
-    lv = LocalVehicle(config["localConfig"]["tracefile"])
-    
-    local = Thread(target=lv.startNoGUI)
-    local.start()
-    
-    #root.mainloop()
-    """

@@ -92,6 +92,10 @@ class Receiver:
     
         r = signature[:64]
         s = signature[64:128]
+
+        print(r)
+        print(s)
+
     
         # convert from string into ten-bit integer
         r = int(r,16)

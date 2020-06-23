@@ -5,13 +5,25 @@ from fastecdsa import keys, curve
 from Verifier import Verifier
 from threading import Thread
 from Receiver import Receiver
+import os
 
 class Recorder(Receiver):
-    
+
+    def __init__(self):
+        self.createOutFile()
+        self.verifier = Verifier()
+        self.messageCounter = 1
+
+    def createOutFile(self):
+        self.outfile = open("results.csv","w")
+        os.chmod("results.csv",0o777)
+        self.outfile.write("X,Y,Dir,Speed,ValidSig,Time,Expired\n")
+        self.outfile.close()
+
     def listenForWSMs(self):
         # print a console message to confirm the network connection is active
         print("Listening on localhost:4444 for WSMs")
-    
+        
         # listen on localhost:4444 which is the UDP sink from GNURadio in wifi_rx.py
         # received packets are passed to processPacket() for data extraction
         sniff(iface="lo", filter="dst port 4444", prn=lambda x: self.filterDuplicatePackets(str(binascii.hexlify(x.load))[130:]))
@@ -23,7 +35,7 @@ class Recorder(Receiver):
 
     # uses returned tuple from parseWSM to verify message and send to GUI
     def processPacket(self, payload):
-    
+    	
         # extract the elements "(unsecuredData,r,s,time)" from the 1609.2 structure
         data = self.parseWSM(payload)
         
@@ -54,3 +66,8 @@ class Recorder(Receiver):
         vehicleDataJSON = json.dumps(decodedData)
 
         print(vehicleDataJSON)
+        self.outfile = open("results.csv","a")
+        self.outfile.write(decodedData['x'] + "," + decodedData['y'] + "," + decodedData['heading'] + "," + decodedData['speed'] + "," + str(decodedData['sig']) + "," + str(decodedData['elapsed']) + "," + str(decodedData['recent']) + "\n")
+
+        self.outfile.close()
+	
