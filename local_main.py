@@ -9,7 +9,7 @@ sys.path.append("/home/administrator/eclipse-workspace/v2verifier/v2verifier")
 import yaml
 from threading import Lock, Thread
 from socket import socket
-from Receiver import Receiver
+from Recorder import Recorder
 from GUI import GUI
 import tkinter as tk
 
@@ -25,6 +25,7 @@ if __name__=="__main__":
         print("Error - you must be root! Try running with sudo")
         exit(1)
     
+    """   
     root = tk.Tk()
     gui = GUI(root)
     gui.runGUIReceiver()
@@ -34,16 +35,18 @@ if __name__=="__main__":
     s2.connect(('127.0.0.1',6666))
     
     lock = Lock()
+    """
+    receiver = Recorder()
     
-    receiver = Receiver()
-    
-    listener = Thread(target=receiver.listenForWSMs, args=(s2,lock,))
+    listener = Thread(target=receiver.listenForWSMs)
     listener.start()
     print("Listener running...")
     
+    """
     lv = LocalVehicle(config["localConfig"]["tracefile"])
     
-    local = Thread(target=lv.start, args=(s2,lock,))
+    local = Thread(target=lv.startNoGUI)
     local.start()
     
-    root.mainloop()
+    #root.mainloop()
+    """
