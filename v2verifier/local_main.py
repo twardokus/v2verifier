@@ -6,12 +6,9 @@ import sys
 sys.path.append(os.getcwd())
 
 import yaml
-from threading import Lock, Thread
-from socket import socket
-import tkinter as tk
-from v2verifier.Recorder import Recorder
-from v2verifier.GUI import GUI
-from v2verifier.LocalVehicle import LocalVehicle
+from threading import Thread
+from Recorder import Recorder
+from LocalVehicle import LocalVehicle
 
 with open("init.yml", "r") as confFile:
     config = yaml.load(confFile,Loader=yaml.FullLoader)

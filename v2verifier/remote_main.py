@@ -5,9 +5,9 @@ This is the main execution file for the remote vehicle
 # Imports
 import yaml
 from multiprocessing import Process
-from v2verifier.RemoteVehicle import RemoteVehicle
-from v2verifier.Utility import Utility
-from v2verifier.attacks.ReplayAttacker import ReplayAttacker
+from RemoteVehicle import RemoteVehicle
+from Utility import Utility
+from attacks.ReplayAttacker import ReplayAttacker
 import os
 
 if os.geteuid() != 0:
@@ -24,7 +24,7 @@ remoteVehicles = []
 # prepare the message queues for all vehicles
 try:
     for i in range(0, config["remoteConfig"]["numberOfVehicles"]):
-        traceFilePath = config["remoteConfig"]["traceFiles"][i]
+        traceFilePath = "coordinate_files/" + config["remoteConfig"]["traceFiles"][i]
         bsmQueue = util.buildBSMQueue(i, traceFilePath, "keys/" + str(i) + "/p256.key")
         rv = RemoteVehicle(bsmQueue)
         remoteVehicles.append(rv)

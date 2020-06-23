@@ -1,7 +1,7 @@
 # a file for utility functions
 import math
-from v2verifier.WavePacketBuilder import WAVEPacketBuilder
-from v2verifier.attacks.AttackerWave import AttackerWave
+from WavePacketBuilder import WAVEPacketBuilder
+from attacks.AttackerWave import AttackerWave
 from datetime import datetime
 
 class Utility:

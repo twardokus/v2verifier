@@ -2,9 +2,9 @@ from scapy.all import sniff
 import binascii
 import json
 from fastecdsa import keys, curve
-from v2verifier.Verifier import Verifier
+from Verifier import Verifier
 from threading import Thread
-from v2verifier.Receiver import Receiver
+from Receiver import Receiver
 import os
 
 class Recorder(Receiver):

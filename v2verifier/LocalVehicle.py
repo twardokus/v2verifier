@@ -1,4 +1,4 @@
-from v2verifier.Utility import Utility
+from Utility import Utility
 import json
 import time
 

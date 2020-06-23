@@ -1,4 +1,4 @@
-from v2verifier.WavePacketBuilder import WAVEPacketBuilder
+from WavePacketBuilder import WAVEPacketBuilder
 import random
 
 class AttackerWave(WAVEPacketBuilder):
