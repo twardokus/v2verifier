@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='utf-8'?>
-<?grc format='1' created='3.7.13'?>
+<?grc format='1' created='3.7.14'?>
 <flow_graph>
   <timestamp>Fri Jul 18 10:38:16 2014</timestamp>
   <block>
@@ -196,7 +196,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>5900000000</value>
+      <value>5890000000</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -295,7 +295,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>.98</value>
+      <value>0.95</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -358,7 +358,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>0</value>
+      <value>11e6</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -912,7 +912,7 @@
     </param>
     <param>
       <key>file</key>
-      <value>/home/administrator/Desktop/out.pcap</value>
+      <value>/home/user/v2verifier/out.pcap</value>
     </param>
     <param>
       <key>_coordinate</key>
@@ -2328,7 +2328,7 @@
     </param>
     <param>
       <key>ant0</key>
-      <value>TX/RX</value>
+      <value></value>
     </param>
     <param>
       <key>bw0</key>
@@ -2340,11 +2340,11 @@
     </param>
     <param>
       <key>dc_offs_enb0</key>
-      <value>""</value>
+      <value>False</value>
     </param>
     <param>
       <key>iq_imbal_enb0</key>
-      <value>""</value>
+      <value>False</value>
     </param>
     <param>
       <key>norm_gain0</key>
