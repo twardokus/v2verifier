@@ -358,7 +358,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>6e6</value>
+      <value>0</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -646,7 +646,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>0.9</value>
+      <value>0.97</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -984,7 +984,7 @@
     </param>
     <param>
       <key>ant0</key>
-      <value></value>
+      <value>TX/RX</value>
     </param>
     <param>
       <key>bw0</key>
@@ -1648,7 +1648,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(400, 620)</value>
+      <value>(504, 540)</value>
     </param>
     <param>
       <key>_rotation</key>
