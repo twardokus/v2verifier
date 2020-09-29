@@ -5,7 +5,8 @@ from datetime import datetime
 import math
 
 class WAVEPacketBuilder():
-    
+
+    #hello
     def getWSMPayload(self, bsmString, key):
         
         payload = self.getLLCBytestring() + self.getWSMHeaders() + self.getIeee1609Dot2Data(bsmString,key)
