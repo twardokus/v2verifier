@@ -6,7 +6,6 @@ import math
 
 class WAVEPacketBuilder():
 
-    #hello
     def getWSMPayload(self, bsmString, key):
         
         payload = self.getLLCBytestring() + self.getWSMHeaders() + self.getIeee1609Dot2Data(bsmString,key)
@@ -88,12 +87,65 @@ class WAVEPacketBuilder():
         # this is a placeholder byte pattern that is unlikely to occur in practice, used to inject actual time
         # when packet is transmitted
         bytestring += "F0E0F0E0F0E0F0E0"
-        
-        # signer
-        bytestring += "80"
-    
+
         # Digest (8 bytes) - this is a dummy value as we have not used certificates, which would be involved here
+        # NOT NEEDED, for if signerIdentifier = "digest"
+        # bytestring += "80"
+        # bytestring += "2122232425262728"
+
+        # signerIdentifier = "certificate"
+        bytestring += "80" #@TODO figure out identifier for "certificate" choice
+    
+        #START CERTIFICATE BASE
+
+        #version = 3
+        bytestring += "03"
+
+        #CertificateType = "explicit"
+        #@TODO implement ExplicitCertificate structure here
+
+        #Issuer = "sha256AndDigest"
+        #dummy value here for issuerID
         bytestring += "2122232425262728"
+
+        #toBeSigned
+        # - START ToBeSignedCertificate HERE -
+
+        #id = linkageData
+        #this data is used to compare/add certificates to a CRL
+        #START linkageData HERE
+
+        #iCert DUMMY VALUE
+        bytestring += "100"
+
+        #linkage-value(size = 9) DUMMY VALUE
+        bytestring += "0fa12245f4c3c1cd54"
+        #END linkageData HERE
+
+        #cracaID(size = 3) DUMMY VALUE
+        bytestring += "52641c"
+
+        #crlSeries DUMMY VALUE
+        bytestring += "20"
+
+        #START validityPeriod HERE
+        #start(time32)
+        bytestring += "24c34587"
+
+        #duration
+        bytestring += "20"
+
+        #END validityPeriod HERE
+
+        # - OPTIONAL FIELDS CAN GO HERE -
+        # IN ORDER:
+        # region, assuranceLevel, appPermissions, certIssuePermissions, certRequestPermissions,
+        # canRequestRollover, encryptionKey
+
+        #verifyKeyIndicator
+        #@TODO get more information on KeyIndicator
+
+        # - END ToBeSignedCertificate HERE -
     
         # signature (ecdsaNistP256Signature = 80)
         bytestring += "80"
