@@ -94,7 +94,8 @@ class WAVEPacketBuilder():
         # bytestring += "2122232425262728"
 
         # signerIdentifier = "certificate"
-        bytestring += "80" #@TODO figure out identifier for "certificate" choice
+        #Assuming digest is 80, set to 81
+        bytestring += "81"
     
         #START CERTIFICATE BASE
 
