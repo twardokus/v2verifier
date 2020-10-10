@@ -102,6 +102,9 @@ class WAVEPacketBuilder():
         #version = 3
         bytestring += "03"
 
+        # Number of items
+        bytestring += "000001"
+
         #CertificateType = "explicit"
         #@TODO implement ExplicitCertificate structure here
 
