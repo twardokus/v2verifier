@@ -108,6 +108,15 @@ class WAVEPacketBuilder():
         #CertificateType = "explicit"
         #@TODO implement ExplicitCertificate structure here
 
+        # Filler?
+        bytestring += "00"
+
+        # version
+        bytestring += "03"
+
+        # type
+        bytestring += "00"
+
         #Issuer = "sha256AndDigest"
         #dummy value here for issuerID
         bytestring += "2122232425262728"
