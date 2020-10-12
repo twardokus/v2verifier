@@ -103,11 +103,12 @@ class WAVEPacketBuilder():
         bytestring += "03"
 
         # Number of items
-        bytestring += "000001"
+        bytestring += "000006"
 
         #CertificateType = "explicit"
         #@TODO implement ExplicitCertificate structure here
 
+        #for i in range(0, 6):
         # Filler?
         bytestring += "00"
 
@@ -140,7 +141,8 @@ class WAVEPacketBuilder():
         bytestring += "0100"
 
         #linkage-value(size = 9) DUMMY VALUE
-        bytestring += "0fa12245f4c3c1cd54"
+        #bytestring += "0fa12245f4c3c1cd54"
+        bytestring += "414243444546474849"
         #END linkageData HERE
 
         #cracaID(size = 3) DUMMY VALUE
@@ -160,8 +162,8 @@ class WAVEPacketBuilder():
         bytestring += "01"
         
         # EccP256CurvePoint
-        bytestring += "00"
-        bytestring += "00"*32
+        bytestring += "04"
+        bytestring += "00"*64
 
         #END validityPeriod HERE
 
