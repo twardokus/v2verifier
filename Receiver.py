@@ -34,6 +34,9 @@ class Receiver:
         # extract the elements "(unsecuredData,r,s,time)" from the 1609.2 structure
         data = self.parseWSM(payload)
         
+        if data == -1:
+            return
+        
         """
         #BSMData = data[0].decode('hex').replace("\n","").split(",")
         BSMData = bytes.fromhex(data[0]).decode('ascii').replace("\n","").split(",")
@@ -73,39 +76,42 @@ class Receiver:
         
     # takes the hex payload from an 802.11p frame as an argument, returns tuple of extracted bytestrings
     def parseWSM(self, WSM):
-            
-        # The first 8 bytes are WSMP N/T headers that do not change in size and can be discarded
-        ieee1609Dot2Data = WSM[8:]
-
-        # First item to extract is the payload in unsecured data field
+        try:
+            # The first 8 bytes are WSMP N/T headers that do not change in size and can be discarded
+            ieee1609Dot2Data = WSM[8:]
     
-        # Note that the numbers for positions are double the byte value
-        # because this is a string of "hex numbers" so 1 byte = 2 chars
-    
-        unsecuredDataLength = int(ieee1609Dot2Data[14:16],16)*2
-        unsecuredData = ieee1609Dot2Data[16:16+(unsecuredDataLength)]
-        timePostition = 16 + unsecuredDataLength + 6
-        time = ieee1609Dot2Data[timePostition:timePostition+16]
-    
-        # the ecdsaNistP256Signature structure is 66 bytes
-        # r - 32 bytes
-        # s - 32 bytes
-        # field separators - 2 bytes
-        signature = ieee1609Dot2Data[len(ieee1609Dot2Data)-(2*66)-1:]
-    
-        # drop the two field identification bytes at the start of the block
-        signature = signature[4:]
+            # First item to extract is the payload in unsecured data field
         
-        # split into r and s
-    
-        r = signature[:64]
-        s = signature[64:128]
-    
-        # convert from string into ten-bit integer
-        r = int(r,16)
-        s = int(s,16)
-    
-        r = int(str(r))
-        s = int(str(s))
-    
-        return (unsecuredData,r,s,time)
+            # Note that the numbers for positions are double the byte value
+            # because this is a string of "hex numbers" so 1 byte = 2 chars
+        
+            unsecuredDataLength = int(ieee1609Dot2Data[14:16],16)*2
+            unsecuredData = ieee1609Dot2Data[16:16+(unsecuredDataLength)]
+            timePostition = 16 + unsecuredDataLength + 6
+            time = ieee1609Dot2Data[timePostition:timePostition+16]
+        
+            # the ecdsaNistP256Signature structure is 66 bytes
+            # r - 32 bytes
+            # s - 32 bytes
+            # field separators - 2 bytes
+            signature = ieee1609Dot2Data[len(ieee1609Dot2Data)-(2*66)-1:]
+        
+            # drop the two field identification bytes at the start of the block
+            signature = signature[4:]
+            
+            # split into r and s
+        
+            r = signature[:64]
+            s = signature[64:128]
+        
+            # convert from string into ten-bit integer
+            r = int(r,16)
+            s = int(s,16)
+        
+            r = int(str(r))
+            s = int(str(s))
+        
+            return (unsecuredData,r,s,time)
+        except:
+            print("Not a WSM.")
+            return -1

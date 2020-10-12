@@ -103,11 +103,12 @@ class WAVEPacketBuilder():
         bytestring += "03"
 
         # Number of items
-        bytestring += "000001"
+        bytestring += "000006"
 
         #CertificateType = "explicit"
         #@TODO implement ExplicitCertificate structure here
 
+        #for i in range(0, 6):
         # Filler?
         bytestring += "00"
 
@@ -119,7 +120,7 @@ class WAVEPacketBuilder():
 
         #Issuer = "sha256AndDigest"
         #dummy value here for issuerID
-        bytestring += "2122232425262728"
+        bytestring += "002122232425262728"
 
         #toBeSigned
         # - START ToBeSignedCertificate HERE -
@@ -128,25 +129,41 @@ class WAVEPacketBuilder():
         #this data is used to compare/add certificates to a CRL
         #START linkageData HERE
 
+
+        #buffer
+        bytestring += "0000"
+        
+        # certificateID choice
+        bytestring += "00"
+        
+
         #iCert DUMMY VALUE
-        bytestring += "100"
+        bytestring += "0100"
 
         #linkage-value(size = 9) DUMMY VALUE
-        bytestring += "0fa12245f4c3c1cd54"
+        #bytestring += "0fa12245f4c3c1cd54"
+        bytestring += "414243444546474849"
         #END linkageData HERE
 
         #cracaID(size = 3) DUMMY VALUE
         bytestring += "52641c"
 
         #crlSeries DUMMY VALUE
-        bytestring += "20"
+        bytestring += "2000"
 
         #START validityPeriod HERE
         #start(time32)
         bytestring += "24c34587"
 
         #duration
-        bytestring += "20"
+        bytestring += "030005"
+        
+        # VerificationKeyIndicator
+        bytestring += "01"
+        
+        # EccP256CurvePoint
+        bytestring += "04"
+        bytestring += "00"*64
 
         #END validityPeriod HERE
 

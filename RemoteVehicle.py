@@ -15,4 +15,4 @@ class RemoteVehicle:
             print("Sending BSM")
             loader = subprocess.Popen(("echo","-n","-e",BSM), stdout=subprocess.PIPE)
             sender = subprocess.check_output(("nc","-w0","-u","localhost","52001"),stdin=loader.stdout) 
-            time.sleep(1)
+            time.sleep(3)
