@@ -1,0 +1,8 @@
+To rebuild gr-foo:
+
+Make the changes to /home/gr-foo/lib/wireshark_connector_impl.cc
+
+cd ~/gr-foo/build
+cmake ../
+make
+sudo make install
