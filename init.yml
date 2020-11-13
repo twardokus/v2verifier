@@ -1,7 +1,7 @@
 remoteConfig:
    numberOfVehicles: 1
    traceFiles:
-      - test_coords
+      - coords_3
       - coords_1
       - coords_3
       - coords_4
