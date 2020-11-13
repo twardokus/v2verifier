@@ -1,5 +1,3 @@
-# this is the main execution file for the "local vehicle"
-
 import os
 import yaml
 from threading import Lock, Thread
