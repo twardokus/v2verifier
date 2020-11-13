@@ -1,20 +1,14 @@
-# this is the main execution file for the "local vehicle"
-
 import os
-import sys
-
-print(os.getcwd())
-sys.path.append("/home/administrator/eclipse-workspace/v2verifier/v2verifier")
-
 import yaml
 from threading import Lock, Thread
 from socket import socket
 from Receiver import Receiver
+from LocalVehicle import LocalVehicle
 from GUI import GUI
 import tkinter as tk
 
 
-from LocalVehicle import LocalVehicle
+#from LocalVehicle import LocalVehicle
 
 with open("init.yml", "r") as confFile:
     config = yaml.load(confFile,Loader=yaml.FullLoader)
@@ -24,6 +18,7 @@ if __name__=="__main__":
     if os.geteuid() != 0:
         print("Error - you must be root! Try running with sudo")
         exit(1)
+    
     
     root = tk.Tk()
     gui = GUI(root)
@@ -37,7 +32,7 @@ if __name__=="__main__":
     
     receiver = Receiver()
     
-    listener = Thread(target=receiver.listenForWSMs, args=(s2,lock,))
+    listener = Thread(target=receiver.runReceiver, args=(s2, lock,))
     listener.start()
     print("Listener running...")
     
@@ -47,3 +42,4 @@ if __name__=="__main__":
     local.start()
     
     root.mainloop()
+    
