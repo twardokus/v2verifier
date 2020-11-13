@@ -10,7 +10,7 @@ remoteConfig:
       6
 localConfig:
    tracefile:
-      test_coords
+      coords_1
 spoofer:
    traceFile:
       test_coords
