@@ -1,1 +1,0 @@
-from PIL.ImageWin import *
