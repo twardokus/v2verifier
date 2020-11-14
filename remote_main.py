@@ -1,22 +1,19 @@
-"""
-This is the main execution file for the remote vehicle
-"""
-
-# Imports
 import yaml
+import os
+
 from multiprocessing import Process
 from RemoteVehicle import RemoteVehicle
 from Utility import Utility
-import os
+
 
 if os.geteuid() != 0:
-        print("Error - you must be root! Try running with sudo")
-        exit(1)
+    print("Error - you must be root! Try running with sudo")
+    exit(1)
 
 util = Utility()
 
 with open("init.yml", "r") as confFile:
-    config = yaml.load(confFile,Loader=yaml.FullLoader)
+    config = yaml.load(confFile, Loader=yaml.FullLoader)
 
 remoteVehicles = []
 
@@ -24,12 +21,13 @@ remoteVehicles = []
 try:
     for i in range(0, config["remoteConfig"]["numberOfVehicles"]):
         traceFilePath = config["remoteConfig"]["traceFiles"][i]
-        bsmQueue = util.buildBSMQueue(i, traceFilePath, "keys/" + str(i) + "/p256.key")
+        bsmQueue = util.build_bsm_queue(i, traceFilePath, "keys/" + str(i) + "/p256.key")
         rv = RemoteVehicle(bsmQueue)
         remoteVehicles.append(rv)
         
 except IndexError:
-    print("Error starting vehicles. Ensure you have entered enough trace files and BSM file paths in \"init.yml\" to match the number of vehicles specified in that file.")
+    print("Error starting vehicles. Ensure you have entered enough trace files and BSM file paths in \"init.yml\" t"
+          "o match the number of vehicles specified in that file.")
 
 # list to hold all spawned processes
 vehicleProcesses = []
@@ -43,5 +41,3 @@ for rv in remoteVehicles:
 
 for vehicle in vehicleProcesses:
     vehicle.join()
-
-

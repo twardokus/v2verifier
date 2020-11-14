@@ -5,84 +5,82 @@ from fastecdsa import keys, curve
 from Verifier import Verifier
 from threading import Thread
 
+
 class Receiver:
     
     def __init__(self):
         self.verifier = Verifier()
         self.messageCounter = 1
         
-    def runReceiver(self, s, lock):
-        listener = Thread(target=self.listenForWSMs(s, lock))
+    def run_receiver(self, s, lock):
+        listener = Thread(target=self.listen_for_wsms(s, lock))
         listener.start()
         
-    def listenForWSMs(self, s, lock):
+    def listen_for_wsms(self, s, lock):
 
         print("Listening on localhost:4444 for WSMs")
     
         # port 4444 corresponds to UDP interface in wifi_rx.grc
         sniff(iface="lo", filter="dst port 4444", prn=lambda x: 
-              self.filterDuplicatePackets(str(binascii.hexlify(x.load))[130:], s, lock))
+              self.filter_duplicate_packets(str(binascii.hexlify(x.load))[130:], s, lock))
     
-    def filterDuplicatePackets(self, payload, s, lock):
+    def filter_duplicate_packets(self, payload, s, lock):
         if self.messageCounter % 2 == 1:
-            self.processPacket(payload, s, lock)
+            self.process_packet(payload, s, lock)
         self.messageCounter += 1
 
-    def processPacket(self, payload, s, lock):
+    def process_packet(self, payload, s, lock):
     
-        data = self.parseWSM(payload)
-        
-        #BSMData = data[0].decode('hex').replace("\n","").split(",")
-        BSMData = bytes.fromhex(data[0]).decode('ascii').replace("\n","").split(",")
+        data = self.parse_wsm(payload)
 
-        decodedData = {}    
+        bsm_data = bytes.fromhex(data[0]).decode('ascii').replace("\n", "").split(",")
+
+        decoded_data = {}
         
-        decodedData['id'] = BSMData[0]
-        decodedData['x'] = BSMData[1]
-        decodedData['y'] = BSMData[2]
-        decodedData['heading'] = BSMData[3]
-        decodedData['speed'] = BSMData[4]
+        decoded_data['id'] = bsm_data[0]
+        decoded_data['x'] = bsm_data[1]
+        decoded_data['y'] = bsm_data[2]
+        decoded_data['heading'] = bsm_data[3]
+        decoded_data['speed'] = bsm_data[4]
         
     
 #       publicKey = keys.import_key("keys/" + decodedData['id'] + "/p256.pub",curve=curve.P256, public=True)
-        publicKey = keys.import_key("keys/0/p256.pub",curve=curve.P256, public=True)
+        public_key = keys.import_key("keys/0/p256.pub", curve=curve.P256, public=True)
 
-
-        # verify the signature
-        isValidSig = self.verifier.verifySignature(data[1],data[2],data[0],publicKey)
+        is_valid_sig = self.verifier.verify_signature(data[1], data[2], data[0], public_key)
         
-        elapsed, isRecent = self.verifier.verifyTime(data[3])
+        elapsed, is_recent = self.verifier.verify_time(data[3])
         
-        decodedData['sig'] = isValidSig
-        decodedData['elapsed'] = elapsed
-        decodedData['recent'] = isRecent
-        decodedData['receiver'] = False
+        decoded_data['sig'] = is_valid_sig
+        decoded_data['elapsed'] = elapsed
+        decoded_data['recent'] = is_recent
+        decoded_data['receiver'] = False
                 
-        vehicleDataJSON = json.dumps(decodedData)
+        vehicle_data_json = json.dumps(decoded_data)
     
         with lock:
-            s.send(vehicleDataJSON.encode())
+            s.send(vehicle_data_json.encode())
         
     # takes the hex payload from an 802.11p frame as an argument, returns tuple of extracted bytestrings
-    def parseWSM(self, WSM):
+    def parse_wsm(self, WSM):
         # The first 8 bytes are WSMP N/T headers that do not change in size and can be discarded
-        ieee1609Dot2Data = WSM[8:]
+        ieee1609_dot2_data = WSM[8:]
 
         # First item to extract is the payload in unsecured data field
     
         # Note that the numbers for positions are double the byte value
         # because this is a string of "hex numbers" so 1 byte = 2 chars
     
-        unsecuredDataLength = int(ieee1609Dot2Data[14:16],16)*2
-        unsecuredData = ieee1609Dot2Data[16:16+(unsecuredDataLength)]
-        timePostition = 16 + unsecuredDataLength + 6
-        time = ieee1609Dot2Data[timePostition:timePostition+16]
+        unsecured_data_length = int(ieee1609_dot2_data[14:16],16)*2
+        unsecured_data = ieee1609_dot2_data[16:16 + unsecured_data_length]
+        time_position = 16 + unsecured_data_length + 6
+        time = ieee1609_dot2_data[time_position:time_position + 16]
     
         # the ecdsaNistP256Signature structure is 66 bytes
         # r - 32 bytes
         # s - 32 bytes
         # field separators - 2 bytes
-        signature = ieee1609Dot2Data[len(ieee1609Dot2Data)-(2*66)-1:]
+        signature = ieee1609_dot2_data[len(ieee1609_dot2_data)-(2*66)-1:]
     
         # drop the two field identification bytes at the start of the block
         signature = signature[4:]
@@ -93,10 +91,10 @@ class Receiver:
         s = signature[64:128]
     
         # convert from string into ten-bit integer
-        r = int(r,16)
-        s = int(s,16)
+        r = int(r, 16)
+        s = int(s, 16)
     
         r = int(str(r))
         s = int(str(s))
     
-        return (unsecuredData,r,s,time)
+        return unsecured_data, r, s, time

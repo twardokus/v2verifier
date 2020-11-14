@@ -7,22 +7,18 @@ from LocalVehicle import LocalVehicle
 from GUI import GUI
 import tkinter as tk
 
-
-#from LocalVehicle import LocalVehicle
-
 with open("init.yml", "r") as confFile:
     config = yaml.load(confFile,Loader=yaml.FullLoader)
 
-if __name__=="__main__":
+if __name__ == "__main__":
     
     if os.geteuid() != 0:
         print("Error - you must be root! Try running with sudo")
         exit(1)
-    
-    
+
     root = tk.Tk()
     gui = GUI(root)
-    gui.runGUIReceiver()
+    gui.run_gui_receiver()
     print("GUI Initialized...")
     
     s2 = socket()
@@ -32,7 +28,7 @@ if __name__=="__main__":
     
     receiver = Receiver()
     
-    listener = Thread(target=receiver.runReceiver, args=(s2, lock,))
+    listener = Thread(target=receiver.run_receiver, args=(s2, lock,))
     listener.start()
     print("Listener running...")
     
@@ -42,4 +38,3 @@ if __name__=="__main__":
     local.start()
     
     root.mainloop()
-    
