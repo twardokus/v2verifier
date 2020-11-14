@@ -161,7 +161,6 @@ class GUI:
 				update.start()
 
 			except json.decoder.JSONDecodeError:
-				print(msg)
 				print("JSON decoding error - invalid data. Discarding.")
 			except Exception as e:
 				print("=====================================================================================")
