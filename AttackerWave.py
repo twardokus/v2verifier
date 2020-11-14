@@ -1,11 +1,12 @@
 from WavePacketBuilder import WAVEPacketBuilder
 import random
 
+
 class AttackerWave(WAVEPacketBuilder):
     
-    def getWSMPayload(self, bsmString):
+    def get_wsm_payload(self, bsm_string):
         
-        payload = super().getLLCBytestring() + super().getWSMHeaders() + self.getIeee1609Dot2Data(bsmString)
+        payload = super().get_llc_bytestring() + super().get_wsm_headers() + self.getIeee1609Dot2Data(bsm_string)
        
         return "\\x" + "\\x".join(payload[i:i+2] for i in range(0, len(payload), 2))
 
@@ -74,7 +75,8 @@ class AttackerWave(WAVEPacketBuilder):
         # 84 -> uncompressed
         bytestring += "80"
         
-        # since an attacker will not have a legitimate key, generate a random 32-byte (64-character) hex string for r and s
+        # since an attacker will not have a legitimate key, generate a random 32-byte (64-character)
+        # hex string for r and s
         r = "".join(random.choice("0123456789ABCDEF") for i in range(0,64))
         s = "".join(random.choice("0123456789ABCDEF") for i in range(0,64))
         

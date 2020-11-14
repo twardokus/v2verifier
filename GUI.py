@@ -93,15 +93,15 @@ class GUI:
 
         # build the counter window
         self.counters = LabelFrame(self.topRight, text="Packet Statistics")
-        self.buildStatisticsLabelFrame()
+        self.build_statistics_label_frame()
 
         # build the legend frame
         self.legend = LabelFrame(self.topRight, text="Legend")
-        self.buildLegendFrame()
+        self.build_legend_frame()
 
         # build the report frame
         self.report = LabelFrame(self.topRight, text="Vehicle Information")
-        self.buildReportFrame()
+        self.build_report_frame()
 
         self.attackLog = tk.Text(root, font=20, bg="white", borderwidth=2)
         self.attackLog.tag_configure("attack", foreground="red")
@@ -120,14 +120,14 @@ class GUI:
         self.legend.grid(row=1, column=0, sticky="ew")
         self.report.grid(row=2, column=0, sticky="ew")
 
-    def runGUIReceiver(self):
+    def run_gui_receiver(self):
         # Start the GUI service on port 6666
         self.s = socket()
         port = 6666
         self.s.bind(('127.0.0.1', port))
         print("Calling receive()")
 
-        labelThread = Thread(target=self.updateStatisticsLabels)
+        labelThread = Thread(target=self.update_statistics_labels)
         labelThread.start()
 
         self.receiver = Thread(target=self.receive, args=(self.s,))
@@ -156,8 +156,8 @@ class GUI:
                     if data['recent']:
                         self.onTimePacketCount += 1
 
-                self.updateVehicleInfoLabels(data["id"], "(" + data["x"] + "," + data["y"] + ")", data["speed"])
-                update = Thread(target=self.newPacket, args=(
+                self.update_vehicle_info_labels(data["id"], "(" + data["x"] + "," + data["y"] + ")", data["speed"])
+                update = Thread(target=self.new_packet, args=(
                 self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'],
                 data['receiver'], data['elapsed'],))
                 update.start()
@@ -174,7 +174,7 @@ class GUI:
                 print("End error message")
                 print("=====================================================================================")
 
-    def newPacket(self, lock, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
+    def new_packet(self, lock, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
 
         # cast coordinates to integers
         x = float(x)
@@ -214,20 +214,20 @@ class GUI:
                         self.textWidget.insert(tk.END,
                                                check + "Message is recent: 0 milliseconds elapsed since transmission\n",
                                                "valid")
-                    # self.textWidget.insert(tk.END, "Message has future timestamp - check clock synchronization!\n", "information")
                 else:
                     self.textWidget.insert(tk.END, rejected + "Message out-of-date: " + str(
                         round(elapsedTime, 2)) + " milliseconds elapsed since transmission\n", "information")
 
                 if not isValid and not isRecent:
                     self.textWidget.insert(tk.END,
-                                           rejected + "!!!--- Invalid signature AND message expired: replay attack likely! ---!!!\n",
+                                           rejected + "!!!--- Invalid signature AND message expired: "
+                                                      "replay attack likely! ---!!!\n",
                                            "attack")
                     self.attackLog.insert(tk.END, "Expired packet received: possible replay attack\n", "information")
                     self.attackLog.see(tk.END)
 
                 self.textWidget.insert(tk.END, "Vehicle reports location at (" + str(x) + "," + str(
-                    y) + "), traveling " + self.headingToDirection(heading) + "\n", "black")
+                    y) + "), traveling " + self.heading_to_direction(heading) + "\n", "black")
 
                 self.textWidget.insert(tk.END, "==========================================\n", "black")
                 self.textWidget.see(tk.END)
@@ -237,7 +237,7 @@ class GUI:
         if not isReceiver:
             self.processedPacketCount += 1
 
-    def updateStatisticsLabels(self):
+    def update_statistics_labels(self):
         while True:
             if self.receivedPacketCount == 0:
                 continue
@@ -266,7 +266,7 @@ class GUI:
 
             time.sleep(0.1)
 
-    def buildStatisticsLabelFrame(self):
+    def build_statistics_label_frame(self):
         self.receivedPacketCountLabel = Label(self.counters, textvariable=self.receivedPacketCountText)
         self.processedPacketCountLabel = Label(self.counters, textvariable=self.processedPacketCountText)
         self.authenticatedPacketCountLabel = Label(self.counters, textvariable=self.authenticatedPacketCountText)
@@ -304,7 +304,7 @@ class GUI:
         self.intactPacketCountPercentage.grid(row=3, column=2)
         self.ontimePacketCountPercentage.grid(row=4, column=2)
 
-    def printCounters(self):
+    def print_counters(self):
         while True:
             print(str(self.receivedPacketCount))
             print(str(self.processedPacketCount))
@@ -313,7 +313,7 @@ class GUI:
             print(str(self.onTimePacketCount))
             time.sleep(2)
 
-    def headingToDirection(self, heading):
+    def heading_to_direction(self, heading):
         if heading == "E":
             return "east"
         elif heading == "NE":
@@ -331,7 +331,7 @@ class GUI:
         elif heading == "SE":
             return "southeast"
 
-    def buildLegendFrame(self):
+    def build_legend_frame(self):
         self.receiverRowLabel = Label(self.legend, text="  is the receiving vehicle")
         self.otherRowLabel = Label(self.legend, text="  are vehicles sendings BSMs")
 
@@ -346,7 +346,7 @@ class GUI:
         self.receiverRowLabel.grid(row=0, column=1, sticky="w")
         self.otherRowLabel.grid(row=1, column=1, sticky="w")
 
-    def buildReportFrame(self):
+    def build_report_frame(self):
         self.totalVehiclesLabel = Label(self.report, text="Total vehicles: " + str(self.numVehicles))
 
         self.vehicleZeroID = Label(self.report, text="0")
@@ -431,38 +431,38 @@ class GUI:
         self.vehicleNineSpeed.grid(row=11, column=2)
         self.receiverSpeed.grid(row=12, column=2)
 
-    def updateVehicleInfoLabels(self, vehicleID, location, speed):
-        vehicleID = int(vehicleID)
-        if vehicleID == 0:
+    def update_vehicle_info_labels(self, vehicle_id, location, speed):
+        vehicle_id = int(vehicle_id)
+        if vehicle_id == 0:
             self.vehicleZeroLocationText.set(location)
             self.vehicleZeroSpeedText.set(str(speed))
-        elif vehicleID == 1:
+        elif vehicle_id == 1:
             self.vehicleOneLocationText.set(location)
             self.vehicleOneSpeedText.set(str(speed))
-        elif vehicleID == 2:
+        elif vehicle_id == 2:
             self.vehicleTwoLocationText.set(location)
             self.vehicleTwoSpeedText.set(str(speed))
-        elif vehicleID == 3:
+        elif vehicle_id == 3:
             self.vehicleThreeLocationText.set(location)
             self.vehicleThreeSpeedText.set(str(speed))
-        elif vehicleID == 4:
+        elif vehicle_id == 4:
             self.vehicleFourLocationText.set(location)
             self.vehicleFourSpeedText.set(str(speed))
-        elif vehicleID == 5:
+        elif vehicle_id == 5:
             self.vehicleFiveLocationText.set(location)
             self.vehicleFiveSpeedText.set(str(speed))
-        elif vehicleID == 6:
+        elif vehicle_id == 6:
             self.vehicleSixLocationText.set(location)
             self.vehicleSixSpeedText.set(str(speed))
-        elif vehicleID == 7:
+        elif vehicle_id == 7:
             self.vehicleSevenLocationText.set(location)
             self.vehicleSevenSpeedText.set(str(speed))
-        elif vehicleID == 8:
+        elif vehicle_id == 8:
             self.vehicleEightLocationText.set(location)
             self.vehicleEightSpeedText.set(str(speed))
-        elif vehicleID == 9:
+        elif vehicle_id == 9:
             self.vehicleNineLocationText.set(location)
             self.vehicleNineSpeedText.set(str(speed))
-        elif vehicleID == 99:
+        elif vehicle_id == 99:
             self.receiverLocationText.set(location)
             self.receiverSpeedText.set(str(speed))

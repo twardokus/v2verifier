@@ -16,4 +16,3 @@ if __name__ == "__main__":
     
         export_key(privateKey, curve=curve.P256, filepath=privateKeyPath)
         export_key(publicKey, curve=curve.P256, filepath=publicKeyPath)
-    
