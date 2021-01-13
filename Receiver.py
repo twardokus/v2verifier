@@ -1,10 +1,10 @@
 from scapy.all import sniff
 import binascii
 import json
-from fastecdsa import keys, curve
+from fastecdsa import keys, curve, ecdsa
 from Verifier import Verifier
 from threading import Thread
-
+import timeit
 
 class Receiver:
     
@@ -12,7 +12,10 @@ class Receiver:
         self.verifier = Verifier()
         self.messageCounter = 1
         
-    def run_receiver(self, s, lock):
+    def run_receiver(self, s=None, lock=None, with_gui=False):
+        if with_gui and (s == None or lock == None):
+            print("Error - cannot run GUI without valid socket and thread lock. Exiting")
+            exit(1)
         listener = Thread(target=self.listen_for_wsms(s, lock))
         listener.start()
         
@@ -47,6 +50,7 @@ class Receiver:
 #       publicKey = keys.import_key("keys/" + decodedData['id'] + "/p256.pub",curve=curve.P256, public=True)
         public_key = keys.import_key("keys/0/p256.pub", curve=curve.P256, public=True)
 
+
         is_valid_sig = self.verifier.verify_signature(data[1], data[2], data[0], public_key)
         
         elapsed, is_recent = self.verifier.verify_time(data[3])
@@ -58,9 +62,12 @@ class Receiver:
                 
         vehicle_data_json = json.dumps(decoded_data)
     
-        with lock:
-            s.send(vehicle_data_json.encode())
-        
+        if s == None or lock == None:
+            self.terminal_out(vehicle_data_json)
+        else:
+            with lock:
+                s.send(vehicle_data_json.encode())
+    
     # takes the hex payload from an 802.11p frame as an argument, returns tuple of extracted bytestrings
     def parse_wsm(self, WSM):
         # The first 8 bytes are WSMP N/T headers that do not change in size and can be discarded
@@ -98,3 +105,11 @@ class Receiver:
         s = int(str(s))
     
         return unsecured_data, r, s, time
+    
+    def terminal_out(self, vehicle_data_json):
+        bsm = json.loads(vehicle_data_json)
+        print("BSM: Position (" + str(bsm["x"]) + "," + str(bsm["y"]) +")" +
+              "\tTraveling: " + bsm["heading"] + 
+              "\tSpeed: " + bsm["speed"] +
+              "\tExpired: " + str(not bsm["recent"]))
+        print("Message is ", "validly" if bsm["sig"] else "NOT VALIDLY", "signed\n")
