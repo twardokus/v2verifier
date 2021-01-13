@@ -28,7 +28,7 @@ if __name__ == "__main__":
         if args.with_gui:
             print("Running local perspective with GUI enabled...")
             program = Local()
-            program.run_local(gui_choice=True)
+            program.run_local(True)
         else:
             print("Running local perspective in console mode...")
             program = Local()
