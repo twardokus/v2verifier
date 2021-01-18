@@ -1,10 +1,9 @@
 from scapy.all import sniff
 import binascii
 import json
-from fastecdsa import keys, curve, ecdsa
+from fastecdsa import keys, curve
 from Verifier import Verifier
 from threading import Thread
-import timeit
 
 class Receiver:
     
