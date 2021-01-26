@@ -254,7 +254,7 @@ class GUI:
             self.onTimePacketCountValueText.set(str(self.onTimePacketCount))
 
             self.receivedPacketCountPercentageText.set(
-                str(round((self.receivedPacketCount / self.totalPackets) * 100, 2)) + "%")
+                str(round((self.receivedPacketCount / self.receivedPacketCount) * 100, 2)) + "%")
             self.processedPacketCountPercentageText.set(
                 str(round((self.processedPacketCount / self.receivedPacketCount) * 100, 2)) + "%")
             self.authenticatedPacketCountPercentageText.set(
