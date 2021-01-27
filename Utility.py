@@ -1,7 +1,6 @@
 # a file for utility functions
 import math
 from WavePacketBuilder import WAVEPacketBuilder
-from AttackerWave import AttackerWave
 from datetime import datetime
 import time
 
@@ -10,7 +9,6 @@ class Utility:
     
     def __init__(self):
         self.waveBuilder = WAVEPacketBuilder()
-        self.attackWaveBuilder = AttackerWave()
         
     def build_bsm_queue(self, vehicle_number, trace_file_path, key):
         
