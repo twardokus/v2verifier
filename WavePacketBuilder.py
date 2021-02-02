@@ -59,10 +59,12 @@ class WAVEPacketBuilder:
         bytestring += "81"
         # HashID (SHA256 = 00)
         bytestring += "00"
-        # Data
+
+        # start tbsData structure
         bytestring += "40"
         # Protocol Version
         bytestring += "03"
+
         # Content - Unsecured Data
         bytestring += "80"
 
@@ -83,19 +85,19 @@ class WAVEPacketBuilder:
 
         # generationTime (8 bytes)
 
+        # TODO: fix this - should be actual generationTime64
         # this is a placeholder byte pattern that is unlikely to occur in practice, used to inject actual time
         # when packet is transmitted
         bytestring += "F0E0F0E0F0E0F0E0"
 
-        # Digest (8 bytes) - this is a dummy value as we have not used certificates, which would be involved here
-        # NOT NEEDED, for if signerIdentifier = "digest"
-        # bytestring += "80"
-        # bytestring += "2122232425262728"
+        # signer = "digest"
+        bytestring += "80"
 
-        # signerIdentifier = "certificate"
-        # Assuming digest is 80, set to 81
-        bytestring += "81"
+        # TODO: fix this - should be actual, calculated value
+        # digest (8 bytes)
+        bytestring += "0000000000000000"
 
+        """
         # START CERTIFICATE BASE
 
         # version = 3
@@ -173,6 +175,7 @@ class WAVEPacketBuilder:
         # @TODO get more information on KeyIndicator
 
         # - END ToBeSignedCertificate HERE -
+        """
 
         # signature (ecdsaNistP256Signature = 80)
         bytestring += "80"
