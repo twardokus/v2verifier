@@ -5,6 +5,7 @@ from fastecdsa import keys, curve
 from Verifier import Verifier
 from threading import Thread
 
+
 class Receiver:
     
     def __init__(self):

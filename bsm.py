@@ -45,3 +45,24 @@ def generate_16092_spdu(payload, private_key):
 
     return spdu
 
+
+def generate_sae_j2735e_bsm(latitude, longitude, elevation):
+
+    bsm = b''
+
+    # messageID (message type), 0x0014 = basicSafetyMessage
+    bsm += b'\x00\x14'
+
+    # spacer
+    bsm += b'\x35'
+
+    # msgCnt (encoded ASCII - e.g., 0x42 -> 'B' -> 11 is the message number)
+    bsm += b'\x42'
+
+    # id
+    bsm += b'\x00\x00\x00\x00'
+
+    # secMark
+    bsm += b'\x00\x00'
+
+

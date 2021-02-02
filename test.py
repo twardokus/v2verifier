@@ -1,6 +1,7 @@
 import socket
 import bsm
 from Vehicle import Vehicle
+import subprocess
 
 def udp_receive():
     UDP_IP = "fe80::7991:8af1:bd58:30f4%18"
@@ -21,5 +22,8 @@ def udp_send(message):
 
 
 if __name__ == "__main__":
-    v = Vehicle()
-    v.send_message()
+    #v = Vehicle()
+    #v.receive_bsms()
+    msg = "\\xff\\xff\\xff\\xff\\xff\\xff\\x00\\x00\\x00\\x00\\x00\\x00\\x88\\xdc"
+    loader = subprocess.Popen(("echo", "-n", "-e", msg), stdout=subprocess.PIPE)
+    sender = subprocess.check_output(("nc", "-w0", "-u", "localhost", "52001"), stdin=loader.stdout)
