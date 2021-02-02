@@ -945,7 +945,7 @@
     </param>
     <param>
       <key>dst_mac</key>
-      <value>[0x42, 0x42, 0x42, 0x42, 0x42, 0x42]</value>
+      <value>[0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -973,7 +973,7 @@
     </param>
     <param>
       <key>src_mac</key>
-      <value>[0x23, 0x23, 0x23, 0x23, 0x23, 0x23]</value>
+      <value>[0x00, 0x00, 0x00, 0x00, 0x00, 0x00]</value>
     </param>
   </block>
   <block>
@@ -984,7 +984,7 @@
     </param>
     <param>
       <key>ant0</key>
-      <value></value>
+      <value>TX/RX</value>
     </param>
     <param>
       <key>bw0</key>
@@ -1636,7 +1636,7 @@
     </param>
     <param>
       <key>dev_addr</key>
-      <value></value>
+      <value>serial=31C043C</value>
     </param>
     <param>
       <key>dev_args</key>
