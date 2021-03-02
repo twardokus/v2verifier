@@ -16,6 +16,9 @@ if __name__ == "__main__":
                         help="enables GUI support for the 'local' perspective. Has no effect for "
                             "remote perspective",
                         action='store_true')
+    parser.add_argument("technology",
+                        help="choice of DSRC or C-V2X technology stack",
+                        choices=["dsrc", "cv2x"])
 
     args = parser.parse_args()    
 
