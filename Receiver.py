@@ -9,12 +9,13 @@ import socket
 
 class Receiver:
     
-    def __init__(self):
+    def __init__(self, gui_enabled=False):
         self.verifier = Verifier()
         self.messageCounter = 1
+        self.gui = gui_enabled
         
-    def run_receiver(self, s=None, lock=None, with_gui=False):
-        if with_gui and (not s or not lock):
+    def run_receiver(self, s=None, lock=None):
+        if self.gui and (not s or not lock):
             print("Error - cannot run GUI without valid socket and thread lock. Exiting")
             exit(1)
 
@@ -34,12 +35,7 @@ class Receiver:
 
     def process_packet(self, payload, s, lock):
 
-        print("Processing packet")
-        print(payload)
-
         data = self.parse_wsm(payload)
-
-        print(data)
 
         bsm_data = bytes.fromhex(data[0]).decode('ascii').replace("\n", "").split(",")
 
@@ -55,7 +51,6 @@ class Receiver:
 #       publicKey = keys.import_key("keys/" + decodedData['id'] + "/p256.pub",curve=curve.P256, public=True)
         public_key = keys.import_key("keys/0/p256.pub", curve=curve.P256, public=True)
 
-
         is_valid_sig = self.verifier.verify_signature(data[1], data[2], data[0], public_key)
         
         elapsed, is_recent = self.verifier.verify_time(data[3])
@@ -67,7 +62,7 @@ class Receiver:
                 
         vehicle_data_json = json.dumps(decoded_data)
     
-        if s == None or lock == None:
+        if not self.gui:
             self.terminal_out(vehicle_data_json)
         else:
             with lock:

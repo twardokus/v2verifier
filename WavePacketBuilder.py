@@ -190,11 +190,19 @@ class WAVEPacketBuilder:
 
         private, public = import_key(key)
         r, s = ecdsa.sign(message, private, hashfunc=sha256)
+
         r = hex(r)
         s = hex(s)
 
         r = r.split("x")[1][:len(r) - 2]
         s = s.split("x")[1][:len(s) - 2]
+
+        # these while loops pad the front of the hex key with zeros to make sure they fit the 32-byte field length
+        while len(r) < 64:
+            r = "0" + r
+
+        while len(s) < 64:
+            s = "0" + s
 
         # r (32 bytes)
         bytestring += str(r)

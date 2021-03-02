@@ -30,7 +30,7 @@ class Local:
 
                 lock = Lock()
 
-                receiver = Receiver()
+                receiver = Receiver(gui_enabled=True)
 
                 listener = Thread(target=receiver.run_receiver, args=(s2, lock,))
                 listener.start()
@@ -44,7 +44,7 @@ class Local:
                 root.mainloop()
             
             else:
-                receiver = Receiver()
+                receiver = Receiver(gui_enabled=False)
                 
                 listener = Thread(target=receiver.run_receiver)
                 listener.start()
