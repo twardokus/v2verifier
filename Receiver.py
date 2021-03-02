@@ -4,6 +4,7 @@ import json
 from fastecdsa import keys, curve
 from Verifier import Verifier
 from threading import Thread
+import socket
 
 
 class Receiver:
@@ -13,28 +14,32 @@ class Receiver:
         self.messageCounter = 1
         
     def run_receiver(self, s=None, lock=None, with_gui=False):
-        if with_gui and (s == None or lock == None):
+        if with_gui and (not s or not lock):
             print("Error - cannot run GUI without valid socket and thread lock. Exiting")
             exit(1)
+
         listener = Thread(target=self.listen_for_wsms(s, lock))
         listener.start()
         
-    def listen_for_wsms(self, s, lock):
+    def listen_for_wsms(self, gui_socket, gui_socket_lock):
 
         print("Listening on localhost:4444 for WSMs")
-    
-        # port 4444 corresponds to UDP interface in wifi_rx.grc
-        sniff(iface="lo", filter="dst port 4444", prn=lambda x: 
-              self.filter_duplicate_packets(str(binascii.hexlify(x.load))[130:], s, lock))
-    
-    def filter_duplicate_packets(self, payload, s, lock):
-        if self.messageCounter % 2 == 1:
-            self.process_packet(payload, s, lock)
-        self.messageCounter += 1
+
+        listener = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        listener.bind(('127.0.0.1', 4444))
+
+        while True:
+            wsm = listener.recv(1024)
+            self.process_packet(wsm.hex()[118:], gui_socket, gui_socket_lock)
 
     def process_packet(self, payload, s, lock):
-    
+
+        print("Processing packet")
+        print(payload)
+
         data = self.parse_wsm(payload)
+
+        print(data)
 
         bsm_data = bytes.fromhex(data[0]).decode('ascii').replace("\n", "").split(",")
 
@@ -71,23 +76,23 @@ class Receiver:
     # takes the hex payload from an 802.11p frame as an argument, returns tuple of extracted bytestrings
     def parse_wsm(self, WSM):
         # The first 8 bytes are WSMP N/T headers that do not change in size and can be discarded
-        ieee1609_dot2_data = WSM[8:]
+        ieee1609_dot2_data = WSM[20:]
 
         # First item to extract is the payload in unsecured data field
     
         # Note that the numbers for positions are double the byte value
         # because this is a string of "hex numbers" so 1 byte = 2 chars
     
-        unsecured_data_length = int(ieee1609_dot2_data[14:16],16)*2
-        unsecured_data = ieee1609_dot2_data[16:16 + unsecured_data_length]
-        time_position = 16 + unsecured_data_length + 6
+        unsecured_data_length = int(ieee1609_dot2_data[12:14], 16)*2
+        unsecured_data = ieee1609_dot2_data[14:14 + unsecured_data_length]
+        time_position = 14 + unsecured_data_length + 6
         time = ieee1609_dot2_data[time_position:time_position + 16]
     
         # the ecdsaNistP256Signature structure is 66 bytes
         # r - 32 bytes
         # s - 32 bytes
         # field separators - 2 bytes
-        signature = ieee1609_dot2_data[len(ieee1609_dot2_data)-(2*66)-1:]
+        signature = ieee1609_dot2_data[len(ieee1609_dot2_data)-(2*66):]
     
         # drop the two field identification bytes at the start of the block
         signature = signature[4:]
@@ -96,7 +101,7 @@ class Receiver:
     
         r = signature[:64]
         s = signature[64:128]
-    
+
         # convert from string into ten-bit integer
         r = int(r, 16)
         s = int(s, 16)
