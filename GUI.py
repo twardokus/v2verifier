@@ -6,7 +6,7 @@ import time
 import threading
 from threading import Thread
 import json
-from socket import socket
+import socket
 import yaml
 
 
@@ -122,27 +122,23 @@ class GUI:
 
     def run_gui_receiver(self):
         # Start the GUI service on port 6666
-        self.s = socket()
-        port = 6666
-        self.s.bind(('127.0.0.1', port))
-        print("Calling receive()")
+        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s.bind(('127.0.0.1', 6666))
 
         labelThread = Thread(target=self.update_statistics_labels)
         labelThread.start()
 
-        self.receiver = Thread(target=self.receive, args=(self.s,))
+        self.receiver = Thread(target=self.receive, args=(s,))
         self.receiver.start()
 
     def receive(self, s):
 
-        s.listen(4)
+        s.listen()
         c = s.accept()[0]
-
-        BUFSIZ = 200
 
         while True:
             try:
-                msg = c.recv(BUFSIZ).decode()
+                msg = c.recv(1024).decode()
                 # decode the JSON string
                 data = json.loads(msg)
 
@@ -162,8 +158,9 @@ class GUI:
                 data['receiver'], data['elapsed'],))
                 update.start()
 
-            except json.decoder.JSONDecodeError:
+            except json.decoder.JSONDecodeError as e:
                 print("JSON decoding error - invalid data. Discarding.")
+                print(str(e))
             except Exception as e:
                 print("=====================================================================================")
                 print("Error processing packet. Exception type:")
@@ -205,7 +202,6 @@ class GUI:
                 else:
                     self.textWidget.insert(tk.END, rejected + "Invalid signature!\n", "attack")
 
-                print("time:\t" + str(elapsedTime))
                 if isRecent:
                     if elapsedTime > 0:
                         self.textWidget.insert(tk.END, check + "Message is recent: " + str(
