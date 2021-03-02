@@ -13,7 +13,7 @@ class Local:
     def run_local(self, with_gui=False):
     
         with open("init.yml", "r") as confFile:
-            config = yaml.load(confFile,Loader=yaml.FullLoader)
+            config = yaml.load(confFile, Loader=yaml.FullLoader)
 
             if os.geteuid() != 0:
                 print("Error - you must be root! Try running with sudo")
@@ -26,7 +26,7 @@ class Local:
                 print("GUI Initialized...")
 
                 s2 = socket()
-                s2.connect(('127.0.0.1',6666))
+                s2.connect(('127.0.0.1', 6666))
 
                 lock = Lock()
 
@@ -38,7 +38,7 @@ class Local:
 
                 lv = LocalVehicle(config["localConfig"]["tracefile"])
 
-                local = Thread(target=lv.start, args=(s2,lock,))
+                local = Thread(target=lv.start, args=(s2, lock,))
                 local.start()
 
                 root.mainloop()
