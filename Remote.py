@@ -2,7 +2,6 @@ import yaml
 
 from multiprocessing import Process
 from RemoteVehicle import RemoteVehicle
-import Utility
 
 
 def run_remote():
