@@ -17,9 +17,7 @@ def run_remote():
     # prepare the message queues for all vehicles
     try:
         for i in range(0, config["remoteConfig"]["numberOfVehicles"]):
-            trace_file_path = config["remoteConfig"]["traceFiles"][i]
-            bsm_queue = util.build_bsm_queue(i, trace_file_path, "keys/" + str(i) + "/p256.key")
-            rv = RemoteVehicle(bsm_queue)
+            rv = RemoteVehicle(config["remoteConfig"]["traceFiles"][i] , config["remoteConfig"]["numberOfVehicles"])
             remote_vehicles.append(rv)
 
     except IndexError:

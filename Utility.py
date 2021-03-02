@@ -1,6 +1,6 @@
 # a file for utility functions
 import math
-from WavePacketBuilder import WAVEPacketBuilder
+import WavePacketBuilder
 from datetime import datetime
 
 
@@ -66,26 +66,6 @@ def inject_time(bsm):
 
 
 class Utility:
-    
-    def __init__(self):
-        self.waveBuilder = WAVEPacketBuilder()
-        
-    def build_bsm_queue(self, vehicle_number, trace_file_path, key):
-        
-        bsm_queue = []
-        with open(trace_file_path, "r") as infile:
-            coordinate_list = infile.readlines()
-        if len(coordinate_list) < 3:
-            raise Exception("Your file must have at least 3 pairs of coordinates")
-            
-        for i in range(0, len(coordinate_list) - 2):
-            heading = calculate_heading(coordinate_list[i], coordinate_list[i + 1])
-            speed = calc_speed(coordinate_list[i], coordinate_list[i + 1])
-            bsm_text = str(vehicle_number) + "," + coordinate_list[i].replace("\n", "") + "," + heading + "," + \
-                str(round(speed, 2)) + "\n"
-            bsm_queue.append(self.waveBuilder.get_wsm_payload(bsm_text, key))
-            
-        return bsm_queue
     
     # For the local vehicle, full WSMs are unnecessary as there is no communication over the SDR
     def build_local_queue(self, trace_file_path):
