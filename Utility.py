@@ -1,6 +1,5 @@
 # a file for utility functions
 import math
-import WavePacketBuilder
 from datetime import datetime
 
 
@@ -63,26 +62,4 @@ def inject_time(bsm):
     bsm = bsm.replace("\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0", time_string)
 
     return bsm.replace("\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0\\xF0\\xE0", time_string)
-
-
-class Utility:
-    
-    # For the local vehicle, full WSMs are unnecessary as there is no communication over the SDR
-    def build_local_queue(self, trace_file_path):
-        with open(trace_file_path) as infile:
-            coordinates = infile.readlines()
-        messages = []
-        for i in range(0, len(coordinates)-2):
-            messages.append("99," + coordinates[i].replace("\n", "") +
-                            "," +
-                            calculate_heading(coordinates[i], coordinates[i + 1]) +
-                            "," +
-                            str(calc_speed(coordinates[i], coordinates[i + 1])))
-        return messages
-        
-    # takes in two strings "x,y" from a trace file
-    # returns one- or two-character string indicating heading
-
-    # takes in two strings "x,y" from a trace file
-    # returns speed in km/hr
 

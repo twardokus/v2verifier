@@ -2,12 +2,10 @@ import yaml
 
 from multiprocessing import Process
 from RemoteVehicle import RemoteVehicle
-from Utility import Utility
+import Utility
 
 
 def run_remote():
-
-    util = Utility()
 
     with open("init.yml", "r") as confFile:
         config = yaml.load(confFile, Loader=yaml.FullLoader)
