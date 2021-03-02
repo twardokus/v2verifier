@@ -1,8 +1,8 @@
 import argparse
 import os
 
-from Local import Local
-from Remote import Remote
+import Local
+import Remote
 
 if __name__ == "__main__":
 
@@ -22,13 +22,10 @@ if __name__ == "__main__":
     if args.perspective == "local":
         if args.with_gui:
             print("Running local perspective with GUI enabled...")
-            program = Local()
-            program.run_local(True)
+            program = Local.run_local(True)
         else:
             print("Running local perspective in console mode...")
-            program = Local()
-            program.run_local()
+            program = Local.run_local()
 
     elif args.perspective == "remote":
-        program = Remote()
-        program.run_remote()
+        program = Remote.run_remote()

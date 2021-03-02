@@ -10,6 +10,25 @@ import socket
 import yaml
 
 
+def heading_to_direction(heading):
+    if heading == "E":
+        return "east"
+    elif heading == "NE":
+        return "northeast"
+    elif heading == "N":
+        return "north"
+    elif heading == "NW":
+        return "northwest"
+    elif heading == "W":
+        return "west"
+    elif heading == "SW":
+        return "southwest"
+    elif heading == "S":
+        return "south"
+    elif heading == "SE":
+        return "southeast"
+
+
 class GUI:
 
     def __init__(self, root):
@@ -223,7 +242,7 @@ class GUI:
                     self.attackLog.see(tk.END)
 
                 self.textWidget.insert(tk.END, "Vehicle reports location at (" + str(x) + "," + str(
-                    y) + "), traveling " + self.heading_to_direction(heading) + "\n", "black")
+                    y) + "), traveling " + heading_to_direction(heading) + "\n", "black")
 
                 self.textWidget.insert(tk.END, "==========================================\n", "black")
                 self.textWidget.see(tk.END)
@@ -308,24 +327,6 @@ class GUI:
             print(str(self.intactPacketCount))
             print(str(self.onTimePacketCount))
             time.sleep(2)
-
-    def heading_to_direction(self, heading):
-        if heading == "E":
-            return "east"
-        elif heading == "NE":
-            return "northeast"
-        elif heading == "N":
-            return "north"
-        elif heading == "NW":
-            return "northwest"
-        elif heading == "W":
-            return "west"
-        elif heading == "SW":
-            return "southwest"
-        elif heading == "S":
-            return "south"
-        elif heading == "SE":
-            return "southeast"
 
     def build_legend_frame(self):
         self.receiverRowLabel = Label(self.legend, text="  is the receiving vehicle")

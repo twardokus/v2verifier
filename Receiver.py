@@ -11,7 +11,6 @@ class Receiver:
     
     def __init__(self, gui_enabled=False):
         self.verifier = Verifier()
-        self.messageCounter = 1
         self.gui = gui_enabled
         
     def run_receiver(self, s=None, lock=None):
@@ -104,11 +103,11 @@ class Receiver:
         s = int(str(s))
     
         return unsecured_data, r, s, time
-    
+
     def terminal_out(self, vehicle_data_json):
         bsm = json.loads(vehicle_data_json)
         print("BSM: Position (" + str(bsm["x"]) + "," + str(bsm["y"]) +")" +
-              "\tTraveling: " + bsm["heading"] + 
+              "\tTraveling: " + bsm["heading"] +
               "\tSpeed: " + bsm["speed"] +
               "\tExpired: " + str(not bsm["recent"]))
         print("Message is ", "validly" if bsm["sig"] else "NOT VALIDLY", "signed\n")

@@ -8,44 +8,42 @@ from GUI import GUI
 import tkinter as tk
 
 
-class Local:
+def run_local(with_gui=False):
 
-    def run_local(self, with_gui=False):
-    
-        with open("init.yml", "r") as confFile:
-            config = yaml.load(confFile, Loader=yaml.FullLoader)
+    with open("init.yml", "r") as confFile:
+        config = yaml.load(confFile, Loader=yaml.FullLoader)
 
-            if os.geteuid() != 0:
-                print("Error - you must be root! Try running with sudo")
-                exit(1)
-    
-            if with_gui:
-                root = tk.Tk()
-                gui = GUI(root)
-                gui.run_gui_receiver()
-                print("GUI Initialized...")
+        if os.geteuid() != 0:
+            print("Error - you must be root! Try running with sudo")
+            exit(1)
 
-                s2 = socket()
-                s2.connect(('127.0.0.1', 6666))
+        if with_gui:
+            root = tk.Tk()
+            gui = GUI(root)
+            gui.run_gui_receiver()
+            print("GUI Initialized...")
 
-                lock = Lock()
+            s2 = socket()
+            s2.connect(('127.0.0.1', 6666))
 
-                receiver = Receiver(gui_enabled=True)
+            lock = Lock()
 
-                listener = Thread(target=receiver.run_receiver, args=(s2, lock,))
-                listener.start()
-                print("Listener running...")
+            receiver = Receiver(gui_enabled=True)
 
-                lv = LocalVehicle(config["localConfig"]["tracefile"])
+            listener = Thread(target=receiver.run_receiver, args=(s2, lock,))
+            listener.start()
+            print("Listener running...")
 
-                local = Thread(target=lv.start, args=(s2, lock,))
-                local.start()
+            lv = LocalVehicle(config["localConfig"]["tracefile"])
 
-                root.mainloop()
-            
-            else:
-                receiver = Receiver(gui_enabled=False)
-                
-                listener = Thread(target=receiver.run_receiver)
-                listener.start()
-                print("Listener running...")
+            local = Thread(target=lv.start, args=(s2, lock,))
+            local.start()
+
+            root.mainloop()
+
+        else:
+            receiver = Receiver(gui_enabled=False)
+
+            listener = Thread(target=receiver.run_receiver)
+            listener.start()
+            print("Listener running...")

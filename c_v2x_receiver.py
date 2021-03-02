@@ -1,18 +1,19 @@
 from Receiver import Receiver
 import struct
 
+
 class CV2XReceiver(Receiver):
     
-    def __init__(self):
-        super()
-        
+    def __init__(self, with_gui=False):
+        super().__init__(gui_enabled=with_gui)
+
     def parse_wsm(self, WSM):
         
         # assuming that Ethernet headers do not make it to this level - if they do, need to add 8-byte offset
         
         # ignore the 5 WSMP header bytes
         ieee1609dot2data = WSM[10:]
-        #print(ieee1609dot2data)
+        # print(ieee1609dot2data)
         
         bsm_length = int(ieee1609dot2data[12:14], 16)
         
