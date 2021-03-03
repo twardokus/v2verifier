@@ -18,8 +18,11 @@ class CV2XReceiver(Receiver):
             wsm = listener.recv(1024)
             self.process_packet(wsm.hex()[52:], gui_socket, gui_socket_lock)
 
+    def process_packet(self, payload, s, lock):
+        print("Received BSM:", payload)
+
     def parse_wsm(self, wsm):
-        
+        print("Input to parse_wsm:", wsm)
         # assuming that Ethernet headers do not make it to this level - if they do, need to add 8-byte offset
         
         # ignore the 5 WSMP header bytes
