@@ -3,12 +3,13 @@ import yaml
 from threading import Lock, Thread
 from socket import socket
 from Receiver import Receiver
+from c_v2x_receiver import CV2XReceiver
 from LocalVehicle import LocalVehicle
 from GUI import GUI
 import tkinter as tk
 
 
-def run_local(with_gui=False):
+def run_local(with_gui=False, tech="dsrc"):
 
     with open("init.yml", "r") as confFile:
         config = yaml.load(confFile, Loader=yaml.FullLoader)
@@ -28,7 +29,10 @@ def run_local(with_gui=False):
 
             lock = Lock()
 
-            receiver = Receiver(gui_enabled=True)
+            if tech == "cv2x":
+                receiver = CV2XReceiver(with_gui=True)
+            else:
+                receiver = Receiver(gui_enabled=True)
 
             listener = Thread(target=receiver.run_receiver, args=(s2, lock,))
             listener.start()
@@ -42,7 +46,10 @@ def run_local(with_gui=False):
             root.mainloop()
 
         else:
-            receiver = Receiver(gui_enabled=False)
+            if tech == "cv2x":
+                receiver = CV2XReceiver(with_gui=False)
+            else:
+                receiver = Receiver(gui_enabled=False)
 
             listener = Thread(target=receiver.run_receiver)
             listener.start()

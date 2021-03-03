@@ -30,6 +30,7 @@ class Receiver:
 
         while True:
             wsm = listener.recv(1024)
+            # print(wsm.hex()[118:])
             self.process_packet(wsm.hex()[118:], gui_socket, gui_socket_lock)
 
     def process_packet(self, payload, s, lock):
@@ -67,9 +68,10 @@ class Receiver:
                 s.send(vehicle_data_json.encode())
     
     # takes the hex payload from an 802.11p frame as an argument, returns tuple of extracted bytestrings
-    def parse_wsm(self, WSM):
+    def parse_wsm(self, wsm):
         # The first 8 bytes are WSMP N/T headers that do not change in size and can be discarded
-        ieee1609_dot2_data = WSM[20:]
+        ieee1609_dot2_data = wsm[20:]
+        print(wsm[20:])
 
         # First item to extract is the payload in unsecured data field
     

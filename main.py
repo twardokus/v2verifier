@@ -25,10 +25,10 @@ if __name__ == "__main__":
     if args.perspective == "local":
         if args.with_gui:
             print("Running local perspective with GUI enabled...")
-            program = Local.run_local(True)
+            program = Local.run_local(with_gui=True, tech=args.technology)
         else:
             print("Running local perspective in console mode...")
-            program = Local.run_local()
+            program = Local.run_local(tech=args.technology)
 
     elif args.perspective == "remote":
         program = Remote.run_remote()
