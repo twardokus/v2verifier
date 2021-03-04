@@ -39,13 +39,11 @@ class CV2XReceiver(Receiver):
     def parse_sae_j2735_bsm(self, bsm):
         data = {}
         
-        data["sender_id"] = bsm[8:16]
+        data["sender_id"] = bsm[9:16]
         data["latitude"] = bsm[20:28]
         data["longitude"] = bsm[28:36]
         data["elevation"] = bsm[36:40]
-        #data["speed"] = struct.unpack('!f', bytes.fromhex("0" + bsm[49:52]))[0]
         data["speed"] = bsm[49:52]
-        #data["heading"] = struct.unpack('!f', bytes.fromhex(bsm[52:56]))[0]
         data["heading"] = bsm[52:56]
         
         self.report_bsm(data)
