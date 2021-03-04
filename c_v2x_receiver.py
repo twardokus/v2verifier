@@ -49,8 +49,8 @@ class CV2XReceiver(Receiver):
         data["heading"] = bsm[52:56]
         
         self.report_bsm(data)
-        
-        
+
+    # 3/3/21 - verified that the offsets in this portion are correct (via Wireshark compare)
     def report_bsm(self, data_dict):
         print("BSM from", data_dict["sender_id"], ": vehicle at (" +
             data_dict["latitude"] + "," + 
