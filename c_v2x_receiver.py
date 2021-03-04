@@ -25,9 +25,10 @@ class CV2XReceiver(Receiver):
     def parse_wsm(self, wsm):
         # print("Input to parse_wsm:", wsm)
 
+        # This is a temporary workaround to avoid trying to process control frames (which
+        # are much shorter than data frames) as if they are BSMs.
         if len(wsm) < 150:
-                return
-        # assuming that Ethernet headers do not make it to this level - if they do, need to add 8-byte offset
+            return
         
         # ignore the 5 WSMP header bytes
         ieee1609dot2data = wsm
