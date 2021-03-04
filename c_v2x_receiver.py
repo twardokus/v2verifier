@@ -16,13 +16,17 @@ class CV2XReceiver(Receiver):
 
         while True:
             wsm = listener.recv(1024)
-            self.process_packet(wsm.hex()[52:], gui_socket, gui_socket_lock)
+            self.process_packet(wsm.hex()[46:], gui_socket, gui_socket_lock)
 
     def process_packet(self, payload, s, lock):
-        print("Received BSM:", payload)
+        # print("Received BSM:", payload)
+        self.parse_wsm(payload)
 
     def parse_wsm(self, wsm):
-        print("Input to parse_wsm:", wsm)
+        # print("Input to parse_wsm:", wsm)
+
+        if len(wsm) < 150:
+                return
         # assuming that Ethernet headers do not make it to this level - if they do, need to add 8-byte offset
         
         # ignore the 5 WSMP header bytes
