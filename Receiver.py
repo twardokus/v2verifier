@@ -1,4 +1,3 @@
-from scapy.all import sniff
 import binascii
 import json
 from fastecdsa import keys, curve
