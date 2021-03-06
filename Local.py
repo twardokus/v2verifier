@@ -9,7 +9,7 @@ from GUI import GUI
 import tkinter as tk
 
 
-def run_local(with_gui=False, tech="dsrc"):
+def run_local(with_gui=False, tech="dsrc", cohda=False):
 
     with open("init.yml", "r") as confFile:
         config = yaml.load(confFile, Loader=yaml.FullLoader)
@@ -30,7 +30,10 @@ def run_local(with_gui=False, tech="dsrc"):
             lock = Lock()
 
             if tech == "cv2x":
-                receiver = CV2XReceiver(with_gui=True)
+                if cohda:
+                    receiver = CV2XReceiver(with_gui=True, cohda=True)
+                else:
+                    receiver = CV2XReceiver(with_gui=True)
             else:
                 receiver = Receiver(gui_enabled=True)
 
@@ -47,7 +50,10 @@ def run_local(with_gui=False, tech="dsrc"):
 
         else:
             if tech == "cv2x":
-                receiver = CV2XReceiver(with_gui=False)
+                if cohda:
+                    receiver = CV2XReceiver(with_gui=False, cohda=True)
+                else:
+                    receiver = CV2XReceiver(with_gui=False)
             else:
                 receiver = Receiver(gui_enabled=False)
 

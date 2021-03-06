@@ -1,19 +1,26 @@
 from Receiver import Receiver
 import socket
+from threading import Thread
 
 
 class CV2XReceiver(Receiver):
     
-    def __init__(self, with_gui=False):
+    def __init__(self, with_gui=False, cohda=False):
         super().__init__(gui_enabled=with_gui)
+        self.cohda = cohda
 
     def listen_for_wsms(self, gui_socket, gui_socket_lock):
 
-        print("Listening on localhost:4444 for C-V2X WSMs")
+        print("Listening on port 4444 for C-V2X WSMs")
 
-        listener = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
-        listener.bind(("fe80::ca89:f53:4108:d142%enp3s0", 4444, 0, 2))
-
+        if self.cohda:
+            # use IPv6 on the Ethernet interface to get messages from Cohda MK6c OBU
+            listener = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+            listener.bind(("fe80::ca89:f53:4108:d142%enp3s0", 4444, 0, 2))
+        else:
+            # otherwise presume SDR and use IPv4 on localhost to get messages from srsLTE
+            listener = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            listener.bind(('localhost', 4444))
         while True:
             wsm = listener.recv(1024)
             self.process_packet(wsm.hex()[46:], gui_socket, gui_socket_lock)

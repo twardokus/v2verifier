@@ -1,5 +1,6 @@
 import argparse
 import os
+import sys
 
 import Local
 import Remote
@@ -19,16 +20,26 @@ if __name__ == "__main__":
     parser.add_argument("technology",
                         help="choice of DSRC or C-V2X technology stack",
                         choices=["dsrc", "cv2x"])
+    parser.add_argument("--device",
+                        help="choice of Cohda or SDR for C-V2X",
+                        choices=["cohda", "sdr"],
+                        required=("cv2x" in sys.argv))
 
     args = parser.parse_args()    
 
     if args.perspective == "local":
         if args.with_gui:
             print("Running local perspective with GUI enabled...")
-            program = Local.run_local(with_gui=True, tech=args.technology)
+            if args.device == "cohda":
+                program = Local.run_local(with_gui=True, tech=args.technology,cohda=True)
+            else:
+                program = Local.run_local(with_gui=True, tech=args.technology)
         else:
             print("Running local perspective in console mode...")
-            program = Local.run_local(tech=args.technology)
+            if args.device == "cohda":
+                program = Local.run_local(tech=args.technology, cohda=True)
+            else:
+                program = Local.run_local(tech=args.technology)
 
     elif args.perspective == "remote":
         program = Remote.run_remote()
