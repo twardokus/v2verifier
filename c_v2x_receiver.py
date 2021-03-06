@@ -11,8 +11,8 @@ class CV2XReceiver(Receiver):
 
         print("Listening on localhost:4444 for C-V2X WSMs")
 
-        listener = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        listener.bind(('127.0.0.1', 4444))
+        listener = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
+        listener.bind(("fe80::ca89:f53:4108:d142%enp3s0", 4444, 0, 2))
 
         while True:
             wsm = listener.recv(1024)
@@ -30,17 +30,27 @@ class CV2XReceiver(Receiver):
         if len(wsm) < 150:
             return
         
+        self.parse_16092_spdu(wsm)
+
+    def parse_16092_spdu(self, wsm):
         # ignore the 5 WSMP header bytes
         ieee1609dot2data = wsm
         # print(ieee1609dot2data)
-        
+
         bsm_length = int(ieee1609dot2data[12:14], 16)
-        
+
         # extract SAE J2735 BSM
-        bsm = ieee1609dot2data[14:(14+(2*bsm_length))]
-        
+        bsm = ieee1609dot2data[14:(14 + (2 * bsm_length))]
+
         self.parse_sae_j2735_bsm(bsm)
-    
+
+        # signature is the last 64 bytes of the SPDU
+        signature = ieee1609dot2data[len(ieee1609dot2data) - 65:]
+        r = signature[:32]
+        s = signature[32:]
+
+
+
     def parse_sae_j2735_bsm(self, bsm):
         data = {}
         
@@ -56,13 +66,12 @@ class CV2XReceiver(Receiver):
     # 3/3/21 - verified that the offsets in this portion are correct (via Wireshark compare)
     def report_bsm(self, data_dict):
         print("BSM from", data_dict["sender_id"], ": vehicle at (" +
-            data_dict["latitude"] + "," + 
-            data_dict["longitude"] + "," + 
-            data_dict["elevation"] +
-            ")" +
-            " is moving on bearing " +
-            str(data_dict["heading"]) + 
-            " at " + 
-            str(data_dict["speed"]) +
-            " m/s") 
-        
+              data_dict["latitude"] + "," +
+              data_dict["longitude"] + "," +
+              data_dict["elevation"] +
+              ")" +
+              " is moving on bearing " +
+              str(data_dict["heading"]) +
+              " at " +
+              str(data_dict["speed"]) +
+              " m/s")
