@@ -14,7 +14,7 @@ def run_remote():
     # prepare the message queues for all vehicles
     try:
         for i in range(0, config["remoteConfig"]["numberOfVehicles"]):
-            rv = RemoteVehicle(config["remoteConfig"]["traceFiles"][i] , config["remoteConfig"]["numberOfVehicles"])
+            rv = RemoteVehicle(config["remoteConfig"]["traceFiles"][i], i)
             remote_vehicles.append(rv)
 
     except IndexError:
