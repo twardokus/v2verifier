@@ -83,6 +83,17 @@ class GUI:
         self.vehicleNineSpeedText = tk.StringVar()
         self.receiverLocationText = tk.StringVar()
         self.receiverSpeedText = tk.StringVar()
+        self.vehicleZeroRepText = tk.StringVar()
+        self.vehicleOneRepText = tk.StringVar()
+        self.vehicleTwoRepText = tk.StringVar()
+        self.vehicleThreeRepText = tk.StringVar()
+        self.vehicleFourRepText = tk.StringVar()
+        self.vehicleFiveRepText = tk.StringVar()
+        self.vehicleSixRepText = tk.StringVar()
+        self.vehicleSevenRepText = tk.StringVar()
+        self.vehicleEightRepText = tk.StringVar()
+        self.vehicleNineRepText = tk.StringVar()
+        self.receiverRepText = tk.StringVar()
 
         self.root = root
         root.title("V2X Communications - Security Testbed")
@@ -171,7 +182,8 @@ class GUI:
                     if data['recent']:
                         self.onTimePacketCount += 1
 
-                self.update_vehicle_info_labels(data["id"], "(" + data["x"] + "," + data["y"] + ")", data["speed"])
+                self.update_vehicle_info_labels(data["id"], "(" + data["x"] + "," + data["y"] + ")",
+                                                data["speed"], data['reputation'])
                 update = Thread(target=self.new_packet, args=(
                 self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'],
                 data['receiver'], data['elapsed'],))
@@ -382,15 +394,29 @@ class GUI:
         self.vehicleNineSpeed = Label(self.report, textvariable=self.vehicleNineSpeedText)
         self.receiverSpeed = Label(self.report, textvariable=self.receiverSpeedText)
 
+        self.vehicleZeroRep = Label(self.report, textvariable=self.vehicleZeroRepText)
+        self.vehicleOneRep = Label(self.report, textvariable=self.vehicleOneRepText)
+        self.vehicleTwoRep = Label(self.report, textvariable=self.vehicleTwoRepText)
+        self.vehicleThreeRep = Label(self.report, textvariable=self.vehicleThreeRepText)
+        self.vehicleFourRep = Label(self.report, textvariable=self.vehicleFourRepText)
+        self.vehicleFiveRep = Label(self.report, textvariable=self.vehicleFiveRepText)
+        self.vehicleSixRep = Label(self.report, textvariable=self.vehicleSixRepText)
+        self.vehicleSevenRep = Label(self.report, textvariable=self.vehicleSevenRepText)
+        self.vehicleEightRep = Label(self.report, textvariable=self.vehicleEightRepText)
+        self.vehicleNineRep = Label(self.report, textvariable=self.vehicleNineRepText)
+        self.receiverRep = Label(self.report, textvariable=self.receiverRepText)
+
         self.totalVehiclesLabel.grid(row=0, column=1)
 
         self.idLabel = Label(self.report, text="Vehicle ID")
         self.locLabel = Label(self.report, text="Location")
         self.speedLabel = Label(self.report, text="Speed (km/hr)")
+        self.reputationLabel = Label(self.report, text="Reputation")
 
         self.idLabel.grid(row=1, column=0)
         self.locLabel.grid(row=1, column=1, padx=(10, 10))
-        self.speedLabel.grid(row=1, column=2)
+        self.speedLabel.grid(row=1, column=2, padx=(10, 10))
+        self.reputationLabel.grid(row=1, column=3)
 
         self.vehicleZeroID.grid(row=2, column=0)
         self.vehicleOneID.grid(row=3, column=0)
@@ -428,38 +454,61 @@ class GUI:
         self.vehicleNineSpeed.grid(row=11, column=2)
         self.receiverSpeed.grid(row=12, column=2)
 
-    def update_vehicle_info_labels(self, vehicle_id, location, speed):
+        self.vehicleZeroRep.grid(row=2, column=3)
+        self.vehicleOneRep.grid(row=3, column=3)
+        self.vehicleTwoRep.grid(row=4, column=4)
+        self.vehicleThreeRep.grid(row=5, column=5)
+        self.vehicleFourRep.grid(row=6, column=6)
+        self.vehicleFiveRep.grid(row=7, column=7)
+        self.vehicleSixRep.grid(row=8, column=8)
+        self.vehicleSevenRep.grid(row=9, column=9)
+        self.vehicleEightRep.grid(row=10, column=10)
+        self.vehicleNineRep.grid(row=11, column=11)
+        self.receiverRep.grid(row=12, column=12)
+
+    def update_vehicle_info_labels(self, vehicle_id, location, speed, reputation):
         vehicle_id = int(vehicle_id)
         if vehicle_id == 0:
             self.vehicleZeroLocationText.set(location)
             self.vehicleZeroSpeedText.set(str(speed))
+            self.vehicleZeroRepText.set(str(reputation))
         elif vehicle_id == 1:
             self.vehicleOneLocationText.set(location)
             self.vehicleOneSpeedText.set(str(speed))
+            self.vehicleOneRepText.set(str(reputation))
         elif vehicle_id == 2:
             self.vehicleTwoLocationText.set(location)
             self.vehicleTwoSpeedText.set(str(speed))
+            self.vehicleTwoRepText.set(str(reputation))
         elif vehicle_id == 3:
             self.vehicleThreeLocationText.set(location)
             self.vehicleThreeSpeedText.set(str(speed))
+            self.vehicleThreeRepText.set(str(reputation))
         elif vehicle_id == 4:
             self.vehicleFourLocationText.set(location)
             self.vehicleFourSpeedText.set(str(speed))
+            self.vehicleFourRepText.set(str(reputation))
         elif vehicle_id == 5:
             self.vehicleFiveLocationText.set(location)
             self.vehicleFiveSpeedText.set(str(speed))
+            self.vehicleFiveRepText.set(str(reputation))
         elif vehicle_id == 6:
             self.vehicleSixLocationText.set(location)
             self.vehicleSixSpeedText.set(str(speed))
+            self.vehicleSixRepText.set(str(reputation))
         elif vehicle_id == 7:
             self.vehicleSevenLocationText.set(location)
             self.vehicleSevenSpeedText.set(str(speed))
+            self.vehicleSevenRepText.set(str(reputation))
         elif vehicle_id == 8:
             self.vehicleEightLocationText.set(location)
             self.vehicleEightSpeedText.set(str(speed))
+            self.vehicleEightRepText.set(str(reputation))
         elif vehicle_id == 9:
             self.vehicleNineLocationText.set(location)
             self.vehicleNineSpeedText.set(str(speed))
+            self.vehicleNineRepText.set(str(reputation))
         elif vehicle_id == 99:
             self.receiverLocationText.set(location)
             self.receiverSpeedText.set(str(speed))
+            self.receiverRepText.set(str(reputation))

@@ -19,6 +19,7 @@ def send_to_gui(msg, s, lock):
     decoded_data['elapsed'] = 0
     decoded_data['recent'] = True
     decoded_data['receiver'] = True
+    decoded_data['reputation'] = 1000
 
     vehicle_data_json = json.dumps(decoded_data)
 
@@ -34,7 +35,7 @@ class LocalVehicle:
     def start(self, s, lock):
 
         with open(self.trace_file, "r") as coordinates_file:
-            coordinates= coordinates_file.readlines()
+            coordinates = coordinates_file.readlines()
 
         if len(coordinates) < 3:
             raise Exception("Coordinates file must have more than three entries!")
