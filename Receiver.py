@@ -5,12 +5,14 @@ from Verifier import Verifier
 from threading import Thread
 import socket
 
+import random
 
 class Receiver:
     
     def __init__(self, gui_enabled=False):
         self.verifier = Verifier()
         self.gui = gui_enabled
+        self.threats = {}
         
     def run_receiver(self, s=None, lock=None):
         if self.gui and (not s or not lock):
@@ -38,26 +40,37 @@ class Receiver:
 
         bsm_data = bytes.fromhex(data[0]).decode('ascii').replace("\n", "").split(",")
 
+        public_key = keys.import_key("keys/" + bsm_data[0] + "/p256.pub", curve=curve.P256, public=True)
+        # public_key = keys.import_key("keys/0/p256.pub", curve=curve.P256, public=True)
+
+        is_valid_sig = self.verifier.verify_signature(data[1], data[2], data[0], public_key)
+
+        elapsed, is_recent = self.verifier.verify_time(data[3])
+
         decoded_data = {}
         
         decoded_data['id'] = bsm_data[0]
+
+        if bsm_data[0] == "0":
+            is_valid_sig = False
+
         decoded_data['x'] = bsm_data[1]
         decoded_data['y'] = bsm_data[2]
         decoded_data['heading'] = bsm_data[3]
         decoded_data['speed'] = bsm_data[4]
-
-        public_key = keys.import_key("keys/" + decoded_data['id'] + "/p256.pub", curve=curve.P256, public=True)
-        # public_key = keys.import_key("keys/0/p256.pub", curve=curve.P256, public=True)
-
-        is_valid_sig = self.verifier.verify_signature(data[1], data[2], data[0], public_key)
-        
-        elapsed, is_recent = self.verifier.verify_time(data[3])
-        
         decoded_data['sig'] = is_valid_sig
         decoded_data['elapsed'] = elapsed
         decoded_data['recent'] = is_recent
         decoded_data['receiver'] = False
-                
+
+        if not decoded_data['id'] in self.threats:
+            self.threats[decoded_data['id']] = 1000
+        else:
+            if not is_valid_sig:
+                self.threats[decoded_data['id']] = self.threats[decoded_data['id']] - 1
+
+        decoded_data['reputation'] = self.threats[decoded_data['id']]
+
         vehicle_data_json = json.dumps(decoded_data)
     
         if not self.gui:
@@ -70,7 +83,7 @@ class Receiver:
     def parse_wsm(self, wsm):
         # The first 8 bytes are WSMP N/T headers that do not change in size and can be discarded
         ieee1609_dot2_data = wsm[20:]
-        print(wsm[20:])
+        # print(wsm[20:])
 
         # First item to extract is the payload in unsecured data field
     
@@ -107,7 +120,8 @@ class Receiver:
 
     def terminal_out(self, vehicle_data_json):
         bsm = json.loads(vehicle_data_json)
-        print("BSM: Position (" + str(bsm["x"]) + "," + str(bsm["y"]) +")" +
+        print("BSM from Vehicle with ID", bsm["id"] + ", reputation: " + str(bsm['reputation']) + "\n"
+              "Position (" + str(bsm["x"]) + "," + str(bsm["y"]) + ")" +
               "\tTraveling: " + bsm["heading"] +
               "\tSpeed: " + bsm["speed"] +
               "\tExpired: " + str(not bsm["recent"]))
