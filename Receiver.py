@@ -51,9 +51,6 @@ class Receiver:
         
         decoded_data['id'] = bsm_data[0]
 
-        if bsm_data[0] == "0":
-            is_valid_sig = False
-
         decoded_data['x'] = bsm_data[1]
         decoded_data['y'] = bsm_data[2]
         decoded_data['heading'] = bsm_data[3]
