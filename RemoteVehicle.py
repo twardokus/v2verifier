@@ -34,7 +34,7 @@ class RemoteVehicle:
                 str(round(speed, 2)) + "\n"
             bsm_payload = WavePacketBuilder.get_wsm_payload(bsm_text, self.key_path)
             bsm_payload = Utility.inject_time(bsm_payload)
-
+            print("Sending message: ", bsm_text)
             send_payload_to_gnuradio(bsm_payload)
 
             time.sleep(0.1)

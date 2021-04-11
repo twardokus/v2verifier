@@ -98,7 +98,6 @@ def getIeee1609Dot2Data(message, key):
     # digest (8 bytes)
     bytestring += "0000000000000000"
 
-    """
     # START CERTIFICATE BASE
 
     # version = 3
@@ -176,7 +175,6 @@ def getIeee1609Dot2Data(message, key):
     # @TODO get more information on KeyIndicator
 
     # - END ToBeSignedCertificate HERE -
-    """
 
     # signature (ecdsaNistP256Signature = 80)
     bytestring += "80"
