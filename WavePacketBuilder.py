@@ -162,7 +162,7 @@ def getIeee1609Dot2Data(message, key):
 
     # EccP256CurvePoint
     bytestring += "04"
-    bytestring += "00" * 64
+    bytestring += "00" * 256
 
     # END validityPeriod HERE
 
