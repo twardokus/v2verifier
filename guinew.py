@@ -50,7 +50,6 @@ class GUI:
         self.known_vehicle_ids.append(vehicle_id)
 
     def add_message(self, message):
-        message = f"<p>{message}</p>"
         eel.addMessage(message)
 
     def run(self):
@@ -161,33 +160,30 @@ class GUI:
 
         # acquire lock
 
-        message = f"Message from {vehicle_id}\n"
+        message = f"<p>Message from {vehicle_id}</p>"
         if not is_receiver:
             if is_valid:
-                message += "\t✔️ Message successfully authenticated\n"
+                message += "<p>\t✔️ Message successfully authenticated</p>"
             else:
-                message += "\t❌ Invalid signature!\n"
+                message += "<p>\t❌ Invalid signature!\n</p>"
 
             if is_recent:
                 rounded_time = 0
                 if elapsed_time > 0:
                     rounded_time = str(round(elapsed_time, 2))
 
-                message += (
-                    f"\t✔️ Message is recent: {rounded_time} ms since transmission\n"
-                )
+                message += f"<p>\t✔️ Message is recent: {rounded_time} ms since transmission<p>"
 
             else:
                 rounded_time = str(round(elapsed_time, 2))
-                message += (
-                    "\t❌ Message is out-of-date: {rounded_time} ms since transmission\n"
-                )
+                message += "<p>\t❌ Message is out-of-date: {rounded_time} ms since transmission<p>"
 
             if not is_valid and not is_recent:
-                message += "\t❌❌❌ Invalid signature and message expired, replay attack likely ❌❌❌\n"
+                message += "<p>\t❌❌❌ Invalid signature and message expired, replay attack likely ❌❌❌</p>"
 
             message += (
-                f"\tVehicle reports location at {lat}, {lng} traveling {heading}\n"
+                f"<p>\tVehicle reports location at {lat}, {lng} traveling {heading}<p>"
             )
+            self.add_message(message)
         else:
             self.processed_packets += 1
