@@ -36,7 +36,7 @@ def main():
         gui = guinew.GUI()
         gui.start_receiver()
 
-        sock = socet.socket()
+        sock = socket.socket()
         sock.connect(("127.0.0.1", 6666))
 
         lock = threading.Lock()
@@ -72,8 +72,8 @@ def main():
 
             for rv in remote_vehicles:
                 vehicle = Process(target=rv.start)
-            vehicle_processes.append(vehicle)
-            vehicle.start()
+                vehicle_processes.append(vehicle)
+                vehicle.start()
             print("Started legitimate vehicle")
 
         for vehicle in vehicle_processes:
