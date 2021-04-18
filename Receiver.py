@@ -42,9 +42,8 @@ class Receiver:
         decoded_data['y'] = bsm_data[2]
         decoded_data['heading'] = bsm_data[3]
         decoded_data['speed'] = bsm_data[4]
-        
-    
-#       publicKey = keys.import_key("keys/" + decodedData['id'] + "/p256.pub",curve=curve.P256, public=True)
+
+        # public_key = keys.import_key("keys/" + decodedData['id'] + "/p256.pub",curve=curve.P256, public=True)
         public_key = keys.import_key("keys/0/p256.pub", curve=curve.P256, public=True)
 
         is_valid_sig = self.verifier.verify_signature(data[1], data[2], data[0], public_key)
@@ -55,7 +54,7 @@ class Receiver:
         decoded_data['elapsed'] = elapsed
         decoded_data['recent'] = is_recent
         decoded_data['receiver'] = False
-                
+
         vehicle_data_json = json.dumps(decoded_data)
     
         with lock:
@@ -75,7 +74,9 @@ class Receiver:
         unsecured_data = ieee1609_dot2_data[16:16 + unsecured_data_length]
         time_position = 16 + unsecured_data_length + 6
         time = ieee1609_dot2_data[time_position:time_position + 16]
-    
+
+        # @TODO pull out cert
+
         # the ecdsaNistP256Signature structure is 66 bytes
         # r - 32 bytes
         # s - 32 bytes

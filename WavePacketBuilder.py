@@ -1,9 +1,13 @@
-from fastecdsa import ecdsa
-from fastecdsa.keys import import_key
+from fastecdsa import ecdsa, keys, curve
 from hashlib import sha256
+from X1609 import X1609
 
 
 class WAVEPacketBuilder:
+
+    def __init__(self):
+        private, public = keys.import_key("keys/0/p256.key")
+        self.cert = X1609("CSEC490", private).toString()
 
     def get_wsm_payload(self, bsm_string, key):
         payload = self.get_llc_bytestring() + self.get_wsm_headers() + self.getIeee1609Dot2Data(bsm_string, key)
@@ -55,7 +59,7 @@ class WAVEPacketBuilder:
         bytestring = ""
         # Protocol Version
         bytestring += "03"
-        # ContentType ( signed data = 81)
+        # ContentType (signed data = 81)
         bytestring += "81"
         # HashID (SHA256 = 00)
         bytestring += "00"
@@ -78,7 +82,7 @@ class WAVEPacketBuilder:
         # headerInfo
         bytestring += "4001"
 
-        # PSID (BSM = 20)
+        # PSID (Blind Spot Monitoring = 20)
         bytestring += "20"
 
         # generationTime (8 bytes)
@@ -99,27 +103,27 @@ class WAVEPacketBuilder:
         # START CERTIFICATE BASE
 
         # version = 3
-        bytestring += "03"
+        #bytestring += "03"
 
         # Number of items
-        bytestring += "000006"
+        #bytestring += "000006"
 
         # CertificateType = "explicit"
         # @TODO implement ExplicitCertificate structure here
 
         # for i in range(0, 6):
         # Filler?
-        bytestring += "00"
+        #bytestring += "00"
 
         # version
-        bytestring += "03"
+        #bytestring += "03"
 
         # type
-        bytestring += "00"
+        #bytestring += "00"
 
         # Issuer = "sha256AndDigest"
         # dummy value here for issuerID
-        bytestring += "002122232425262728"
+        #bytestring += "002122232425262728"
 
         # toBeSigned
         # - START ToBeSignedCertificate HERE -
@@ -129,38 +133,38 @@ class WAVEPacketBuilder:
         # START linkageData HERE
 
         # buffer
-        bytestring += "0000"
+        #bytestring += "0000"
 
         # certificateID choice
-        bytestring += "00"
+        #bytestring += "00"
 
         # iCert DUMMY VALUE
-        bytestring += "0100"
+        #bytestring += "0100"
 
         # linkage-value(size = 9) DUMMY VALUE
         # bytestring += "0fa12245f4c3c1cd54"
-        bytestring += "414243444546474849"
+        #bytestring += "414243444546474849"
         # END linkageData HERE
 
         # cracaID(size = 3) DUMMY VALUE
-        bytestring += "52641c"
+        #bytestring += "52641c"
 
         # crlSeries DUMMY VALUE
-        bytestring += "2000"
+        #bytestring += "2000"
 
         # START validityPeriod HERE
         # start(time32)
-        bytestring += "24c34587"
+        #bytestring += "24c34587"
 
         # duration
-        bytestring += "030005"
+        #bytestring += "030005"
 
         # VerificationKeyIndicator
-        bytestring += "01"
+        #bytestring += "01"
 
         # EccP256CurvePoint
-        bytestring += "04"
-        bytestring += "00" * 64
+        #bytestring += "04"
+        #bytestring += "00" * 64
 
         # END validityPeriod HERE
 
@@ -174,10 +178,13 @@ class WAVEPacketBuilder:
 
         # - END ToBeSignedCertificate HERE -
 
+        # END of Certificate Base
+        bytestring += self.cert
+
         # signature (ecdsaNistP256Signature = 80)
         bytestring += "80"
 
-        # ecdsaNistP256Signature (r: compressed-y-0 = 82)
+        # ecdsaNistP256Signature
         # 80 -> x-only
         # 81 -> fill (NULL)
         # 82 -> compressed-y-0
@@ -185,7 +192,7 @@ class WAVEPacketBuilder:
         # 84 -> uncompressed
         bytestring += "80"
 
-        private, public = import_key(key)
+        private, public = keys.import_key(key)
         r, s = ecdsa.sign(message, private, hashfunc=sha256)
         r = hex(r)
         s = hex(s)
