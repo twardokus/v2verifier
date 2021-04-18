@@ -6,7 +6,9 @@ import yaml
 import guinew
 import threading
 import time
+import socket
 from Utility import Utility
+from Receiver import Receiver
 from RemoteVehicle import RemoteVehicle
 from LocalVehicle import LocalVehicle
 from multiprocessing import Process
@@ -34,8 +36,8 @@ def main():
         gui = guinew.GUI()
         gui.start_receiver()
 
-        sock = socket()
-        sock.connect("127.0.0.1", 6666)
+        sock = socet.socket()
+        sock.connect(("127.0.0.1", 6666))
 
         lock = threading.Lock()
         receiver = Receiver()
