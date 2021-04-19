@@ -29,7 +29,7 @@ def main():
     try:
         conf_file = open("init.yml", "r")
         config = yaml.load(conf_file, Loader=yaml.FullLoader)
-    except yaml.YAMLError as e:
+    except Exception as e:
         print(f"Unable to load config file init.yml: {e}")
 
     if args.perspective == "local":
@@ -70,10 +70,10 @@ def main():
                 f"Error starting vehicles. The config file is missing a trace file or BSM file path for vehicle {i} in init.yml"
             )
 
-            for rv in remote_vehicles:
-                vehicle = Process(target=rv.start)
-                vehicle_processes.append(vehicle)
-                vehicle.start()
+        for rv in remote_vehicles:
+            vehicle = Process(target=rv.start)
+            vehicle_processes.append(vehicle)
+            vehicle.start()
             print("Started legitimate vehicle")
 
         for vehicle in vehicle_processes:
