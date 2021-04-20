@@ -32,6 +32,8 @@ class GUI:
         self.intact_packets = 0
         self.ontime_packets = 0
 
+        self.logger.info("Initialized GUI")
+
     def update_vehicle(self, vehicle_id, lat, lng, icon_path):
         self.logger.info(f"moving vehicle {vehicle_id} to {lat}, {lng}")
         eel.updateMarker(vehicle_id, lat, lng, icon_path)
@@ -45,7 +47,7 @@ class GUI:
         self.ontime_packets = ontime
 
     def create_new_vehicle(self, vehicle_id, lat, lng, icon_path):
-        print(f"icon: '{icon_path}'")
+        self.logger.info(f"creating new vehicle {vehicle_id}")
         eel.createVehicle(vehicle_id, icon_path)
         self.known_vehicle_ids.append(vehicle_id)
 
@@ -56,7 +58,7 @@ class GUI:
         self.logger.info("called run, starting server")
         eel.init("gui-new")
         self.logger.info("starting for real")
-        eel.start("main.html", mode="firefox")
+        eel.start("main.html")
 
     def start_receiver(self):
         self.logger.info("called start_receiver, creating socket")
@@ -102,6 +104,8 @@ class GUI:
                 msf = conn.recv(BUFFER_SIZE).decode()
                 data = json.loads(msg)
 
+                self.logger.info("received data")
+
                 if not data["receiver"]:
                     self.received_packets += 1
                     self.intact_packets += 1
@@ -143,6 +147,8 @@ class GUI:
         is_receiver,
         elapsed_time,
     ):
+        self.logger.info(f"processing packet from {vehicle_id}")
+
         icon = ""
         if is_receiver:
             icon = f"/images/receiver/{heading}.png"
