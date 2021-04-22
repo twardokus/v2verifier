@@ -18,7 +18,7 @@ class X1609:
         self.issuer = "80"
 
         # to be signed certificate
-        self.toBeSigned = ToBeSignedCertificate(hostname).toString()
+        self.toBeSigned = ToBeSignedCertificate(hostname).toString().encode("utf-8").hex()
 
         # signature
         # 80 -> ecdsaNistP256Signature
@@ -32,7 +32,7 @@ class X1609:
         self.signature = "80"
         self.ecdsa_nist_p256 = "80"
 
-        r, s = ecdsa.sign(self.toBeSigned.encode("utf-8").hex(), private_key, hashfunc=sha256)
+        r, s = ecdsa.sign(self.toBeSigned, private_key, hashfunc=sha256)
         
         r = hex(r)
         s = hex(s)

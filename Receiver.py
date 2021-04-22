@@ -47,10 +47,11 @@ class Receiver:
         public_key = keys.import_key("keys/0/p256.pub", curve=curve.P256, public=True)
 
         is_valid_sig = self.verifier.verify_signature(data[1], data[2], data[0], public_key)
+        is_valid_cert = self.verifier.verify_signature(data[5], data[6], data[4], public_key)
         
         elapsed, is_recent = self.verifier.verify_time(data[3])
         
-        decoded_data['sig'] = is_valid_sig
+        decoded_data['sig'] = is_valid_sig and is_valid_cert
         decoded_data['elapsed'] = elapsed
         decoded_data['recent'] = is_recent
         decoded_data['receiver'] = False
@@ -76,6 +77,20 @@ class Receiver:
         time = ieee1609_dot2_data[time_position:time_position + 16]
 
         # @TODO pull out cert
+        cert = ieee1609_dot2_data[time_position + 18:len(ieee1609_dot2_data)-(2*66)-1]
+        tbs = cert[6:len(cert)-(2*66)]
+
+        cert_sig = cert[len(cert)-(2*66):]
+        cert_sig = cert_sig[4:]
+
+        r2 = cert_sig[:64]
+        s2 = cert_sig[64:128]
+
+        r2 = int(r2, 16)
+        s2 = int(s2, 16)
+
+        r2 = int(str(r2))
+        s2 = int(str(s2))
 
         # the ecdsaNistP256Signature structure is 66 bytes
         # r - 32 bytes
@@ -97,5 +112,5 @@ class Receiver:
     
         r = int(str(r))
         s = int(str(s))
-    
-        return unsecured_data, r, s, time
+
+        return unsecured_data, r, s, time, tbs, r2, s2
