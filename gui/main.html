@@ -18,15 +18,20 @@
 .table-data {
   width: 12vw;
 }
+.tab {
+  text-indent: 30px;
+}
 #map {
   height: 95vh;
 }
 #packet-data {
   height: 30vh;
+  margin: 5px;
 }
 #messages {
   height: 65vh;
   overflow: auto;
+  margin: 5px;
 }
     </style>
     <script>
@@ -54,7 +59,7 @@ let vehicles = {};
 
 eel.expose(createVehicle)
 function createVehicle(id, icon_path) {
-  console.log(icon_path)
+  console.log("creating vehicle " + id + " with icon " + icon_path)
   vehicles[id] = new google.maps.Marker({
     map,
     icon: icon_path,
@@ -64,14 +69,14 @@ function createVehicle(id, icon_path) {
 
 eel.expose(updateMarker)
 function updateMarker(id, latitude, longitude, icon_path) {
-  if (id in vehicles) {
-    console.log("moved " + id + " to " + latitude + ", " + longitude)
-    vehicles[id].setPosition({lat: latitude, lng: longitude})
-    vehicles[id].setIcon(icon_path)
+  if (!(id in vehicles)) {
+    createVehicle(id, icon_path)
   }
-  else {
-    console.log("tried to update vehicle " + id +", but it doesn't exist")
-  }
+  lat_num = parseFloat(latitude)
+  lng_num = parseFloat(longitude)
+  console.log("moved " + id + " to " + latitude + ", " + longitude)
+  vehicles[id].setPosition({lat: lat_num, lng: lng_num})
+  vehicles[id].setIcon(icon_path)
 }
 
 eel.expose(updatePacketCounts)
@@ -85,8 +90,11 @@ function updatePacketCounts(received, processed, authenticated, intact, ontime) 
 
 eel.expose(addMessage)
 function addMessage(message) {
-  document.getElementById("messages").innerHTML += message;
+  messageBox = document.getElementById("messages")
+  messageBox.innerHTML += message
+  messageBox.scrollTop = messageBox.scrollHeight
 }
+
     </script>
   </head>
 

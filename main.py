@@ -3,10 +3,11 @@
 import argparse
 import os
 import yaml
-from gui import GUI
+import random
 import threading
 import time
 import socket
+from gui import GUI
 from Utility import Utility
 from Receiver import Receiver
 from RemoteVehicle import RemoteVehicle
@@ -36,6 +37,7 @@ def main():
         gui = GUI()
         gui.start_receiver()
         gui.prep()
+        time.sleep(1)
 
         sock = socket.socket()
         sock.connect(("127.0.0.1", 6666))
@@ -71,8 +73,8 @@ def main():
                 f"Error starting vehicles. The config file is missing a trace file or BSM file path for vehicle {i} in init.yml"
             )
 
-        for rv in remote_vehicles:
-            vehicle = Process(target=rv.start)
+            for rv in remote_vehicles:
+                vehicle = Process(target=rv.start)
             vehicle_processes.append(vehicle)
             vehicle.start()
             print("Started legitimate vehicle")
@@ -85,23 +87,36 @@ def main():
         gui = GUI()
         gui.start_receiver()
         gui.prep()
+        time.sleep(1)
         print("Created gui object, calling run")
         gui_thread = threading.Thread(target=gui.run)
         gui_thread.start()
         print("thread started")
 
-        time.sleep(5)
-        gui.update_packet_counts(1, 2, 3, 4, 5)
-        time.sleep(1)
-        gui.process_new_packet("car_1", 43.0812, -77.680235, "N", True, True, True, 0)
-        time.sleep(1)
-        gui.process_new_packet("car_2", 43.0899, -77.681, "E", True, True, False, 0)
-        time.sleep(1)
-        gui.process_new_packet("car_3", 43.0845, -77.6802, "S", False, True, False, 0)
-        time.sleep(1)
-        gui.process_new_packet("car_1", 43.0812, -77.6803, "W", True, True, True, 0)
-        for i in range(20):
-            gui.add_message("message")
+        with open("coords/coords_1") as coord_file:
+            while True:
+                for line in coord_file:
+                    lat, lng = line.strip().split(", ")
+                    # update car location
+                    gui.process_new_packet("car_1", lat, lng, "N", True, True, True, 0)
+
+                    # add message
+                    message = "<p>Message from car_1:</p>"
+                    message += (
+                        '<p class="tab">✔️ Message successfully authenticated</p>'
+                    )
+                    message += '<p class="tab">✔️ Message is recent: 31.6 ms since transmission</p>'
+                    message += f'<p class="tab">Vehicle reports location at {lat}, {lng} traveling N</p>'
+                    gui.add_message(message)
+
+                    # update packet counts
+                    gui.received_packets += 1
+                    gui.intact_packets += 1
+                    if random.random() <= 0.8:
+                        gui.authenticated_packets += 1
+                    gui.ontime_packets += 1
+
+                    time.sleep(0.5)
 
         gui_thread.join()
 

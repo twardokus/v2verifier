@@ -17,7 +17,6 @@ class GUI:
         self.logger.addHandler(ch)
 
         self.threadlock = threading.Lock()
-        self.known_vehicle_ids = []
 
         with open("init.yml", "r") as conf_file:
             self.config = yaml.load(conf_file, Loader=yaml.FullLoader)
@@ -46,11 +45,6 @@ class GUI:
         self.authenticated_packets = authenticated
         self.intact_packets = intact
         self.ontime_packets = ontime
-
-    def create_new_vehicle(self, vehicle_id, lat, lng, icon_path):
-        self.logger.info(f"creating new vehicle {vehicle_id}")
-        eel.createVehicle(vehicle_id, icon_path)
-        self.known_vehicle_ids.append(vehicle_id)
 
     def add_message(self, message):
         eel.addMessage(message)
@@ -164,41 +158,34 @@ class GUI:
         else:
             icon = f"/images/phantom/{heading}.png"
 
-        self.logger.info(f"known vehicles: {self.known_vehicle_ids}")
-
-        if vehicle_id not in self.known_vehicle_ids:
-            self.create_new_vehicle(vehicle_id, lat, lng, icon)
-
         self.update_vehicle(vehicle_id, lat, lng, icon)
 
         # print messages to gui
 
         # acquire lock
 
-        message = f"<p>Message from {vehicle_id}</p>"
+        message = f"<p>Message from {vehicle_id}:</p>"
         if not is_receiver:
             if is_valid:
-                message += "<p>\t✔️ Message successfully authenticated</p>"
+                message += '<p class="tab">✔️ Message successfully authenticated</p>'
             else:
-                message += "<p>\t❌ Invalid signature!\n</p>"
+                message += '<p class="tab">❌ Invalid signature!\n</p>'
 
             if is_recent:
                 rounded_time = 0
                 if elapsed_time > 0:
                     rounded_time = str(round(elapsed_time, 2))
 
-                message += f"<p>\t✔️ Message is recent: {rounded_time} ms since transmission<p>"
+                message += f'<p class="tab">✔️ Message is recent: {rounded_time} ms since transmission<p>'
 
             else:
                 rounded_time = str(round(elapsed_time, 2))
-                message += "<p>\t❌ Message is out-of-date: {rounded_time} ms since transmission<p>"
+                message += '<p class="tab">❌ Message is out-of-date: {rounded_time} ms since transmission<p>'
 
             if not is_valid and not is_recent:
-                message += "<p>\t❌❌❌ Invalid signature and message expired, replay attack likely ❌❌❌</p>"
+                message += '<p class="tab">❌❌❌ Invalid signature and message expired, replay attack likely ❌❌❌</p>'
 
-            message += (
-                f"<p>\tVehicle reports location at {lat}, {lng} traveling {heading}<p>"
-            )
+            message += f'<p class="tab">Vehicle reports location at {lat}, {lng} traveling {heading}<p>'
             self.add_message(message)
         else:
             self.processed_packets += 1
