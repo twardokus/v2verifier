@@ -23,7 +23,6 @@ class Receiver:
         listener.start()
         
     def listen_for_wsms(self, gui_socket, gui_socket_lock):
-
         print("Listening on localhost:4444 for WSMs")
 
         listener = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -31,6 +30,7 @@ class Receiver:
 
         while True:
             wsm = listener.recv(1024)
+            print("Received message")
             # print(wsm.hex()[118:])
             self.process_packet(wsm.hex()[118:], gui_socket, gui_socket_lock)
 
@@ -86,6 +86,8 @@ class Receiver:
     
         # Note that the numbers for positions are double the byte value
         # because this is a string of "hex numbers" so 1 byte = 2 chars
+        
+        # print(ieee1609_dot2_data)
     
         unsecured_data_length = int(ieee1609_dot2_data[12:14], 16)*2
         unsecured_data = ieee1609_dot2_data[14:14 + unsecured_data_length]
