@@ -3,7 +3,7 @@ import yaml
 from threading import Lock, Thread
 from socket import socket
 from Receiver import Receiver
-from c_v2x_receiver import CV2XReceiver
+from cv2x.c_v2x_receiver import CV2XReceiver
 from LocalVehicle import LocalVehicle
 from GUI import GUI
 import tkinter as tk
