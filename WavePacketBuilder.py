@@ -3,200 +3,210 @@ from fastecdsa.keys import import_key
 from hashlib import sha256
 
 
-class WAVEPacketBuilder:
+def get_wsm_payload(bsm_string, key):
+    payload = get_llc_bytestring() + get_wsm_headers() + getIeee1609Dot2Data(bsm_string, key)
 
-    def get_wsm_payload(self, bsm_string, key):
-        payload = self.get_llc_bytestring() + self.get_wsm_headers() + self.getIeee1609Dot2Data(bsm_string, key)
+    return "\\x" + "\\x".join(payload[i:i + 2] for i in range(0, len(payload), 2))
 
-        return "\\x" + "\\x".join(payload[i:i + 2] for i in range(0, len(payload), 2))
 
-    def get_llc_bytestring(self):
-        bytestring = ""
+def get_llc_bytestring():
+    bytestring = ""
 
-        # Logical Link Control fields
+    # Logical Link Control fields
 
-        # llc_dsap = "aa" to indicate SNAP extension in use (for protocol identification)
-        bytestring += "aa"
+    # llc_dsap = "aa" to indicate SNAP extension in use (for protocol identification)
+    bytestring += "aa"
 
-        # llc_ssap = "aa" to indicate SNAP extension in use  (for protocol identification)
-        bytestring += "aa"
+    # llc_ssap = "aa" to indicate SNAP extension in use  (for protocol identification)
+    bytestring += "aa"
 
-        # llc_control = "03" for unacknowledged, connectionless mode
-        bytestring += "03"
+    # llc_control = "03" for unacknowledged, connectionless mode
+    bytestring += "03"
 
-        # llc_org_code = "000000" as we have no assigned OUI
-        bytestring += "000000"
+    # llc_org_code = "000000" as we have no assigned OUI
+    bytestring += "000000"
 
-        # llc_type = "88dc" to indicate WAVE Short Message Protocol
-        bytestring += "88dc"
+    # llc_type = "88dc" to indicate WAVE Short Message Protocol
+    bytestring += "88dc"
 
-        return bytestring
+    return bytestring
 
-    def get_wsm_headers(self):
-        bytestring = ""
 
-        # WSM N-Header and T-Header fields
+def get_wsm_headers():
+    bytestring = ""
 
-        # wsmp_n_subtype_opt_version = "03"
-        bytestring += "03"
-        # wsmp_n_tpid = "00"
-        bytestring += "00"
-        # wsmp_t_headerLengthAndPSID = "20"
-        bytestring += "20"
-        # wsmp_t_length = "00"
-        bytestring += "00"
+    # WSM N-Header and T-Header fields
 
-        return bytestring
+    # wsmp_n_subtype_opt_version = "03"
+    bytestring += "03"
+    # wsmp_n_tpid = "00"
+    bytestring += "00"
+    # wsmp_t_headerLengthAndPSID = "20"
+    bytestring += "20"
+    # wsmp_t_length = "00"
+    bytestring += "00"
 
-    def getIeee1609Dot2Data(self, message, key):
-        message = message.encode("utf-8").hex()
+    return bytestring
 
-        # IEEE1609Dot2Data Structure
-        bytestring = ""
-        # Protocol Version
-        bytestring += "03"
-        # ContentType ( signed data = 81)
-        bytestring += "81"
-        # HashID (SHA256 = 00)
-        bytestring += "00"
-        # Data
-        bytestring += "40"
-        # Protocol Version
-        bytestring += "03"
-        # Content - Unsecured Data
-        bytestring += "80"
 
-        # Length of Unsecured Data
-        length = hex(int(len(str(message)) / 2)).split("x")[1]
-        if len(length) == 1:
-            bytestring += "0"
-        bytestring += length
+def getIeee1609Dot2Data(message, key):
+    message = message.encode("utf-8").hex()
 
-        # unsecuredData
-        bytestring += message
+    # IEEE1609Dot2Data Structure
+    bytestring = ""
+    # Protocol Version
+    bytestring += "03"
+    # ContentType ( signed data = 81)
+    bytestring += "81"
+    # HashID (SHA256 = 00)
+    bytestring += "00"
 
-        # headerInfo
-        bytestring += "4001"
+    # start tbsData structure
+    bytestring += "40"
+    # Protocol Version
+    bytestring += "03"
 
-        # PSID (BSM = 20)
-        bytestring += "20"
+    # Content - Unsecured Data
+    bytestring += "80"
 
-        # generationTime (8 bytes)
+    # Length of Unsecured Data
+    length = hex(int(len(str(message)) / 2)).split("x")[1]
+    if len(length) == 1:
+        bytestring += "0"
+    bytestring += length
 
-        # this is a placeholder byte pattern that is unlikely to occur in practice, used to inject actual time
-        # when packet is transmitted
-        bytestring += "F0E0F0E0F0E0F0E0"
+    # unsecuredData
+    bytestring += message
 
-        # Digest (8 bytes) - this is a dummy value as we have not used certificates, which would be involved here
-        # NOT NEEDED, for if signerIdentifier = "digest"
-        # bytestring += "80"
-        # bytestring += "2122232425262728"
+    # headerInfo
+    bytestring += "4001"
 
-        # signerIdentifier = "certificate"
-        # Assuming digest is 80, set to 81
-        bytestring += "81"
+    # PSID (BSM = 20)
+    bytestring += "20"
 
-        # START CERTIFICATE BASE
+    # generationTime (8 bytes)
 
-        # version = 3
-        bytestring += "03"
+    # TODO: fix this - should be actual generationTime64
+    # this is a placeholder byte pattern that is unlikely to occur in practice, used to inject actual time
+    # when packet is transmitted
+    bytestring += "F0E0F0E0F0E0F0E0"
 
-        # Number of items
-        bytestring += "000006"
+    # signer = "digest"
+    bytestring += "80"
 
-        # CertificateType = "explicit"
-        # @TODO implement ExplicitCertificate structure here
+    # TODO: fix this - should be actual, calculated value
+    # digest (8 bytes)
+    bytestring += "0000000000000000"
 
-        # for i in range(0, 6):
-        # Filler?
-        bytestring += "00"
+    # START CERTIFICATE BASE
 
-        # version
-        bytestring += "03"
+    # version = 3
+    bytestring += "03"
 
-        # type
-        bytestring += "00"
+    # Number of items
+    bytestring += "000006"
 
-        # Issuer = "sha256AndDigest"
-        # dummy value here for issuerID
-        bytestring += "002122232425262728"
+    # CertificateType = "explicit"
+    # @TODO implement ExplicitCertificate structure here
 
-        # toBeSigned
-        # - START ToBeSignedCertificate HERE -
+    # for i in range(0, 6):
+    # Filler?
+    bytestring += "00"
 
-        # id = linkageData
-        # this data is used to compare/add certificates to a CRL
-        # START linkageData HERE
+    # version
+    bytestring += "03"
 
-        # buffer
-        bytestring += "0000"
+    # type
+    bytestring += "00"
 
-        # certificateID choice
-        bytestring += "00"
+    # Issuer = "sha256AndDigest"
+    # dummy value here for issuerID
+    bytestring += "002122232425262728"
 
-        # iCert DUMMY VALUE
-        bytestring += "0100"
+    # toBeSigned
+    # - START ToBeSignedCertificate HERE -
 
-        # linkage-value(size = 9) DUMMY VALUE
-        # bytestring += "0fa12245f4c3c1cd54"
-        bytestring += "414243444546474849"
-        # END linkageData HERE
+    # id = linkageData
+    # this data is used to compare/add certificates to a CRL
+    # START linkageData HERE
 
-        # cracaID(size = 3) DUMMY VALUE
-        bytestring += "52641c"
+    # buffer
+    bytestring += "0000"
 
-        # crlSeries DUMMY VALUE
-        bytestring += "2000"
+    # certificateID choice
+    bytestring += "00"
 
-        # START validityPeriod HERE
-        # start(time32)
-        bytestring += "24c34587"
+    # iCert DUMMY VALUE
+    bytestring += "0100"
 
-        # duration
-        bytestring += "030005"
+    # linkage-value(size = 9) DUMMY VALUE
+    # bytestring += "0fa12245f4c3c1cd54"
+    bytestring += "414243444546474849"
+    # END linkageData HERE
 
-        # VerificationKeyIndicator
-        bytestring += "01"
+    # cracaID(size = 3) DUMMY VALUE
+    bytestring += "52641c"
 
-        # EccP256CurvePoint
-        bytestring += "04"
-        bytestring += "00" * 64
+    # crlSeries DUMMY VALUE
+    bytestring += "2000"
 
-        # END validityPeriod HERE
+    # START validityPeriod HERE
+    # start(time32)
+    bytestring += "24c34587"
 
-        # - OPTIONAL FIELDS CAN GO HERE -
-        # IN ORDER:
-        # region, assuranceLevel, appPermissions, certIssuePermissions, certRequestPermissions,
-        # canRequestRollover, encryptionKey
+    # duration
+    bytestring += "030005"
 
-        # verifyKeyIndicator
-        # @TODO get more information on KeyIndicator
+    # VerificationKeyIndicator
+    bytestring += "01"
 
-        # - END ToBeSignedCertificate HERE -
+    # EccP256CurvePoint
+    bytestring += "04"
+    bytestring += "00" * 256
 
-        # signature (ecdsaNistP256Signature = 80)
-        bytestring += "80"
+    # END validityPeriod HERE
 
-        # ecdsaNistP256Signature (r: compressed-y-0 = 82)
-        # 80 -> x-only
-        # 81 -> fill (NULL)
-        # 82 -> compressed-y-0
-        # 83 -> compressed-y-1
-        # 84 -> uncompressed
-        bytestring += "80"
+    # - OPTIONAL FIELDS CAN GO HERE -
+    # IN ORDER:
+    # region, assuranceLevel, appPermissions, certIssuePermissions, certRequestPermissions,
+    # canRequestRollover, encryptionKey
 
-        private, public = import_key(key)
-        r, s = ecdsa.sign(message, private, hashfunc=sha256)
-        r = hex(r)
-        s = hex(s)
+    # verifyKeyIndicator
+    # @TODO get more information on KeyIndicator
 
-        r = r.split("x")[1][:len(r) - 2]
-        s = s.split("x")[1][:len(s) - 2]
+    # - END ToBeSignedCertificate HERE -
 
-        # r (32 bytes)
-        bytestring += str(r)
+    # signature (ecdsaNistP256Signature = 80)
+    bytestring += "80"
 
-        # s (32 bytes)
-        bytestring += str(s)
+    # ecdsaNistP256Signature (r: compressed-y-0 = 82)
+    # 80 -> x-only
+    # 81 -> fill (NULL)
+    # 82 -> compressed-y-0
+    # 83 -> compressed-y-1
+    # 84 -> uncompressed
+    bytestring += "80"
 
-        return bytestring
+    private, public = import_key(key)
+    r, s = ecdsa.sign(message, private, hashfunc=sha256)
+
+    r = hex(r)
+    s = hex(s)
+
+    r = r.split("x")[1][:len(r) - 2]
+    s = s.split("x")[1][:len(s) - 2]
+
+    # these while loops pad the front of the hex key with zeros to make sure they fit the 32-byte field length
+    while len(r) < 64:
+        r = "0" + r
+
+    while len(s) < 64:
+        s = "0" + s
+
+    # r (32 bytes)
+    bytestring += str(r)
+
+    # s (32 bytes)
+    bytestring += str(s)
+
+    return bytestring

@@ -2,41 +2,34 @@ import yaml
 
 from multiprocessing import Process
 from RemoteVehicle import RemoteVehicle
-from Utility import Utility
 
 
-class Remote:
+def run_remote():
 
-    def run_remote(self):
+    with open("init.yml", "r") as confFile:
+        config = yaml.load(confFile, Loader=yaml.FullLoader)
 
-        util = Utility()
+    remote_vehicles = []
 
-        with open("init.yml", "r") as confFile:
-            config = yaml.load(confFile, Loader=yaml.FullLoader)
+    # prepare the message queues for all vehicles
+    try:
+        for i in range(0, config["remoteConfig"]["numberOfVehicles"]):
+            rv = RemoteVehicle(config["remoteConfig"]["traceFiles"][i], i)
+            remote_vehicles.append(rv)
 
-        remote_vehicles = []
+    except IndexError:
+        print("Error starting vehicles. Ensure you have entered enough trace files and BSM file paths "
+              "in \"init.yml\" to match the number of vehicles specified in that file.")
 
-        # prepare the message queues for all vehicles
-        try:
-            for i in range(0, config["remoteConfig"]["numberOfVehicles"]):
-                trace_file_path = config["remoteConfig"]["traceFiles"][i]
-                bsm_queue = util.build_bsm_queue(i, trace_file_path, "keys/" + str(i) + "/p256.key")
-                rv = RemoteVehicle(bsm_queue)
-                remote_vehicles.append(rv)
+    # list to hold all spawned processes
+    vehicle_processes = []
 
-        except IndexError:
-            print("Error starting vehicles. Ensure you have entered enough trace files and BSM file paths "
-                  "in \"init.yml\" to match the number of vehicles specified in that file.")
+    # start transmitting packets for all legitimate vehicles
+    for rv in remote_vehicles:
+        vehicle = Process(target=rv.start)
+        vehicle_processes.append(vehicle)
+        vehicle.start()
+        print("Started legitimate vehicle")
 
-        # list to hold all spawned processes
-        vehicle_processes = []
-
-        # start transmitting packets for all legitimate vehicles
-        for rv in remote_vehicles:
-            vehicle = Process(target=rv.start)
-            vehicle_processes.append(vehicle)
-            vehicle.start()
-            print("Started legitimate vehicle")
-
-        for vehicle in vehicle_processes:
-            vehicle.join()
+    for vehicle in vehicle_processes:
+        vehicle.join()
