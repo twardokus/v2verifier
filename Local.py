@@ -4,8 +4,8 @@ from threading import Lock, Thread
 from socket import socket
 from Receiver import Receiver
 from cv2x.c_v2x_receiver import CV2XReceiver
-from LocalVehicle import LocalVehicle
-from GUI import GUI
+from vehicle.LocalVehicle import LocalVehicle
+from gui.GUI import GUI
 import tkinter as tk
 
 

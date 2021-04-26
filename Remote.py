@@ -1,7 +1,7 @@
 import yaml
 
 from multiprocessing import Process
-from RemoteVehicle import RemoteVehicle
+from vehicle.RemoteVehicle import RemoteVehicle
 
 
 def run_remote():

@@ -115,7 +115,7 @@ class GUI:
         self.textWidget.tag_configure("attack", foreground="red")
         self.textWidget.tag_configure("information", foreground="orange")
 
-        background = ImageTk.PhotoImage(Image.open("pic/background.jpg"))
+        background = ImageTk.PhotoImage(Image.open("gui/pic/background.jpg"))
         self.backgroundImage = background
         self.canvas.create_image(400, 300, image=self.backgroundImage, anchor=tk.CENTER)
 
@@ -211,12 +211,12 @@ class GUI:
         # load the appropriate image, depending on signature validation and whether the packet is local
         i = None
         if isReceiver:
-            i = ImageTk.PhotoImage(Image.open("pic/receiver/" + heading + ".png"))
+            i = ImageTk.PhotoImage(Image.open("gui/pic/receiver/" + heading + ".png"))
         else:
             if isValid:
-                i = ImageTk.PhotoImage(Image.open("pic/" + heading + ".png"))
+                i = ImageTk.PhotoImage(Image.open("gui/pic/" + heading + ".png"))
             else:
-                i = ImageTk.PhotoImage(Image.open("pic/phantom/" + heading + ".png"))
+                i = ImageTk.PhotoImage(Image.open("gui/pic/phantom/" + heading + ".png"))
 
         self.canvas.create_image(x, y, image=i, anchor=tk.CENTER, tags="car" + str(threading.currentThread().ident))
 
@@ -344,8 +344,8 @@ class GUI:
         self.receiverRowLabel = Label(self.legend, text="  is the receiving vehicle")
         self.otherRowLabel = Label(self.legend, text="  are vehicles sendings BSMs")
 
-        self.receiverImg = ImageTk.PhotoImage(Image.open("pic/receiver/E.png"))
-        self.otherImg = ImageTk.PhotoImage(Image.open("pic/E.png"))
+        self.receiverImg = ImageTk.PhotoImage(Image.open("gui/pic/receiver/E.png"))
+        self.otherImg = ImageTk.PhotoImage(Image.open("gui/pic/E.png"))
 
         self.receiverImage = Label(self.legend, image=self.receiverImg)
         self.otherImage = Label(self.legend, image=self.otherImg)
