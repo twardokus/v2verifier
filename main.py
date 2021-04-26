@@ -1,9 +1,7 @@
 import argparse
-import os
 import sys
 
-import Local
-import Remote
+from txrx import Remote, Local
 
 if __name__ == "__main__":
 
@@ -31,7 +29,7 @@ if __name__ == "__main__":
         if args.with_gui:
             print("Running local perspective with GUI enabled...")
             if args.device == "cohda":
-                program = Local.run_local(with_gui=True, tech=args.technology,cohda=True)
+                program = Local.run_local(with_gui=True, tech=args.technology, cohda=True)
             else:
                 program = Local.run_local(with_gui=True, tech=args.technology)
         else:

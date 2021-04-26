@@ -1,11 +1,9 @@
-import binascii
 import json
 from fastecdsa import keys, curve
-from Verifier import Verifier
+from txrx.Verifier import Verifier
 from threading import Thread
 import socket
 
-import random
 
 class Receiver:
     

@@ -1,6 +1,5 @@
-from Receiver import Receiver
+from txrx.Receiver import Receiver
 import socket
-from threading import Thread
 
 
 class CV2XReceiver(Receiver):

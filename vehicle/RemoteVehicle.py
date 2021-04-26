@@ -1,7 +1,6 @@
 import subprocess
 import time
-import Utility
-import WavePacketBuilder
+from txrx import Utility, WavePacketBuilder
 
 
 def send_payload_to_gnuradio(message_payload):
