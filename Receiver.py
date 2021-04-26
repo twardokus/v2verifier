@@ -124,4 +124,4 @@ class Receiver:
               "\tTraveling: " + bsm["heading"] +
               "\tSpeed: " + bsm["speed"] +
               "\tExpired: " + str(not bsm["recent"]))
-        print("Message is ", "validly" if bsm["sig"] else "NOT VALIDLY", "signed\n")
+        print("Message is", "validly" if bsm["sig"] else "NOT VALIDLY", "signed\n")
