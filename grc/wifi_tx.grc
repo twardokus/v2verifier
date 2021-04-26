@@ -827,7 +827,7 @@
     </param>
     <param>
       <key>_coordinate</key>
-      <value>(192, 196)</value>
+      <value>(192, 260)</value>
     </param>
     <param>
       <key>_rotation</key>
@@ -1636,7 +1636,7 @@
     </param>
     <param>
       <key>dev_addr</key>
-      <value>serial=31C043C</value>
+      <value></value>
     </param>
     <param>
       <key>dev_args</key>
