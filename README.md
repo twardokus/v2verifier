@@ -15,7 +15,7 @@ Running V2Verifier requires a minimum of two USRP software-defined radios (B210 
 ## Installing V2Verifier
 On each Ubuntu PC, you must install the following dependencies:
 
-	sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python-pip python3-pip python3-tk python3-pil python3-pil.imagetk gnuradio
+	sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil python3-pil.imagetk gnuradio
 
 Since V2Verifier incorporates open-source code from the [WiME project](https://www.wime-project.net/), 
 you need to install two components from that project.  
@@ -44,7 +44,7 @@ you need to install two components from that project.
 		
 Next, install some Python 3 libraries.
 
-	pip3 install fastecdsa scapy
+	pip3 install fastecdsa
 	pip3 install -U pyyaml
 
 ## Running V2Verifier
