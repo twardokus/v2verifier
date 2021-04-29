@@ -7,19 +7,16 @@ def send_to_gui(msg, s, lock):
 
     bsm = msg.split(",")
 
-    decoded_data = {}
-
-    decoded_data['id'] = bsm[0]
-    decoded_data['x'] = bsm[1]
-    decoded_data['y'] = bsm[2]
-    decoded_data['heading'] = bsm[3]
-    decoded_data['speed'] = bsm[4]
-
-    decoded_data['sig'] = True
-    decoded_data['elapsed'] = 0
-    decoded_data['recent'] = True
-    decoded_data['receiver'] = True
-    decoded_data['reputation'] = 1000
+    decoded_data = {'id': bsm[0],
+                    'x': bsm[1],
+                    'y': bsm[2],
+                    'heading': bsm[3],
+                    'speed': bsm[4],
+                    'sig': True,
+                    'elapsed': 0,
+                    'recent': True,
+                    'receiver': True,
+                    'reputation': 1000}
 
     vehicle_data_json = json.dumps(decoded_data)
 
