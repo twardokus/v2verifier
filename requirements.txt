@@ -1,0 +1,6 @@
+fastecdsa
+scapy
+eel
+pyopenssl
+pyyaml
+folium
