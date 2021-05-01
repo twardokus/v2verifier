@@ -8,6 +8,13 @@ Included are implementations of:
 the [WiME Project's](http://dx.doi.org/10.1109/TMC.2017.2751474)
 IEEE 802.11p transceiver 
 
+## Publications
+If you use our testbed code, we would appreciate a reference to the following publication:
+
+Geoff Twardokus, Jaime Ponicki, Samantha Baker, Peter Carenzo, [Hanif Rahbari](http://rahbari.csec.rit.edu/), and Sumita Mishra, "**Targeted Discreditation Attack against Trust Management in Connected Vehicles**," _IEEE International Conference on Communications (ICC 2021)_, Virtual/Montreal, June 2021 [[PDF](http://rahbari.csec.rit.edu/papers/V2Verifier_ICC21.pdf)]
+
+Additional publications related to the V2Verifier project are listed [here](https://github.com/twardokus/v2verifier/wiki/Publications).
+
 ## Requirements
 Running V2Verifier requires a minimum of two USRP software-defined radios (B210 or N210 with 5.9 GHz daughterboards) and at least one PC capable of running Ubuntu 18.04. A virtual machine may be used, but is not recommended. We further recommend using two PCs with one USRP connected to each PC for best results.
 
