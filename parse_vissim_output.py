@@ -2,22 +2,35 @@ import argparse
 import re
 import os
 
-def writeDataToFiles(outputDirectory: str, vehiclePaths: list) -> None:
+def writeDataToFiles(vehiclePaths: dict) -> None:
     """Write vehicle paths loaded from PTV Vissim export into V2Verifier config
 
     Parameters:
-        outputDirectory (str): directory path where files should be written
         vehiclePaths (dict): dictionary of coordinates keyed on vehicleID
 
     Returns:
         None
 
     """
-    
-    if not os.path.isdir(outputDirectory):
-        ...
 
+    if not os.getcwd().endswith("v2verifier"):
+        print("Error - script must be run from within the",
+            "V2Verifier project directory")
+        exit()
+        
+    if not os.path.isdir(os.path.join(os.getcwd(), "coords", "vissim")):
+        os.mkdir(os.path.join(os.getcwd(), "coords", "vissim"))
 
+    for vehicle in vehiclePaths:
+        try:
+            with open(os.path.join(os.getcwd(), "coords", "vissim", 
+                ("vissim_" + vehicle)), 'w') as outFile:
+                for coordinatePair in vehiclePaths[vehicle]:
+                    outFile.write(coordinatePair + "\n")
+        except:
+            print("Error writing output file")
+            exit()
+        
 def printVehicleInfo(id: str, x: str, y: str, speed: str, angle: str) -> None:
     """Show information about a vehicle
     
@@ -36,7 +49,7 @@ def printVehicleInfo(id: str, x: str, y: str, speed: str, angle: str) -> None:
     print("Vehicle", id, "is at (", x + "," + y, ") moving at", speed, "km/hr",
         "on bearing", angle)
 
-def parse_file(infilePath: str) -> dict:
+def parse_file(inFilePath: str) -> dict:
     """Parse a PTV Vissim simulation export file
     
     Parameters:
@@ -47,12 +60,13 @@ def parse_file(infilePath: str) -> dict:
     """
 
     try:
-        dataFile = open(infilePath, 'r')
+        dataFile = open(inFilePath, 'r')
     except FileNotFoundError:
-        print("Could not find the file. Check the path and try again")
+        print("Could not find the file \"" + inFilePath + "\". Check the path",
+            "and try again")
         exit()
     except:
-        print("Error opening", infilePath + ". Exiting.")
+        print("Error opening", inFilePath + ". Exiting.")
         exit()
 
     data = dataFile.readlines()
@@ -85,9 +99,7 @@ if __name__=="__main__":
         )
 
     parser.add_argument("infile", help="path to PTV exported .FZP file")
-    parser.add_argument("outdir", help="path to directory root for output")
-
     args = parser.parse_args()
 
     vehiclePaths = parse_file(args.infile)
-    writeDataToFiles(args.outdir, vehiclePaths)
+    writeDataToFiles(vehiclePaths)
