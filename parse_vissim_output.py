@@ -60,7 +60,7 @@ def parse_file(inFilePath: str) -> dict:
     """
 
     try:
-        dataFile = open(inFilePath, 'r')
+        dataFile = open(inFilePath, 'r', errors="ignore")
     except FileNotFoundError:
         print("Could not find the file \"" + inFilePath + "\". Check the path",
             "and try again")
@@ -85,9 +85,9 @@ def parse_file(inFilePath: str) -> dict:
             x, y, speed, angle = vehicleData.split(";")
 
             if vehicleID in vehiclePaths:
-                vehiclePaths[vehicleID].append(x + "," + y)
+                vehiclePaths[vehicleID].append(x + "," + str((-1)*int(y)))
             else:
-                vehiclePaths[vehicleID] = [x + "," + y]
+                vehiclePaths[vehicleID] = [x + "," + str((-1)*int(y))]
 
     vehiclePaths = dict(sorted(vehiclePaths.items(), key=lambda item: item[0]))
 
