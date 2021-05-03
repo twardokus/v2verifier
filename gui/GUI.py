@@ -27,6 +27,8 @@ def heading_to_direction(heading):
         return "south"
     elif heading == "SE":
         return "southeast"
+    elif heading == "-":
+        return "-"
 
 
 class GUI:
@@ -211,10 +213,12 @@ class GUI:
         # load the appropriate image, depending on signature validation and whether the packet is local
         i = None
         if isReceiver:
-            i = ImageTk.PhotoImage(Image.open("gui/pic/receiver/" + heading + ".png"))
+            if not heading == "-":
+                i = ImageTk.PhotoImage(Image.open("gui/pic/receiver/" + heading + ".png"))
         else:
             if isValid:
-                i = ImageTk.PhotoImage(Image.open("gui/pic/" + heading + ".png"))
+                if not heading == "-":
+                    i = ImageTk.PhotoImage(Image.open("gui/pic/" + heading + ".png"))
             else:
                 i = ImageTk.PhotoImage(Image.open("gui/pic/phantom/" + heading + ".png"))
 

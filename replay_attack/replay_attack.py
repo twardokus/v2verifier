@@ -1,4 +1,4 @@
-from replay_attack.ReplayAttacker import ReplayAttacker
+from ReplayAttacker import ReplayAttacker
 import sys
 if __name__ == "__main__":
 
