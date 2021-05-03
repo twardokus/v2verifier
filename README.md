@@ -68,8 +68,20 @@ the `wifi_rx.grc` file from the same subdirectory. Click the green play button a
 flowgraphs on both PCs. You will need to configure the communication options (e.g., bandwith, frequency) to suit your 
 needs. The default is a 10 MHz channel on 5.89 GHz.
 
-On each PC, navigate to the v2verifier directory and run `python3 main.py [local | remote] [dsrc | cv2x ]` (leave off 
-the options for usage help) to execute the transmit and receiver V2V programs.
+On each PC, navigate to the v2verifier directory. For the receiver, run the command
+
+    python3 main.py local dsrc [-g]
+
+to launch the receiver (include the `-g` option for GUI support). For the transmitter, run the command
+
+    python3 main.py remote dsrc
+    
+to begin transmitting messages.
+
+*Note that V2Verifier also supports C-V2X communication, but this requires equipment capable of both cellular
+communication and GPS clock synchronization (e.g., USRP B210 w/ GPSDO or 
+[Cohda Wireless MK6c](https://cohdawireless.com/solutions/hardware/mk6c-evk/)) as well as access to either an outdoor
+testing environment or synthesized GPS source.*
 
 ## Replay attack with V2Verifier
 Conducting a replay attack requires three USRPs and three PCs.
