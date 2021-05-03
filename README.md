@@ -1,4 +1,4 @@
-# v2verifier
+# V2Verifier
 V2Verifer is an open-source project dedicated to wireless experimentation
 focused on the security of vehicle-to-vehicle (V2V) communications.
 Included are implementations of:
@@ -59,3 +59,25 @@ Connect one USRP to each PC. On both PCs, launch GNURadio with the command `gnur
 
 On each PC, navigate to the v2verifier directory and run `python3 main.py [local | remote] [dsrc | cv2x ]` (leave off the options for usage help) to execute the transmit and receiver V2V programs.
 
+## Replay attack with V2Verifier
+Conducting a replay attack requires three USRPs and three PCs.
+One USRP, which will be used to conduct the attack, will require two antennas.
+
+Set up two PCs as above and run the normal transmitter and receiver programs. Make
+sure to use the `-g` option with the `local` program to launch the receiver
+GUI.
+
+    python3 ./main.py [local | remote] dsrc [-g]
+    
+On the third PC, connected to the USRP with two antennas, open the `wifi_rx.grc`
+and `wifi_tx.grc` flowgraphs in GNURadio. Also, open a terminal and navigate
+to the `replay_attack` directory in the V2Verifier directory.
+- Run the `wifi_rx.grc` flowgraph
+- Switch to the terminal and run `python3 ./replay_attack.py <seconds_to_collect>`
+- When the script prompts to press Enter, *wait!* Go back to GNURadio, stop the 
+`wifi_rx.grc` flowgraph and run the `wifi_tx.grc` flowgraph
+- Return to the terminal and press Enter. The attacker will begin replaying 
+messages.
+- Look at the receiver you started at the beginning. You should see the effects
+of the replay attack (e.g., warning messages in yellow text on the message
+feed) on the GUI.
