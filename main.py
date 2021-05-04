@@ -83,6 +83,32 @@ def main():
             vehicle.join()
 
         print("All vehicle processes terminated")
+    elif args.perspective == "gps":
+        util = Utility()
+
+        gui = GUI()
+        gui.start_receiver()
+        gui.prep()
+        time.sleep(1)
+
+        gps_sock = socket.socket()
+        gps_sock.connect(("localhost", "gps port"))
+
+        sock = socket.socket()
+        sock.connect(("127.0.0.1", 6666))
+
+        lock = threading.Lock()
+        receiver = Receiver()
+
+        listener = threading.Thread(target=receiver.run_receiver, args=(sock, lock))
+        listener.start()
+        print("Listener running")
+
+        gps_vehicle = GPSVehicle(gps_sock, sock, lock)
+        gps_thread = threading.Thread(gps_vehicle.start)
+        gps_thread.start()
+
+        gui.run()
     elif args.perspective == "test":
         gui = GUI()
         gui.start_receiver()
