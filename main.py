@@ -12,6 +12,7 @@ from Utility import Utility
 from Receiver import Receiver
 from RemoteVehicle import RemoteVehicle
 from LocalVehicle import LocalVehicle
+from GPSVehicle import GPSVehicle
 from multiprocessing import Process
 
 
@@ -20,7 +21,7 @@ def main():
         description="Run a V2V security experiment using V2Verifier"
     )
     parser.add_argument(
-        "perspective", help="choice of perspective", choices=["local", "remote", "test"]
+        "perspective", help="choice of perspective", choices=["local", "remote", "gps", "test"]
     )
     args = parser.parse_args()
 
@@ -73,8 +74,8 @@ def main():
                 f"Error starting vehicles. The config file is missing a trace file or BSM file path for vehicle {i} in init.yml"
             )
 
-            for rv in remote_vehicles:
-                vehicle = Process(target=rv.start)
+        for rv in remote_vehicles:
+            vehicle = Process(target=rv.start)
             vehicle_processes.append(vehicle)
             vehicle.start()
             print("Started legitimate vehicle")
@@ -92,7 +93,7 @@ def main():
         time.sleep(1)
 
         gps_sock = socket.socket()
-        gps_sock.connect(("localhost", "gps port"))
+        gps_sock.connect(("localhost", 5555))
 
         sock = socket.socket()
         sock.connect(("127.0.0.1", 6666))
@@ -104,8 +105,8 @@ def main():
         listener.start()
         print("Listener running")
 
-        gps_vehicle = GPSVehicle(gps_sock, sock, lock)
-        gps_thread = threading.Thread(gps_vehicle.start)
+        gps_vehicle = GPSVehicle(71, gps_sock, sock, lock)
+        gps_thread = threading.Thread(target=gps_vehicle.start)
         gps_thread.start()
 
         gui.run()

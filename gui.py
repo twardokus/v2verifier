@@ -187,5 +187,5 @@ class GUI:
 
             message += f'<p class="tab">Vehicle reports location at {lat}, {lng} traveling {heading}<p>'
             self.add_message(message)
-        else:
+
             self.processed_packets += 1
