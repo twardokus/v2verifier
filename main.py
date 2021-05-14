@@ -6,7 +6,6 @@ import threading
 import time
 import socket
 import sys
-from gui import GUI
 from GPSVehicle import GPSVehicle
 from multiprocessing import Process
 
