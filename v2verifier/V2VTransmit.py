@@ -1,6 +1,8 @@
 import struct
+import math
 from fastecdsa import ecdsa
 from hashlib import sha256
+from datetime import datetime
 
 
 def generate_v2v_bsm(latitude: float, longitude:float, elevation: float, speed: float, heading: float) -> bytes:
@@ -14,7 +16,7 @@ def generate_v2v_bsm(latitude: float, longitude:float, elevation: float, speed: 
         heading (float) the direction of travel measured in degrees (relative to what?)
 
     Returns:
-        bytes
+        bytes: a BSM reporting vehicle position and motion
 
     """
 
@@ -29,7 +31,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
         private_key: an ECDSA private key to sign the SPDU
 
     Returns:
-        bytes
+        bytes: a 1609.2-compliant SPDU
     """
 
     llc_dsap_ssap = 43690  # 0xaaaa -> SNAP extension
@@ -59,7 +61,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     section_start = 128  # 0x80 -> start substructure
     length_of_unsecured_data = len(bsm)  # length in bytes of BSM parameter
 
-    ieee1609Dot2Data = struct.pack(">bBbbbBB",
+    ieee1609_dot2_data = struct.pack(">bBbbbBB",
                                    protocol_version,
                                    content_type,
                                    hash_id,
@@ -68,15 +70,18 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
                                    section_start,
                                    length_of_unsecured_data)
 
-    ieee1609Dot2Data += bsm
+    ieee1609_dot2_data += bsm
 
     header_info = 1  # 0x01 -> start structure here
     psid = 32  # 0x20 -> Blind Spot Monitoring (generic V2V safety, no PSIDs are standardized yet)
-    generation_time = 0  # TODO: add a function to calculate time since Jan. 1 2004 per 1609.2
+
+    # The generationTime per 1609.2 is the number of elapsed microseconds since 00:00 Jan 1 2004 UTC
+    generation_time = math.floor((datetime.now() - datetime(2004, 1, 1, 0, 0, 0, 0)).total_seconds() * 1000)
+
     signer_identifier = 128  # 0x80 -> digest TODO: add certificates (0x81) here
     digest = 0  # TODO: replace with certificates, eight bytes of zeros as placeholder
 
-    ieee1609Dot2Data += struct.pack(">BBBQBQ",
+    ieee1609_dot2_data += struct.pack(">BBBQBQ",
                                     section_offset,
                                     header_info,
                                     psid,
@@ -87,17 +92,19 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
 
     signature_format = 128  # 0x80 -> x-only for signature value
 
-    ieee1609Dot2Data += struct.pack("BB",
+    ieee1609_dot2_data += struct.pack(">BB",
                                     section_start,
                                     signature_format)
 
+    print(len(llc + wsm_headers + ieee1609_dot2_data))
+
     r, s = ecdsa.sign(bsm, private_key, hashfunc=sha256)
 
-    ieee1609Dot2Data += r.to_bytes(32, 'little') + s.to_bytes(32, 'little')
+    ieee1609_dot2_data += r.to_bytes(32, 'little') + s.to_bytes(32, 'little')
 
-    print((llc + wsm_headers + ieee1609Dot2Data).hex())
+    # print((llc + wsm_headers + ieee1609_dot2_data).hex())
 
-    return llc + wsm_headers + ieee1609Dot2Data
+    return llc + wsm_headers + ieee1609_dot2_data
 
 
 
