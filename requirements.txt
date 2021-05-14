@@ -1,6 +1,6 @@
-fastecdsa
-scapy
 eel
-pyopenssl
-pyyaml
+fastecdsa
 folium
+pynmea2
+pyyaml
+scapy
