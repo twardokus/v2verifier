@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>V2X Communications - Security Testbed</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+    <script type="text/javascript" src="/eel.js"></script>
+    <style>
+.grid-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  /* grid-template-rows: auto; */
+}
+.grid-item {
+}
+.table-header {
+  width: 25vw;
+}
+.table-data {
+  width: 12vw;
+}
+.tab {
+  text-indent: 30px;
+}
+#map {
+  height: 95vh;
+}
+#packet-data {
+  height: 30vh;
+  margin: 5px;
+}
+#messages {
+  height: 65vh;
+  overflow: auto;
+  margin: 5px;
+}
+    </style>
+    <script>
+      let map;
+
+function initMap() {
+  map = new google.maps.Map(document.getElementById("map"), {
+    center: { lat: 43.081395, lng: -77.680271 },
+    zoom: 17,
+  });
+
+  image = "/car.png"
+  /*
+  marker = new google.maps.Marker({
+    position: {lat: 43.081390, lng: -77.680271},
+    map,
+    icon: image,
+  });
+   */
+
+}
+
+let marker;
+let vehicles = {};
+
+eel.expose(createVehicle)
+function createVehicle(id, icon_path) {
+  console.log("creating vehicle " + id + " with icon " + icon_path)
+  vehicles[id] = new google.maps.Marker({
+    map,
+    icon: icon_path,
+  });
+  console.log(vehicles)
+}
+
+eel.expose(updateMarker)
+function updateMarker(id, latitude, longitude, icon_path) {
+  if (!(id in vehicles)) {
+    createVehicle(id, icon_path)
+  }
+  lat_num = parseFloat(latitude)
+  lng_num = parseFloat(longitude)
+  console.log("moved " + id + " to " + latitude + ", " + longitude)
+  vehicles[id].setPosition({lat: lat_num, lng: lng_num})
+  vehicles[id].setIcon(icon_path)
+}
+
+eel.expose(updatePacketCounts)
+function updatePacketCounts(received, processed, authenticated, intact, ontime) {
+  document.getElementById("received-packet-data").innerHTML = received;
+  document.getElementById("processed-packet-data").innerHTML = processed;
+  document.getElementById("authenticated-packet-data").innerHTML = authenticated;
+  document.getElementById("intact-packet-data").innerHTML = intact;
+  document.getElementById("ontime-packet-data").innerHTML = ontime;
+
+  document.getElementById("processed-packet-pct").innerHTML = (processed / received * 100 ).toFixed(2) + "%";
+  document.getElementById("authenticated-packet-pct").innerHTML = (authenticated / received * 100 ).toFixed(2) + "%";
+  document.getElementById("intact-packet-pct").innerHTML = (intact / received * 100 ).toFixed(2) + "%";
+  document.getElementById("ontime-packet-pct").innerHTML = (ontime / received * 100 ).toFixed(2) + "%";
+}
+
+eel.expose(addMessage)
+function addMessage(message) {
+  messageBox = document.getElementById("messages")
+  messageBox.innerHTML += message
+  messageBox.scrollTop = messageBox.scrollHeight
+}
+
+    </script>
+  </head>
+
+  <body>
+    <div class="grid-container">
+      <div class="grid-item" id="map">
+      </div>
+      <div class="grid-item">
+        <div id="packet-data">
+          <table>
+            <tr>
+              <td><p class="table-header">Received Packets:</p></td>
+              <td><p class="table-data" id="received-packet-data">0</p></td>
+              <td><p class="table-data" id="received-packet-pct">100%</p></td>
+            </tr>
+            <tr>
+              <td><p class="table-header">Processed Packets:</p></td>
+              <td><p class="table-data" id="processed-packet-data">0</p></td>
+              <td><p class="table-data" id="processed-packet-pct">100%</p></td>
+            </tr>
+            <tr>
+              <td><p class="table-header">Authenticated Packets:</p></td>
+              <td><p class="table-data" id="authenticated-packet-data">0</p></td>
+              <td><p class="table-data" id="authenticated-packet-pct">100%</p></td>
+            </tr>
+            <tr>
+              <td><p class="table-header">Intact Packets:</p></td>
+              <td><p class="table-data" id="intact-packet-data">0</p></td>
+              <td><p class="table-data" id="intact-packet-pct">100%</p></td>
+            </tr>
+            <tr>
+              <td><p class="table-header">On-Time Packets:</p></td>
+              <td><p class="table-data "id="ontime-packet-data">0</p></td>
+              <td><p class="table-data" id="ontime-packet-pct">100%</p></td>
+            </tr>
+          </table>
+        </div>
+        <div id="messages"></div>
+      </div>
+    </div>
+    <script src="https://maps.googleapis.com/maps/api/js?key=API_KEY&callback=initMap&libraries=&v=weekly" async></script>
+
+  </body>
+</html>
