@@ -20,7 +20,7 @@ def generate_v2v_bsm(latitude: float, longitude:float, elevation: float, speed: 
 
     """
 
-    return struct.pack("fffff", latitude, longitude, elevation, speed, heading)
+    return struct.pack(">fffff", latitude, longitude, elevation, speed, heading)
 
 
 def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
@@ -95,8 +95,6 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     ieee1609_dot2_data += struct.pack(">BB",
                                     section_start,
                                     signature_format)
-
-    print(len(llc + wsm_headers + ieee1609_dot2_data))
 
     r, s = ecdsa.sign(bsm, private_key, hashfunc=sha256)
 
