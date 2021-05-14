@@ -25,46 +25,59 @@ class GPSVehicle:
             nmea = pynmea2.parse(gps_loc.split(b":")[1].decode().replace("GPS_GPGGA", "").strip())
             print(nmea)
 
-            lat = float(nmea.lat)
-            lon = float(nmea.lon)
-            last_lat = float(last_nmea.lat)
-            last_lon = float(last_nmea.lon)
+            lat = float(nmea.latitude)
+            lon = float(nmea.longitidue)
+            last_lat = float(last_nmea.latitude)
+            last_lon = float(last_nmea.longitude)
 
-            speed = math.sqrt(math.pow(lat - last_lat, 2) + math.pow(lon - last_lon, 2)) * 36
+            speed = (
+                    math.sqrt(math.pow(lat - last_lat, 2) + math.pow(lon - last_lon, 2))
+                    * 36
+                    )
             heading = self.get_heading(nmea, last_nmea)
 
-            bsm_text = f"{self.vehicle_num}, {nmea.lat}, {nmea.lng}, {heading}, {speed}\n"
+            bsm_text = f"{self.vehicle_num},{nmea.latitude},{nmea.longitude},{heading},{speed}\n"
 
-            message = self.build_packet(bsm_text)
+            message = self.build_packet(nmea.latitude, nmea.longitude, heading, speed, self.key)
+
+            last_nmea = nmea
 
             self.send_to_radio(message)
             self.send_to_gui(bsm_text)
 
 
     def get_heading(self, nmea, last_nmea):
-        if nmea.lat == last_nmea.lat and last_nmea.lon == last_nmea.lon:
-            return "-"
-
-        if nmea.lat > last_nmea.lat:
-            if nmea.lon > last_nmea.lon:
-                return "SE"
-            elif nmea.lon == last_nmea.lon:
-                return "E"
+        if nmea.longitude == last_nmea.longitude:
+            # no change
+            if nmea.latitude == last_nmea.latitude:
+                return "-"
+            # heading North
+            elif nmea.latitude > last_nmea.latitude:
+                return N
+            # heading South
             else:
+                return "S"
+        # heading East
+        elif nmea.longitude > last_nmea.longitude:
+            if nmea.latitude > last_nmea.latitude:
                 return "NE"
-        elif nmea.lat < last_nmea.lat:
-            if nmea.lon > last_nmea.lon:
-                return "SW"
-            elif nmea.lon == last_nmea.lon:
-                return "W"
+            elif nmea.latitude < last_nmea.latitude:
+                return "SE"
             else:
-                return "NW"
+                return "E"
+        # heading West
         else:
-            return "N" if nmea.lon > last_nmea.lon else "S"
+            if nmea.latitude > last_nmea.latitude:
+                return "NW"
+            elif nmea.latitude < last_nmea.latitude:
+                return "SW"
+            else:
+                return "W"
 
 
     def build_packet(self, lat, lng, heading, speed, key):
         speed = str(round(speed, 2))
+        bsm_text = f"{self.vehicle_num},{nmea.latitude},{nmea.longitude},{heading},{speed}\n"
         return self.wave_builder.get_wsm_payload(bsm_text, key)
 
     def send_to_radio(self, message):
@@ -77,46 +90,24 @@ class GPSVehicle:
             ("nc", "-w0", "-u", "localhost", "52001"), stdin=loader.stdout
         )
 
-    def send_to_gui(self, message):
-        print("Sending BSM to GUI")
-
-        bsm = msg.split(",")
-
-        decoded_data = {}
-
-        decoded_data["id"] = bsm[0]
-        decoded_data["x"] = bsm[1]
-        decoded_data["y"] = bsm[2]
-        decoded_data["heading"] = bsm[3]
-        decoded_data["speed"] = bsm[4]
-
-        decoded_data["sig"] = True
-        decoded_data["elapsed"] = 0
-        decoded_data["recent"] = True
-        decoded_data["receiver"] = True
-
-        vehicle_data_json = json.dumps(decoded_data)
-
-        with lock:
-            self.sock.send(vehicle_data_json.encode())
 
     def send_to_gui(self, message):
         bsm = message.split(",")
-        
+
         decoded_data = {}
-        
+
         decoded_data['id'] = bsm[0]
         decoded_data['x'] = bsm[1]
         decoded_data['y'] = bsm[2]
         decoded_data['heading'] = bsm[3]
         decoded_data['speed'] = bsm[4]
-        
+
         decoded_data['sig'] = True
         decoded_data['elapsed'] = 0
         decoded_data['recent'] = True
         decoded_data['receiver'] = True
-    
+
         vehicle_data_json = json.dumps(decoded_data)
-    
+
         with self.lock:
             self.sock.send(vehicle_data_json.encode())
