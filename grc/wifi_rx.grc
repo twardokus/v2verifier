@@ -295,7 +295,7 @@
     </param>
     <param>
       <key>value</key>
-      <value>0.97</value>
+      <value>0.8</value>
     </param>
     <param>
       <key>_enabled</key>
@@ -2328,7 +2328,7 @@
     </param>
     <param>
       <key>ant0</key>
-      <value>RX2</value>
+      <value>TX/RX</value>
     </param>
     <param>
       <key>bw0</key>
