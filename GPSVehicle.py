@@ -3,7 +3,7 @@ import json
 import time
 import subprocess
 import pynmea2
-from Utility import Utility
+from txrx import Utility
 from WavePacketBuilder import WAVEPacketBuilder
 
 
