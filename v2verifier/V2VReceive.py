@@ -1,15 +1,18 @@
 import V2VTransmit
 import struct
+import math
+from datetime import datetime
+from fastecdsa import ecdsa
 
 
-def parse_received_spdu(spdu: bytes) -> tuple:
+def parse_received_spdu(spdu: bytes) -> dict:
     """Parse a 1609.2 SPDU
 
     Parameters:
         spdu (bytes): a 1609.2 SPDU
 
     Returns:
-        tuple: the contents of the SPDU
+        dict: the contents of the SPDU
 
     """
 
@@ -46,27 +49,36 @@ def parse_received_spdu(spdu: bytes) -> tuple:
         "psid": spdu_contents[21],
         "generation_time": spdu_contents[22],
         "signer_identifier": spdu_contents[23],
-        "digest": spdu_contents[24]
+        "digest": spdu_contents[24],
+        "signature": signature
     }
 
-    for key in spdu_dict:
-        print(key + "\t" + str(spdu_dict[key]))
+    return spdu_dict
 
-    return spdu_contents
 
-def verify_spdu(spdu_contents: dict) -> dict:
+def verify_spdu(spdu_dict: dict) -> dict:
     """Perform security checks on received SPDU
 
     Parameters:
-        spdu_contents (dict): the contents of a received SPDU as parsed with parse_received_spdu
+        spdu_dict (dict): the contents of a received SPDU as parsed with parse_received_spdu
 
     Returns:
         dict: security check results for the SPDU
 
     """
 
+    # SAE J2945, 30sec delay is allowed
+    max_allowed_elapsed_microseconds = 30000
+
+    elapsed = math.floor((datetime.now() -
+                          datetime(2004, 1, 1, 0, 0, 0, 0)).total_seconds() * 1000) - spdu_dict["generation_time"]
+
+    unexpired = True if elapsed < max_allowed_elapsed_microseconds else False
+
+    r, s = spdu_dict["signature"][:32], spdu_dict["signature"][32:]
+    # TODO: fix this
+    ecdsa.verify((r, s), message, public_key)
 
 
-
-if __name__=="__main__":
+if __name__ == "__main__":
     parse_received_spdu(V2VTransmit.generate_1609_spdu(V2VTransmit.generate_v2v_bsm(43, -71, 1543, 45.36, 145.223), 21))
