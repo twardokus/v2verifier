@@ -1,4 +1,6 @@
 import struct
+from fastecdsa import ecdsa
+from hashlib import sha256
 
 
 def generate_v2v_bsm(latitude: float, longitude:float, elevation: float, speed: float, heading: float) -> bytes:
@@ -19,11 +21,12 @@ def generate_v2v_bsm(latitude: float, longitude:float, elevation: float, speed: 
     return struct.pack("fffff", latitude, longitude, elevation, speed, heading)
 
 
-def generate_1609_spdu(bsm: bytes) -> bytes:
+def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     """Create a bytes object representing an IEEE 1609.2 SPDU
 
     Parameters:
         bsm (bytes): a bytes object containing the BSM data for this message
+        private_key: an ECDSA private key to sign the SPDU
 
     Returns:
         bytes
@@ -70,17 +73,33 @@ def generate_1609_spdu(bsm: bytes) -> bytes:
     header_info = 1  # 0x01 -> start structure here
     psid = 32  # 0x20 -> Blind Spot Monitoring (generic V2V safety, no PSIDs are standardized yet)
     generation_time = 0  # TODO: add a function to calculate time since Jan. 1 2004 per 1609.2
+    signer_identifier = 128  # 0x80 -> digest TODO: add certificates (0x81) here
+    digest = 0  # TODO: replace with certificates, eight bytes of zeros as placeholder
 
-    ieee1609Dot2Data += struct.pack(">BBBQ",
+    ieee1609Dot2Data += struct.pack(">BBBQBQ",
                                     section_offset,
                                     header_info,
                                     psid,
-                                    generation_time
+                                    generation_time,
+                                    signer_identifier,
+                                    digest
                                     )
 
-    print(llc + wsm_headers + ieee1609Dot2Data)
+    signature_format = 128  # 0x80 -> x-only for signature value
+
+    ieee1609Dot2Data += struct.pack("BB",
+                                    section_start,
+                                    signature_format)
+
+    r, s = ecdsa.sign(bsm, private_key, hashfunc=sha256)
+
+    ieee1609Dot2Data += r.to_bytes(32, 'little') + s.to_bytes(32, 'little')
+
+    print((llc + wsm_headers + ieee1609Dot2Data).hex())
+
+    return llc + wsm_headers + ieee1609Dot2Data
 
 
 
 if __name__=="__main__":
-    generate_1609_spdu(generate_v2v_bsm(43, -71, 1543, 45.36, 145.223))
+    generate_1609_spdu(generate_v2v_bsm(43, -71, 1543, 45.36, 145.223), 21)
