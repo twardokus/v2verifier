@@ -1,11 +1,12 @@
 import struct
 import math
+import socket
 from fastecdsa import ecdsa
 from hashlib import sha256
 from datetime import datetime
 
 
-def generate_v2v_bsm(latitude: float, longitude:float, elevation: float, speed: float, heading: float) -> bytes:
+def generate_v2v_bsm(latitude: float, longitude: float, elevation: float, speed: float, heading: float) -> bytes:
     """Create a BSM bytearray reporting vehicle position and motion data
 
     Parameters:
@@ -105,6 +106,21 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     return llc + wsm_headers + ieee1609_dot2_data
 
 
+def send_v2v_message(msg: bytes, ip_address: str, port: int) -> None:
+    """Send a V2V message using network communications
+
+    Parameters:
+        msg (bytes): the message to send
+        ip_address (str): the IP address to connect to and send the message
+        port (int): the port to connect to and send the message
+
+    Returns:
+        None
+    """
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.sendto(msg, (ip_address, port))
 
 if __name__=="__main__":
-    generate_1609_spdu(generate_v2v_bsm(43, -71, 1543, 45.36, 145.223), 21)
+    message = generate_1609_spdu(generate_v2v_bsm(43, -71, 1543, 45.36, 145.223), 21)
+    send_v2v_message(message, "localhost", 52001)

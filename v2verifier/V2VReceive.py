@@ -1,4 +1,4 @@
-import V2VTransmit
+import v2verifier.V2VTransmit
 import struct
 import math
 from datetime import datetime
@@ -77,7 +77,7 @@ def verify_spdu(spdu_dict: dict) -> dict:
 
     r, s = spdu_dict["signature"][:32], spdu_dict["signature"][32:]
     # TODO: fix this
-    ecdsa.verify((r, s), message, public_key)
+    valid_signature = ecdsa.verify((r, s), struct.pack("fffff", spdu_dict["bsm"]), public_key)
 
 
 if __name__ == "__main__":
