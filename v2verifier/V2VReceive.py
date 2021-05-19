@@ -68,6 +68,8 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
 
     """
 
+    # Verify the timestamp
+
     # SAE J2945, 30sec delay is allowed
     max_allowed_elapsed_microseconds = 30000
 
@@ -75,6 +77,8 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
                           datetime(2004, 1, 1, 0, 0, 0, 0)).total_seconds() * 1000) - spdu_dict["generation_time"]
 
     unexpired = True if elapsed < max_allowed_elapsed_microseconds else False
+
+    # Verify the signature
 
     r = int.from_bytes(spdu_dict["signature"][:32], "little")
     s = int.from_bytes(spdu_dict["signature"][32:], "little")
@@ -89,11 +93,11 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
 
     valid_signature = ecdsa.verify((r, s), reassembled_message, public_key)
 
-    return {"valid_signature": valid_signature}
+    return {"valid_signature": valid_signature, "unexpired": unexpired, "elapsed": elapsed}
 
 
 def report_bsm(bsm: tuple, verification_dict: dict) -> str:
-    """Generate a report about a received SPDU
+    """Generate a report about a received SPDU. Intended to generate output for printing to console.
 
     Parameters:
         bsm (tuple): a tuple containing BSM information
@@ -116,8 +120,14 @@ def report_bsm(bsm: tuple, verification_dict: dict) -> str:
     report += "\n"
 
     report += "Message is "
-    report += "VALIDLY" if verification_dict["valid_signature"] else "NOT VALIDLY"
+    report += "validly" if verification_dict["valid_signature"] else "NOT VALIDLY"
     report += " signed"
+
+    report += "\n"
+
+    report += "Message is "
+    report += "unexpired " if verification_dict["unexpired"] else "EXPIRED "
+    report += "(" + str(verification_dict["elapsed"]) + " milliseconds elapsed)"
 
     report += "\n"
 
