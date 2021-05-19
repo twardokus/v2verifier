@@ -2,7 +2,7 @@ import v2verifier.V2VTransmit
 import struct
 import math
 from datetime import datetime
-from fastecdsa import ecdsa
+from fastecdsa import ecdsa, point
 
 
 def parse_received_spdu(spdu: bytes) -> dict:
@@ -56,11 +56,12 @@ def parse_received_spdu(spdu: bytes) -> dict:
     return spdu_dict
 
 
-def verify_spdu(spdu_dict: dict) -> dict:
+def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
     """Perform security checks on received SPDU
 
     Parameters:
         spdu_dict (dict): the contents of a received SPDU as parsed with parse_received_spdu
+        public_key (fastecdsa.point.Point): the public key to use for verifying the message signature
 
     Returns:
         dict: security check results for the SPDU
@@ -75,10 +76,26 @@ def verify_spdu(spdu_dict: dict) -> dict:
 
     unexpired = True if elapsed < max_allowed_elapsed_microseconds else False
 
-    r, s = spdu_dict["signature"][:32], spdu_dict["signature"][32:]
+    r = int.from_bytes(spdu_dict["signature"][:32], "little")
+    s = int.from_bytes(spdu_dict["signature"][32:], "little")
+
     # TODO: fix this
-    valid_signature = ecdsa.verify((r, s), struct.pack("fffff", spdu_dict["bsm"]), public_key)
+
+    reassembled_message = struct.pack(">fffff",
+                                      spdu_dict["bsm"][0],
+                                      spdu_dict["bsm"][1],
+                                      spdu_dict["bsm"][2],
+                                      spdu_dict["bsm"][3],
+                                      spdu_dict["bsm"][4]
+                                      )
+
+    valid_signature = ecdsa.verify((r, s), reassembled_message, public_key)
+
+    return {"valid_signature": valid_signature}
 
 
 if __name__ == "__main__":
-    parse_received_spdu(V2VTransmit.generate_1609_spdu(V2VTransmit.generate_v2v_bsm(43, -71, 1543, 45.36, 145.223), 21))
+    parse_received_spdu(v2verifier.V2VTransmit.generate_1609_spdu(
+        v2verifier.V2VTransmit.generate_v2v_bsm(43, -71, 1543, 45.36, 145.223),
+        21)
+    )

@@ -1,4 +1,5 @@
 import time
+import socket
 import v2verifier.V2VReceive
 import v2verifier.V2VTransmit
 from fastecdsa import point
@@ -56,12 +57,18 @@ class Vehicle:
                                                               float(speed),
                                                               float(heading))
                 spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key)
+                print(spdu.hex())
                 v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 52001)
                 time.sleep(0.1)
 
         elif mode == "receiver":
-            print()
-
+            sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            sock.bind(("127.0.0.1", 4444))
+            while True:
+                data = sock.recv(2048)
+                print(data[57:].hex())
+                spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
+                print(v2verifier.V2VReceive.verify_spdu(spdu_data, self.public_key))
         else:
             raise Exception("Error - Vehicle.run() requires that mode be specified as either "
                             "\"transmitter\" or \"receiver\".")

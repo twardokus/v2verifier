@@ -27,8 +27,9 @@ def transmit() -> None:
 def receive() -> None:
     """Run this V2Verifier instance as the BSM receiver"""
 
-    # TODO: implement the receiver
-    return
+    private, public = keys.import_key("keys/0/p256.key")
+    vehicle = v2verifier.Vehicle.Vehicle(public, private)
+    vehicle.run(mode="receiver", pvm_list=[])
 
 
 if __name__ == "__main__":
