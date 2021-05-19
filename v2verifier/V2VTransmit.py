@@ -121,6 +121,7 @@ def send_v2v_message(msg: bytes, ip_address: str, port: int) -> None:
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.sendto(msg, (ip_address, port))
 
+
 if __name__=="__main__":
     message = generate_1609_spdu(generate_v2v_bsm(43, -71, 1543, 45.36, 145.223), 21)
     send_v2v_message(message, "localhost", 52001)

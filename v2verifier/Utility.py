@@ -12,6 +12,7 @@ def read_data_from_file(filepath: str) -> list:
         with open(filepath, "r") as infile:
             # TODO: add a check here to validate the input. For now, we'll assume the user knows what they're doing
             data = infile.readlines()
+            return data
 
     except FileNotFoundError:
         print("Error - could not open the file at ", filepath)
