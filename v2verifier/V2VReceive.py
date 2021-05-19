@@ -79,8 +79,6 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
     r = int.from_bytes(spdu_dict["signature"][:32], "little")
     s = int.from_bytes(spdu_dict["signature"][32:], "little")
 
-    # TODO: fix this
-
     reassembled_message = struct.pack(">fffff",
                                       spdu_dict["bsm"][0],
                                       spdu_dict["bsm"][1],
@@ -94,8 +92,33 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
     return {"valid_signature": valid_signature}
 
 
-if __name__ == "__main__":
-    parse_received_spdu(v2verifier.V2VTransmit.generate_1609_spdu(
-        v2verifier.V2VTransmit.generate_v2v_bsm(43, -71, 1543, 45.36, 145.223),
-        21)
-    )
+def report_bsm(bsm: tuple, verification_dict: dict) -> str:
+    """Generate a report about a received SPDU
+
+    Parameters:
+        bsm (tuple): a tuple containing BSM information
+        verification_dict (dict): a dictionary containing verification information about an SPDU
+
+    Returns:
+        str: a string containing information to be displayed (e.g., to console) about an SPDU
+
+    """
+
+    report = ""
+    report += "Vehicle reports location "
+    report += str(round(bsm[0], 5))
+    report += ", "
+    report += str(round(bsm[1], 5))
+    report += " at elevation " + str(round(bsm[2], 3)) + " meters"
+    report += "\n"
+
+    report += "Current speed " + str(round(bsm[3], 3)) + " m/s on bearing " + str(round(bsm[4], 3)) + " degrees"
+    report += "\n"
+
+    report += "Message is "
+    report += "VALIDLY" if verification_dict["valid_signature"] else "NOT VALIDLY"
+    report += " signed"
+
+    report += "\n"
+
+    return report

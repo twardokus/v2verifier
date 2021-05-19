@@ -66,9 +66,10 @@ class Vehicle:
             sock.bind(("127.0.0.1", 4444))
             while True:
                 data = sock.recv(2048)
-                print(data[57:].hex())
                 spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
-                print(v2verifier.V2VReceive.verify_spdu(spdu_data, self.public_key))
+                verification_data = v2verifier.V2VReceive.verify_spdu(spdu_data, self.public_key)
+                print(v2verifier.V2VReceive.report_bsm(spdu_data["bsm"], verification_data))
+
         else:
             raise Exception("Error - Vehicle.run() requires that mode be specified as either "
                             "\"transmitter\" or \"receiver\".")
