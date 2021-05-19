@@ -1,6 +1,7 @@
 from fastecdsa import keys, curve, ecdsa
 from hashlib import sha256
 
+
 class X1609:
     
     def __init__(self, hostname, private_key):

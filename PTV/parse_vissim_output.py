@@ -18,13 +18,13 @@ def writeDataToFiles(vehiclePaths: dict) -> None:
             "V2Verifier project directory")
         exit()
         
-    if not os.path.isdir(os.path.join(os.getcwd(), "coords", "vissim")):
-        os.mkdir(os.path.join(os.getcwd(), "coords", "vissim"))
+    if not os.path.isdir(os.path.join(os.getcwd(), "../coords", "vissim")):
+        os.mkdir(os.path.join(os.getcwd(), "../coords", "vissim"))
 
     for vehicle in vehiclePaths:
         try:
-            with open(os.path.join(os.getcwd(), "coords", "vissim", 
-                ("vissim_" + vehicle)), 'w') as outFile:
+            with open(os.path.join(os.getcwd(), "../coords", "vissim",
+                                   ("vissim_" + vehicle)), 'w') as outFile:
                 for coordinatePair in vehiclePaths[vehicle]:
                     outFile.write(coordinatePair + "\n")
         except:

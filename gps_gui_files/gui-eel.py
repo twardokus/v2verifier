@@ -18,7 +18,7 @@ class GUI:
 
         self.threadlock = threading.Lock()
 
-        with open("init.yml", "r") as conf_file:
+        with open("../init.yml", "r") as conf_file:
             self.config = yaml.load(conf_file, Loader=yaml.FullLoader)
 
         self.num_vehicles = self.config["remoteConfig"]["numberOfVehicles"] + 1
@@ -50,7 +50,7 @@ class GUI:
         eel.addMessage(message)
 
     def prep(self):
-        eel.init("gui")
+        eel.init("../gui")
 
     def run(self):
         self.logger.info("called run, starting server")
