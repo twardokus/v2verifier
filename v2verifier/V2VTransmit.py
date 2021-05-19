@@ -63,13 +63,13 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     length_of_unsecured_data = len(bsm)  # length in bytes of BSM parameter
 
     ieee1609_dot2_data = struct.pack(">bBbbbBB",
-                                   protocol_version,
-                                   content_type,
-                                   hash_id,
-                                   section_offset,
-                                   protocol_version,
-                                   section_start,
-                                   length_of_unsecured_data)
+                                     protocol_version,
+                                     content_type,
+                                     hash_id,
+                                     section_offset,
+                                     protocol_version,
+                                     section_start,
+                                     length_of_unsecured_data)
 
     ieee1609_dot2_data += bsm
 
@@ -83,25 +83,23 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     digest = 0  # TODO: replace with certificates, eight bytes of zeros as placeholder
 
     ieee1609_dot2_data += struct.pack(">BBBQBQ",
-                                    section_offset,
-                                    header_info,
-                                    psid,
-                                    generation_time,
-                                    signer_identifier,
-                                    digest
-                                    )
+                                      section_offset,
+                                      header_info,
+                                      psid,
+                                      generation_time,
+                                      signer_identifier,
+                                      digest
+                                      )
 
     signature_format = 128  # 0x80 -> x-only for signature value
 
     ieee1609_dot2_data += struct.pack(">BB",
-                                    section_start,
-                                    signature_format)
+                                      section_start,
+                                      signature_format)
 
     r, s = ecdsa.sign(bsm, private_key, hashfunc=sha256)
 
     ieee1609_dot2_data += r.to_bytes(32, 'little') + s.to_bytes(32, 'little')
-
-    # print((llc + wsm_headers + ieee1609_dot2_data).hex())
 
     return llc + wsm_headers + ieee1609_dot2_data
 
@@ -120,8 +118,3 @@ def send_v2v_message(msg: bytes, ip_address: str, port: int) -> None:
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.sendto(msg, (ip_address, port))
-
-
-if __name__=="__main__":
-    message = generate_1609_spdu(generate_v2v_bsm(43, -71, 1543, 45.36, 145.223), 21)
-    send_v2v_message(message, "localhost", 52001)
