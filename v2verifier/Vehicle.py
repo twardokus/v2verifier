@@ -31,10 +31,12 @@ class Vehicle:
 
         Returns:
             None
+
         """
 
         self.public_key = public_key
         self.private_key = private_key
+        self.bsm_interval = 0.1  # interval specified in seconds, 0.1 -> every 100ms
 
     def run(self, mode: str, pvm_list: list) -> None:
         """Launch the vehicle's BSM transmitter
@@ -56,10 +58,11 @@ class Vehicle:
                                                               float(elevation),
                                                               float(speed),
                                                               float(heading))
+
                 spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key)
-                print(spdu.hex())
                 v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 52001)
-                time.sleep(0.1)
+
+                time.sleep(self.bsm_interval)
 
         elif mode == "receiver":
             sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -72,4 +75,4 @@ class Vehicle:
 
         else:
             raise Exception("Error - Vehicle.run() requires that mode be specified as either "
-                            "\"transmitter\" or \"receiver\".")
+                            "\"transmitter\" or \"receiver\".\nCheck your inputs and try again.")
