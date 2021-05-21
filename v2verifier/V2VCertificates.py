@@ -13,7 +13,7 @@ def get_certificate_format_string() -> str:
         str: the format string for a V2V certificate to be used in call to struct.unpack()
 
     """
-    return "BBBBQBB" + "4s" + "dHLBHLBB24xQBB24xQ31xB"
+    return "BBBBQBB" + "4s" + "QHLBHLBB24xQBB24xQ31xB"
 
 
 def get_certificate_fields_list() -> list:
@@ -98,7 +98,7 @@ def generate_v2v_certificate(hostname: str, private_key: int) -> bytes:
 
     psid = 32  # 0x20 -> "vehicle safety and awareness" (per Wireshark, likely an SAE designation)
 
-    v2v_certificate += struct.pack("!dHLBHLB",
+    v2v_certificate += struct.pack("!QHLBHLB",
                                    craca_id,
                                    crl_series,
                                    start_validity,

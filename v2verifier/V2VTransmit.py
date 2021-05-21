@@ -118,9 +118,6 @@ def send_v2v_message(msg: bytes, ip_address: str, port: int) -> None:
     Returns:
         None
     """
-    print(len(msg))
-    print(msg.hex())
-    print()
-    print()
+
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.sendto(msg, (ip_address, port))

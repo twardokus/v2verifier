@@ -32,9 +32,6 @@ def parse_received_spdu(spdu: bytes) -> dict:
 
     # spdu_contents will be a tuple containing each element of the 1609.2 SPDU as constructed
     # using V2VTransmit.generate_1609_spdu()
-    print(spdu_format_string)
-    print(len(payload))
-    print(payload.hex())
     spdu_contents = struct.unpack(spdu_format_string, payload)
 
     spdu_dict = {
@@ -60,19 +57,20 @@ def parse_received_spdu(spdu: bytes) -> dict:
         "hashedID": spdu_contents[28],
         "start_tbs_data": spdu_contents[29],
         "hostname_length": spdu_contents[30],
-        "craca_id": spdu_contents[31],
-        "crl_series": spdu_contents[32],
-        "start_validity": spdu_contents[33],
-        "spacer": spdu_contents[34],
-        "certificate_duration": spdu_contents[35],
-        "filler": spdu_contents[36],
-        "psid": spdu_contents[37],
-        "verification_key_indicator": spdu_contents[38],
-        "ecc_public_key_y": spdu_contents[39],
-        "start_signature": spdu_contents[40],
-        "ecc_public_key_x_indicator": spdu_contents[41],
-        "ecc_public_key_x": spdu_contents[42],
-        "s": spdu_contents[43],
+        "hostname": spdu_contents[31],
+        "craca_id": spdu_contents[32],
+        "crl_series": spdu_contents[33],
+        "start_validity": spdu_contents[34],
+        "spacer": spdu_contents[35],
+        "certificate_duration": spdu_contents[36],
+        "filler": spdu_contents[37],
+        "psid": spdu_contents[38],
+        "verification_key_indicator": spdu_contents[39],
+        "ecc_public_key_y": spdu_contents[40],
+        "start_signature": spdu_contents[41],
+        "ecc_public_key_x_indicator": spdu_contents[42],
+        "ecc_public_key_x": spdu_contents[43],
+        "s": spdu_contents[44],
         "signature": signature
     }
 
