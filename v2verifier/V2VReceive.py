@@ -1,4 +1,4 @@
-import v2verifier.V2VTransmit
+import v2verifier.V2VCertificates
 import struct
 import math
 from datetime import datetime
@@ -22,7 +22,8 @@ def parse_received_spdu(spdu: bytes) -> dict:
     ieee1609_dot2_data_format_string = "bBbbbBB"
     bsm_format_string = "fffff"
     ieee1609_dot2_data_format_string += bsm_format_string
-    ieee1609_dot2_data_format_string += "BBBQBQ"
+    ieee1609_dot2_data_format_string += "BBBQB"
+    ieee1609_dot2_data_format_string += v2verifier.V2VCertificates.get_certificate_format_string()
     ieee1609_dot2_data_format_string += "BB"
 
     spdu_format_string = llc_format_string + wsm_header_format_string + ieee1609_dot2_data_format_string
@@ -31,6 +32,9 @@ def parse_received_spdu(spdu: bytes) -> dict:
 
     # spdu_contents will be a tuple containing each element of the 1609.2 SPDU as constructed
     # using V2VTransmit.generate_1609_spdu()
+    print(spdu_format_string)
+    print(len(payload))
+    print(payload.hex())
     spdu_contents = struct.unpack(spdu_format_string, payload)
 
     spdu_dict = {
@@ -46,10 +50,29 @@ def parse_received_spdu(spdu: bytes) -> dict:
         "wsmp_hash_id": spdu_contents[9],
         "bsm_length": spdu_contents[13],
         "bsm": spdu_contents[14:19],
-        "psid": spdu_contents[21],
+        "header_psid": spdu_contents[21],
         "generation_time": spdu_contents[22],
         "signer_identifier": spdu_contents[23],
-        "digest": spdu_contents[24],
+        "signer": spdu_contents[24],
+        "certificate_version_type": spdu_contents[25],
+        "certificate_type": spdu_contents[26],
+        "issuer": spdu_contents[27],
+        "hashedID": spdu_contents[28],
+        "start_tbs_data": spdu_contents[29],
+        "hostname_length": spdu_contents[30],
+        "craca_id": spdu_contents[31],
+        "crl_series": spdu_contents[32],
+        "start_validity": spdu_contents[33],
+        "spacer": spdu_contents[34],
+        "certificate_duration": spdu_contents[35],
+        "filler": spdu_contents[36],
+        "psid": spdu_contents[37],
+        "verification_key_indicator": spdu_contents[38],
+        "ecc_public_key_y": spdu_contents[39],
+        "start_signature": spdu_contents[40],
+        "ecc_public_key_x_indicator": spdu_contents[41],
+        "ecc_public_key_x": spdu_contents[42],
+        "s": spdu_contents[43],
         "signature": signature
     }
 

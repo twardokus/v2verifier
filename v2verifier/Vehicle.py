@@ -60,7 +60,7 @@ class Vehicle:
                                                               float(heading))
 
                 spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key)
-                v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 52001)
+                v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
 
                 time.sleep(self.bsm_interval)
 
@@ -69,7 +69,9 @@ class Vehicle:
             sock.bind(("127.0.0.1", 4444))
             while True:
                 data = sock.recv(2048)
-                spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
+                # TODO: add test mode changing this and the listening port above to skip GNURadio
+                # spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
+                spdu_data = v2verifier.V2VReceive.parse_received_spdu(data)
                 verification_data = v2verifier.V2VReceive.verify_spdu(spdu_data, self.public_key)
                 print(v2verifier.V2VReceive.report_bsm(spdu_data["bsm"], verification_data))
 
