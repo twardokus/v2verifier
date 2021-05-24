@@ -1,23 +1,21 @@
 # V2Verifier
-V2Verifer is an open-source project dedicated to wireless experimentation
-focused on the security of vehicle-to-vehicle (V2V) communications.
-Included are implementations of:
-- Security features from the IEEE 1609.2 standard for V2V security
-- WAVE Short Message Protocol (IEEE 1609.3)
-- Dedicated Short Range Communication (DSRC) - adapted from 
+V2Verifer is an open-source software-defined radio (SDR) testbed for studying 
+security problems in vehicle-to-vehicle (V2V) communications.
+V2Verifier features the first open-source implementation of the IEEE 1609.2 
+standard for V2V security, with features including V2V message signing and 
+verification as well as privacy-preserving pseudonymous identification.
+Support is also included for WAVE Short Message Protocol (WSMP)
+based on the IEEE 1609.3 standard. At the lower communication layers,
+V2Verifier currently supports Dedicated Short Range Communication (DSRC), adapted from 
 the [WiME Project's](http://dx.doi.org/10.1109/TMC.2017.2751474)
-IEEE 802.11p transceiver 
+IEEE 802.11p transceiver, along with limited (but actively increasing) support for Cellular
+Vehicle-to-Everything (C-V2X) based on the [srsRAN](https://github.com/srsRAN/srsRAN) project.
 
-## Publications
-If you use our testbed code, we would appreciate a reference to the following publication:
-
-Geoff Twardokus, Jaime Ponicki, Samantha Baker, Peter Carenzo, [Hanif Rahbari](http://rahbari.csec.rit.edu/), and 
-Sumita Mishra, "**Targeted Discreditation Attack against Trust Management in Connected Vehicles**," _IEEE International 
-Conference on Communications (ICC 2021)_, Virtual/Montreal, June 2021 
-[[PDF](http://rahbari.csec.rit.edu/papers/V2Verifier_ICC21.pdf)]
-
-Additional publications related to the V2Verifier project are listed 
-[here](https://github.com/twardokus/v2verifier/wiki/Publications).
+Publications related to the V2Verifier project are listed 
+[here](https://github.com/twardokus/v2verifier/wiki/Publications). V2Verifier is 
+developed and maintained in the Wireless and IoT Security and Privacy (WISP) lab
+at [Rochester Institute of Technology](https://www.rit.edu/)'s
+[Global Cybersecurity Institute](https://www.rit.edu/cybersecurity/).
 
 ## Requirements
 Running V2Verifier requires a minimum of two USRP software-defined radios (B210 or N210 with 5.9 GHz daughterboards) 
