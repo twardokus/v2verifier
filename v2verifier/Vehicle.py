@@ -9,16 +9,16 @@ class Vehicle:
     """A class to represent a vehicle
 
     Attributes:
-    ----------
+
     public_key : int
         the vehicle's public key
     private_key : int
         the vehicle's private key
 
-    Methods
-    -------
+    Methods:
+
     run(pvm_list):
-        Send a BSM every 100ms based on the data inputs of pvm_list
+        Send a BSM every 100ms with contents defined in pvm_list
 
     """
 
@@ -38,12 +38,13 @@ class Vehicle:
         self.private_key = private_key
         self.bsm_interval = 0.1  # interval specified in seconds, 0.1 -> every 100ms
 
-    def run(self, mode: str, pvm_list: list) -> None:
+    def run(self, mode: str, pvm_list: list, test_mode: bool = False) -> None:
         """Launch the vehicle's BSM transmitter
 
         Parameters:
             mode (str): selection of "transmitter" or "receiver"
             pvm_list (list): a list of vehicle position/motion data elements
+            test_mode (bool): indicate whether test mode (w/o USRPs and GNURadio) should be used. Affects ports used.
 
         Returns:
             None
@@ -60,7 +61,12 @@ class Vehicle:
                                                               float(heading))
 
                 spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key)
-                v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
+
+                if test_mode:  # in test mode, send directly to receiver on port 4444
+                    print("Transmitting in test mode")
+                    v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
+                else:  # otherwise, send to wifi_tx.grc listener on port 52001 to become 802.11 payload
+                    v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 52001)
 
                 time.sleep(self.bsm_interval)
 
@@ -69,9 +75,13 @@ class Vehicle:
             sock.bind(("127.0.0.1", 4444))
             while True:
                 data = sock.recv(2048)
-                # TODO: add test mode changing this and the listening port above to skip GNURadio
-                # spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
-                spdu_data = v2verifier.V2VReceive.parse_received_spdu(data)
+
+                if test_mode:  # in test mode, there are no 802.11 headers, so parse all received data
+                    print("Receiving in test mode")
+                    spdu_data = v2verifier.V2VReceive.parse_received_spdu(data)
+                else:  # otherwise (i.e., w/ GNURadio), 802.11 PHY/MAC headers must be stripped before parsing SPDU
+                    spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
+
                 verification_data = v2verifier.V2VReceive.verify_spdu(spdu_data, self.public_key)
                 print(v2verifier.V2VReceive.report_bsm(spdu_data["bsm"], verification_data))
                 v2verifier.V2VReceive.report_bsm_gui(spdu_data["bsm"], verification_data, "127.0.0.1", 6666)

@@ -20,6 +20,11 @@ def process_args():
                         "--with-gui",
                         help="option to launch GUI with receiver",
                         action="store_true")
+    parser.add_argument("-t",
+                        "--test",
+                        help="run in test mode without SDRs or GNURadio",
+                        action="store_true"
+                        )
     return parser.parse_args()
 
 
@@ -29,7 +34,8 @@ def transmit() -> None:
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
     vehicle.run(mode="transmitter",
-                pvm_list=v2verifier.Utility.read_data_from_file("test_gps_coords.csv"))
+                pvm_list=v2verifier.Utility.read_data_from_file("test_gps_coords.csv"),
+                test_mode=args.test)
 
 
 def receive(with_gui: bool = False) -> None:
@@ -50,12 +56,10 @@ def receive(with_gui: bool = False) -> None:
         gui_thread = threading.Thread(target=gui.run)
         gui_thread.start()
         print("GUI launched successfully")
-        # gui.start_receiver()
-        # print("GUI listening...")
 
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
-    vehicle.run(mode="receiver", pvm_list=[])
+    vehicle.run(mode="receiver", pvm_list=[], test_mode=args.test)
 
 
 if __name__ == "__main__":
