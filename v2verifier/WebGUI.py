@@ -115,7 +115,7 @@ class WebGUI:
         while True:
             # try:
             msg = self.sock.recv(2048)
-            data = struct.unpack("!5f??", msg)
+            data = struct.unpack("!5f??f", msg)
 
             # data = json.loads(msg)
 
@@ -142,7 +142,7 @@ class WebGUI:
                     data[5],  # data["sig"],
                     data[6],  # data["recent"],
                     False,  # data["receiver"],
-                    999,  # data["elapsed"],
+                    data[7],  # data["elapsed"],
                 ),
             )
             update.start()

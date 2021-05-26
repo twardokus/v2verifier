@@ -131,14 +131,16 @@ def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: i
         None
 
     """
-    data = struct.pack("!5f??",
+
+    data = struct.pack("!5f??f",
                        bsm[0],
                        bsm[1],
                        bsm[2],
                        bsm[3],
                        bsm[4],
                        verification_dict["valid_signature"],
-                       verification_dict["unexpired"]
+                       verification_dict["unexpired"],
+                       verification_dict["elapsed"]
                        )
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
