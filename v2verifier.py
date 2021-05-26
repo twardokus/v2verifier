@@ -50,6 +50,8 @@ def receive(with_gui: bool = False) -> None:
         gui_thread = threading.Thread(target=gui.run)
         gui_thread.start()
         print("GUI launched successfully")
+        # gui.start_receiver()
+        # print("GUI listening...")
 
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)

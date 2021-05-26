@@ -2,6 +2,7 @@ import v2verifier.V2VCertificates
 import struct
 import math
 from datetime import datetime
+import socket
 from fastecdsa import ecdsa, point
 
 
@@ -115,6 +116,33 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
     valid_signature = ecdsa.verify((r, s), reassembled_message, public_key)
 
     return {"valid_signature": valid_signature, "unexpired": unexpired, "elapsed": elapsed}
+
+
+def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: int) -> None:
+    """Send BSM data and verification status to the V2Verifier GUI
+
+    Parameters:
+        bsm (tuple): a tuple containing BSM information
+        verification_dict (dict): a dictionary containing verification information about the BSM
+        ip_address (str): the IP address of the GUI
+        port (int): the port on ip_address where the GUI service is running
+
+    Returns:
+        None
+
+    """
+    data = struct.pack("!5f??",
+                       bsm[0],
+                       bsm[1],
+                       bsm[2],
+                       bsm[3],
+                       bsm[4],
+                       verification_dict["valid_signature"],
+                       verification_dict["unexpired"]
+                       )
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.sendto(data, (ip_address, port))
 
 
 def report_bsm(bsm: tuple, verification_dict: dict) -> str:

@@ -6,6 +6,7 @@ import time
 import socket
 import logging
 import json
+import struct
 
 
 class WebGUI:
@@ -61,7 +62,7 @@ class WebGUI:
         eel.addMessage(message)
 
     def prep(self):
-        eel.init("gps_gui_files")
+        eel.init("web")
 
     def run(self):
         self.logger.info("called run, starting server")
@@ -74,7 +75,7 @@ class WebGUI:
 
     def start_receiver(self):
         self.logger.info("called start_receiver, creating socket")
-        self.sock = socket.socket()
+        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(("127.0.0.1", 6666))
 
         # eel.spawn(self.update_stats_labels)
@@ -106,47 +107,50 @@ class WebGUI:
     def receive(self):
         self.logger.info("starting receive")
 
-        BUFFER_SIZE = 200
+        # BUFFER_SIZE = 200
 
-        self.sock.listen(4)
-        conn = self.sock.accept()[0]
+        # self.sock.listen(4)
+        # conn = self.sock.accept()[0]
 
         while True:
-            try:
-                msg = conn.recv(BUFFER_SIZE).decode()
-                data = json.loads(msg)
+            # try:
+            msg = self.sock.recv(2048)
+            data = struct.unpack("!5f??", msg)
 
-                self.logger.info("received data")
+            # data = json.loads(msg)
 
-                if not data["receiver"]:
-                    self.received_packets += 1
-                    self.intact_packets += 1
+            self.logger.info("received data")
 
-                    if data["sig"]:
-                        self.authenticated_packets += 1
+            # if not data["receiver"]:
+            #     self.received_packets += 1
+            #     self.intact_packets += 1
 
-                    if data["recent"]:
-                        self.ontime_packets += 1
+            if data[5]:
+                self.authenticated_packets += 1
 
-                update = threading.Thread(
-                    target=self.process_new_packet,
-                    args=(
-                        data["id"],
-                        data["x"],
-                        data["y"],
-                        data["heading"],
-                        data["sig"],
-                        data["recent"],
-                        data["receiver"],
-                        data["elapsed"],
-                    ),
-                )
-                update.start()
+            if data[6]:
+                self.ontime_packets += 1
 
-            except json.decoder.JSONDecodeError:
-                self.logger.error("JSON decoding error, discarding invalid data")
-            except Exception as e:
-                self.logger.error(f"exception: {e}")
+            update = threading.Thread(
+                target=self.process_new_packet,
+                args=(
+                    0,  # data["id"],
+                    data[0],  # data["x"],
+                    data[1],  # data["y"],
+                    "N",  # TODO: fix this
+                    # data[4],  # ["heading"],
+                    data[5],  # data["sig"],
+                    data[6],  # data["recent"],
+                    False,  # data["receiver"],
+                    999,  # data["elapsed"],
+                ),
+            )
+            update.start()
+
+            # except json.decoder.JSONDecodeError:
+            #     self.logger.error("JSON decoding error, discarding invalid data")
+            # except Exception as e:
+            #     self.logger.error(f"exception: {e}")
 
     def process_new_packet(
         self,
@@ -165,7 +169,7 @@ class WebGUI:
         if is_receiver:
             icon = f"/images/receiver/{heading}.png"
         elif is_valid:
-            icon = f"/images/regular/{heading}.png"
+            icon = f"/images/{heading}.png"
         else:
             icon = f"/images/phantom/{heading}.png"
 
