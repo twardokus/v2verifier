@@ -1,7 +1,11 @@
 import v2verifier.Vehicle
 import v2verifier.Utility
+import v2verifier.WebGUI
 from fastecdsa import keys
 import argparse
+import time
+import threading
+import sys
 
 
 def process_args():
@@ -12,6 +16,10 @@ def process_args():
                         help="choice of perspective",
                         choices=["receiver", "transmitter"]
                         )
+    parser.add_argument("-g",
+                        "--with-gui",
+                        help="option to launch GUI with receiver",
+                        action="store_true")
     return parser.parse_args()
 
 
@@ -24,8 +32,24 @@ def transmit() -> None:
                 pvm_list=v2verifier.Utility.read_data_from_file("test_gps_coords.csv"))
 
 
-def receive() -> None:
-    """Run this V2Verifier instance as the BSM receiver"""
+def receive(with_gui: bool = False) -> None:
+    """Run this V2Verifier instance as the BSM receiver
+
+    Parameters:
+        with_gui (bool): specify whether to launch GUI with receiver. Default is False (no GUI)
+
+    """
+
+    if with_gui:
+        print("Launching V2Verifier receiver with GUI...")
+        gui = v2verifier.WebGUI.WebGUI()
+        gui.start_receiver()
+        gui.prep()
+        time.sleep(1)
+        print("GUI initialized...")
+        gui_thread = threading.Thread(target=gui.run)
+        gui_thread.start()
+        print("GUI launched successfully")
 
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
@@ -39,4 +63,4 @@ if __name__ == "__main__":
         transmit()
 
     if args.perspective == "receiver":
-        receive()
+        receive(args.with_gui)

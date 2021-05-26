@@ -8,8 +8,18 @@ import logging
 import json
 
 
-class GUI:
+class WebGUI:
+    """A class to represent the Web-based V2Verifier GUI
+
+    TODO: complete this docstring entry
+
+    Methods:
+
+    """
+
     def __init__(self):
+        """Initialize the WebGUI class instance"""
+
         self.logger = logging.getLogger(__name__)
         self.logger.setLevel(logging.INFO)
         ch = logging.StreamHandler()
@@ -18,13 +28,14 @@ class GUI:
 
         self.threadlock = threading.Lock()
 
-        with open("../init.yml", "r") as conf_file:
-            self.config = yaml.load(conf_file, Loader=yaml.FullLoader)
-
-        self.num_vehicles = self.config["remoteConfig"]["numberOfVehicles"] + 1
-        self.totalPackets = self.config["remoteConfig"]["traceLength"] * (
-            self.num_vehicles - 1
-        )
+        #
+        # with open("../init.yml", "r") as conf_file:
+        #     self.config = yaml.load(conf_file, Loader=yaml.FullLoader)
+        #
+        # self.num_vehicles = self.config["remoteConfig"]["numberOfVehicles"] + 1
+        # self.totalPackets = self.config["remoteConfig"]["traceLength"] * (
+        #     self.num_vehicles - 1
+        # )
 
         self.received_packets = 0
         self.processed_packets = 0
@@ -50,15 +61,15 @@ class GUI:
         eel.addMessage(message)
 
     def prep(self):
-        eel.init("../gui")
+        eel.init("gps_gui_files")
 
     def run(self):
         self.logger.info("called run, starting server")
         self.logger.info("starting for real")
         eel.start(
             "main.html",
-            mode="custom",
-            cmdline_args=["firefox", "http://localhost:8000"],
+            #mode="custom",
+            #cmdline_args=["firefox", "http://localhost:8000"],
         )
 
     def start_receiver(self):
