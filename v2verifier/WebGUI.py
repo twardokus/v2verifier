@@ -64,14 +64,22 @@ class WebGUI:
         # EEL exposes this function in main.html
         eel.updateMarker(vehicle_id, latitude, longitude, icon_path)
 
-    def add_message(self, message):
+    def add_message(self, message: str) -> None:
+        """Wrapper method for eel.addMessage() exposed in main.html
+
+        :param message: the message that EEL should render on the GUI
+        :type message: str
+        """
         eel.addMessage(message)
 
     def prep(self):
+        """Wrapper method for eel.init() to initialize EEL in this project's web directory
+        """
         eel.init("web")
 
-    def run(self):
-
+    def run(self) -> None:
+        """Launch the EEL GUI by opening main.html in a web browser (Chrome) window
+        """
         if self.logging_enabled:
             self.logger.info("called run, starting server")
             self.logger.info("starting for real")
@@ -80,8 +88,9 @@ class WebGUI:
             "main.html"
         )
 
-    def start_receiver(self):
-
+    def start_receiver(self) -> None:
+        """Initialize web sockets to receive BSM data from V2Verifier and launch threads to receive/render data
+        """
         if self.logging_enabled:
             self.logger.info("called start_receiver, creating socket")
 
@@ -94,7 +103,9 @@ class WebGUI:
         receiver = threading.Thread(target=self.receive)
         receiver.start()
 
-    def update_stats_labels(self):
+    def update_stats_labels(self) -> None:
+        """Continuously update the packet statistics displayed on the GUI
+        """
 
         if self.logging_enabled:
             self.logger.info("starting update_stats_labels")
@@ -104,6 +115,7 @@ class WebGUI:
             if self.received_packets == 0:
                 continue
 
+            # exposed by EEL in main.html
             eel.updatePacketCounts(
                 self.received_packets,
                 self.processed_packets,
@@ -114,7 +126,10 @@ class WebGUI:
 
             eel.sleep(0.1)
 
-    def receive(self):
+    def receive(self) -> None:
+        """Listen for BSM data being sent from V2Verifier receiver and spawn thread to update rendered data
+        accordingly
+        """
         if self.logging_enabled:
             self.logger.info("starting receive")
 
@@ -154,21 +169,26 @@ class WebGUI:
     def process_new_packet(self, vehicle_id: int, latitude: float, longitude: float, elevation: float,
                            heading: float, is_valid: bool, is_recent: bool, is_receiver: bool,
                            elapsed_time: float) -> None:
-        """Method to present data from a BSM on the GUI
+        """Method to render data from a BSM on the GUI
 
-        Parameters:
-            vehicle_id (int): the ID number of the vehicle which sent the message
-            latitude (float): the reported latitude
-            longitude (float): the reported longitude
-            elevation (float): the reported elevation
-            heading (float): the reported heading (direction of travel)
-            is_valid (bool): result of message verification
-            is_recent (bool): result of message timestamp verification
-            is_receiver (bool): True if the sender of the message is the receiver (for representing local vehicle)
-            elapsed_time (float): the time elapsed between the BSM's generation time and the time this method is called
-
-        Returns:
-            None
+        :param vehicle_id: the ID number of the vehicle which sent the message
+        :type vehicle_id: int
+        :param latitude: the reported latitude
+        :type latitude: float
+        :param longitude: the reported longitude
+        :type longitude: float
+        :param elevation: the reported elevation
+        :type elevation: float
+        :param heading: the reported heading (direction of travel)
+        :type heading: float
+        :param is_valid: result of message verification
+        :type is_valid: bool
+        :param is_recent: result of message timestamp verification
+        :type is_recent: bool
+        :param is_receiver: True if the sender of the message is the receiver (for representing local vehicle)
+        :type is_receiver: bool
+        :param elapsed_time: the time elapsed between the BSM's generation time and the time this method is called
+        :type elapsed_time: float
         """
 
         if self.logging_enabled:
