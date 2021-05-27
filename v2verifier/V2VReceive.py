@@ -1,7 +1,8 @@
-import v2verifier.V2VTransmit
+import v2verifier.V2VCertificates
 import struct
 import math
 from datetime import datetime
+import socket
 from fastecdsa import ecdsa, point
 
 
@@ -22,7 +23,8 @@ def parse_received_spdu(spdu: bytes) -> dict:
     ieee1609_dot2_data_format_string = "bBbbbBB"
     bsm_format_string = "fffff"
     ieee1609_dot2_data_format_string += bsm_format_string
-    ieee1609_dot2_data_format_string += "BBBQBQ"
+    ieee1609_dot2_data_format_string += "BBBQB"
+    ieee1609_dot2_data_format_string += v2verifier.V2VCertificates.get_certificate_format_string()
     ieee1609_dot2_data_format_string += "BB"
 
     spdu_format_string = llc_format_string + wsm_header_format_string + ieee1609_dot2_data_format_string
@@ -46,10 +48,30 @@ def parse_received_spdu(spdu: bytes) -> dict:
         "wsmp_hash_id": spdu_contents[9],
         "bsm_length": spdu_contents[13],
         "bsm": spdu_contents[14:19],
-        "psid": spdu_contents[21],
+        "header_psid": spdu_contents[21],
         "generation_time": spdu_contents[22],
         "signer_identifier": spdu_contents[23],
-        "digest": spdu_contents[24],
+        "signer": spdu_contents[24],
+        "certificate_version_type": spdu_contents[25],
+        "certificate_type": spdu_contents[26],
+        "issuer": spdu_contents[27],
+        "hashedID": spdu_contents[28],
+        "start_tbs_data": spdu_contents[29],
+        "hostname_length": spdu_contents[30],
+        "hostname": spdu_contents[31],
+        "craca_id": spdu_contents[32],
+        "crl_series": spdu_contents[33],
+        "start_validity": spdu_contents[34],
+        "spacer": spdu_contents[35],
+        "certificate_duration": spdu_contents[36],
+        "filler": spdu_contents[37],
+        "psid": spdu_contents[38],
+        "verification_key_indicator": spdu_contents[39],
+        "ecc_public_key_y": spdu_contents[40],
+        "start_signature": spdu_contents[41],
+        "ecc_public_key_x_indicator": spdu_contents[42],
+        "ecc_public_key_x": spdu_contents[43],
+        "s": spdu_contents[44],
         "signature": signature
     }
 
@@ -94,6 +116,35 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
     valid_signature = ecdsa.verify((r, s), reassembled_message, public_key)
 
     return {"valid_signature": valid_signature, "unexpired": unexpired, "elapsed": elapsed}
+
+
+def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: int) -> None:
+    """Send BSM data and verification status to the V2Verifier GUI
+
+    Parameters:
+        bsm (tuple): a tuple containing BSM information
+        verification_dict (dict): a dictionary containing verification information about the BSM
+        ip_address (str): the IP address of the GUI
+        port (int): the port on ip_address where the GUI service is running
+
+    Returns:
+        None
+
+    """
+
+    data = struct.pack("!5f??f",
+                       bsm[0],
+                       bsm[1],
+                       bsm[2],
+                       bsm[3],
+                       bsm[4],
+                       verification_dict["valid_signature"],
+                       verification_dict["unexpired"],
+                       verification_dict["elapsed"]
+                       )
+
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    sock.sendto(data, (ip_address, port))
 
 
 def report_bsm(bsm: tuple, verification_dict: dict) -> str:

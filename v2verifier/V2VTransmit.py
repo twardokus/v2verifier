@@ -5,6 +5,8 @@ from fastecdsa import ecdsa
 from hashlib import sha256
 from datetime import datetime
 
+import v2verifier.V2VCertificates
+
 
 def generate_v2v_bsm(latitude: float, longitude: float, elevation: float, speed: float, heading: float) -> bytes:
     """Create a BSM bytearray reporting vehicle position and motion data
@@ -74,22 +76,23 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     ieee1609_dot2_data += bsm
 
     header_info = 1  # 0x01 -> start structure here
-    psid = 32  # 0x20 -> Blind Spot Monitoring (generic V2V safety, no PSIDs are standardized yet)
+    header_psid = 32  # 0x20 -> Blind Spot Monitoring (generic V2V safety, no PSIDs are standardized yet)
 
     # The generationTime per 1609.2 is the number of elapsed microseconds since 00:00 Jan 1 2004 UTC
     generation_time = math.floor((datetime.now() - datetime(2004, 1, 1, 0, 0, 0, 0)).total_seconds() * 1000)
 
-    signer_identifier = 128  # 0x80 -> digest TODO: add certificates (0x81) here
-    digest = 0  # TODO: replace with certificates, eight bytes of zeros as placeholder
+    # TODO: this might be a duplicate field with V2VCertificates.... fix if needed
+    signer_identifier = 128  # 0x81 -> certificate
 
-    ieee1609_dot2_data += struct.pack(">BBBQBQ",
+    ieee1609_dot2_data += struct.pack(">BBBQB",
                                       section_offset,
                                       header_info,
-                                      psid,
+                                      header_psid,
                                       generation_time,
                                       signer_identifier,
-                                      digest
                                       )
+
+    ieee1609_dot2_data += v2verifier.V2VCertificates.generate_v2v_certificate("test", private_key)
 
     signature_format = 128  # 0x80 -> x-only for signature value
 
