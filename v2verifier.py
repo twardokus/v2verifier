@@ -19,9 +19,8 @@ def process_args():
     parser.add_argument("-g",
                         "--with-gui",
                         help="option to launch GUI with receiver",
-                        action="store_true")
-    parser.add_argument("-t",
-                        "--test",
+                        choices=["web", "tk"])
+    parser.add_argument("--test",
                         help="run in test mode without SDRs or GNURadio",
                         action="store_true"
                         )
@@ -47,15 +46,19 @@ def receive(with_gui: bool = False) -> None:
     """
 
     if with_gui:
-        print("Launching V2Verifier receiver with GUI...")
-        gui = v2verifier.WebGUI.WebGUI()
-        gui.start_receiver()
-        gui.prep()
-        time.sleep(1)
-        print("GUI initialized...")
-        gui_thread = threading.Thread(target=gui.run)
-        gui_thread.start()
-        print("GUI launched successfully")
+        if with_gui == "web":
+            print("Launching V2Verifier receiver with WebGUI...")
+            gui = v2verifier.WebGUI.WebGUI()
+            gui.start_receiver()
+            gui.prep()
+            time.sleep(1)
+            print("WebGUI initialized...")
+            gui_thread = threading.Thread(target=gui.run)
+            gui_thread.start()
+            print("WebGUI launched successfully")
+        else:
+            print("Launching V2Verifier receiver with TkGUI...")
+            # TODO: finish this... tie in old GUI
 
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
