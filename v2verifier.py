@@ -1,6 +1,8 @@
 import v2verifier.Vehicle
 import v2verifier.Utility
 import v2verifier.WebGUI
+import v2verifier.TkGUI
+import tkinter
 from fastecdsa import keys
 import argparse
 import time
@@ -19,9 +21,8 @@ def process_args():
     parser.add_argument("-g",
                         "--with-gui",
                         help="option to launch GUI with receiver",
-                        action="store_true")
-    parser.add_argument("-t",
-                        "--test",
+                        choices=["web", "tk"])
+    parser.add_argument("--test",
                         help="run in test mode without SDRs or GNURadio",
                         action="store_true"
                         )
@@ -47,20 +48,27 @@ def receive(with_gui: bool = False) -> None:
     """
 
     if with_gui:
-        print("Launching V2Verifier receiver with GUI...")
-        gui = v2verifier.WebGUI.WebGUI()
-        gui.start_receiver()
-        gui.prep()
-        time.sleep(1)
-        print("GUI initialized...")
-        gui_thread = threading.Thread(target=gui.run)
-        gui_thread.start()
-        print("GUI launched successfully")
+        if with_gui == "web":
+            print("Launching V2Verifier receiver with WebGUI...")
+            gui = v2verifier.WebGUI.WebGUI()
+            gui.start_receiver()
+            gui.prep()
+            time.sleep(1)
+            print("WebGUI initialized...")
+            gui_thread = threading.Thread(target=gui.run)
+            gui_thread.start()
+            print("WebGUI launched successfully")
+        else:
+            print("TkGUI is not currently supported.")
+            sys.exit()
+            # print("Launching V2Verifier receiver with TkGUI...")
+            # gui = v2verifier.TkGUI.TkGUI()
+            # gui_thread = threading.Thread(target=gui.run)
+            # gui_thread.start()
 
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
     vehicle.run(mode="receiver", pvm_list=[], test_mode=args.test)
-
 
 if __name__ == "__main__":
     args = process_args()

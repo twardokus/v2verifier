@@ -23,7 +23,7 @@ def generate_v2v_bsm(latitude: float, longitude: float, elevation: float, speed:
 
     """
 
-    return struct.pack(">fffff", latitude, longitude, elevation, speed, heading)
+    return struct.pack("!fffff", latitude, longitude, elevation, speed, heading)
 
 
 def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
@@ -41,7 +41,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     llc_control = 3  # 0x03 -> connectionless mode (no ACKs)
     llc_type = 35036  # 0x88dc -> WSMP
 
-    llc = struct.pack(">HbxxxH",
+    llc = struct.pack("!HbxxxH",
                       llc_dsap_ssap,
                       llc_control,
                       llc_type)
@@ -51,7 +51,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     wsmp_t_header_length_and_psid = 32  # 0x20 -> length 4 bytes, no PSID specified
     wsmp_t_length = 0  # 0x00 -> length of optional T-Header fields is zero
 
-    wsm_headers = struct.pack(">bbbb",
+    wsm_headers = struct.pack("!bbbb",
                               wsmp_n_subtype_opt_version,
                               wsmp_n_tpid,
                               wsmp_t_header_length_and_psid,
@@ -64,7 +64,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     section_start = 128  # 0x80 -> start substructure
     length_of_unsecured_data = len(bsm)  # length in bytes of BSM parameter
 
-    ieee1609_dot2_data = struct.pack(">bBbbbBB",
+    ieee1609_dot2_data = struct.pack("!bBbbbBB",
                                      protocol_version,
                                      content_type,
                                      hash_id,
@@ -84,7 +84,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     # TODO: this might be a duplicate field with V2VCertificates.... fix if needed
     signer_identifier = 128  # 0x81 -> certificate
 
-    ieee1609_dot2_data += struct.pack(">BBBQB",
+    ieee1609_dot2_data += struct.pack("!BBBQB",
                                       section_offset,
                                       header_info,
                                       header_psid,
@@ -92,11 +92,11 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
                                       signer_identifier,
                                       )
 
-    ieee1609_dot2_data += v2verifier.V2VCertificates.generate_v2v_certificate("test", private_key)
+    # ieee1609_dot2_data += v2verifier.V2VCertificates.generate_v2v_certificate("test", private_key)
 
     signature_format = 128  # 0x80 -> x-only for signature value
 
-    ieee1609_dot2_data += struct.pack(">BB",
+    ieee1609_dot2_data += struct.pack("!BB",
                                       section_start,
                                       signature_format)
 
