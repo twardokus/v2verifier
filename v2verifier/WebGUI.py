@@ -91,8 +91,8 @@ class WebGUI:
         label_thread = threading.Thread(target=self.update_stats_labels)
         label_thread.start()
 
-        self.receiver = threading.Thread(target=self.receive)
-        self.receiver.start()
+        receiver = threading.Thread(target=self.receive)
+        receiver.start()
 
     def update_stats_labels(self):
 
