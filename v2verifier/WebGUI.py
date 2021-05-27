@@ -1,11 +1,7 @@
 import eel
 import threading
-import yaml
-import folium
-import time
 import socket
 import logging
-import json
 import struct
 
 
@@ -50,14 +46,6 @@ class WebGUI:
         self.logger.info(f"moving vehicle {vehicle_id} to {lat}, {lng}")
         eel.updateMarker(vehicle_id, lat, lng, icon_path)
 
-    # def update_packet_counts(self, received, processed, authenticated, intact, ontime):
-    #     self.logger.info("called update_packet_counts in python")
-    #     self.received_packets = received
-    #     self.processed_packets = processed
-    #     self.authenticated_packets = authenticated
-    #     self.intact_packets = intact
-    #     self.ontime_packets = ontime
-
     def add_message(self, message):
         eel.addMessage(message)
 
@@ -68,9 +56,7 @@ class WebGUI:
         self.logger.info("called run, starting server")
         self.logger.info("starting for real")
         eel.start(
-            "main.html",
-            #mode="custom",
-            #cmdline_args=["firefox", "http://localhost:8000"],
+            "main.html"
         )
 
     def start_receiver(self):
@@ -78,11 +64,9 @@ class WebGUI:
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(("127.0.0.1", 6666))
 
-        # eel.spawn(self.update_stats_labels)
         label_thread = threading.Thread(target=self.update_stats_labels)
         label_thread.start()
 
-        # eel.spawn(self.receive)
         self.receiver = threading.Thread(target=self.receive)
         self.receiver.start()
 
@@ -101,30 +85,19 @@ class WebGUI:
                 self.intact_packets,
                 self.ontime_packets,
             )
-            print("Updating labels")
 
             eel.sleep(0.1)
 
     def receive(self):
         self.logger.info("starting receive")
 
-        # BUFFER_SIZE = 200
-
-        # self.sock.listen(4)
-        # conn = self.sock.accept()[0]
-
         while True:
-            # try:
             msg = self.sock.recv(2048)
             data = struct.unpack("!5f??f", msg)
 
-            # data = json.loads(msg)
-
             self.logger.info("received data")
 
-            # if not data["receiver"]:
             self.received_packets += 1
-            #     self.intact_packets += 1
 
             if data[5]:
                 self.authenticated_packets += 1
@@ -148,11 +121,6 @@ class WebGUI:
                 ),
             )
             update.start()
-
-            # except json.decoder.JSONDecodeError:
-            #     self.logger.error("JSON decoding error, discarding invalid data")
-            # except Exception as e:
-            #     self.logger.error(f"exception: {e}")
 
     def process_new_packet(
         self,
