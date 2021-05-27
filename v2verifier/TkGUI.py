@@ -31,7 +31,9 @@ def heading_to_direction(heading):
 
 class TkGUI:
 
-    def __init__(self, root):
+    def __init__(self):
+
+        self.root = tk.Tk()
 
         self.threadlock = threading.Lock()
 
@@ -95,8 +97,7 @@ class TkGUI:
         self.vehicleNineRepText = tk.StringVar()
         self.receiverRepText = tk.StringVar()
 
-        self.root = root
-        root.title("V2X Communications - Security Testbed")
+        self.root.title("V2X Communications - Security Testbed")
 
         self.root.grid_rowconfigure(1, weight=1)
         self.root.grid_columnconfigure(1, weight=1)
@@ -105,21 +106,21 @@ class TkGUI:
         CANVAS_WIDTH = 800
 
         # create the drawing canvas
-        # self.canvas = tk.Canvas(root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH, bg='#247000')
-        self.canvas = tk.Canvas(root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH)
+        # self.canvas = tk.Canvas(self.root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH, bg='#247000')
+        self.canvas = tk.Canvas(self.root, height=CANVAS_HEIGHT, width=CANVAS_WIDTH)
 
         # create textbox to display messages
-        self.textWidget = tk.Text(root, height=300, font=20, bg="white", borderwidth=2)
+        self.textWidget = tk.Text(self.root, height=300, font=20, bg="white", borderwidth=2)
 
         self.textWidget.tag_configure("valid", foreground="green")
         self.textWidget.tag_configure("attack", foreground="red")
         self.textWidget.tag_configure("information", foreground="orange")
 
-        background = ImageTk.PhotoImage(Image.open("gui/pic/background.jpg"))
+        background = ImageTk.PhotoImage(Image.open("pictures/background.jpg"))
         self.backgroundImage = background
         self.canvas.create_image(400, 300, image=self.backgroundImage, anchor=tk.CENTER)
 
-        self.topRight = Frame(root)
+        self.topRight = Frame(self.root)
 
         # build the counter window
         self.counters = LabelFrame(self.topRight, text="Packet Statistics")
@@ -133,7 +134,7 @@ class TkGUI:
         self.report = LabelFrame(self.topRight, text="Vehicle Information")
         self.build_report_frame()
 
-        self.attackLog = tk.Text(root, font=20, bg="white", borderwidth=2)
+        self.attackLog = tk.Text(self.root, font=20, bg="white", borderwidth=2)
         self.attackLog.tag_configure("attack", foreground="red")
         self.attackLog.tag_configure("information", foreground="orange")
 
@@ -149,6 +150,12 @@ class TkGUI:
         self.counters.grid(row=0, column=0, sticky="new")
         self.legend.grid(row=1, column=0, sticky="ew")
         self.report.grid(row=2, column=0, sticky="ew")
+
+    def run(self):
+        receiver_thread = threading.Thread(target=self.run_gui_receiver)
+        receiver_thread.start()
+
+        self.root.mainloop()
 
     def run_gui_receiver(self):
         # Start the GUI service on port 6666
@@ -211,12 +218,12 @@ class TkGUI:
         # load the appropriate image, depending on signature validation and whether the packet is local
         i = None
         if isReceiver:
-            i = ImageTk.PhotoImage(Image.open("gui/pic/receiver/" + heading + ".png"))
+            i = ImageTk.PhotoImage(Image.open("pictures/receiver/" + heading + ".png"))
         else:
             if isValid:
-                i = ImageTk.PhotoImage(Image.open("gui/pic/" + heading + ".png"))
+                i = ImageTk.PhotoImage(Image.open("pictures/" + heading + ".png"))
             else:
-                i = ImageTk.PhotoImage(Image.open("gui/pic/phantom/" + heading + ".png"))
+                i = ImageTk.PhotoImage(Image.open("pictures/phantom/" + heading + ".png"))
 
         self.canvas.create_image(x, y, image=i, anchor=tk.CENTER, tags="car" + str(threading.currentThread().ident))
 
@@ -344,8 +351,8 @@ class TkGUI:
         self.receiverRowLabel = Label(self.legend, text="  is the receiving vehicle")
         self.otherRowLabel = Label(self.legend, text="  are vehicles sendings BSMs")
 
-        self.receiverImg = ImageTk.PhotoImage(Image.open("gui/pic/receiver/E.png"))
-        self.otherImg = ImageTk.PhotoImage(Image.open("gui/pic/E.png"))
+        self.receiverImg = ImageTk.PhotoImage(Image.open("pictures/receiver/E.png"))
+        self.otherImg = ImageTk.PhotoImage(Image.open("pictures/E.png"))
 
         self.receiverImage = Label(self.legend, image=self.receiverImg)
         self.otherImage = Label(self.legend, image=self.otherImg)
