@@ -1,6 +1,8 @@
 import v2verifier.Vehicle
 import v2verifier.Utility
 import v2verifier.WebGUI
+import v2verifier.TkGUI
+import tkinter
 from fastecdsa import keys
 import argparse
 import time
@@ -57,13 +59,16 @@ def receive(with_gui: bool = False) -> None:
             gui_thread.start()
             print("WebGUI launched successfully")
         else:
-            print("Launching V2Verifier receiver with TkGUI...")
-            # TODO: finish this... tie in old GUI
+            print("TkGUI is not currently supported.")
+            sys.exit()
+            # print("Launching V2Verifier receiver with TkGUI...")
+            # gui = v2verifier.TkGUI.TkGUI()
+            # gui_thread = threading.Thread(target=gui.run)
+            # gui_thread.start()
 
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
     vehicle.run(mode="receiver", pvm_list=[], test_mode=args.test)
-
 
 if __name__ == "__main__":
     args = process_args()
