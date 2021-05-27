@@ -8,22 +8,24 @@ import struct
 class WebGUI:
     """A class to represent the Web-based V2Verifier GUI
 
-    TODO: complete this docstring entry
-
-    Methods:
-
+    :param enable_logging: choice of whether to enable console logging for GUI, defaults to False
+    :type enable_logging: bool
     """
 
-    def __init__(self):
-        """Initialize the WebGUI class instance"""
+    def __init__(self, enable_logging: bool = False):
+        """WebGUI constructor
+        """
 
-        self.logger = logging.getLogger(__name__)
-        self.logger.setLevel(logging.INFO)
-        ch = logging.StreamHandler()
-        ch.setLevel(logging.INFO)
-        self.logger.addHandler(ch)
+        self.logging_enabled = True if enable_logging else False
 
-        self.threadlock = threading.Lock()
+        if self.logging_enabled:
+            self.logger = logging.getLogger(__name__)
+            self.logger.setLevel(logging.INFO)
+            ch = logging.StreamHandler()
+            ch.setLevel(logging.INFO)
+            self.logger.addHandler(ch)
+
+        self.thread_lock = threading.Lock()
 
         #
         # with open("../init.yml", "r") as conf_file:
@@ -38,13 +40,28 @@ class WebGUI:
         self.processed_packets = 0
         self.authenticated_packets = 0
         self.intact_packets = 0
-        self.ontime_packets = 0
+        self.on_time_packets = 0
 
-        self.logger.info("Initialized GUI")
+        if self.logging_enabled:
+            self.logger.info("Initialized GUI")
 
-    def update_vehicle(self, vehicle_id, lat, lng, icon_path):
-        self.logger.info(f"moving vehicle {vehicle_id} to {lat}, {lng}")
-        eel.updateMarker(vehicle_id, lat, lng, icon_path)
+    def update_vehicle(self, vehicle_id: int, latitude: float, longitude: float, icon_path: str) -> None:
+        """Update the GUI marker for a given vehicle
+
+        :param vehicle_id: the ID number of the vehicle whose marker is being updated
+        :type vehicle_id: int
+        :param latitude: the new latitude where the marker should be placed
+        :type latitude: float
+        :param longitude: the new longitude where the marker should be placed
+        :type longitude: float
+        :param icon_path: the file path to an image to use as the marker on the map
+        :type icon_path: str
+        """
+        if self.logging_enabled:
+            self.logger.info(f"moving vehicle {vehicle_id} to {latitude}, {longitude}")
+
+        # EEL exposes this function in main.html
+        eel.updateMarker(vehicle_id, latitude, longitude, icon_path)
 
     def add_message(self, message):
         eel.addMessage(message)
@@ -53,14 +70,20 @@ class WebGUI:
         eel.init("web")
 
     def run(self):
-        self.logger.info("called run, starting server")
-        self.logger.info("starting for real")
+
+        if self.logging_enabled:
+            self.logger.info("called run, starting server")
+            self.logger.info("starting for real")
+
         eel.start(
             "main.html"
         )
 
     def start_receiver(self):
-        self.logger.info("called start_receiver, creating socket")
+
+        if self.logging_enabled:
+            self.logger.info("called start_receiver, creating socket")
+
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.sock.bind(("127.0.0.1", 6666))
 
@@ -71,7 +94,9 @@ class WebGUI:
         self.receiver.start()
 
     def update_stats_labels(self):
-        self.logger.info("starting update_stats_labels")
+
+        if self.logging_enabled:
+            self.logger.info("starting update_stats_labels")
 
         while True:
 
@@ -83,19 +108,21 @@ class WebGUI:
                 self.processed_packets,
                 self.authenticated_packets,
                 self.intact_packets,
-                self.ontime_packets,
+                self.on_time_packets,
             )
 
             eel.sleep(0.1)
 
     def receive(self):
-        self.logger.info("starting receive")
+        if self.logging_enabled:
+            self.logger.info("starting receive")
 
         while True:
             msg = self.sock.recv(2048)
             data = struct.unpack("!5f??f", msg)
 
-            self.logger.info("received data")
+            if self.logging_enabled:
+                self.logger.info("received data")
 
             self.received_packets += 1
 
@@ -104,7 +131,7 @@ class WebGUI:
                 self.intact_packets += 1
 
             if data[6]:
-                self.ontime_packets += 1
+                self.on_time_packets += 1
 
             update = threading.Thread(
                 target=self.process_new_packet,
@@ -112,6 +139,7 @@ class WebGUI:
                     0,  # data["id"],
                     data[0],  # data["x"],
                     data[1],  # data["y"],
+                    data[2],
                     "N",  # TODO: fix this
                     # data[4],  # ["heading"],
                     data[5],  # data["sig"],
@@ -122,18 +150,28 @@ class WebGUI:
             )
             update.start()
 
-    def process_new_packet(
-        self,
-        vehicle_id,
-        lat,
-        lng,
-        heading,
-        is_valid,
-        is_recent,
-        is_receiver,
-        elapsed_time,
-    ):
-        self.logger.info(f"processing packet from {vehicle_id}")
+    def process_new_packet(self, vehicle_id: int, latitude: float, longitude: float, elevation: float,
+                           heading: float, is_valid: bool, is_recent: bool, is_receiver: bool,
+                           elapsed_time: float) -> None:
+        """Method to present data from a BSM on the GUI
+
+        Parameters:
+            vehicle_id (int): the ID number of the vehicle which sent the message
+            latitude (float): the reported latitude
+            longitude (float): the reported longitude
+            elevation (float): the reported elevation
+            heading (float): the reported heading (direction of travel)
+            is_valid (bool): result of message verification
+            is_recent (bool): result of message timestamp verification
+            is_receiver (bool): True if the sender of the message is the receiver (for representing local vehicle)
+            elapsed_time (float): the time elapsed between the BSM's generation time and the time this method is called
+
+        Returns:
+            None
+        """
+
+        if self.logging_enabled:
+            self.logger.info(f"processing packet from {vehicle_id}")
 
         icon = ""
         if is_receiver:
@@ -143,7 +181,7 @@ class WebGUI:
         else:
             icon = f"/images/phantom/{heading}.png"
 
-        self.update_vehicle(vehicle_id, lat, lng, icon)
+        self.update_vehicle(vehicle_id, latitude, longitude, icon)
 
         # print messages to gui
 
@@ -170,7 +208,7 @@ class WebGUI:
             if not is_valid and not is_recent:
                 message += '<p class="tab">❌❌❌ Invalid signature and message expired, replay attack likely ❌❌❌</p>'
 
-            message += f'<p class="tab">Vehicle reports location at {lat}, {lng} traveling {heading}<p>'
+            message += f'<p class="tab">Vehicle reports location at {latitude}, {longitude} traveling {heading}<p>'
             self.add_message(message)
 
             self.processed_packets += 1
