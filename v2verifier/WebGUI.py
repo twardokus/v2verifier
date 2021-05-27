@@ -25,6 +25,7 @@ class WebGUI:
             ch.setLevel(logging.INFO)
             self.logger.addHandler(ch)
 
+        self.receive_socket = None
         self.thread_lock = threading.Lock()
 
         #
@@ -84,8 +85,8 @@ class WebGUI:
         if self.logging_enabled:
             self.logger.info("called start_receiver, creating socket")
 
-        self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.sock.bind(("127.0.0.1", 6666))
+        self.receive_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        self.receive_socket.bind(("127.0.0.1", 6666))
 
         label_thread = threading.Thread(target=self.update_stats_labels)
         label_thread.start()
@@ -118,7 +119,7 @@ class WebGUI:
             self.logger.info("starting receive")
 
         while True:
-            msg = self.sock.recv(2048)
+            msg = self.receive_socket.recv(2048)
             data = struct.unpack("!5f??f", msg)
 
             if self.logging_enabled:
