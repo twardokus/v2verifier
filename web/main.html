@@ -140,7 +140,14 @@
         <div id="messages"></div>
     </div>
 </div>
-<script src="https://maps.googleapis.com/maps/api/js?key=SECRET_API_KEY&callback=initMap&libraries=&v=weekly" async></script>
+<script type="text/javascript" src="config.js"></script>
+<script>
+    var api_key = config.GOOGLE_JS_API_KEY;
+    var JSLink = "https://maps.googleapis.com/maps/api/js?key=" + api_key + "&callback=initMap&libraries=&v=weekly";
+    var JSElement = document.createElement('script');
+    JSElement.src = JSLink;
+    document.getElementsByTagName('head')[0].appendChild(JSElement);
+</script>
 
 </body>
 </html>
