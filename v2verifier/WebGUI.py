@@ -50,13 +50,13 @@ class WebGUI:
         self.logger.info(f"moving vehicle {vehicle_id} to {lat}, {lng}")
         eel.updateMarker(vehicle_id, lat, lng, icon_path)
 
-    def update_packet_counts(self, received, processed, authenticated, intact, ontime):
-        self.logger.info("called update_packet_counts in python")
-        self.received_packets = received
-        self.processed_packets = processed
-        self.authenticated_packets = authenticated
-        self.intact_packets = intact
-        self.ontime_packets = ontime
+    # def update_packet_counts(self, received, processed, authenticated, intact, ontime):
+    #     self.logger.info("called update_packet_counts in python")
+    #     self.received_packets = received
+    #     self.processed_packets = processed
+    #     self.authenticated_packets = authenticated
+    #     self.intact_packets = intact
+    #     self.ontime_packets = ontime
 
     def add_message(self, message):
         eel.addMessage(message)
@@ -101,6 +101,7 @@ class WebGUI:
                 self.intact_packets,
                 self.ontime_packets,
             )
+            print("Updating labels")
 
             eel.sleep(0.1)
 
@@ -122,11 +123,12 @@ class WebGUI:
             self.logger.info("received data")
 
             # if not data["receiver"]:
-            #     self.received_packets += 1
+            self.received_packets += 1
             #     self.intact_packets += 1
 
             if data[5]:
                 self.authenticated_packets += 1
+                self.intact_packets += 1
 
             if data[6]:
                 self.ontime_packets += 1
