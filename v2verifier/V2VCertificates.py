@@ -9,6 +9,8 @@ import math
 def get_certificate_format_string() -> str:
     """Function to return the format string used by generate_v2v_certificate
 
+
+
     Returns:
         str: the format string for a V2V certificate to be used in call to struct.unpack()
 
@@ -46,6 +48,19 @@ def get_certificate_fields_list() -> list:
         "ecc_public_key_x",
         "s"
     ]
+
+
+def get_implicit_certificate() -> bytes:
+    """Get a byte representation of a 1609.2-compliant implicit certificate
+
+    :return: byte representation of an implicit certificate
+    :rtype: bytes
+
+    """
+    version = 3  # 0x03 -> version
+    certificate_type = 129  # 0x81 -> implicit
+
+
 
 
 def generate_v2v_certificate(hostname: str, private_key: int) -> bytes:
