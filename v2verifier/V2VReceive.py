@@ -178,7 +178,7 @@ def report_bsm(bsm: tuple, verification_dict: dict) -> str:
 
     report += "Message is "
     report += "unexpired " if verification_dict["unexpired"] else "EXPIRED "
-    report += "(" + str(verification_dict["elapsed"]) + " milliseconds elapsed)"
+    report += "(" + str(verification_dict["elapsed"]) + " microseconds elapsed)"
 
     report += "\n"
 
