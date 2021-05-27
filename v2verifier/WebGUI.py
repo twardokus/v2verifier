@@ -153,21 +153,22 @@ class WebGUI:
                 target=self.process_new_packet,
                 args=(
                     0,  # data["id"],
-                    data[0],  # data["x"],
-                    data[1],  # data["y"],
-                    data[2],
+                    data[0],  # latitude (formerly data["x"])
+                    data[1],  # longitude (formerly data["y"])
+                    data[2],  # elevation
+                    data[3],  # speed
                     "N",  # TODO: fix this
-                    # data[4],  # ["heading"],
-                    data[5],  # data["sig"],
-                    data[6],  # data["recent"],
-                    False,  # data["receiver"],
-                    data[7],  # data["elapsed"],
+                    # data[4],  # heading (formerly ["heading"])
+                    data[5],  # valid_signature (formerly data["sig"])
+                    data[6],  # unexpired (formerly data["recent"])
+                    False,  # data["receiver"]
+                    data[7],  # elapsed_time (formerly data["elapsed"])
                 ),
             )
             update.start()
 
     def process_new_packet(self, vehicle_id: int, latitude: float, longitude: float, elevation: float,
-                           heading: float, is_valid: bool, is_recent: bool, is_receiver: bool,
+                           speed: float, heading: float, is_valid: bool, is_recent: bool, is_receiver: bool,
                            elapsed_time: float) -> None:
         """Method to render data from a BSM on the GUI
 
@@ -179,6 +180,8 @@ class WebGUI:
         :type longitude: float
         :param elevation: the reported elevation
         :type elevation: float
+        :param speed: the reported speed of travel
+        :type speed: float
         :param heading: the reported heading (direction of travel)
         :type heading: float
         :param is_valid: result of message verification
