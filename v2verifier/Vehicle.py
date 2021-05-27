@@ -63,7 +63,6 @@ class Vehicle:
                 spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key)
 
                 if test_mode:  # in test mode, send directly to receiver on port 4444
-                    print("Transmitting in test mode")
                     v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
                 else:  # otherwise, send to wifi_tx.grc listener on port 52001 to become 802.11 payload
                     v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 52001)
@@ -77,7 +76,6 @@ class Vehicle:
                 data = sock.recv(2048)
 
                 if test_mode:  # in test mode, there are no 802.11 headers, so parse all received data
-                    print("Receiving in test mode")
                     spdu_data = v2verifier.V2VReceive.parse_received_spdu(data)
                 else:  # otherwise (i.e., w/ GNURadio), 802.11 PHY/MAC headers must be stripped before parsing SPDU
                     spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
