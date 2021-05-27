@@ -24,7 +24,7 @@ def parse_received_spdu(spdu: bytes) -> dict:
     bsm_format_string = "fffff"
     ieee1609_dot2_data_format_string += bsm_format_string
     ieee1609_dot2_data_format_string += "BBBQB"
-    ieee1609_dot2_data_format_string += v2verifier.V2VCertificates.get_certificate_format_string()
+    # ieee1609_dot2_data_format_string += v2verifier.V2VCertificates.get_certificate_format_string()
     ieee1609_dot2_data_format_string += "BB"
 
     spdu_format_string = llc_format_string + wsm_header_format_string + ieee1609_dot2_data_format_string
@@ -35,6 +35,45 @@ def parse_received_spdu(spdu: bytes) -> dict:
     # using V2VTransmit.generate_1609_spdu()
     spdu_contents = struct.unpack(spdu_format_string, payload)
 
+    # spdu_dict = {
+    #     "llc_dsap_and_ssap": spdu_contents[0],
+    #     "llc_control": spdu_contents[1],
+    #     "llc_type": spdu_contents[2],
+    #     "wsmp_n_subtype_opt_version": spdu_contents[3],
+    #     "wsmp_n_tpid": spdu_contents[4],
+    #     "wsmp_t_header_length_and_psid": spdu_contents[5],
+    #     "wsmp_t_length": spdu_contents[6],
+    #     "wsmp_protocol_version": spdu_contents[7],
+    #     "wsmp_content_type": spdu_contents[8],
+    #     "wsmp_hash_id": spdu_contents[9],
+    #     "bsm_length": spdu_contents[13],
+    #     "bsm": spdu_contents[14:19],
+    #     "header_psid": spdu_contents[21],
+    #     "generation_time": spdu_contents[22],
+    #     "signer_identifier": spdu_contents[23],
+    #     "signer": spdu_contents[24],
+    #     "certificate_version_type": spdu_contents[25],
+    #     "certificate_type": spdu_contents[26],
+    #     "issuer": spdu_contents[27],
+    #     "hashedID": spdu_contents[28],
+    #     "start_tbs_data": spdu_contents[29],
+    #     "hostname_length": spdu_contents[30],
+    #     "hostname": spdu_contents[31],
+    #     "craca_id": spdu_contents[32],
+    #     "crl_series": spdu_contents[33],
+    #     "start_validity": spdu_contents[34],
+    #     "spacer": spdu_contents[35],
+    #     "certificate_duration": spdu_contents[36],
+    #     "filler": spdu_contents[37],
+    #     "psid": spdu_contents[38],
+    #     "verification_key_indicator": spdu_contents[39],
+    #     "ecc_public_key_y": spdu_contents[40],
+    #     "start_signature": spdu_contents[41],
+    #     "ecc_public_key_x_indicator": spdu_contents[42],
+    #     "ecc_public_key_x": spdu_contents[43],
+    #     "s": spdu_contents[44],
+    #     "signature": signature
+    # }
     spdu_dict = {
         "llc_dsap_and_ssap": spdu_contents[0],
         "llc_control": spdu_contents[1],
@@ -51,27 +90,7 @@ def parse_received_spdu(spdu: bytes) -> dict:
         "header_psid": spdu_contents[21],
         "generation_time": spdu_contents[22],
         "signer_identifier": spdu_contents[23],
-        "signer": spdu_contents[24],
-        "certificate_version_type": spdu_contents[25],
-        "certificate_type": spdu_contents[26],
-        "issuer": spdu_contents[27],
-        "hashedID": spdu_contents[28],
-        "start_tbs_data": spdu_contents[29],
-        "hostname_length": spdu_contents[30],
-        "hostname": spdu_contents[31],
-        "craca_id": spdu_contents[32],
-        "crl_series": spdu_contents[33],
-        "start_validity": spdu_contents[34],
-        "spacer": spdu_contents[35],
-        "certificate_duration": spdu_contents[36],
-        "filler": spdu_contents[37],
-        "psid": spdu_contents[38],
-        "verification_key_indicator": spdu_contents[39],
-        "ecc_public_key_y": spdu_contents[40],
-        "start_signature": spdu_contents[41],
-        "ecc_public_key_x_indicator": spdu_contents[42],
-        "ecc_public_key_x": spdu_contents[43],
-        "s": spdu_contents[44],
+        "digest": spdu_contents[24],
         "signature": signature
     }
 
