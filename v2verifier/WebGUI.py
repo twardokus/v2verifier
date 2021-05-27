@@ -169,7 +169,7 @@ class WebGUI:
         if is_receiver:
             icon = f"/images/receiver/{heading}.png"
         elif is_valid:
-            icon = f"/images/{heading}.png"
+            icon = f"/images/regular/{heading}.png"
         else:
             icon = f"/images/phantom/{heading}.png"
 
