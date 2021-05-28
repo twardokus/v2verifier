@@ -92,7 +92,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
                                       signer_identifier,
                                       )
 
-    # ieee1609_dot2_data += v2verifier.V2VCertificates.generate_v2v_certificate("test", private_key)
+    ieee1609_dot2_data += v2verifier.V2VCertificates.get_implicit_certificate()
 
     signature_format = 128  # 0x80 -> x-only for signature value
 

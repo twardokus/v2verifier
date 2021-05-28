@@ -24,7 +24,7 @@ def parse_received_spdu(spdu: bytes) -> dict:
     bsm_format_string = "fffff"
     ieee1609_dot2_data_format_string += bsm_format_string
     ieee1609_dot2_data_format_string += "BBBQB"
-    # ieee1609_dot2_data_format_string += v2verifier.V2VCertificates.get_certificate_format_string()
+    ieee1609_dot2_data_format_string += "BBBB12s3s2sLBHBB32x"
     ieee1609_dot2_data_format_string += "BB"
 
     spdu_format_string = llc_format_string + wsm_header_format_string + ieee1609_dot2_data_format_string
@@ -90,10 +90,22 @@ def parse_received_spdu(spdu: bytes) -> dict:
         "header_psid": spdu_contents[21],
         "generation_time": spdu_contents[22],
         "signer_identifier": spdu_contents[23],
+        "version": spdu_contents[24],
+        "certificate_type": spdu_contents[25],
+        "issuer": spdu_contents[26],
+        "id": spdu_contents[27],
+        "hostname": spdu_contents[28],
+        "craca_id": spdu_contents[29],
+        "crlseries": spdu_contents[30],
+        "validity_period_start": spdu_contents[31],
+        "validity_period_choice": spdu_contents[32],
+        "validity_period_duration": spdu_contents[33],
+        "verify_key_indicator_choice": spdu_contents[34],
+        "reconstruction_value_choice": spdu_contents[35],
         "digest": spdu_contents[24],
         "signature": signature
     }
-
+    print(spdu_dict)
     return spdu_dict
 
 
