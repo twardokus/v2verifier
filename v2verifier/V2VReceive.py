@@ -17,7 +17,7 @@ def parse_received_spdu(spdu: bytes) -> dict:
 
     """
 
-    llc_format_string = ">HbxxxH"
+    llc_format_string = "!HbxxxH"
     wsm_header_format_string = "bbbb"
 
     ieee1609_dot2_data_format_string = "bBbbbBB"
@@ -105,7 +105,7 @@ def parse_received_spdu(spdu: bytes) -> dict:
         "digest": spdu_contents[24],
         "signature": signature
     }
-    print(spdu_dict)
+
     return spdu_dict
 
 
@@ -136,7 +136,7 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
     r = int.from_bytes(spdu_dict["signature"][:32], "little")
     s = int.from_bytes(spdu_dict["signature"][32:], "little")
 
-    reassembled_message = struct.pack(">fffff",
+    reassembled_message = struct.pack("!fffff",
                                       spdu_dict["bsm"][0],
                                       spdu_dict["bsm"][1],
                                       spdu_dict["bsm"][2],
@@ -178,8 +178,8 @@ def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: i
     sock.sendto(data, (ip_address, port))
 
 
-def report_bsm(bsm: tuple, verification_dict: dict) -> str:
-    """Generate a report about a received SPDU. Intended to generate output for printing to console.
+def get_bsm_report(bsm: tuple, verification_dict: dict) -> str:
+    """Create a report about a received SPDU. Intended to generate output for printing to console.
 
     Parameters:
         bsm (tuple): a tuple containing BSM information
