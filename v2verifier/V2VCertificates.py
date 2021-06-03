@@ -9,11 +9,8 @@ import math
 def get_certificate_format_string() -> str:
     """Function to return the format string used by generate_v2v_certificate
 
-
-
-    Returns:
-        str: the format string for a V2V certificate to be used in call to struct.unpack()
-
+    :return: the format string for a V2V certificate to be used in call to struct.unpack()
+    :rtype: str
     """
     return "BBBBQBB" + "4s" + "QHLBHLBB24xQBB24xQ31xB"
 
@@ -21,9 +18,8 @@ def get_certificate_format_string() -> str:
 def get_certificate_fields_list() -> list:
     """Function to get a list of certificate fields for use with struct.unpack()
 
-    Returns:
-        list: a list of certificate fields for use with struct.unpack()
-
+    :return: a list of certificate fields for use with struct.unpack()
+    :rtype: list
     """
     return [
         "signer",
@@ -55,7 +51,6 @@ def get_implicit_certificate() -> bytes:
 
     :return: byte representation of an implicit certificate
     :rtype: bytes
-
     """
     version = 3  # 0x03 -> version 3
     certificate_type = 129  # 0x81 -> implicit
@@ -91,15 +86,15 @@ def get_implicit_certificate() -> bytes:
 
 
 def get_explicit_certificate(hostname: str, private_key: int) -> bytes:
-    """Generate a V2V certificate to use for signing messages
+    """Get a byte representation of a 1609.2-compliant explicit certificate
 
-    Parameters:
-        hostname (str): the name of the certificate-bearing entity
-        private_key (int): the private key of the requester
+    :param hostname: the name of the certificate-bearing entity
+    :type hostname: str
+    :param private_key: the private key used to sign this certificate
+    :type private_key: int
 
-    Returns:
-        bytes: a byte representation of a V2V certificate
-
+    :return: a byte representation of a V2V explicit certificate
+    :rtype: bytes
     """
 
     signer = 129  # 0x81 -> certificate

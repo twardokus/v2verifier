@@ -11,7 +11,8 @@ import sys
 
 
 def process_args():
-    """Wrapper for the argparse module"""
+    """Wrapper for the argparse module
+    """
 
     parser = argparse.ArgumentParser(description="Run a V2V security experiment with V2Verifier")
     parser.add_argument("perspective",
@@ -30,7 +31,8 @@ def process_args():
 
 
 def transmit() -> None:
-    """Run this V2Verifier instance as the BSM transmitter"""
+    """Run this V2Verifier instance as the BSM transmitter
+    """
 
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
@@ -42,9 +44,8 @@ def transmit() -> None:
 def receive(with_gui: bool = False) -> None:
     """Run this V2Verifier instance as the BSM receiver
 
-    Parameters:
-        with_gui (bool): specify whether to launch GUI with receiver. Default is False (no GUI)
-
+    :param with_gui: specify whether to launch GUI with receiver. Default is False (no GUI)
+    :type with_gui: bool
     """
 
     if with_gui:

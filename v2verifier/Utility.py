@@ -1,11 +1,11 @@
 def read_data_from_file(filepath: str) -> list:
     """Reads in vehicle motion data from a CSV text file
 
-    Parameters:
-        filepath (str): the filepath to a CSV text file of vehicle motion data.
+    :param filepath: the filepath to a CSV text file of vehicle motion data.
+    :type filepath: str
 
-    Returns:
-        list: a list of position/motion strings formatted as "latitude,longitude,elevation,speed,heading"
+    :return: a list of position/motion strings formatted as "latitude,longitude,elevation,speed,heading"
+    :rtype: list
     """
 
     try:
