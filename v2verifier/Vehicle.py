@@ -6,32 +6,21 @@ from fastecdsa import point
 
 
 class Vehicle:
-    """A class to represent a vehicle
+    """A class to represent a vehicle.
 
-    Attributes:
-
-    public_key : int
-        the vehicle's public key
-    private_key : int
-        the vehicle's private key
-
-    Methods:
-
-    run(pvm_list):
-        Send a BSM every 100ms with contents defined in pvm_list
-
+    :param public_key: the vehicle's public key
+    :type public_key: fastecdsa.point.Point
+    :param private_key: the vehicle's private key
+    :type private_key: int
     """
 
     def __init__(self, public_key: point.Point, private_key: int) -> None:
         """Constructor for the vehicle class
 
-        Parameters:
-            public_key (fastecdsa.point.Point): the vehicle's public key
-            private_key (int): the vehicle's private key
-
-        Returns:
-            None
-
+        :param public_key: the vehicle's public key
+        :type public_key: fastecdsa.point.Point
+        :param private_key: the vehicle's private key
+        :type private_key: int
         """
 
         self.public_key = public_key
@@ -41,14 +30,12 @@ class Vehicle:
     def run(self, mode: str, pvm_list: list, test_mode: bool = False) -> None:
         """Launch the vehicle's BSM transmitter
 
-        Parameters:
-            mode (str): selection of "transmitter" or "receiver"
-            pvm_list (list): a list of vehicle position/motion data elements
-            test_mode (bool): indicate whether test mode (w/o USRPs and GNURadio) should be used. Affects ports used.
-
-        Returns:
-            None
-
+        :param mode: selection of "transmitter" or "receiver"
+        :type mode: str
+        :param pvm_list: a list of vehicle position/motion data elements
+        :type pvm_list: list
+        :param test_mode: indicate whether test mode (w/o USRPs and GNURadio) should be used. Affects ports used.
+        :type test_mode: bool, optional
         """
 
         if mode == "transmitter":

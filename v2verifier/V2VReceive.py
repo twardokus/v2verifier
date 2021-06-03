@@ -9,12 +9,11 @@ from fastecdsa import ecdsa, point
 def parse_received_spdu(spdu: bytes) -> dict:
     """Parse a 1609.2 SPDU
 
-    Parameters:
-        spdu (bytes): a 1609.2 SPDU
+    :param spdu: a 1609.2 SPDU
+    :type spdu: bytes
 
-    Returns:
-        dict: the contents of the SPDU
-
+    :return: a dictionary containing the contents of the SPDU keyed by SPDU field
+    :rtype: dict
     """
 
     llc_format_string = "!HbxxxH"
@@ -34,6 +33,8 @@ def parse_received_spdu(spdu: bytes) -> dict:
     # spdu_contents will be a tuple containing each element of the 1609.2 SPDU as constructed
     # using V2VTransmit.generate_1609_spdu()
     spdu_contents = struct.unpack(spdu_format_string, payload)
+
+    # this code is for explicit certificate parsing
 
     # spdu_dict = {
     #     "llc_dsap_and_ssap": spdu_contents[0],
@@ -112,13 +113,13 @@ def parse_received_spdu(spdu: bytes) -> dict:
 def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
     """Perform security checks on received SPDU
 
-    Parameters:
-        spdu_dict (dict): the contents of a received SPDU as parsed with parse_received_spdu
-        public_key (fastecdsa.point.Point): the public key to use for verifying the message signature
+    :param spdu_dict: the contents of a received SPDU as parsed with parse_received_spdu
+    :type spdu_dict: dict
+    :param public_key: the public key to use for verifying the message signature
+    :type public_key: fastecdsa.point.Point
 
-    Returns:
-        dict: security check results for the SPDU
-
+    :return: security check results for the SPDU
+    :rtype: dict
     """
 
     # Verify the timestamp
@@ -150,17 +151,16 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
 
 
 def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: int) -> None:
-    """Send BSM data and verification status to the V2Verifier GUI
+    """Send BSM data and verification status to the V2Verifier GUI via UDP datagram
 
-    Parameters:
-        bsm (tuple): a tuple containing BSM information
-        verification_dict (dict): a dictionary containing verification information about the BSM
-        ip_address (str): the IP address of the GUI
-        port (int): the port on ip_address where the GUI service is running
-
-    Returns:
-        None
-
+    :param bsm: a tuple of BSM information matching the format returned by v2verifier.V2VTransmit.generate_v2v_bsm()
+    :type bsm: tuple
+    :param verification_dict: a dictionary containing verification information about the BSM
+    :type verification_dict: dict
+    :param ip_address: the IP address of the GUI
+    :type ip_address: str
+    :param port: the port on ip_address where the GUI service is running
+    :type port: int
     """
 
     data = struct.pack("!5f??f",
@@ -181,13 +181,13 @@ def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: i
 def get_bsm_report(bsm: tuple, verification_dict: dict) -> str:
     """Create a report about a received SPDU. Intended to generate output for printing to console.
 
-    Parameters:
-        bsm (tuple): a tuple containing BSM information
-        verification_dict (dict): a dictionary containing verification information about an SPDU
+    :param bsm: a tuple of BSM information matching the format returned by v2verifier.V2VTransmit.generate_v2v_bsm()
+    :type bsm: tuple
+    :param verification_dict: a dictionary containing verification information about an SPDU
+    :type verification_dict: dict
 
-    Returns:
-        str: a string containing information to be displayed (e.g., to console) about an SPDU
-
+    :return: a string containing information about an SPDU to be displayed (e.g., printed to console)
+    :rtype: str
     """
 
     report = ""

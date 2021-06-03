@@ -11,16 +11,19 @@ import v2verifier.V2VCertificates
 def generate_v2v_bsm(latitude: float, longitude: float, elevation: float, speed: float, heading: float) -> bytes:
     """Create a BSM bytearray reporting vehicle position and motion data
 
-    Parameters:
-        latitude (float): latitude of the vehicle position in degrees
-        longitude (float): longitude of the vehicle position in degrees
-        elevation (float): elevation of the vehicle in meters
-        speed (float): the speed of the vehicle in meters per second
-        heading (float) the direction of travel measured in degrees (relative to what?)
+    :param latitude: latitude of the vehicle position in degrees
+    :type latitude: float
+    :param longitude: longitude of the vehicle position in degrees
+    :type longitude: float
+    :param elevation: elevation of the vehicle in meters
+    :type elevation: float
+    :param speed: the speed of the vehicle in meters per second
+    :type speed: float
+    :param heading: the direction of travel measured in degrees
+    :type heading: float
 
-    Returns:
-        bytes: a BSM reporting vehicle position and motion
-
+    :return: a BSM reporting vehicle position and motion
+    :rtype: bytes
     """
 
     return struct.pack("!fffff", latitude, longitude, elevation, speed, heading)
@@ -29,12 +32,13 @@ def generate_v2v_bsm(latitude: float, longitude: float, elevation: float, speed:
 def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     """Create a bytes object representing an IEEE 1609.2 SPDU
 
-    Parameters:
-        bsm (bytes): a bytes object containing the BSM data for this message
-        private_key: an ECDSA private key to sign the SPDU
+    :param bsm: a bytes object containing the BSM data for this message
+    :type bsm: bytes
+    :param private_key: an ECDSA private key to use for signing the SPDU
+    :type private_key: int
 
-    Returns:
-        bytes: a 1609.2-compliant SPDU
+    :return: a 1609.2-compliant SPDU
+    :rtype: bytes
     """
 
     llc_dsap_ssap = 43690  # 0xaaaa -> SNAP extension
@@ -110,13 +114,12 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
 def send_v2v_message(msg: bytes, ip_address: str, port: int) -> None:
     """Send a V2V message using network communications
 
-    Parameters:
-        msg (bytes): the message to send
-        ip_address (str): the IP address to connect to and send the message
-        port (int): the port to connect to and send the message
-
-    Returns:
-        None
+    :param msg: the message to send
+    :type msg: bytes
+    :param ip_address: the IP address to connect to and send the message
+    :type ip_address: str
+    :param port: the port to connect to and send the message
+    :type port: int
     """
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
