@@ -214,3 +214,21 @@ def get_bsm_report(bsm: tuple, verification_dict: dict) -> str:
     report += "\n"
 
     return report
+
+
+def report_spdu(spdu_dict: dict) -> str:
+    """A testing/debugging function that returns a printable report of SPDU contents after parsing
+
+    :param spdu_dict: a dictionary containing SPDU fields such as returned from parse_received_spdu()
+    :type spdu_dict: dict
+
+    :return: a string representation of the SPDU fields
+    :rtype str
+    """
+
+    report = ""
+
+    for key in spdu_dict.keys():
+        report += key + "\t\t\t" + str(spdu_dict[key]) + "\n"
+
+    return report

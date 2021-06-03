@@ -82,7 +82,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
     generation_time = math.floor((datetime.now() - datetime(2004, 1, 1, 0, 0, 0, 0)).total_seconds() * 1000)
 
     # TODO: this might be a duplicate field with V2VCertificates.... fix if needed
-    signer_identifier = 128  # 0x81 -> certificate
+    signer_identifier = 129  # 0x81 -> certificate
 
     ieee1609_dot2_data += struct.pack("!BBBQB",
                                       section_offset,

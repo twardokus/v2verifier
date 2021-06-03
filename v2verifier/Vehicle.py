@@ -80,6 +80,7 @@ class Vehicle:
                 else:  # otherwise (i.e., w/ GNURadio), 802.11 PHY/MAC headers must be stripped before parsing SPDU
                     spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
 
+                print(v2verifier.V2VReceive.report_spdu(spdu_data))
                 verification_data = v2verifier.V2VReceive.verify_spdu(spdu_data, self.public_key)
                 print(v2verifier.V2VReceive.get_bsm_report(spdu_data["bsm"], verification_data))
                 v2verifier.V2VReceive.report_bsm_gui(spdu_data["bsm"], verification_data, "127.0.0.1", 6666)
