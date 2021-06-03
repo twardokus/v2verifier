@@ -9,6 +9,8 @@ import math
 def get_certificate_format_string() -> str:
     """Function to return the format string used by generate_v2v_certificate
 
+
+
     Returns:
         str: the format string for a V2V certificate to be used in call to struct.unpack()
 
@@ -48,7 +50,47 @@ def get_certificate_fields_list() -> list:
     ]
 
 
-def generate_v2v_certificate(hostname: str, private_key: int) -> bytes:
+def get_implicit_certificate() -> bytes:
+    """Get a byte representation of a 1609.2-compliant implicit certificate
+
+    :return: byte representation of an implicit certificate
+    :rtype: bytes
+
+    """
+    version = 3  # 0x03 -> version 3
+    certificate_type = 129  # 0x81 -> implicit
+    issuer = 128  # 128 -> self-issued, use SHA-256
+    id = 129  # 0x81 -> hostname
+    hostname = "demo_vehicle"  # fixed, do not change
+    craca_id = 0  # 0x000000 -> we have no certificate revocation authority (yet)
+    crlseries = 0 # 0x0000 -> we have no CRLs issued by a CRLCA, either
+    validity_period_start = math.floor((datetime.now() - datetime(2004, 1, 1, 0, 0, 0, 0)).total_seconds())
+    validity_period_choice = 132  # 0x84 -> hours
+    validity_period_duration = 24  # 0x0018 -> 24 hours
+    verify_key_indicator_choice = 129  # 0x81 -> reconstructionValue
+    reconstruction_value_choice = 128  # 0x80 -> x-only
+    reconstruction_value = 0  # 32-byte null field as we don't support this yet
+
+    implicit_certificate = struct.pack("!BBBB12s3s2sLBHBB32x",
+                                       version,
+                                       certificate_type,
+                                       issuer,
+                                       id,
+                                       hostname.encode(),
+                                       bytes([craca_id]),
+                                       bytes([crlseries]),
+                                       validity_period_start,
+                                       validity_period_choice,
+                                       validity_period_duration,
+                                       verify_key_indicator_choice,
+                                       reconstruction_value_choice,
+                                       # reconstruction_value
+                                       )
+
+    return implicit_certificate
+
+
+def get_explicit_certificate(hostname: str, private_key: int) -> bytes:
     """Generate a V2V certificate to use for signing messages
 
     Parameters:
@@ -366,5 +408,9 @@ class ToBeSignedCertificate():
 
 
 if __name__ == "__main__":
-    """Test code"""
-    print(generate_v2v_certificate("test", 32).hex())
+    """Test code
+    """
+    # print(get_implicit_certificate().hex())
+    private, public = keys.import_key("keys/0/p256.key")
+    cert = V2VCertificate("test", private)
+    print(len(cert.toString())/2)

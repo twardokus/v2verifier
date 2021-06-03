@@ -70,6 +70,7 @@ def receive(with_gui: bool = False) -> None:
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
     vehicle.run(mode="receiver", pvm_list=[], test_mode=args.test)
 
+
 if __name__ == "__main__":
     args = process_args()
 

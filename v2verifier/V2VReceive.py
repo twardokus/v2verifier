@@ -17,14 +17,14 @@ def parse_received_spdu(spdu: bytes) -> dict:
 
     """
 
-    llc_format_string = ">HbxxxH"
+    llc_format_string = "!HbxxxH"
     wsm_header_format_string = "bbbb"
 
     ieee1609_dot2_data_format_string = "bBbbbBB"
     bsm_format_string = "fffff"
     ieee1609_dot2_data_format_string += bsm_format_string
     ieee1609_dot2_data_format_string += "BBBQB"
-    # ieee1609_dot2_data_format_string += v2verifier.V2VCertificates.get_certificate_format_string()
+    ieee1609_dot2_data_format_string += "BBBB12s3s2sLBHBB32x"
     ieee1609_dot2_data_format_string += "BB"
 
     spdu_format_string = llc_format_string + wsm_header_format_string + ieee1609_dot2_data_format_string
@@ -90,6 +90,18 @@ def parse_received_spdu(spdu: bytes) -> dict:
         "header_psid": spdu_contents[21],
         "generation_time": spdu_contents[22],
         "signer_identifier": spdu_contents[23],
+        "version": spdu_contents[24],
+        "certificate_type": spdu_contents[25],
+        "issuer": spdu_contents[26],
+        "id": spdu_contents[27],
+        "hostname": spdu_contents[28],
+        "craca_id": spdu_contents[29],
+        "crlseries": spdu_contents[30],
+        "validity_period_start": spdu_contents[31],
+        "validity_period_choice": spdu_contents[32],
+        "validity_period_duration": spdu_contents[33],
+        "verify_key_indicator_choice": spdu_contents[34],
+        "reconstruction_value_choice": spdu_contents[35],
         "digest": spdu_contents[24],
         "signature": signature
     }
@@ -124,7 +136,7 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
     r = int.from_bytes(spdu_dict["signature"][:32], "little")
     s = int.from_bytes(spdu_dict["signature"][32:], "little")
 
-    reassembled_message = struct.pack(">fffff",
+    reassembled_message = struct.pack("!fffff",
                                       spdu_dict["bsm"][0],
                                       spdu_dict["bsm"][1],
                                       spdu_dict["bsm"][2],
@@ -166,8 +178,8 @@ def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: i
     sock.sendto(data, (ip_address, port))
 
 
-def report_bsm(bsm: tuple, verification_dict: dict) -> str:
-    """Generate a report about a received SPDU. Intended to generate output for printing to console.
+def get_bsm_report(bsm: tuple, verification_dict: dict) -> str:
+    """Create a report about a received SPDU. Intended to generate output for printing to console.
 
     Parameters:
         bsm (tuple): a tuple containing BSM information
@@ -200,5 +212,23 @@ def report_bsm(bsm: tuple, verification_dict: dict) -> str:
     report += "(" + str(verification_dict["elapsed"]) + " microseconds elapsed)"
 
     report += "\n"
+
+    return report
+
+
+def report_spdu(spdu_dict: dict) -> str:
+    """A testing/debugging function that returns a printable report of SPDU contents after parsing
+
+    :param spdu_dict: a dictionary containing SPDU fields such as returned from parse_received_spdu()
+    :type spdu_dict: dict
+
+    :return: a string representation of the SPDU fields
+    :rtype str
+    """
+
+    report = ""
+
+    for key in spdu_dict.keys():
+        report += key + "\t\t\t" + str(spdu_dict[key]) + "\n"
 
     return report
