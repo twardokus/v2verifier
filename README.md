@@ -1,12 +1,15 @@
 # V2Verifier
-V2Verifer is an open-source project dedicated to wireless experimentation
-focused on the security of vehicle-to-vehicle (V2V) communications.
-Included are implementations of:
-- Security features from the IEEE 1609.2 standard for V2V security
+V2Verifer is an open-source project dedicated to wireless experimentation focused on the security of vehicle-to-vehicle
+(V2V) communications. Included are implementations of:
+- Security features from the IEEE 1609.2 standard for V2V security, including message signing and verification
 - WAVE Short Message Protocol (IEEE 1609.3)
 - Dedicated Short Range Communication (DSRC) - adapted from 
 the [WiME Project's](http://dx.doi.org/10.1109/TMC.2017.2751474)
-IEEE 802.11p transceiver 
+IEEE 802.11p transceiver
+- Cellular Vehicle-to-Everything (C-V2X) - based on the [srsRAN](https://github.com/srsRAN/srsRAN) project (formerly
+srsLTE)
+
+
 
 ## Publications
 If you use our testbed code, we would appreciate a reference to the following publication:
