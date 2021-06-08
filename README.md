@@ -88,6 +88,7 @@ communication and GPS clock synchronization (e.g., USRP B210 w/ GPSDO or
 testing environment or synthesized GPS source.*
 
 ## Replay attack with V2Verifier
+**Note - these instructions apply to versions of V2Verifier through the beta release of version 2.0. While updates are in progress, please ensure you use an appropriate release of V2Verifier as these instructions will not work with release 2.0**
 Conducting a replay attack requires three USRPs and three PCs. Note that these instructions apply only to DSRC at present.
 One USRP, which will be used to conduct the attack, will require two antennas.
 
