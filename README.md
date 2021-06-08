@@ -9,6 +9,9 @@ IEEE 802.11p transceiver
 - Cellular Vehicle-to-Everything (C-V2X) - based on the [srsRAN](https://github.com/srsRAN/srsRAN) project (formerly
 srsLTE)
 
+Check out our [YouTube page](https://www.youtube.com/channel/UC5lY5D4KYgfKu3FXtfjHP7A)
+for some of our past projects and publications that made use of V2Verifier!
+
 ### Citing V2Verifier
 If you use V2Verifier or any of its components in your work, please cite 
 [our paper](https://github.com/twardokus/v2verifier/wiki/Publications) from IEEE ICC 2021. Additional publications
