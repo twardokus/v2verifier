@@ -59,10 +59,9 @@ you need to install two components from that project.
 	sudo make install
 	sudo ldconfig
 		
-Next, install some Python 3 libraries.
+Next, install and/or upgrade some Python 3 libraries.
 
-	pip3 install fastecdsa
-	pip3 install -U pyyaml
+	pip3 install -U fastecdsa pyyaml eel folium pynmea2
 
 ## Running V2Verifier
 Connect one USRP to each PC. On both PCs, launch GNURadio with the command `gnuradio-companion` from a terminal. 
