@@ -9,30 +9,27 @@ IEEE 802.11p transceiver
 - Cellular Vehicle-to-Everything (C-V2X) - based on the [srsRAN](https://github.com/srsRAN/srsRAN) project (formerly
 srsLTE)
 
-
-
-## Publications
-If you use our testbed code, we would appreciate a reference to the following publication:
-
-Geoff Twardokus, Jaime Ponicki, Samantha Baker, Peter Carenzo, [Hanif Rahbari](http://rahbari.csec.rit.edu/), and 
-Sumita Mishra, "**Targeted Discreditation Attack against Trust Management in Connected Vehicles**," _IEEE International 
-Conference on Communications (ICC 2021)_, Virtual/Montreal, June 2021 
-[[PDF](http://rahbari.csec.rit.edu/papers/V2Verifier_ICC21.pdf)]
-
-Additional publications related to the V2Verifier project are listed 
-[here](https://github.com/twardokus/v2verifier/wiki/Publications).
+### Citing V2Verifier
+If you use V2Verifier or any of its components in your work, please cite 
+[our paper](https://github.com/twardokus/v2verifier/wiki/Publications) from IEEE ICC 2021. Additional publications
+involving V2Verifier are listed on the same page.
 
 ## Requirements
-Running V2Verifier requires a minimum of two USRP software-defined radios (B210 or N210 with 5.9 GHz daughterboards) 
-and at least one PC capable of running Ubuntu 18.04. A virtual machine may be used, but is not recommended. We further 
-recommend using two PCs with one USRP connected to each PC for best results.
+V2Verifier is designed to be run with software-defined radios (SDRs); specifically, we recommend either the USRP B210 or,
+preferably, the USRP N210, both available from Ettus Research. When using N210s, 6 GHz daughterboards (e.g.,
+UBX 40) are required for each N210 device.
 
+If you do not have access to SDRs, V2Verifier can also be run as a pure simulation environment that only requires a modern
+PC to run. With or without SDRs, we strongly discourage the use of virtual machines as this may incur testbed-breaking
+latency. Ubuntu 18.04 is the only officially supported operating system at this time.
 
 ## Installing V2Verifier
 On each Ubuntu PC, you must install the following dependencies:
 
 	sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil 
 	python3-pil.imagetk gnuradio
+	
+You may alternately choose to use Pip to install all required packages from the included `requirements.txt` file.
 
 Since V2Verifier incorporates open-source code from the [WiME project](https://www.wime-project.net/), 
 you need to install two components from that project.  
@@ -73,13 +70,14 @@ needs. The default is a 10 MHz channel on 5.89 GHz.
 
 On each PC, navigate to the v2verifier directory. For the receiver, run the command
 
-    python3 main.py local dsrc [-g]
+    python3 v2verifier.py receiver [-g {web tk}] [--test]
 
 to launch the receiver (include the `-g` option for GUI support). For the transmitter, run the command
 
-    python3 main.py remote dsrc
+    python3 v2verifier.py transmitter [--test]
     
-to begin transmitting messages.
+to begin transmitting messages. See the command-line help (`python3 v2verifier.py --help`) for information about the
+optional arguments noted for each command.
 
 *Note that V2Verifier also supports C-V2X communication, but this requires equipment capable of both cellular
 communication and GPS clock synchronization (e.g., USRP B210 w/ GPSDO or 
@@ -87,7 +85,7 @@ communication and GPS clock synchronization (e.g., USRP B210 w/ GPSDO or
 testing environment or synthesized GPS source.*
 
 ## Replay attack with V2Verifier
-Conducting a replay attack requires three USRPs and three PCs.
+Conducting a replay attack requires three USRPs and three PCs. Note that these instructions apply only to DSRC at present.
 One USRP, which will be used to conduct the attack, will require two antennas.
 
 Set up two PCs as above and run the normal transmitter and receiver programs. Make sure to use the `-g` option with 
