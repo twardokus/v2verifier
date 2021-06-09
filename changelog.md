@@ -6,7 +6,7 @@ Notable changes to this project will be tracked here. Additions, deprecations, e
 - major re-structuring of the project to reflect a typical Python project. V2Verifier can now be imported as a module for maximum portability and integration with other open-source projects.
 - a new GUI, based on Electron, features a Google Maps integration and support for GNSS-based vehicle locations, facilitaing more realistic experimentation and an interface better suited to research activities than the old Tk-based GUI
 - real-time message generation and transmission replaces pre-generated message queues in versions <= 1.1
-- initial support for receiving ([not] transmitting) C-V2X messages from commercial devices ([commit #b35898d](https://github.com/twardokus/v2verifier/commits/master?before=8655d3f1db9c398f9496732a3307af6d7617fb92+70&branch=master))
+- initial support for receiving (_not_ transmitting) C-V2X messages from commercial devices ([commit #b35898d](https://github.com/twardokus/v2verifier/commits/master?before=8655d3f1db9c398f9496732a3307af6d7617fb92+70&branch=master))
 - fully functional C-V2X receiver (note that SDR-to-SDR C-V2X support is still under development)
 - a basic reputation tracking functionality which degrades vehicle reputation based on signature verification failures and receipt of expired messages
 - Tk-based GUI now features a "threat tracking" interface to allow at-a-glance reporting on vehicle location/motion information within a scenario
