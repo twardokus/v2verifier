@@ -14,7 +14,7 @@ srsLTE)
 Check out our [YouTube page](https://www.youtube.com/channel/UC5lY5D4KYgfKu3FXtfjHP7A)
 for some of our past projects and publications that made use of V2Verifier!
 
-Developed and maintained in the Wireless and IoT Security and Privacy (WISP) lab at Rochester Institute of Technology's [Global 
+V2Verifier is developed and maintained in the Wireless and IoT Security and Privacy (WISP) lab at Rochester Institute of Technology's [Global 
 Cybersecurity Institute](https://rit.edu/cybersecurity).
 
 ### Citing V2Verifier
