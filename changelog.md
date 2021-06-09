@@ -3,7 +3,7 @@ Notable changes to this project will be tracked here. Additions, deprecations, e
 
 ## Unreleased changes
 ### Added
-- V2V certificates are now supported, moving V2Verifier more closely to full support for the IEEE 1609.2 and 1609.2.1 standards. Note that full cryptographic support for certificate generation and verification, including 1609.2 pseudonym generation and linkage, is not yet included but is currently under active development.
+- Message certificates are now added to the 1609.2 message structure, moving V2Verifier more closely to full support for the IEEE 1609.2 and 1609.2.1 standards. \*Note that full cryptographic support for certificate generation and verification, including 1609.2 pseudonym generation and linkage, is not yet included but is currently under active development.
 - A new, browser-based GUI (built with Electron) features Google Maps integration and support for GNSS-based vehicle locations, facilitaing more realistic experimentation and providing an interface that is better suited to research activities than the existing Tkinter GUI.
 - Real-time message generation and transmission replace pre-generated message queues in versions <= 1.1
 - Support for receiving C-V2X messages from commercial off-the-shelf C-V2X devices ([commit #b35898d](https://github.com/twardokus/v2verifier/commits/master?before=8655d3f1db9c398f9496732a3307af6d7617fb92+70&branch=master))
