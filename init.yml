@@ -1,11 +1,8 @@
-remoteConfig:
-   numberOfVehicles: 1
+scenario:
+   numberOfVehicles: 2
    traceFiles:
-      - coords/coords_3
-      - coords/coords_1
-      - coords/coords_3
-      - coords/coords_4
-      - coords/coords_5
+      - test_gps_coords.csv
+      - single_coordinate_test.csv
    traceLength:
       6
 localConfig:

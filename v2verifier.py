@@ -8,6 +8,8 @@ import argparse
 import time
 import threading
 import sys
+import yaml
+from threading import Thread
 
 
 def process_args():
@@ -30,14 +32,17 @@ def process_args():
     return parser.parse_args()
 
 
-def transmit() -> None:
+def transmit(vehicle_index: int) -> None:
     """Run this V2Verifier instance as the BSM transmitter
+
+    :param vehicle_index: an indicator of which vehicle this is, for use when multiple transmitters are requested
+    :type vehicle_index: int
     """
 
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
     vehicle.run(mode="transmitter",
-                pvm_list=v2verifier.Utility.read_data_from_file("test_gps_coords.csv"),
+                pvm_list=v2verifier.Utility.read_data_from_file(config["scenario"]["traceFiles"][vehicle_index]),
                 test_mode=args.test)
 
 
@@ -75,8 +80,16 @@ def receive(with_gui: bool = False) -> None:
 if __name__ == "__main__":
     args = process_args()
 
+    with open("init.yml") as config_file:
+        config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+    number_of_transmitters = int(config["scenario"]["numberOfVehicles"])
+    if len(config["scenario"]["traceFiles"]) < number_of_transmitters:
+        raise Exception("Error - too few trace files provided for requested number of vehicles.")
+
     if args.perspective == "transmitter":
-        transmit()
+        for i in range(0, number_of_transmitters):
+            Thread(target=transmit, args=[i]).start()
 
     if args.perspective == "receiver":
         receive(args.with_gui)
