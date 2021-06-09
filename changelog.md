@@ -3,14 +3,15 @@ Notable changes to this project will be tracked here. Additions, deprecations, e
 
 ## Unreleased changes
 ### Added
-- major re-structuring of the project to reflect a typical Python project. V2Verifier can now be imported as a module for maximum portability and integration with other open-source projects.
-- a new GUI, based on Electron, features a Google Maps integration and support for GNSS-based vehicle locations, facilitaing more realistic experimentation and an interface better suited to research activities than the old Tk-based GUI
-- real-time message generation and transmission replaces pre-generated message queues in versions <= 1.1
-- initial support for receiving (_not_ transmitting) C-V2X messages from commercial devices ([commit #b35898d](https://github.com/twardokus/v2verifier/commits/master?before=8655d3f1db9c398f9496732a3307af6d7617fb92+70&branch=master))
-- fully functional C-V2X receiver (note that SDR-to-SDR C-V2X support is still under development)
-- a basic reputation tracking functionality which degrades vehicle reputation based on signature verification failures and receipt of expired messages
-- Tk-based GUI now features a "threat tracking" interface to allow at-a-glance reporting on vehicle location/motion information within a scenario
-- files to execute a simple message replay attack in DSRC are now included with the testbed code
+- V2V certificates are now supported, moving V2Verifier more closely to full support for the IEEE 1609.2 and 1609.2.1 standards. Note that full cryptographic support for certificate generation and verification, including 1609.2 pseudonym generation and linkage, is not yet included but is currently under active development.
+- A new, browser-based GUI (built with Electron) features Google Maps integration and support for GNSS-based vehicle locations, facilitaing more realistic experimentation and providing an interface that is better suited to research activities than the existing Tkinter GUI.
+- Real-time message generation and transmission replace pre-generated message queues in versions <= 1.1
+- Support for receiving C-V2X messages from commercial off-the-shelf C-V2X devices ([commit #b35898d](https://github.com/twardokus/v2verifier/commits/master?before=8655d3f1db9c398f9496732a3307af6d7617fb92+70&branch=master))
+- A fully functional C-V2X _receiver_ (full SDR-to-SDR C-V2X support is in the final stages of development)
+- To support misbehavior detection system evaluation, a basic reputation tracking functionality had been added which degrades vehicle reputation based on security issues like signature verification failures or receipt of expired messages
+- The Tk-based GUI now features a "threat tracking" interface to allow at-a-glance reporting on vehicle location/motion information within a scenario
+- Files and documentation to execute a message replay attack in DSRC are now included with the testbed code.
+- The project has been significantly restructured to reflect a typical Python module. V2Verifier can now be imported as a module, facilitating maximum portability and potential integration with other open-source projects.
 ### Changed
 - V2Verifier no longer requires root permissions (i.e., `sudo`-ing commands is no longer required)
 - Several instances of object-oriented design converted to straightforward functions, reducing system resource consumption and improving performance
