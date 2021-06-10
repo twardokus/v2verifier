@@ -1,7 +1,9 @@
 # V2Verifier
-V2Verifer is an open-source project dedicated to wireless experimentation focused on the security of vehicle-to-vehicle
-(V2V) communications. Included are implementations of:
-- Security features from the IEEE 1609.2 standard for V2V security, including message signing and verification
+V2Verifer is an open-source testbed for experimental evaluation of security in vehicle-to-vehicle (V2V) communication.
+V2Verifier supports a broad range of experimentation with V2V technologies and 
+security protocols using a combination of software-defined radios (e.g., USRPs) and commercial V2V equipment. Among other features, V2Verifier includes
+implementations of:
+- Security features from the IEEE 1609.2 standard for V2V security, including message signing and verification and V2V certificates
 - WAVE Short Message Protocol (IEEE 1609.3)
 - Dedicated Short Range Communication (DSRC) - adapted from 
 the [WiME Project's](http://dx.doi.org/10.1109/TMC.2017.2751474)
@@ -11,6 +13,9 @@ srsLTE)
 
 Check out our [YouTube page](https://www.youtube.com/channel/UC5lY5D4KYgfKu3FXtfjHP7A)
 for some of our past projects and publications that made use of V2Verifier!
+
+V2Verifier is developed and maintained in the Wireless and IoT Security and Privacy (WISP) lab at Rochester Institute of Technology's [Global 
+Cybersecurity Institute](https://rit.edu/cybersecurity).
 
 ### Citing V2Verifier
 If you use V2Verifier or any of its components in your work, please cite 
