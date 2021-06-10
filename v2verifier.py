@@ -27,6 +27,11 @@ def process_args():
                         help="choice of perspective",
                         choices=["receiver", "transmitter"]
                         )
+    parser.add_argument("-t",
+                        "--technology",
+                        help="choice of technology",
+                        choices=["dsrc", "cv2x"]
+                        )
     parser.add_argument("-g",
                         "--with-gui",
                         help="option to launch GUI with receiver",
@@ -48,15 +53,18 @@ def transmit(vehicle_index: int) -> None:
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
     vehicle.run(mode="transmitter",
+                tech="dsrc",
                 pvm_list=v2verifier.Utility.read_data_from_file(config["scenario"]["traceFiles"][vehicle_index]),
                 test_mode=args.test)
 
 
-def receive(with_gui: bool = False) -> None:
+def receive(with_gui: bool = False, technology: str = "dsrc") -> None:
     """Run this V2Verifier instance as the BSM receiver
 
     :param with_gui: specify whether to launch GUI with receiver. Default is False (no GUI)
     :type with_gui: bool
+    :param technology: choice of dsrc or c-v2x
+    :type technology: str
     """
 
     if with_gui:
@@ -81,7 +89,7 @@ def receive(with_gui: bool = False) -> None:
 
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
-    vehicle.run(mode="receiver", pvm_list=[], test_mode=args.test)
+    vehicle.run(mode="receiver", tech=technology, pvm_list=[], test_mode=args.test)
 
 
 if __name__ == "__main__":
@@ -99,4 +107,4 @@ if __name__ == "__main__":
             Thread(target=transmit, args=[i]).start()
 
     if args.perspective == "receiver":
-        receive(args.with_gui)
+        receive(with_gui=args.with_gui, technology=args.technology)

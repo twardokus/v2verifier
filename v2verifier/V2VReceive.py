@@ -110,6 +110,33 @@ def parse_received_spdu(spdu: bytes) -> dict:
     return spdu_dict
 
 
+def parse_received_cv2x_spdu(spdu: bytes) -> dict:
+    """Parse a 1609.2 SPDU received from COTS C-V2X equipment
+
+    :param spdu: a 1609.2 SPDU with SAE J2735 BSM
+    :type spdu: bytes
+
+    :return: a dictionary containing the contents of the SPDU keyed by SPDU field
+    :rtype: dict
+    """
+    # Return an empty dict if this SPDU is too short to be a BSM (e.g., a control message)
+    if len(spdu) < 150:
+        return {}
+
+    # drop headers
+    spdu = spdu[42:]
+
+    spdu_dict = {
+        "latitude": struct.unpack("!f", spdu[10:14]),
+        "longitude": struct.unpack("!f", spdu[14:18]),
+        "elevation": struct.unpack("!f", spdu[18:19]),
+        "speed": struct.unpack("!f", spdu[25:26]),
+        "heading": struct.unpack("!f", spdu[26:27])
+    }
+
+    return spdu_dict
+
+
 def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
     """Perform security checks on received SPDU
 
@@ -230,5 +257,24 @@ def report_spdu(spdu_dict: dict) -> str:
 
     for key in spdu_dict.keys():
         report += key + "\t\t\t" + str(spdu_dict[key]) + "\n"
+
+    return report
+
+
+def report_cots_cv2x_bsm(bsm: dict) -> str:
+    """A function to report the BSM information contained in an SPDU from a COTS C-V2X device
+
+    :param bsm: a dictionary containing BSM fields from a C-V2X SPDU
+    :type bsm: dict
+
+    :return: a string representation of the BSM fields
+    :rtype: str
+    """
+    report = ""
+
+    for key in bsm.keys():
+        report += key + "\t\t\t" + str(bsm[key]) + "\n"
+
+    report += "\n"
 
     return report
