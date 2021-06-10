@@ -12,11 +12,17 @@ import yaml
 from threading import Thread
 
 
+welcome_message = "-"*30 + "\n"
+welcome_message += "\""
+welcome_message += "V2Verifier: A Testbed for V2V Security\n\n"
+welcome_message += ""
+
+
 def process_args():
     """Wrapper for the argparse module
     """
 
-    parser = argparse.ArgumentParser(description="Run a V2V security experiment with V2Verifier")
+    parser = argparse.ArgumentParser(description=welcome_message)
     parser.add_argument("perspective",
                         help="choice of perspective",
                         choices=["receiver", "transmitter"]
@@ -65,7 +71,8 @@ def receive(with_gui: bool = False) -> None:
             gui_thread.start()
             print("WebGUI launched successfully")
         else:
-            print("TkGUI is not currently supported.")
+            print("TkGUI is not currently supported. For the time being, please use V2Verifier v1.1 or "
+                  "use the new web-based GUI")
             sys.exit()
             # print("Launching V2Verifier receiver with TkGUI...")
             # gui = v2verifier.TkGUI.TkGUI()
