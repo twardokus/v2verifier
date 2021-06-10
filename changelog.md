@@ -3,19 +3,25 @@ Notable changes to this project will be tracked here. Additions, deprecations, e
 
 ## Unreleased changes
 ### Added
-- Message certificates are now added to the 1609.2 message structure, moving V2Verifier more closely to full support for the IEEE 1609.2 and 1609.2.1 standards. \*Note that full cryptographic support for certificate generation and verification, including 1609.2 pseudonym generation and linkage, is not yet included but is currently under active development.
-- A new, browser-based GUI (built with Electron) features Google Maps integration and support for GNSS-based vehicle locations, facilitaing more realistic experimentation and providing an interface that is better suited to research activities than the existing Tkinter GUI.
+- Implicit certificate and certificate digest structures (see IEEE 1609.2 Section 6.4) are now included with V2Verifier messages. \*_Note that full cryptographic support for certificate generation and verification, including 1609.2 pseudonym generation and linkage, is not yet included but is currently under active development_.
+- A new, browser-based GUI (built with JavaScript as an Electron app) features a Google Maps integration and support for GNSS-based vehicle locations.
+    - This facilitates more realistic experiments
+    - Better suited to research activities than the existing Tkinter GUI (which remains suitable for instructional use)
 - Real-time message generation and transmission replace pre-generated message queues in versions <= 1.1
+    - Compliant with IEEE 1609.2 Section 6.3.9 (regarding the `generationTime` field)
 - Support for receiving C-V2X messages from commercial off-the-shelf C-V2X devices ([commit #b35898d](https://github.com/twardokus/v2verifier/commits/master?before=8655d3f1db9c398f9496732a3307af6d7617fb92+70&branch=master))
 - A fully functional C-V2X _receiver_ (full SDR-to-SDR C-V2X support is in the final stages of development)
-- To support misbehavior detection system evaluation, a basic reputation tracking functionality had been added which degrades vehicle reputation based on security issues like signature verification failures or receipt of expired messages
-- The Tk-based GUI now features a "threat tracking" interface to allow at-a-glance reporting on vehicle location/motion information within a scenario
-- Files and documentation to execute a message replay attack in DSRC are now included with the testbed code.
-- The project has been significantly restructured to reflect a typical Python module. V2Verifier can now be imported as a module, facilitating maximum portability and potential integration with other open-source projects.
+- Basic reputation tracking had been added. Vehicle reputation starts at a customizable value (default 1000) and degrades over time with security failures like signature verification failure or transmission of expired messages
+    - This is a starting point for evaluating reputation-based misbehavior detection systems
+- The existing Tk-based GUI now features a "threat tracking" interface to allow at-a-glance understanding of vehicle location/motion information within a scenario
+- Files and documentation to execute a message replay attack in DSRC are now included with the testbed code
+- The project has been significantly restructured. V2Verifier can now be imported as a module, facilitating maximum portability and integration with other open-source projects.
+- V2Verifier can now be run as pure simulation if access to software-defined radios is not available
+    - This is ideal for testing and development as well as in situations where equipment is limited
 ### Changed
 - V2Verifier no longer requires root permissions (i.e., `sudo`-ing commands is no longer required)
 - Several instances of object-oriented design converted to straightforward functions, reducing system resource consumption and improving performance
-- socket communication between testbed components now uses TCP instead of UDP for more reliable (and faster) communication
+- Socket communication between testbed components now uses TCP instead of UDP for more reliable (and faster) communication
 ### Fixed
 - Resolve issue with GUI not launching that originated with Python 3.6/3.9 differences in keyword argument handling
 - Verification failures due to dropping the leading zero in some ECDSA signatures have been resolved ([commit #648b118](https://github.com/twardokus/v2verifier/commit/648b11883d4f4b71055d84c9cfc6b1c548654160))
