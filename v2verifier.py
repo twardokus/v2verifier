@@ -12,19 +12,13 @@ import yaml
 from threading import Thread
 
 
-welcome_message = "-"*30 + "\n"
-welcome_message += "\""
-welcome_message += "V2Verifier: A Testbed for V2V Security\n\n"
-welcome_message += ""
-
-
 def process_args():
     """Wrapper for the argparse module
     """
 
-    parser = argparse.ArgumentParser(description=welcome_message)
+    parser = argparse.ArgumentParser(description="v2verifier.py - a testbed for V2V security")
     parser.add_argument("perspective",
-                        help="choice of perspective",
+                        help="choice of role",
                         choices=["receiver", "transmitter"]
                         )
     parser.add_argument("-t",

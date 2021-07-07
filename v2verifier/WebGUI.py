@@ -152,7 +152,7 @@ class WebGUI:
             update = threading.Thread(
                 target=self.process_new_packet,
                 args=(
-                    0,  # data["id"],
+                    0,  # data["id"], #TODO also fix this
                     data[0],  # latitude (formerly data["x"])
                     data[1],  # longitude (formerly data["y"])
                     data[2],  # elevation

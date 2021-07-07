@@ -77,7 +77,7 @@ needs. The default is a 10 MHz channel on 5.89 GHz.
 
 On each PC, navigate to the v2verifier directory. For the receiver, run the command
 
-    python3 v2verifier.py receiver [-g {web tk}] [--test]
+    python3 v2verifier.py receiver -t {dsrc cv2x} [-g {web tk}] [--test]
 
 to launch the receiver (include the `-g` option for GUI support). For the transmitter, run the command
 
