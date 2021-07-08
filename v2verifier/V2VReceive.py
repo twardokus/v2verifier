@@ -111,14 +111,6 @@ def parse_received_spdu(spdu: bytes) -> dict:
     else:
         raise Exception("Signatures other than ECDSA P256 not currently supported")
 
-    # for key in spdu_dict.keys():
-    #     if type(spdu_dict[key]) == dict:
-    #         print("Substructure:", key)
-    #         for subkey in spdu_dict[key]:
-    #             print("\t", subkey, ":\t", spdu_dict[key][subkey].hex())
-    #     else:
-    #         print(key, ":\t", spdu_dict[key].hex())
-
     return spdu_dict
 
 

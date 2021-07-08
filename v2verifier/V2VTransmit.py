@@ -77,7 +77,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
                                      length_of_unsecured_data)
 
     ieee1609_dot2_data += bsm
-    print(bsm.hex())
+
     header_info = 1  # 0x01 -> start structure here
     header_psid = 32  # 0x20 -> Blind Spot Monitoring (generic V2V safety, no PSIDs are standardized yet)
 

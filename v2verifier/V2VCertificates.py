@@ -400,12 +400,3 @@ class ToBeSignedCertificate():
         bytestring += self.verification_curve_data
 
         return bytestring
-
-
-if __name__ == "__main__":
-    """Test code
-    """
-    # print(get_implicit_certificate().hex())
-    private, public = keys.import_key("keys/0/p256.key")
-    cert = V2VCertificate("test", private)
-    print(len(cert.toString())/2)

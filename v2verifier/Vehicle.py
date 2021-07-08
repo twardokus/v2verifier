@@ -71,7 +71,6 @@ class Vehicle:
                         spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
 
                     verification_data = v2verifier.V2VReceive.verify_spdu(spdu_data, self.public_key)
-                    print(spdu_data["tbs_data"]["unsecured_data"].hex())
                     print(v2verifier.V2VReceive.get_bsm_report(spdu_data["tbs_data"]["unsecured_data"], verification_data))
                     v2verifier.V2VReceive.report_bsm_gui(spdu_data["tbs_data"]["unsecured_data"], verification_data, "127.0.0.1", 6666)
             elif tech == "cv2x":
