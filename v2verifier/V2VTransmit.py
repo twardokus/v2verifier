@@ -25,7 +25,6 @@ def generate_v2v_bsm(latitude: float, longitude: float, elevation: float, speed:
     :return: a BSM reporting vehicle position and motion
     :rtype: bytes
     """
-
     return struct.pack("!fffff", latitude, longitude, elevation, speed, heading)
 
 
@@ -78,7 +77,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
                                      length_of_unsecured_data)
 
     ieee1609_dot2_data += bsm
-
+    print(bsm.hex())
     header_info = 1  # 0x01 -> start structure here
     header_psid = 32  # 0x20 -> Blind Spot Monitoring (generic V2V safety, no PSIDs are standardized yet)
 
@@ -106,7 +105,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
 
     r, s = ecdsa.sign(bsm, private_key, hashfunc=sha256)
 
-    ieee1609_dot2_data += r.to_bytes(32, 'little') + s.to_bytes(32, 'little')
+    ieee1609_dot2_data += r.to_bytes(32, 'big') + s.to_bytes(32, 'big')
 
     return llc + wsm_headers + ieee1609_dot2_data
 

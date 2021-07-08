@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import v2verifier.V2VCertificates
 import struct
 import math
@@ -7,7 +9,9 @@ from fastecdsa import ecdsa, point
 
 
 def parse_received_spdu(spdu: bytes) -> dict:
-    """Parse a 1609.2 SPDU
+    """Parse a 1609.2 SPDU. Assumes input spdu bytes begins with LLC (0xaaaa...) string;
+    any preceding radio headers (or other prepended bytes) must be stripped before
+    being passed to this function.
 
     :param spdu: a 1609.2 SPDU
     :type spdu: bytes
@@ -16,98 +20,166 @@ def parse_received_spdu(spdu: bytes) -> dict:
     :rtype: dict
     """
 
-    llc_format_string = "!HbxxxH"
-    wsm_header_format_string = "bbbb"
+    spdu_dict = {}
 
-    ieee1609_dot2_data_format_string = "bBbbbBB"
-    bsm_format_string = "fffff"
-    ieee1609_dot2_data_format_string += bsm_format_string
-    ieee1609_dot2_data_format_string += "BBBQB"
-    ieee1609_dot2_data_format_string += "BBBB12s3s2sLBHBB32x"
-    ieee1609_dot2_data_format_string += "BB"
+    # llc_format_string = "!HbxxxH"
+    # wsm_header_format_string = "bbbb"
 
-    spdu_format_string = llc_format_string + wsm_header_format_string + ieee1609_dot2_data_format_string
+    spdu_dict["llc"] = spdu[:8]
 
-    payload, signature = spdu[:-64], spdu[-64:]
+    spdu_dict["wsm_header"] = spdu[8:12]
 
-    # spdu_contents will be a tuple containing each element of the 1609.2 SPDU as constructed
-    # using V2VTransmit.generate_1609_spdu()
-    spdu_contents = struct.unpack(spdu_format_string, payload)
+    # Ieee1609Dot2Data structure is remainder of message after LLC and WSM headers are parsed
+    dot2data = spdu[12:]
 
-    # this code is for explicit certificate parsing
+    current_byte = 0
 
-    # spdu_dict = {
-    #     "llc_dsap_and_ssap": spdu_contents[0],
-    #     "llc_control": spdu_contents[1],
-    #     "llc_type": spdu_contents[2],
-    #     "wsmp_n_subtype_opt_version": spdu_contents[3],
-    #     "wsmp_n_tpid": spdu_contents[4],
-    #     "wsmp_t_header_length_and_psid": spdu_contents[5],
-    #     "wsmp_t_length": spdu_contents[6],
-    #     "wsmp_protocol_version": spdu_contents[7],
-    #     "wsmp_content_type": spdu_contents[8],
-    #     "wsmp_hash_id": spdu_contents[9],
-    #     "bsm_length": spdu_contents[13],
-    #     "bsm": spdu_contents[14:19],
-    #     "header_psid": spdu_contents[21],
-    #     "generation_time": spdu_contents[22],
-    #     "signer_identifier": spdu_contents[23],
-    #     "signer": spdu_contents[24],
-    #     "certificate_version_type": spdu_contents[25],
-    #     "certificate_type": spdu_contents[26],
-    #     "issuer": spdu_contents[27],
-    #     "hashedID": spdu_contents[28],
-    #     "start_tbs_data": spdu_contents[29],
-    #     "hostname_length": spdu_contents[30],
-    #     "hostname": spdu_contents[31],
-    #     "craca_id": spdu_contents[32],
-    #     "crl_series": spdu_contents[33],
-    #     "start_validity": spdu_contents[34],
-    #     "spacer": spdu_contents[35],
-    #     "certificate_duration": spdu_contents[36],
-    #     "filler": spdu_contents[37],
-    #     "psid": spdu_contents[38],
-    #     "verification_key_indicator": spdu_contents[39],
-    #     "ecc_public_key_y": spdu_contents[40],
-    #     "start_signature": spdu_contents[41],
-    #     "ecc_public_key_x_indicator": spdu_contents[42],
-    #     "ecc_public_key_x": spdu_contents[43],
-    #     "s": spdu_contents[44],
-    #     "signature": signature
-    # }
-    spdu_dict = {
-        "llc_dsap_and_ssap": spdu_contents[0],
-        "llc_control": spdu_contents[1],
-        "llc_type": spdu_contents[2],
-        "wsmp_n_subtype_opt_version": spdu_contents[3],
-        "wsmp_n_tpid": spdu_contents[4],
-        "wsmp_t_header_length_and_psid": spdu_contents[5],
-        "wsmp_t_length": spdu_contents[6],
-        "wsmp_protocol_version": spdu_contents[7],
-        "wsmp_content_type": spdu_contents[8],
-        "wsmp_hash_id": spdu_contents[9],
-        "bsm_length": spdu_contents[13],
-        "bsm": spdu_contents[14:19],
-        "header_psid": spdu_contents[21],
-        "generation_time": spdu_contents[22],
-        "signer_identifier": spdu_contents[23],
-        "version": spdu_contents[24],
-        "certificate_type": spdu_contents[25],
-        "issuer": spdu_contents[26],
-        "id": spdu_contents[27],
-        "hostname": spdu_contents[28],
-        "craca_id": spdu_contents[29],
-        "crlseries": spdu_contents[30],
-        "validity_period_start": spdu_contents[31],
-        "validity_period_choice": spdu_contents[32],
-        "validity_period_duration": spdu_contents[33],
-        "verify_key_indicator_choice": spdu_contents[34],
-        "reconstruction_value_choice": spdu_contents[35],
-        "digest": spdu_contents[24],
-        "signature": signature
-    }
+    spdu_dict["protocol_version"] = dot2data[current_byte:current_byte + 1]
+    current_byte += 1
+
+    spdu_dict["content_type"] = dot2data[current_byte:current_byte + 1]
+    current_byte += 1
+
+    spdu_dict["hash_id"] = dot2data[current_byte:current_byte + 1]
+    current_byte += 1
+
+    spdu_dict["tbs_data"] = {}
+    current_byte += 1  # 0x40 -> field delimiter, no need to save
+
+    spdu_dict["tbs_data"]["protocol_version"] = dot2data[current_byte:current_byte + 1]
+    current_byte += 1
+
+    spdu_dict["tbs_data"]["content_type"] = dot2data[current_byte: current_byte + 1]
+    current_byte += 1
+
+    spdu_dict["tbs_data"]["length"] = dot2data[current_byte: current_byte + 1]
+    current_byte += 1
+
+    spdu_dict["tbs_data"]["unsecured_data"] = \
+        dot2data[current_byte: current_byte + int.from_bytes(spdu_dict["tbs_data"]["length"], 'big')]
+    current_byte += int.from_bytes(spdu_dict["tbs_data"]["length"], 'big')
+
+    spdu_dict["header_info"] = {}
+    current_byte += 2  # delimiter is 0x4001
+
+    spdu_dict["header_info"]["psid"] = dot2data[current_byte:current_byte + 1]
+    current_byte += 1
+
+    spdu_dict["header_info"]["generation_time"] = dot2data[current_byte:current_byte + 8]
+    current_byte += 8
+
+    spdu_dict["signer_type"] = dot2data[current_byte:current_byte + 1]
+    current_byte += 1
+
+    if spdu_dict["signer_type"] == b'\x80':  # 0x80 -> digest
+        spdu_dict["digest"] = dot2data[current_byte:current_byte + 8]
+        current_byte += 8
+
+    elif spdu_dict["signer_type"] == b'\x81':  # 0x81 -> certificate
+        spdu_dict["certificate"], current_byte = parse_spdu_certificate(dot2data, current_byte)
+
+    spdu_dict["signature_choice"] = dot2data[current_byte:current_byte + 1]
+    current_byte += 1
+
+    spdu_dict["signature"] = {}
+
+    if spdu_dict["signature_choice"] == b'\x80':  # EcdsaP256Signature
+        spdu_dict["signature"]["r_choice"] = dot2data[current_byte:current_byte + 1]
+        current_byte += 1
+
+        if spdu_dict["signature"]["r_choice"] == b'\x80' or \
+            spdu_dict["signature"]["r_choice"] == b'\x81' or \
+            spdu_dict["signature"]["r_choice"] == b'\x82' or \
+            spdu_dict["signature"]["r_choice"] == b'\x83':
+
+            spdu_dict["signature"]["r"] = dot2data[current_byte:current_byte + 32]
+            current_byte += 32
+
+        elif spdu_dict["signature"]["r_choice"] == b'\x84':  # uncompressed
+            spdu_dict["signature"]["r"] = {}
+            spdu_dict["signature"]["r"]["x"] = dot2data[current_byte:current_byte + 32]
+            current_byte += 32
+            spdu_dict["signature"]["r"]["y"] = dot2data[current_byte:current_byte + 32]
+            current_byte += 32
+
+        else:
+            raise Exception("Unknown signature type specified.")
+
+        spdu_dict["signature"]["s"] = dot2data[current_byte:current_byte + 32]
+        current_byte += 32
+
+    else:
+        raise Exception("Signatures other than ECDSA P256 not currently supported")
+
+    # for key in spdu_dict.keys():
+    #     if type(spdu_dict[key]) == dict:
+    #         print("Substructure:", key)
+    #         for subkey in spdu_dict[key]:
+    #             print("\t", subkey, ":\t", spdu_dict[key][subkey].hex())
+    #     else:
+    #         print(key, ":\t", spdu_dict[key].hex())
 
     return spdu_dict
+
+
+def parse_spdu_certificate(dot2data: bytes, current_byte: int) -> Tuple[dict, int]:
+    """Parse a certificate-type Signer substructure within an SPDU
+
+    :param dot2data: the bytes of an Ieee1609Dot2Data structure
+    :type dot2data: bytes
+    :param current_byte: the byte offset where the certificate starts within dot2data
+    :type current_byte: int
+
+    :return a tuple containing a dictionary of the certificate fields/values and byte offset of end of certificate
+    :rtype tuple
+    """
+
+    cert_dict = {}
+
+    cert_dict["version"] = dot2data[current_byte:current_byte + 1]
+    current_byte += 1
+
+    cert_dict["cert_type"] = dot2data[current_byte:current_byte + 1]
+    current_byte += 1
+    
+    if cert_dict["cert_type"] == b'\x01':  # 0x01 -> implicit certificate
+        cert_dict["issuer"] = dot2data[current_byte:current_byte + 1]
+        current_byte += 1
+        
+        cert_dict["id"] = dot2data[current_byte:current_byte + 1]
+        current_byte += 1
+        
+        cert_dict["hostname"] = dot2data[current_byte:current_byte + 12]
+        current_byte += 12
+
+        cert_dict["craca_id"] = dot2data[current_byte:current_byte + 3]
+        current_byte += 3
+
+        cert_dict["crlseries"] = dot2data[current_byte:current_byte + 2]
+        current_byte += 2
+
+        cert_dict["validity_start"] = dot2data[current_byte:current_byte + 4]
+        current_byte += 4
+
+        cert_dict["validity_choice"] = dot2data[current_byte:current_byte + 1]
+        current_byte += 1
+
+        cert_dict["validity_duration"] = dot2data[current_byte:current_byte + 2]
+        current_byte += 2
+
+        cert_dict["verify_key_indicator_choice"] = dot2data[current_byte:current_byte + 1]
+        current_byte += 1
+
+        cert_dict["reconstruction_value_choice"] = dot2data[current_byte:current_byte + 1]
+        current_byte += 1
+
+        cert_dict["reconstruction_value"] = dot2data[current_byte:current_byte + 32]
+        current_byte += 32
+
+    else:
+        raise Exception("Explicit certificates cannot be received at this time.")
+
+    return cert_dict, current_byte
 
 
 def parse_received_cv2x_spdu(spdu: bytes) -> dict:
@@ -155,24 +227,20 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
     max_allowed_elapsed_microseconds = 30000
 
     elapsed = math.floor((datetime.now() -
-                          datetime(2004, 1, 1, 0, 0, 0, 0)).total_seconds() * 1000) - spdu_dict["generation_time"]
+                          datetime(2004, 1, 1, 0, 0, 0, 0)).total_seconds() * 1000) \
+                                - int.from_bytes(spdu_dict["header_info"]["generation_time"],'big')
 
     unexpired = True if elapsed < max_allowed_elapsed_microseconds else False
 
     # Verify the signature
+    if spdu_dict["signature_choice"] == b'\x80':  # ECDSA P256
 
-    r = int.from_bytes(spdu_dict["signature"][:32], "little")
-    s = int.from_bytes(spdu_dict["signature"][32:], "little")
+        r = int.from_bytes(spdu_dict["signature"]["r"], 'big')
+        s = int.from_bytes(spdu_dict["signature"]["s"], 'big')
+        valid_signature = ecdsa.verify((r, s), spdu_dict["tbs_data"]["unsecured_data"], public_key)
 
-    reassembled_message = struct.pack("!fffff",
-                                      spdu_dict["bsm"][0],
-                                      spdu_dict["bsm"][1],
-                                      spdu_dict["bsm"][2],
-                                      spdu_dict["bsm"][3],
-                                      spdu_dict["bsm"][4]
-                                      )
-
-    valid_signature = ecdsa.verify((r, s), reassembled_message, public_key)
+    else:
+        raise Exception("Verification for signatures other than ECDSA P256 is not supported.")
 
     return {"valid_signature": valid_signature, "unexpired": unexpired, "elapsed": elapsed}
 
@@ -205,17 +273,18 @@ def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: i
     sock.sendto(data, (ip_address, port))
 
 
-def get_bsm_report(bsm: tuple, verification_dict: dict) -> str:
+def get_bsm_report(bsm: bytes, verification_dict: dict) -> str:
     """Create a report about a received SPDU. Intended to generate output for printing to console.
 
-    :param bsm: a tuple of BSM information matching the format returned by v2verifier.V2VTransmit.generate_v2v_bsm()
-    :type bsm: tuple
+    :param bsm: BSM data in byte format as packed by v2verifier.V2VTransmit.generate_bsm()
+    :type bsm: bytes
     :param verification_dict: a dictionary containing verification information about an SPDU
     :type verification_dict: dict
 
     :return: a string containing information about an SPDU to be displayed (e.g., printed to console)
     :rtype: str
     """
+    bsm = struct.unpack("!fffff", bsm)
 
     report = ""
     report += "Vehicle reports location "

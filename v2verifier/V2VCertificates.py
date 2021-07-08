@@ -53,8 +53,8 @@ def get_implicit_certificate() -> bytes:
     :rtype: bytes
     """
     version = 3  # 0x03 -> version 3
-    certificate_type = 129  # 0x81 -> implicit
-    issuer = 128  # 128 -> self-issued, use SHA-256
+    certificate_type = 1  # 0x01 -> implicit
+    issuer = 128  # 0x80 -> self-issued, use SHA-256
     id = 129  # 0x81 -> hostname
     hostname = "demo_vehicle"  # fixed, do not change
     craca_id = 0  # 0x000000 -> we have no certificate revocation authority (yet)
