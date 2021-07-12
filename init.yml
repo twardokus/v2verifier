@@ -1,8 +1,8 @@
 scenario:
    numberOfVehicles: 1
    traceFiles:
-      - single_coordinate_test.csv
       - test_gps_coords.csv
+      - single_coordinate_test.csv
    traceLength:
       6
 localConfig:

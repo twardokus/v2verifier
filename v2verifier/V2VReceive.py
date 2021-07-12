@@ -2,6 +2,7 @@ from typing import Tuple
 
 import v2verifier.V2VCertificates
 import struct
+import os
 import math
 from datetime import datetime
 import socket
@@ -229,12 +230,21 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
 
         r = int.from_bytes(spdu_dict["signature"]["r"], 'big')
         s = int.from_bytes(spdu_dict["signature"]["s"], 'big')
+
+        # openssl dgst -sha256 -verify public.pem -signature test.sha256 test.py
+        # openssl_verify_command = "openssl dgst -sha256 -verify public.pem -signature SIGNATURE_DIGEST SIGNED_DATA"
+
         valid_signature = ecdsa.verify((r, s), spdu_dict["tbs_data"]["unsecured_data"], public_key)
+
+        signature_type = "ecdsa_p256"
 
     else:
         raise Exception("Verification for signatures other than ECDSA P256 is not supported.")
 
-    return {"valid_signature": valid_signature, "unexpired": unexpired, "elapsed": elapsed}
+    return {"signature_type": signature_type,
+            "valid_signature": valid_signature,
+            "unexpired": unexpired,
+            "elapsed": elapsed}
 
 
 def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: int) -> None:
@@ -263,6 +273,20 @@ def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: i
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     sock.sendto(data, (ip_address, port))
+
+
+def extract_bsm_data(bsm: bytes, verification_dict: dict) -> tuple:
+    """Return a tuple containing the data elements of a BSM
+
+    :param bsm: the bsm bytes to parse
+    :type bsm: bytes
+    :param verification_dict: verification information from verify_spdu()
+    :type verification_dict: dict
+
+    :return: the BSM data elements
+    :rtype: tuple
+    """
+    return struct.unpack("!fffff", bsm)
 
 
 def get_bsm_report(bsm: bytes, verification_dict: dict) -> str:
