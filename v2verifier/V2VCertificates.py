@@ -53,8 +53,8 @@ def get_implicit_certificate() -> bytes:
     :rtype: bytes
     """
     version = 3  # 0x03 -> version 3
-    certificate_type = 129  # 0x81 -> implicit
-    issuer = 128  # 128 -> self-issued, use SHA-256
+    certificate_type = 1  # 0x01 -> implicit
+    issuer = 128  # 0x80 -> self-issued, use SHA-256
     id = 129  # 0x81 -> hostname
     hostname = "demo_vehicle"  # fixed, do not change
     craca_id = 0  # 0x000000 -> we have no certificate revocation authority (yet)
@@ -400,12 +400,3 @@ class ToBeSignedCertificate():
         bytestring += self.verification_curve_data
 
         return bytestring
-
-
-if __name__ == "__main__":
-    """Test code
-    """
-    # print(get_implicit_certificate().hex())
-    private, public = keys.import_key("keys/0/p256.key")
-    cert = V2VCertificate("test", private)
-    print(len(cert.toString())/2)

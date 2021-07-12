@@ -25,7 +25,6 @@ def generate_v2v_bsm(latitude: float, longitude: float, elevation: float, speed:
     :return: a BSM reporting vehicle position and motion
     :rtype: bytes
     """
-
     return struct.pack("!fffff", latitude, longitude, elevation, speed, heading)
 
 
@@ -106,7 +105,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
 
     r, s = ecdsa.sign(bsm, private_key, hashfunc=sha256)
 
-    ieee1609_dot2_data += r.to_bytes(32, 'little') + s.to_bytes(32, 'little')
+    ieee1609_dot2_data += r.to_bytes(32, 'big') + s.to_bytes(32, 'big')
 
     return llc + wsm_headers + ieee1609_dot2_data
 

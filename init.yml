@@ -1,5 +1,5 @@
 scenario:
-   numberOfVehicles: 2
+   numberOfVehicles: 1
    traceFiles:
       - test_gps_coords.csv
       - single_coordinate_test.csv
