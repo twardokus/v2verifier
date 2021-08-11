@@ -76,7 +76,7 @@ class Vehicle:
                     self.update_known_vehicles(spdu_data["certificate"]["hostname"], bsm_data_tuple, verification_data)
 
                     print(v2verifier.V2VReceive.get_bsm_report(spdu_data["tbs_data"]["unsecured_data"], verification_data))
-                    v2verifier.V2VReceive.report_bsm_gui(spdu_data["tbs_data"]["unsecured_data"], verification_data, "127.0.0.1", 6666)
+                    v2verifier.V2VReceive.report_bsm_gui(bsm_data_tuple, verification_data, "127.0.0.1", 6666)
 
             elif tech == "cv2x":
                 # use IPv6 on the Ethernet interface to get messages from COTS device
