@@ -70,10 +70,10 @@
 #include "srslte/phy/ue/ue_sl.h"
 
 
-#define REP_INTERVL 100
+#define REP_INTERVL 500
 
 bool keep_running = true;
-bool debug_log = false;
+bool debug_log = true;
 srslte_cell_sl_t cell_sl = {.nof_prb = 50, .tm = SRSLTE_SIDELINK_TM4, .cp = SRSLTE_CP_NORM, .N_sl_id = 19};
 
 typedef struct {
@@ -481,7 +481,7 @@ int main(int argc, char** argv)
     else {
 
       // only if data to transmit
-      if (sf_config[tx_msec_offset % REP_INTERVL].l_sub_channel > 0) {
+      if (tx_msec_offset % REP_INTERVL == 0 && sf_config[tx_msec_offset % REP_INTERVL].l_sub_channel > 0) {
 
         int ret = srslte_rf_send_timed2(&radio,
                                         signal_buffer_tx[tx_msec_offset % REP_INTERVL],
@@ -492,6 +492,9 @@ int main(int argc, char** argv)
                                         true);
         if (ret < 0) {
           ERROR("Error sending data: %d\n", ret);
+        }
+        else {
+          printf("Sent data %d\n",tx_msec_offset);
         }
 
         // write logfile
