@@ -1,0 +1,6 @@
+eel
+fastecdsa
+folium
+pynmea2
+pyyaml
+scapy
