@@ -24,7 +24,7 @@ def process_args():
     parser.add_argument("-t",
                         "--technology",
                         help="choice of technology",
-                        choices=["dsrc", "cv2x"]
+                        choices=["dsrc", "cv2x", "cohda"]
                         )
     parser.add_argument("-g",
                         "--with-gui",
@@ -37,17 +37,19 @@ def process_args():
     return parser.parse_args()
 
 
-def transmit(vehicle_index: int) -> None:
+def transmit(vehicle_index: int, technology: str) -> None:
     """Run this V2Verifier instance as the BSM transmitter
 
     :param vehicle_index: an indicator of which vehicle this is, for use when multiple transmitters are requested
     :type vehicle_index: int
+    :param technology: specify the technology
+    :type technology: str
     """
 
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)
     vehicle.run(mode="transmitter",
-                tech="dsrc",
+                tech=technology,
                 pvm_list=v2verifier.Utility.read_data_from_file(config["scenario"]["traceFiles"][vehicle_index]),
                 test_mode=args.test)
 
@@ -98,7 +100,7 @@ if __name__ == "__main__":
 
     if args.perspective == "transmitter":
         for i in range(0, number_of_transmitters):
-            Thread(target=transmit, args=[i]).start()
+            Thread(target=transmit, args=[i, args.technology]).start()
 
     if args.perspective == "receiver":
         receive(with_gui=args.with_gui, technology=args.technology)
