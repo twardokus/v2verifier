@@ -72,14 +72,14 @@ def receive(with_gui: bool = False, technology: str = "dsrc") -> None:
             gui_thread = threading.Thread(target=gui.run)
             gui_thread.start()
             print("WebGUI launched successfully")
-        else:
-            print("TkGUI is not currently supported. For the time being, please use V2Verifier v1.1 or "
-                  "use the new web-based GUI")
-            sys.exit()
-            # print("Launching V2Verifier receiver with TkGUI...")
-            # gui = v2verifier.TkGUI.TkGUI()
-            # gui_thread = threading.Thread(target=gui.run)
-            # gui_thread.start()
+        # else:
+        #     # print("TkGUI is not currently supported. For the time being, please use V2Verifier v1.1 or "
+        #     #     "use the new web-based GUI")
+        #     # sys.exit()
+        #     print("Launching V2Verifier receiver with TkGUI...")
+        #     gui = v2verifier.TkGUI.TkGUI()
+        #     gui_thread = threading.Thread(target=gui.run)
+        #     gui_thread.start()
 
     private, public = keys.import_key("keys/0/p256.key")
     vehicle = v2verifier.Vehicle.Vehicle(public, private)

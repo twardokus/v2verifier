@@ -25,7 +25,7 @@ class Vehicle:
 
         self.public_key = public_key
         self.private_key = private_key
-        self.bsm_interval = 0.1  # interval specified in seconds, 0.1 -> every 100ms
+        self.bsm_interval = 0.5  # interval specified in seconds, 0.1 -> every 100ms
         self.known_vehicles = {}
 
     def run(self, mode: str, tech: str, pvm_list: list, test_mode: bool = False) -> None:
@@ -69,7 +69,7 @@ class Vehicle:
                     if test_mode:  # in test mode, there are no 802.11 headers, so parse all received data
                         spdu_data = v2verifier.V2VReceive.parse_received_spdu(data)
                     else:  # otherwise (i.e., w/ GNURadio), 802.11 PHY/MAC headers must be stripped before parsing SPDU
-                        spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
+                        spdu_data = v2verifier.V2VReceive.parse_received_spdu(data)#[57:])
 
                     verification_data = v2verifier.V2VReceive.verify_spdu(spdu_data, self.public_key)
                     bsm_data_tuple = v2verifier.V2VReceive.extract_bsm_data(spdu_data["tbs_data"]["unsecured_data"], verification_data)

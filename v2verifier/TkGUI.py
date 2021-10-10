@@ -1,3 +1,4 @@
+import struct
 from tkinter.ttk import *
 import tkinter as tk
 from PIL import Image
@@ -31,16 +32,16 @@ def heading_to_direction(heading):
 
 class TkGUI:
 
-    def __init__(self):
+    def __init__(self, root):
 
-        self.root = tk.Tk()
+        self.root = root
 
         self.threadlock = threading.Lock()
 
         with open("init.yml", "r") as confFile:
             self.config = yaml.load(confFile, Loader=yaml.FullLoader)
-        self.numVehicles = self.config["remoteConfig"]["numberOfVehicles"] + 1
-        self.totalPackets = self.config["remoteConfig"]["traceLength"] * (self.numVehicles - 1)
+        self.numVehicles = 1 #self.config["remoteConfig"]["numberOfVehicles"] + 1
+        self.totalPackets = 100 #self.config["remoteConfig"]["traceLength"] * (self.numVehicles - 1)
 
         self.receivedPacketCount = 0
         self.processedPacketCount = 0
@@ -151,6 +152,8 @@ class TkGUI:
         self.legend.grid(row=1, column=0, sticky="ew")
         self.report.grid(row=2, column=0, sticky="ew")
 
+        print("GUI loaded...")
+
     def run(self):
         receiver_thread = threading.Thread(target=self.run_gui_receiver)
         receiver_thread.start()
@@ -159,7 +162,7 @@ class TkGUI:
 
     def run_gui_receiver(self):
         # Start the GUI service on port 6666
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.bind(('127.0.0.1', 6666))
 
         labelThread = Thread(target=self.update_statistics_labels)
@@ -170,44 +173,47 @@ class TkGUI:
 
     def receive(self, s):
 
-        s.listen()
-        c = s.accept()[0]
+        # s.listen()
+        # c = s.accept()[0]
+        # print("Connection!")
 
         while True:
-            try:
-                msg = c.recv(1024).decode()
+            # try:
+                msg = s.recvfrom(1024)[0]
+                print("Received", msg)
                 # decode the JSON string
-                data = json.loads(msg)
+                data = struct.unpack("!5f??f", msg)
 
-                if not data['receiver']:
-                    self.receivedPacketCount += 1
+                # TODO: restore security information rendering
+                # if not data['receiver']:
+                #     self.receivedPacketCount += 1
+                #
+                #     self.intactPacketCount += 1
+                #
+                #     if data['sig']:
+                #         self.authenticatedPacketCount += 1
+                #     if data['recent']:
+                #         self.onTimePacketCount += 1
 
-                    self.intactPacketCount += 1
+                # self.update_vehicle_info_labels(data["id"], "(" + data["x"] + "," + data["y"] + ")",
+                #                                 data["speed"], data['reputation'])
 
-                    if data['sig']:
-                        self.authenticatedPacketCount += 1
-                    if data['recent']:
-                        self.onTimePacketCount += 1
-
-                self.update_vehicle_info_labels(data["id"], "(" + data["x"] + "," + data["y"] + ")",
-                                                data["speed"], data['reputation'])
+                # self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'],
+                # data['receiver'], data['elapsed'],))
                 update = Thread(target=self.new_packet, args=(
-                self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'],
-                data['receiver'], data['elapsed'],))
+                    self.threadlock, 0, data[0], data[1], "N", data[5], data[6], False, data[7])
+                )
                 update.start()
 
-            except json.decoder.JSONDecodeError as e:
-                print("JSON decoding error - invalid data. Discarding.")
-                print(str(e))
-            except Exception as e:
-                print("=====================================================================================")
-                print("Error processing packet. Exception type:")
-                print(type(e))
-                print("")
-                print("Error message:")
-                print(e)
-                print("End error message")
-                print("=====================================================================================")
+            # except Exception as e:
+            #     print("=====================================================================================")
+            #     print("Error processing packet. Exception type:")
+            #     print(type(e))
+            #     print("")
+            #     print("Error message:")
+            #     print(e)
+            #     print("End error message")
+            #     print("=====================================================================================")
 
     def new_packet(self, lock, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
 

@@ -110,6 +110,8 @@ def parse_received_spdu(spdu: bytes) -> dict:
         current_byte += 32
 
     else:
+        print("Received signature type - ", spdu_dict["signature_choice"])
+        print(spdu_dict)
         raise Exception("Signatures other than ECDSA P256 not currently supported")
 
     return spdu_dict
