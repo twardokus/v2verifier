@@ -30,6 +30,34 @@ def heading_to_direction(heading):
         return "southeast"
 
 
+def numerical_heading_to_direction(heading):
+    corrected_heading = heading
+    if heading < 0:
+        corrected_heading += 360
+    elif heading > 359:
+        corrected_heading = heading % 360
+
+    if corrected_heading <= 22.5:
+        return "N"
+    elif 22.5 < corrected_heading <= 67.5:
+        return "NE"
+    elif 67.5 < corrected_heading <= 112.5:
+        return "E"
+    elif 112.5 < corrected_heading <= 157.5:
+        return "SE"
+    elif 157.5 < corrected_heading <= 202.5:
+        return "S"
+    elif 202.5 < corrected_heading <= 247.5:
+        return "SW"
+    elif 247.5 < corrected_heading <= 292.5:
+        return "W"
+    elif 292.5 < corrected_heading <= 337.5:
+        return "NW"
+    elif 337.5 < corrected_heading:
+        return "N"
+
+
+
 class TkGUI:
 
     def __init__(self, root):
@@ -181,27 +209,26 @@ class TkGUI:
             # try:
                 msg = s.recvfrom(1024)[0]
                 print("Received", msg)
-                # decode the JSON string
+
                 data = struct.unpack("!5f??f", msg)
 
-                # TODO: restore security information rendering
                 # if not data['receiver']:
-                #     self.receivedPacketCount += 1
-                #
-                #     self.intactPacketCount += 1
-                #
-                #     if data['sig']:
-                #         self.authenticatedPacketCount += 1
-                #     if data['recent']:
-                #         self.onTimePacketCount += 1
+                self.receivedPacketCount += 1
 
-                # self.update_vehicle_info_labels(data["id"], "(" + data["x"] + "," + data["y"] + ")",
-                #                                 data["speed"], data['reputation'])
+                self.intactPacketCount += 1
+
+                if data[5]:
+                    self.authenticatedPacketCount += 1
+                if data[7]:
+                    self.onTimePacketCount += 1
+
+                self.update_vehicle_info_labels(0, "(" + str(data[0]) + "," + str(data[1]) + ")",
+                                                str(data[3]), "0")
 
                 # self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'],
                 # data['receiver'], data['elapsed'],))
                 update = Thread(target=self.new_packet, args=(
-                    self.threadlock, 0, data[0], data[1], "N", data[5], data[6], False, data[7])
+                    self.threadlock, 0, data[0], data[1], numerical_heading_to_direction(data[4]), data[5], data[6], False, data[7])
                 )
                 update.start()
 

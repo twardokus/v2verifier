@@ -25,7 +25,7 @@ class Vehicle:
 
         self.public_key = public_key
         self.private_key = private_key
-        self.bsm_interval = 0.5  # interval specified in seconds, 0.1 -> every 100ms
+        self.bsm_interval = 0.1  # interval specified in seconds, 0.1 -> every 100ms
         self.known_vehicles = {}
 
     def run(self, mode: str, tech: str, pvm_list: list, test_mode: bool = False) -> None:
