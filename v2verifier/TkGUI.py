@@ -210,7 +210,7 @@ class TkGUI:
                 msg = s.recvfrom(1024)[0]
                 print("Received", msg)
 
-                data = struct.unpack("!5f??f", msg)
+                data = struct.unpack("!5f??ff", msg)
 
                 # if not data['receiver']:
                 self.receivedPacketCount += 1
@@ -222,13 +222,13 @@ class TkGUI:
                 if data[7]:
                     self.onTimePacketCount += 1
 
-                self.update_vehicle_info_labels(0, "(" + str(data[0]) + "," + str(data[1]) + ")",
+                self.update_vehicle_info_labels(data[8], "(" + str(data[0]) + "," + str(data[1]) + ")",
                                                 str(data[3]), "0")
 
                 # self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'],
                 # data['receiver'], data['elapsed'],))
                 update = Thread(target=self.new_packet, args=(
-                    self.threadlock, 0, data[0], data[1], numerical_heading_to_direction(data[4]), data[5], data[6], False, data[7])
+                    self.threadlock, data[8], data[0], data[1], numerical_heading_to_direction(data[4]), data[5], data[6], False, data[7])
                 )
                 update.start()
 

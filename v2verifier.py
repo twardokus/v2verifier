@@ -34,6 +34,9 @@ def process_args():
                         help="run in test mode without SDRs or GNURadio",
                         action="store_true"
                         )
+    parser.add_argument("--hostname",
+                        help="specify unique vehicle hostname",
+                        default="demo_vehicle")
     return parser.parse_args()
 
 
@@ -45,7 +48,7 @@ def transmit(vehicle_index: int) -> None:
     """
 
     private, public = keys.import_key("keys/0/p256.key")
-    vehicle = v2verifier.Vehicle.Vehicle(public, private)
+    vehicle = v2verifier.Vehicle.Vehicle(public, private, args.hostname)
     vehicle.run(mode="transmitter",
                 tech="dsrc",
                 pvm_list=v2verifier.Utility.read_data_from_file(config["scenario"]["traceFiles"][vehicle_index]),
@@ -82,7 +85,7 @@ def receive(with_gui: bool = False, technology: str = "dsrc") -> None:
         #     gui_thread.start()
 
     private, public = keys.import_key("keys/0/p256.key")
-    vehicle = v2verifier.Vehicle.Vehicle(public, private)
+    vehicle = v2verifier.Vehicle.Vehicle(public, private, args.hostname)
     vehicle.run(mode="receiver", tech=technology, pvm_list=[], test_mode=args.test)
 
 

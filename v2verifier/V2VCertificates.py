@@ -46,17 +46,24 @@ def get_certificate_fields_list() -> list:
     ]
 
 
-def get_implicit_certificate() -> bytes:
+def get_implicit_certificate(vehicle_hostname: str) -> bytes:
     """Get a byte representation of a 1609.2-compliant implicit certificate
 
     :return: byte representation of an implicit certificate
     :rtype: bytes
     """
+
+    if len(vehicle_hostname) > 12:
+        vehicle_hostname = vehicle_hostname[:12]
+
+    while len(vehicle_hostname) < 12:
+        vehicle_hostname = "0" + vehicle_hostname
+
     version = 3  # 0x03 -> version 3
     certificate_type = 1  # 0x01 -> implicit
     issuer = 128  # 0x80 -> self-issued, use SHA-256
     id = 129  # 0x81 -> hostname
-    hostname = "demo_vehicle"  # fixed, do not change
+    hostname = vehicle_hostname
     craca_id = 0  # 0x000000 -> we have no certificate revocation authority (yet)
     crlseries = 0 # 0x0000 -> we have no CRLs issued by a CRLCA, either
     validity_period_start = math.floor((datetime.now() - datetime(2004, 1, 1, 0, 0, 0, 0)).total_seconds())
