@@ -62,8 +62,7 @@ class Vehicle:
                 time.sleep(self.bsm_interval)
 
         elif mode == "receiver":
-            print("Test mode is ", end="")
-            print("ACTIVE") if test_mode else print("OFF")
+
             if tech == "dsrc":
                 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 sock.bind(("127.0.0.1", 4444))
