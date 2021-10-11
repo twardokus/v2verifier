@@ -62,6 +62,8 @@ class Vehicle:
                 time.sleep(self.bsm_interval)
 
         elif mode == "receiver":
+            print("Test mode is ", end="")
+            print("ACTIVE") if test_mode else print("OFF")
             if tech == "dsrc":
                 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
                 sock.bind(("127.0.0.1", 4444))
@@ -71,7 +73,7 @@ class Vehicle:
                     if test_mode:  # in test mode, there are no 802.11 headers, so parse all received data
                         spdu_data = v2verifier.V2VReceive.parse_received_spdu(data)
                     else:  # otherwise (i.e., w/ GNURadio), 802.11 PHY/MAC headers must be stripped before parsing SPDU
-                        spdu_data = v2verifier.V2VReceive.parse_received_spdu(data)#[57:])
+                        spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
 
                     verification_data = v2verifier.V2VReceive.verify_spdu(spdu_data, self.public_key)
                     bsm_data_tuple = v2verifier.V2VReceive.extract_bsm_data(spdu_data["tbs_data"]["unsecured_data"],
