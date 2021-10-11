@@ -1,7 +1,12 @@
 import time
 import socket
+from threading import Thread
+
+import yaml
+
 import v2verifier.V2VReceive
 import v2verifier.V2VTransmit
+import v2verifier.Utility
 from fastecdsa import point
 
 
@@ -62,6 +67,8 @@ class Vehicle:
                 time.sleep(self.bsm_interval)
 
         elif mode == "receiver":
+            local_vehicle = Thread(target=self.run_self, args=[test_mode])
+            local_vehicle.start()
 
             if tech == "dsrc":
                 sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -145,3 +152,24 @@ class Vehicle:
             print("Vehicle: ", vehicle)
             for item in self.known_vehicles[vehicle]:
                 print("\t", item, self.known_vehicles[vehicle][item])
+
+    def run_self(self, test_mode=False):
+        print("Running self")
+        with open("init.yml") as config_file:
+            config = yaml.load(config_file, Loader=yaml.FullLoader)
+
+        pvm_list = v2verifier.Utility.read_data_from_file(config["local"]["tracefile"])
+        for pvm_element in pvm_list:
+            latitude, longitude, elevation, speed, heading = pvm_element.split(",")
+            bsm = v2verifier.V2VTransmit.generate_v2v_bsm(float(latitude),
+                                                          float(longitude),
+                                                          float(elevation),
+                                                          float(speed),
+                                                          float(heading))
+
+            spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key, "reserved9999")
+            spdu = b'\xFE'*57 + spdu
+
+            v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
+
+            time.sleep(self.bsm_interval)
