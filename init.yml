@@ -1,7 +1,8 @@
 scenario:
-   numberOfVehicles: 1
+   numberOfVehicles: 2
    traceFiles:
       - tk_trace.csv
+      - tk_trace_2.csv
       - test_gps_coords.csv
       - single_coordinate_test.csv
    traceLength:

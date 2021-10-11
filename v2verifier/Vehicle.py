@@ -30,7 +30,7 @@ class Vehicle:
         self.local_id_counter = 0
         self.hostname = hostname
 
-    def run(self, mode: str, tech: str, pvm_list: list, test_mode: bool = False) -> None:
+    def run(self, mode: str, tech: str, pvm_list: list, hostname: str, test_mode: bool = False) -> None:
         """Launch the vehicle
 
         :param mode: selection of "transmitter" or "receiver"
@@ -52,7 +52,7 @@ class Vehicle:
                                                               float(speed),
                                                               float(heading))
 
-                spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key, self.hostname)
+                spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key, hostname)
 
                 if test_mode:  # in test mode, send directly to receiver on port 4444
                     v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
