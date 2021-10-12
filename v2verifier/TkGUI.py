@@ -57,7 +57,6 @@ def numerical_heading_to_direction(heading):
         return "N"
 
 
-
 class TkGUI:
 
     def __init__(self, root):
@@ -68,8 +67,8 @@ class TkGUI:
 
         with open("init.yml", "r") as confFile:
             self.config = yaml.load(confFile, Loader=yaml.FullLoader)
-        self.numVehicles = 1 #self.config["remoteConfig"]["numberOfVehicles"] + 1
-        self.totalPackets = 100 #self.config["remoteConfig"]["traceLength"] * (self.numVehicles - 1)
+        self.numVehicles = 1  # self.config["remoteConfig"]["numberOfVehicles"] + 1
+        self.totalPackets = 100  # self.config["remoteConfig"]["traceLength"] * (self.numVehicles - 1)
 
         self.receivedPacketCount = 0
         self.processedPacketCount = 0
@@ -207,14 +206,13 @@ class TkGUI:
 
         while True:
             # try:
-                msg = s.recvfrom(1024)[0]
-                print("Received", msg)
+            msg = s.recvfrom(1024)[0]
+            print("Received", msg)
 
-                data = struct.unpack("!5f??ff", msg)
+            data = struct.unpack("!5f??ff", msg)
 
-                # if not data['receiver']:
+            if not data[8] == 99:
                 self.receivedPacketCount += 1
-
                 self.intactPacketCount += 1
 
                 if data[5]:
@@ -222,25 +220,24 @@ class TkGUI:
                 if data[7]:
                     self.onTimePacketCount += 1
 
-                self.update_vehicle_info_labels(data[8], "(" + str(data[0]) + "," + str(data[1]) + ")",
-                                                str(data[3]), "0")
+            self.update_vehicle_info_labels(data[8], "(" + str(data[0]) + "," + str(data[1]) + ")",
+                                            str(data[3]), "0")
 
-                # self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'],
-                # data['receiver'], data['elapsed'],))
-                update = Thread(target=self.new_packet, args=(
-                    self.threadlock, data[8], data[0], data[1], numerical_heading_to_direction(data[4]), data[5], data[6], False, data[7])
-                )
-                update.start()
+            update = Thread(target=self.new_packet, args=(
+                self.threadlock, data[8], data[0], data[1], numerical_heading_to_direction(data[4]), data[5],
+                data[6], True if data[8] == 99 else False, data[7])
+                            )
+            update.start()
 
-            # except Exception as e:
-            #     print("=====================================================================================")
-            #     print("Error processing packet. Exception type:")
-            #     print(type(e))
-            #     print("")
-            #     print("Error message:")
-            #     print(e)
-            #     print("End error message")
-            #     print("=====================================================================================")
+        # except Exception as e:
+        #     print("=====================================================================================")
+        #     print("Error processing packet. Exception type:")
+        #     print(type(e))
+        #     print("")
+        #     print("Error message:")
+        #     print(e)
+        #     print("End error message")
+        #     print("=====================================================================================")
 
     def new_packet(self, lock, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
 

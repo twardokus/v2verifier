@@ -127,23 +127,30 @@ class Vehicle:
         :param verification_data: security information from verify_spdu()
         :type verification_data: dict
         """
-        if id not in self.known_vehicles.keys():
-            self.known_vehicles[id] = {"id_number": self.local_id_counter}
-            self.local_id_counter += 1
 
-        self.known_vehicles[id]["latitude"] = bsm_data[0]
-        self.known_vehicles[id]["longitude"] = bsm_data[1]
-        self.known_vehicles[id]["elevation"] = bsm_data[2]
-        self.known_vehicles[id]["speed"] = bsm_data[3]
-        self.known_vehicles[id]["heading"] = bsm_data[4]
+        # don't show the local vehicle as a remote one
+        if id != b'reserved9999':
 
-        self.known_vehicles[id]["signature_type"] = verification_data["signature_type"]
-        self.known_vehicles[id]["valid_signature"] = verification_data["valid_signature"]
-        self.known_vehicles[id]["unexpired"] = verification_data["unexpired"]
-        self.known_vehicles[id]["elapsed"] = verification_data["elapsed"]
+            if id not in self.known_vehicles.keys():
+                self.known_vehicles[id] = {"id_number": self.local_id_counter}
+                self.local_id_counter += 1
+
+            self.known_vehicles[id]["latitude"] = bsm_data[0]
+            self.known_vehicles[id]["longitude"] = bsm_data[1]
+            self.known_vehicles[id]["elevation"] = bsm_data[2]
+            self.known_vehicles[id]["speed"] = bsm_data[3]
+            self.known_vehicles[id]["heading"] = bsm_data[4]
+
+            self.known_vehicles[id]["signature_type"] = verification_data["signature_type"]
+            self.known_vehicles[id]["valid_signature"] = verification_data["valid_signature"]
+            self.known_vehicles[id]["unexpired"] = verification_data["unexpired"]
+            self.known_vehicles[id]["elapsed"] = verification_data["elapsed"]
 
     def get_vehicle_number_by_id(self, id_number: str):
-        return self.known_vehicles[id_number]["id_number"]
+        if id_number == b'reserved9999':
+            return 99
+        else:
+            return self.known_vehicles[id_number]["id_number"]
 
     def report_known_vehicles(self):
         """Print out report of all known vehicles and all data elements for each known vehicle
@@ -168,7 +175,8 @@ class Vehicle:
                                                           float(heading))
 
             spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key, "reserved9999")
-            spdu = b'\xFE'*57 + spdu
+            if not test_mode:
+                spdu = b'\xFE'*57 + spdu
 
             v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
 
