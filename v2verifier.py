@@ -40,6 +40,9 @@ def process_args():
     parser.add_argument("--hostnamefile",
                         help="filepath for list of hostnames to use in CSV format",
                         default="hostnames.csv")
+    parser.add_argument("--spoofer",
+                        help="enable BSM spoofing (use bogus creds)",
+                        action="store_true")
     return parser.parse_args()
 
 
@@ -50,7 +53,8 @@ def transmit(vehicle_index: int, hostname: str) -> None:
     :type vehicle_index: int
     """
 
-    private, public = keys.import_key("keys/0/p256.key")
+    key_path = "keys/1/p256.key" if args.spoofer else "keys/0/p256.key"
+    private, public = keys.import_key(key_path)
     vehicle = v2verifier.Vehicle.Vehicle(public, private, args.hostname)
     vehicle.run(mode="transmitter",
                 tech="dsrc",
