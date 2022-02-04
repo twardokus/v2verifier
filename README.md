@@ -1,36 +1,46 @@
 # V2Verifier
 
-V2Verifer is an open-source testbed for experimental evaluation of security in vehicle-to-vehicle (V2V) communication.
-V2Verifier supports a broad range of experimentation with V2V technologies and 
-security protocols using a combination of software-defined radios (e.g., USRPs) and commercial V2V equipment. Among other features, V2Verifier includes
-implementations of:
-- Security features from the IEEE 1609.2 standard for V2V security, including message signing and verification and V2V certificates
+V2Verifer is an open-source testbed for experimental evaluation of security in
+vehicle-to-vehicle (V2V) communication. V2Verifier supports a broad range of 
+experimentation with V2V technologies and security protocols using a 
+combination of software-defined radios (e.g., USRPs) and commercial V2V
+equipment. Among other features, V2Verifier includes implementations of:
+- Security features from the IEEE 1609.2 standard for V2V security, including
+message signing and verification and V2V certificates
 - WAVE Short Message Protocol (IEEE 1609.3)
 - Dedicated Short Range Communication (DSRC) - adapted from 
 the [WiME Project's](http://dx.doi.org/10.1109/TMC.2017.2751474)
 IEEE 802.11p transceiver
-- Cellular Vehicle-to-Everything (C-V2X) - based on the [srsRAN](https://github.com/srsRAN/srsRAN) project (formerly
+- Cellular Vehicle-to-Everything (C-V2X) - based on the 
+[srsRAN](https://github.com/srsRAN/srsRAN) project (formerly
 srsLTE)
 
-Check out our [YouTube page](https://www.youtube.com/channel/UC5lY5D4KYgfKu3FXtfjHP7A)
+Check out our 
+[YouTube page](https://www.youtube.com/channel/UC5lY5D4KYgfKu3FXtfjHP7A)
 for some of our past projects and publications that made use of V2Verifier!
 
-V2Verifier is developed and maintained in the [Wireless and IoT Security and Privacy (WISP)](https://www.rit.edu/wisplab/) lab at Rochester Institute of Technology's [Global 
-Cybersecurity Institute](https://rit.edu/cybersecurity).
+V2Verifier is developed and maintained in the [Wireless and IoT Security 
+and Privacy (WISP)](https://www.rit.edu/wisplab/) lab at Rochester Institute
+of Technology's [Global Cybersecurity Institute](
+https://rit.edu/cybersecurity).
 
 ### Citing V2Verifier
 If you use V2Verifier or any of its components in your work, please cite 
-[our paper](https://github.com/twardokus/v2verifier/wiki/Publications) from IEEE ICC 2021. Additional publications
-involving V2Verifier are listed on the same page.
+[our paper](https://github.com/twardokus/v2verifier/wiki/Publications) from 
+IEEE ICC 2021. Additional publications involving V2Verifier are listed on the 
+same page.
 
 ## Requirements
-V2Verifier is designed to be run with software-defined radios (SDRs); specifically, we recommend either the USRP B210 or,
-preferably, the USRP N210, both available from Ettus Research. When using N210s, 6 GHz daughterboards (e.g.,
-UBX 40) are required for each N210 device.
+V2Verifier is designed to be run with software-defined radios (SDRs); 
+specifically, we recommend either the USRP B210 or, preferably, the USRP N210, 
+both available from Ettus Research. When using N210s, 6 GHz daughterboards 
+(e.g., UBX 40) are required for each N210 device.
 
-If you do not have access to SDRs, V2Verifier can also be run as a pure simulation environment that only requires a modern
-PC to run. With or without SDRs, we strongly discourage the use of virtual machines as this may incur testbed-breaking
-latency. Ubuntu 18.04 is the only officially supported operating system at this time.
+If you do not have access to SDRs, V2Verifier can also be run as a pure 
+simulation environment that only requires a modern PC to run. With or without
+SDRs, we strongly discourage the use of virtual machines as this may incur 
+testbed-breaking latency. Ubuntu 18.04 is the only officially supported 
+operating system at this time.
 
 ## Installing V2Verifier
 On each Ubuntu PC, you must install the following dependencies:
