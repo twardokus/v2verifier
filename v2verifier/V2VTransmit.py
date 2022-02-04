@@ -28,7 +28,7 @@ def generate_v2v_bsm(latitude: float, longitude: float, elevation: float, speed:
     return struct.pack("!fffff", latitude, longitude, elevation, speed, heading)
 
 
-def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
+def generate_1609_spdu(bsm: bytes, private_key: int, vehicle_hostname: str) -> bytes:
     """Create a bytes object representing an IEEE 1609.2 SPDU
 
     :param bsm: a bytes object containing the BSM data for this message
@@ -95,7 +95,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int) -> bytes:
                                       signer_identifier,
                                       )
 
-    ieee1609_dot2_data += v2verifier.V2VCertificates.get_implicit_certificate()
+    ieee1609_dot2_data += v2verifier.V2VCertificates.get_implicit_certificate(vehicle_hostname)
 
     signature_format = 128  # 0x80 -> x-only for signature value
 

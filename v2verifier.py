@@ -34,21 +34,32 @@ def process_args():
                         help="run in test mode without SDRs or GNURadio",
                         action="store_true"
                         )
+    parser.add_argument("--hostname",
+                        help="specify unique vehicle hostname",
+                        default="demo_vehicle")
+    parser.add_argument("--hostnamefile",
+                        help="filepath for list of hostnames to use in CSV format",
+                        default="hostnames.csv")
+    parser.add_argument("--spoofer",
+                        help="enable BSM spoofing (use bogus creds)",
+                        action="store_true")
     return parser.parse_args()
 
 
-def transmit(vehicle_index: int) -> None:
+def transmit(vehicle_index: int, hostname: str) -> None:
     """Run this V2Verifier instance as the BSM transmitter
 
     :param vehicle_index: an indicator of which vehicle this is, for use when multiple transmitters are requested
     :type vehicle_index: int
     """
 
-    private, public = keys.import_key("keys/0/p256.key")
-    vehicle = v2verifier.Vehicle.Vehicle(public, private)
+    key_path = "keys/1/p256.key" if args.spoofer else "keys/0/p256.key"
+    private, public = keys.import_key(key_path)
+    vehicle = v2verifier.Vehicle.Vehicle(public, private, args.hostname)
     vehicle.run(mode="transmitter",
                 tech="dsrc",
                 pvm_list=v2verifier.Utility.read_data_from_file(config["scenario"]["traceFiles"][vehicle_index]),
+                hostname=hostname,
                 test_mode=args.test)
 
 
@@ -72,18 +83,18 @@ def receive(with_gui: bool = False, technology: str = "dsrc") -> None:
             gui_thread = threading.Thread(target=gui.run)
             gui_thread.start()
             print("WebGUI launched successfully")
-        else:
-            print("TkGUI is not currently supported. For the time being, please use V2Verifier v1.1 or "
-                  "use the new web-based GUI")
-            sys.exit()
-            # print("Launching V2Verifier receiver with TkGUI...")
-            # gui = v2verifier.TkGUI.TkGUI()
-            # gui_thread = threading.Thread(target=gui.run)
-            # gui_thread.start()
+        # else:
+        #     # print("TkGUI is not currently supported. For the time being, please use V2Verifier v1.1 or "
+        #     #     "use the new web-based GUI")
+        #     # sys.exit()
+        #     print("Launching V2Verifier receiver with TkGUI...")
+        #     gui = v2verifier.TkGUI.TkGUI()
+        #     gui_thread = threading.Thread(target=gui.run)
+        #     gui_thread.start()
 
     private, public = keys.import_key("keys/0/p256.key")
-    vehicle = v2verifier.Vehicle.Vehicle(public, private)
-    vehicle.run(mode="receiver", tech=technology, pvm_list=[], test_mode=args.test)
+    vehicle = v2verifier.Vehicle.Vehicle(public, private, args.hostname)
+    vehicle.run(mode="receiver", tech=technology, pvm_list=[], hostname=args.hostname, test_mode=args.test)
 
 
 if __name__ == "__main__":
@@ -96,9 +107,12 @@ if __name__ == "__main__":
     if len(config["scenario"]["traceFiles"]) < number_of_transmitters:
         raise Exception("Error - too few trace files provided for requested number of vehicles.")
 
+    with open(args.hostnamefile) as infile:
+        hostnames = infile.readlines()
+
     if args.perspective == "transmitter":
         for i in range(0, number_of_transmitters):
-            Thread(target=transmit, args=[i]).start()
+            Thread(target=transmit, args=[i, hostnames[i]]).start()
 
     if args.perspective == "receiver":
         receive(with_gui=args.with_gui, technology=args.technology)

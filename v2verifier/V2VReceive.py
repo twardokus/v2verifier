@@ -110,6 +110,8 @@ def parse_received_spdu(spdu: bytes) -> dict:
         current_byte += 32
 
     else:
+        print("Received signature type - ", spdu_dict["signature_choice"])
+        print(spdu_dict)
         raise Exception("Signatures other than ECDSA P256 not currently supported")
 
     return spdu_dict
@@ -247,7 +249,7 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
             "elapsed": elapsed}
 
 
-def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: int) -> None:
+def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: int, vehicle_id: float) -> None:
     """Send BSM data and verification status to the V2Verifier GUI via UDP datagram
 
     :param bsm: a tuple of BSM information matching the format returned by v2verifier.V2VTransmit.generate_v2v_bsm()
@@ -260,7 +262,7 @@ def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: i
     :type port: int
     """
 
-    data = struct.pack("!5f??f",
+    data = struct.pack("!5f??ff",
                        bsm[0],
                        bsm[1],
                        bsm[2],
@@ -268,7 +270,8 @@ def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: i
                        bsm[4],
                        verification_dict["valid_signature"],
                        verification_dict["unexpired"],
-                       verification_dict["elapsed"]
+                       verification_dict["elapsed"],
+                       vehicle_id
                        )
 
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

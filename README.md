@@ -1,73 +1,82 @@
 # V2Verifier
 
-V2Verifer is an open-source testbed for experimental evaluation of security in vehicle-to-vehicle (V2V) communication.
-V2Verifier supports a broad range of experimentation with V2V technologies and 
-security protocols using a combination of software-defined radios (e.g., USRPs) and commercial V2V equipment. Among other features, V2Verifier includes
-implementations of:
-- Security features from the IEEE 1609.2 standard for V2V security, including message signing and verification and V2V certificates
+V2Verifer is an open-source testbed for experimental evaluation of security in
+vehicle-to-vehicle (V2V) communication. V2Verifier supports a broad range of 
+experimentation with V2V technologies and security protocols using a 
+combination of software-defined radios (e.g., USRPs) and commercial V2V
+equipment. Among other features, V2Verifier includes implementations of:
+- Security features from the IEEE 1609.2 standard for V2V security, including
+message signing and verification and V2V certificates
 - WAVE Short Message Protocol (IEEE 1609.3)
 - Dedicated Short Range Communication (DSRC) - adapted from 
 the [WiME Project's](http://dx.doi.org/10.1109/TMC.2017.2751474)
 IEEE 802.11p transceiver
-- Cellular Vehicle-to-Everything (C-V2X) - based on the [srsRAN](https://github.com/srsRAN/srsRAN) project (formerly
+- Cellular Vehicle-to-Everything (C-V2X) - based on the 
+[srsRAN](https://github.com/srsRAN/srsRAN) project (formerly
 srsLTE)
 
-Check out our [YouTube page](https://www.youtube.com/channel/UC5lY5D4KYgfKu3FXtfjHP7A)
+Check out our 
+[YouTube page](https://www.youtube.com/channel/UC5lY5D4KYgfKu3FXtfjHP7A)
 for some of our past projects and publications that made use of V2Verifier!
 
-V2Verifier is developed and maintained in the [Wireless and IoT Security and Privacy (WISP)](https://www.rit.edu/wisplab/) lab at Rochester Institute of Technology's [Global 
-Cybersecurity Institute](https://rit.edu/cybersecurity).
+V2Verifier is developed and maintained in the [Wireless and IoT Security 
+and Privacy (WISP)](https://www.rit.edu/wisplab/) lab at Rochester Institute
+of Technology's [Global Cybersecurity Institute](
+https://rit.edu/cybersecurity).
 
 ### Citing V2Verifier
 If you use V2Verifier or any of its components in your work, please cite 
-[our paper](https://github.com/twardokus/v2verifier/wiki/Publications) from IEEE ICC 2021. Additional publications
-involving V2Verifier are listed on the same page.
+[our paper](https://github.com/twardokus/v2verifier/wiki/Publications) from 
+IEEE ICC 2021. Additional publications involving V2Verifier are listed on the 
+same page.
 
 ## Requirements
-V2Verifier is designed to be run with software-defined radios (SDRs); specifically, we recommend either the USRP B210 or,
-preferably, the USRP N210, both available from Ettus Research. When using N210s, 6 GHz daughterboards (e.g.,
-UBX 40) are required for each N210 device.
+V2Verifier is designed to be run with software-defined radios (SDRs); 
+specifically, we recommend either the USRP B210 or, preferably, the USRP N210, 
+both available from Ettus Research. When using N210s, 6 GHz daughterboards 
+(e.g., UBX 40) are required for each N210 device.
 
-If you do not have access to SDRs, V2Verifier can also be run as a pure simulation environment that only requires a modern
-PC to run. With or without SDRs, we strongly discourage the use of virtual machines as this may incur testbed-breaking
-latency. Ubuntu 18.04 is the only officially supported operating system at this time.
+If you do not have access to SDRs, V2Verifier can also be run as a pure 
+simulation environment that only requires a modern PC to run. With or without
+SDRs, we strongly discourage the use of virtual machines as this may incur 
+testbed-breaking latency. Ubuntu 20.04 is currently the only supported
+operating system. **Windows operating systems are not supported.**
 
 ## Installing V2Verifier
-On each Ubuntu PC, you must install the following dependencies:
+
+**Important:** These instructions must be completed for _each_ PC you wish 
+to use for running V2Verifier experiments.
+
+[GNURadio](https://github.com/gnuradio/gnuradio) version 3.8 is required to run
+DSRC experiments in V2Verifier. Additionally, GNURadio modules from the 
+[WiME project](https://www.wime-project.net/)] are required. Install GNURadio
+as well as the required WiME modules with the following commands. If you
+encounter any errors, please visit the GNURadio project for their most recent
+installation instructions and troubleshooting guide.
+
+    sudo apt install -y python3-pip
+    sudo -H pip3 install PyBOMBS
+    pybombs auto-config
+    pybombs recipes add-defaults
+    mkdir ~/gr38
+    pybombs prefix init ~/gr38 -R gnuradio-default
+   
+    pybombs install gr-foo
+    pybombs install gr-ieee-80211
+
+To ensure installation was successful, execute the following command to 
+run GNURadio Companion.
+
+    pybombs run gnuradio-companion
+
+Next, on each Ubuntu PC, you must install the following dependencies:
 
 	sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil 
-	python3-pil.imagetk gnuradio
-	
-You may alternately choose to use Pip to install all required packages from the included `requirements.txt` file.
-
-Since V2Verifier incorporates open-source code from the [WiME project](https://www.wime-project.net/), 
-you need to install two components from that project.  
-    
-    cd ~
-    git clone https://github.com/bastibl/gr-foo.git
-    cd gr-foo
-    git checkout maint-3.7
-    mkdir build
-    cd build
-    cmake ..
-    make
-    sudo make install
-    sudo ldconfig
-
-	cd ~
-	git clone git://github.com/bastibl/gr-ieee802-11.git
-	cd gr-ieee802-11
-	git checkout maint-3.7
-	mkdir build
-	cd build
-	cmake ..
-	make
-	sudo make install
-	sudo ldconfig
+	python3-pil.imagetk
 		
-Next, install and/or upgrade some Python 3 libraries.
+Finally, install and/or upgrade some Python 3 libraries.
 
-	pip3 install -U fastecdsa pyyaml eel folium pynmea2
+	pip3 install -U image fastecdsa pyyaml eel folium pynmea2
 
 ## Running V2Verifier
 Connect one USRP to each PC. On both PCs, launch GNURadio with the command `gnuradio-companion` from a terminal. 
@@ -91,6 +100,16 @@ optional arguments noted for each command.
 communication and GPS clock synchronization (e.g., USRP B210 w/ GPSDO or 
 [Cohda Wireless MK6c](https://cohdawireless.com/solutions/hardware/mk6c-evk/)) as well as access to either an outdoor
 testing environment or synthesized GPS source.*
+
+**Important note about GUI usage:** V2Verifier currently offers two graphical 
+interfaces. The first is a web-based interface that interacts with Google Maps. 
+To use this GUI, you will need to purchase a Google Maps API key through Google 
+Cloud services and create `config.js` file in the `web` directory of V2Verifier
+(some familiarity with JavaScript is helpful). Our second interface is based on
+TkGUI. To use this option, open a separate terminal window before running any 
+`v2verifier.py` commands and run `python3 tkgui_execute.py` to launch the 
+TkGUI interface as a separate process. We encourage you to open a GitHub issue
+with any questions or problems using either graphical interface.
 
 ## Replay attack with V2Verifier
 **Note - these instructions apply to versions of V2Verifier through the beta release of version 2.0. While updates are in progress, please ensure you use an appropriate release of V2Verifier as these instructions will not work with release 2.0**
