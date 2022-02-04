@@ -101,6 +101,16 @@ communication and GPS clock synchronization (e.g., USRP B210 w/ GPSDO or
 [Cohda Wireless MK6c](https://cohdawireless.com/solutions/hardware/mk6c-evk/)) as well as access to either an outdoor
 testing environment or synthesized GPS source.*
 
+**Important note about GUI usage:** V2Verifier currently offers two graphical 
+interfaces. The first is a web-based interface that interacts with Google Maps. 
+To use this GUI, you will need to purchase a Google Maps API key through Google 
+Cloud services and create `config.js` file in the `web` directory of V2Verifier
+(some familiarity with JavaScript is helpful). Our second interface is based on
+TkGUI. To use this option, open a separate terminal window before running any 
+`v2verifier.py` commands and run `python3 tkgui_execute.py` to launch the 
+TkGUI interface as a separate process. We encourage you to open a GitHub issue
+with any questions or problems using either graphical interface.
+
 ## Replay attack with V2Verifier
 **Note - these instructions apply to versions of V2Verifier through the beta release of version 2.0. While updates are in progress, please ensure you use an appropriate release of V2Verifier as these instructions will not work with release 2.0**
 
