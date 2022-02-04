@@ -165,7 +165,7 @@ class Vehicle:
         with open("init.yml") as config_file:
             config = yaml.load(config_file, Loader=yaml.FullLoader)
 
-        pvm_list = v2verifier.Utility.read_data_from_file(config["local"]["tracefile"])
+        pvm_list = v2verifier.Utility.read_data_from_file("trace_files/" + config["local"]["tracefile"])
         for pvm_element in pvm_list:
             latitude, longitude, elevation, speed, heading = pvm_element.split(",")
             bsm = v2verifier.V2VTransmit.generate_v2v_bsm(float(latitude),

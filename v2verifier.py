@@ -58,7 +58,7 @@ def transmit(vehicle_index: int, hostname: str) -> None:
     vehicle = v2verifier.Vehicle.Vehicle(public, private, args.hostname)
     vehicle.run(mode="transmitter",
                 tech="dsrc",
-                pvm_list=v2verifier.Utility.read_data_from_file(config["scenario"]["traceFiles"][vehicle_index]),
+                pvm_list=v2verifier.Utility.read_data_from_file("trace_files/" + config["scenario"]["traceFiles"][vehicle_index]),
                 hostname=hostname,
                 test_mode=args.test)
 
