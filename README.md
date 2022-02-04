@@ -74,9 +74,12 @@ Next, on each Ubuntu PC, you must install the following dependencies:
 	sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil 
 	python3-pil.imagetk
 		
-Finally, install and/or upgrade some Python 3 libraries.
+Install and/or upgrade some Python 3 libraries.
 
 	pip3 install -U image fastecdsa pyyaml eel folium pynmea2
+
+Finally, download the ZIP file for the latest stable release of V2Verifier, extract the project, and you are ready 
+to start using V2Verifier!
 
 ## Running V2Verifier
 Connect one USRP to each PC. On both PCs, launch GNURadio with the command `gnuradio-companion` from a terminal. 
