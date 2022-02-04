@@ -39,45 +39,44 @@ both available from Ettus Research. When using N210s, 6 GHz daughterboards
 If you do not have access to SDRs, V2Verifier can also be run as a pure 
 simulation environment that only requires a modern PC to run. With or without
 SDRs, we strongly discourage the use of virtual machines as this may incur 
-testbed-breaking latency. Ubuntu 18.04 is the only officially supported 
-operating system at this time.
+testbed-breaking latency. Ubuntu 20.04 is currently the only supported
+operating system. **Windows operating systems are not supported.**
 
 ## Installing V2Verifier
-On each Ubuntu PC, you must install the following dependencies:
+
+**Important:** These instructions must be completed for _each_ PC you wish 
+to use for running V2Verifier experiments.
+
+[GNURadio](https://github.com/gnuradio/gnuradio) version 3.8 is required to run
+DSRC experiments in V2Verifier. Additionally, GNURadio modules from the 
+[WiME project](https://www.wime-project.net/)] are required. Install GNURadio
+as well as the required WiME modules with the following commands. If you
+encounter any errors, please visit the GNURadio project for their most recent
+installation instructions and troubleshooting guide.
+
+    sudo apt install -y python3-pip
+    sudo -H pip3 install PyBOMBS
+    pybombs auto-config
+    pybombs recipes add-defaults
+    mkdir ~/gr38
+    pybombs prefix init ~/gr38 -R gnuradio-default
+   
+    pybombs install gr-foo
+    pybombs install gr-ieee-80211
+
+To ensure installation was successful, execute the following command to 
+run GNURadio Companion.
+
+    pybombs run gnuradio-companion
+
+Next, on each Ubuntu PC, you must install the following dependencies:
 
 	sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil 
-	python3-pil.imagetk gnuradio
-	
-You may alternately choose to use Pip to install all required packages from the included `requirements.txt` file.
-
-Since V2Verifier incorporates open-source code from the [WiME project](https://www.wime-project.net/), 
-you need to install two components from that project.  
-    
-    cd ~
-    git clone https://github.com/bastibl/gr-foo.git
-    cd gr-foo
-    git checkout maint-3.7
-    mkdir build
-    cd build
-    cmake ..
-    make
-    sudo make install
-    sudo ldconfig
-
-	cd ~
-	git clone git://github.com/bastibl/gr-ieee802-11.git
-	cd gr-ieee802-11
-	git checkout maint-3.7
-	mkdir build
-	cd build
-	cmake ..
-	make
-	sudo make install
-	sudo ldconfig
+	python3-pil.imagetk
 		
-Next, install and/or upgrade some Python 3 libraries.
+Finally, install and/or upgrade some Python 3 libraries.
 
-	pip3 install -U fastecdsa pyyaml eel folium pynmea2
+	pip3 install -U image fastecdsa pyyaml eel folium pynmea2
 
 ## Running V2Verifier
 Connect one USRP to each PC. On both PCs, launch GNURadio with the command `gnuradio-companion` from a terminal. 
