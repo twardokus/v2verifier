@@ -24,7 +24,7 @@ def process_args():
     parser.add_argument("-t",
                         "--technology",
                         help="choice of technology",
-                        choices=["dsrc", "cv2x"]
+                        choices=["dsrc", "cv2x", "cohda"]
                         )
     parser.add_argument("-g",
                         "--with-gui",
@@ -46,11 +46,14 @@ def process_args():
     return parser.parse_args()
 
 
-def transmit(vehicle_index: int, hostname: str) -> None:
+def transmit(vehicle_index: int, hostname: str, technology: str) -> None:
+
     """Run this V2Verifier instance as the BSM transmitter
 
     :param vehicle_index: an indicator of which vehicle this is, for use when multiple transmitters are requested
     :type vehicle_index: int
+    :param technology: specify the technology
+    :type technology: str
     """
 
     key_path = "keys/1/p256.key" if args.spoofer else "keys/0/p256.key"

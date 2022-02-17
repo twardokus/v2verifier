@@ -49,22 +49,26 @@ class Vehicle:
         """
 
         if mode == "transmitter":
-            for pvm_element in pvm_list:
-                latitude, longitude, elevation, speed, heading = pvm_element.split(",")
-                bsm = v2verifier.V2VTransmit.generate_v2v_bsm(float(latitude),
-                                                              float(longitude),
-                                                              float(elevation),
-                                                              float(speed),
-                                                              float(heading))
+            if tech == "cv2x":
+                print("C-V2X is currently not supported")
+                exit(1)
+            else:
+                for pvm_element in pvm_list:
+                    latitude, longitude, elevation, speed, heading = pvm_element.split(",")
+                    bsm = v2verifier.V2VTransmit.generate_v2v_bsm(float(latitude),
+                                                                  float(longitude),
+                                                                  float(elevation),
+                                                                  float(speed),
+                                                                  float(heading))
 
                 spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key, hostname)
 
-                if test_mode:  # in test mode, send directly to receiver on port 4444
-                    v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
-                else:  # otherwise, send to wifi_tx.grc listener on port 52001 to become 802.11 payload
-                    v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 52001)
+                    if test_mode:  # in test mode, send directly to receiver on port 4444
+                        v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
+                    else:  # otherwise, send to wifi_tx.grc listener on port 52001 to become 802.11 payload
+                        v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 52001)
 
-                time.sleep(self.bsm_interval)
+                    time.sleep(self.bsm_interval)
 
         elif mode == "receiver":
             local_vehicle = Thread(target=self.run_self, args=[test_mode])
@@ -82,6 +86,7 @@ class Vehicle:
                         spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
 
                     verification_data = v2verifier.V2VReceive.verify_spdu(spdu_data, self.public_key)
+
                     bsm_data_tuple = v2verifier.V2VReceive.extract_bsm_data(spdu_data["tbs_data"]["unsecured_data"],
                                                                             verification_data)
                     self.update_known_vehicles(spdu_data["certificate"]["hostname"], bsm_data_tuple,
@@ -95,7 +100,17 @@ class Vehicle:
                                                          )
                                                          )
 
+# =======             
+                    # bsm_data_tuple = v2verifier.V2VReceive.extract_bsm_data(spdu_data["tbs_data"]["unsecured_data"], verification_data)
+                    # self.update_known_vehicles(spdu_data["certificate"]["hostname"], bsm_data_tuple, verification_data)
+
+                    # print(v2verifier.V2VReceive.get_bsm_report(spdu_data["tbs_data"]["unsecured_data"], verification_data))
+                    # v2verifier.V2VReceive.report_bsm_gui(bsm_data_tuple, verification_data, "127.0.0.1", 6666)
+# >>>>>>> cv2x-integration
             elif tech == "cv2x":
+                print("C-V2X is currently not supported")
+                exit(1)
+            elif tech == "cohda":
                 # use IPv6 on the Ethernet interface to get messages from COTS device
                 sock = socket.socket(socket.AF_INET6, socket.SOCK_DGRAM)
                 sock.bind(("fe80::ca89:f53:4108:d142%enp3s0", 4444, 0, 2))
