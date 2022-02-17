@@ -1,3 +1,4 @@
+import struct
 from tkinter.ttk import *
 import tkinter as tk
 from PIL import Image
@@ -29,18 +30,45 @@ def heading_to_direction(heading):
         return "southeast"
 
 
+def numerical_heading_to_direction(heading):
+    corrected_heading = heading
+    if heading < 0:
+        corrected_heading += 360
+    elif heading > 359:
+        corrected_heading = heading % 360
+
+    if corrected_heading <= 22.5:
+        return "N"
+    elif 22.5 < corrected_heading <= 67.5:
+        return "NE"
+    elif 67.5 < corrected_heading <= 112.5:
+        return "E"
+    elif 112.5 < corrected_heading <= 157.5:
+        return "SE"
+    elif 157.5 < corrected_heading <= 202.5:
+        return "S"
+    elif 202.5 < corrected_heading <= 247.5:
+        return "SW"
+    elif 247.5 < corrected_heading <= 292.5:
+        return "W"
+    elif 292.5 < corrected_heading <= 337.5:
+        return "NW"
+    elif 337.5 < corrected_heading:
+        return "N"
+
+
 class TkGUI:
 
-    def __init__(self):
+    def __init__(self, root):
 
-        self.root = tk.Tk()
+        self.root = root
 
         self.threadlock = threading.Lock()
 
         with open("init.yml", "r") as confFile:
             self.config = yaml.load(confFile, Loader=yaml.FullLoader)
-        self.numVehicles = self.config["remoteConfig"]["numberOfVehicles"] + 1
-        self.totalPackets = self.config["remoteConfig"]["traceLength"] * (self.numVehicles - 1)
+        self.numVehicles = 1  # self.config["remoteConfig"]["numberOfVehicles"] + 1
+        self.totalPackets = 100  # self.config["remoteConfig"]["traceLength"] * (self.numVehicles - 1)
 
         self.receivedPacketCount = 0
         self.processedPacketCount = 0
@@ -151,6 +179,8 @@ class TkGUI:
         self.legend.grid(row=1, column=0, sticky="ew")
         self.report.grid(row=2, column=0, sticky="ew")
 
+        print("GUI loaded...")
+
     def run(self):
         receiver_thread = threading.Thread(target=self.run_gui_receiver)
         receiver_thread.start()
@@ -159,7 +189,7 @@ class TkGUI:
 
     def run_gui_receiver(self):
         # Start the GUI service on port 6666
-        s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         s.bind(('127.0.0.1', 6666))
 
         labelThread = Thread(target=self.update_statistics_labels)
@@ -170,44 +200,44 @@ class TkGUI:
 
     def receive(self, s):
 
-        s.listen()
-        c = s.accept()[0]
+        # s.listen()
+        # c = s.accept()[0]
+        # print("Connection!")
 
         while True:
-            try:
-                msg = c.recv(1024).decode()
-                # decode the JSON string
-                data = json.loads(msg)
+            # try:
+            msg = s.recvfrom(1024)[0]
+            print("Received", msg)
 
-                if not data['receiver']:
-                    self.receivedPacketCount += 1
+            data = struct.unpack("!5f??ff", msg)
 
-                    self.intactPacketCount += 1
+            if not data[8] == 99:
+                self.receivedPacketCount += 1
+                self.intactPacketCount += 1
 
-                    if data['sig']:
-                        self.authenticatedPacketCount += 1
-                    if data['recent']:
-                        self.onTimePacketCount += 1
+                if data[5]:
+                    self.authenticatedPacketCount += 1
+                if data[7]:
+                    self.onTimePacketCount += 1
 
-                self.update_vehicle_info_labels(data["id"], "(" + data["x"] + "," + data["y"] + ")",
-                                                data["speed"], data['reputation'])
-                update = Thread(target=self.new_packet, args=(
-                self.threadlock, data["id"], data['x'], data['y'], data['heading'], data['sig'], data['recent'],
-                data['receiver'], data['elapsed'],))
-                update.start()
+            self.update_vehicle_info_labels(data[8], "(" + str(data[0]) + "," + str(data[1]) + ")",
+                                            str(data[3]), "0")
 
-            except json.decoder.JSONDecodeError as e:
-                print("JSON decoding error - invalid data. Discarding.")
-                print(str(e))
-            except Exception as e:
-                print("=====================================================================================")
-                print("Error processing packet. Exception type:")
-                print(type(e))
-                print("")
-                print("Error message:")
-                print(e)
-                print("End error message")
-                print("=====================================================================================")
+            update = Thread(target=self.new_packet, args=(
+                self.threadlock, data[8], data[0], data[1], numerical_heading_to_direction(data[4]), data[5],
+                data[6], True if data[8] == 99 else False, data[7])
+                            )
+            update.start()
+
+        # except Exception as e:
+        #     print("=====================================================================================")
+        #     print("Error processing packet. Exception type:")
+        #     print(type(e))
+        #     print("")
+        #     print("Error message:")
+        #     print(e)
+        #     print("End error message")
+        #     print("=====================================================================================")
 
     def new_packet(self, lock, carid, x, y, heading, isValid, isRecent, isReceiver, elapsedTime):
 
