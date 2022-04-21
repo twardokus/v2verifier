@@ -38,7 +38,7 @@ class Receiver:
 
         bsm_data = bytes.fromhex(data[0]).decode('ascii').replace("\n", "").split(",")
 
-        public_key = keys.import_key("keys/" + bsm_data[0] + "/p256.pub", curve=curve.P256, public=True)
+        public_key = keys.import_key("keys/" + bsm_data[0] + "/p256.pub", curve=curve.P256, public=True)[1]
         # public_key = keys.import_key("keys/0/p256.pub", curve=curve.P256, public=True)
 
         is_valid_sig = self.verifier.verify_signature(data[1], data[2], data[0], public_key)
