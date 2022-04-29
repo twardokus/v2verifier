@@ -1,8 +1,3 @@
-//
-// Created by geoff on 11/13/21.
-//
-
-#include <iostream>
 #include <openssl/ec.h>
 #include <openssl/sha.h>
 
@@ -16,9 +11,14 @@ void ecdsa_sign(unsigned char *hash, EC_KEY *signing_key, unsigned int* signatur
 
 }
 
-bool ecdsa_verify(unsigned char *hash, unsigned char *signature, const unsigned int* signature_buffer_length, EC_KEY *verification_key) {
-
-    return ECDSA_verify(0, hash,32, signature, (int)*signature_buffer_length, verification_key);
+int ecdsa_verify(unsigned char *hash, unsigned char *signature, const unsigned int* signature_buffer_length, EC_KEY *verification_key) {
+    int result = ECDSA_verify(0, hash,32, signature, (int)*signature_buffer_length, verification_key);
+    if(result == -1) {
+        perror("Fatal error: ECDSA_verify returned -1");
+        exit(EXIT_FAILURE);
+    }
+    else
+        return result;
 
 }
 

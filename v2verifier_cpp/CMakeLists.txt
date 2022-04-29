@@ -1,9 +1,9 @@
-cmake_minimum_required(VERSION 3.20)
-project(cpp)
+#cmake_minimum_required(VERSION 3.)
+project(v2verifier)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(cpp main.cpp Vehicle.cpp Vehicle.h VehicleUtil.cpp VehicleUtil.h ieee16092.h bsm.h certificates.h v2vcrypto.h v2vcrypto.cpp)
+add_executable(v2verifier main.cpp Vehicle.cpp Vehicle.h VehicleUtil.cpp VehicleUtil.h ieee16092.h bsm.h certificates.h v2vcrypto.h v2vcrypto.cpp)
 
 
-target_link_libraries(cpp crypto)
+target_link_libraries(v2verifier crypto)

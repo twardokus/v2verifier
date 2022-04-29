@@ -131,3 +131,15 @@ the `wifi_tx.grc` flowgraph
 - Return to the terminal and press Enter. The attacker will begin replaying messages.
 - Look at the receiver you started at the beginning. You should see the effects of the replay attack (e.g., warning 
 messages in yellow text on the message feed) on the GUI.
+
+# CPP Instructions
+
+## Required packages
+
+`sudo apt install -y libssl-dev`
+
+## Build
+
+    mkdir build
+    cmake ../
+    make

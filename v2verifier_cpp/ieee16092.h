@@ -1,7 +1,3 @@
-//
-// Created by geoff on 10/19/21.
-//
-
 #ifndef CPP_IEEE16092_H
 #define CPP_IEEE16092_H
 

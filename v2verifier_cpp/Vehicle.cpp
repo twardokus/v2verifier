@@ -1,7 +1,3 @@
-//
-// Created by geoff on 10/14/21.
-//
-
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <cstring>
@@ -12,6 +8,7 @@
 #include "Vehicle.h"
 #include <openssl/pem.h>
 #include <thread>
+
 
 std::string Vehicle::get_hostname() {
    return hostname;
@@ -94,7 +91,7 @@ void Vehicle::receive(int num_msgs, ArgumentParser arg_pars) {
         exit(EXIT_FAILURE);
     }
 
-    int len, n;
+    unsigned int len;
 
     len = sizeof(cliaddr);
 
@@ -104,16 +101,23 @@ void Vehicle::receive(int num_msgs, ArgumentParser arg_pars) {
 
         // this is to prevent a truly infinite loop
         int received_message_counter = 0;
+
+        // for getting times when BSMs are received (security check for replay attacks)
+        using timestamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds>;
+
         while (received_message_counter < num_msgs) {
             recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
                      (socklen_t *) len);
 
-            print_spdu(incoming_spdu);
-            verify_message_ecdsa(incoming_spdu);
+            timestamp received_time = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
+
+            bool valid_spdu = verify_message_ecdsa(incoming_spdu, received_time);
+            print_spdu(incoming_spdu, valid_spdu);
+
             received_message_counter++;
-            std::cout<< received_message_counter << std::endl;
+
         }
-        get_average_verify_times();
+
         exit(0);
 
     }
@@ -185,8 +189,13 @@ void Vehicle::print_bsm(Vehicle::ecdsa_spdu &spdu) {
  * This is largely a debugging function so we can print and view received data, e.g., to make sure that things are being
  * sent and received properly.
  */
-void Vehicle::print_spdu(Vehicle::ecdsa_spdu &spdu) {
-    std::cout << "Timestamp:\t" << std::chrono::system_clock::to_time_t(spdu.data.signedData.tbsData.headerInfo.timestamp) << std::endl;
+void Vehicle::print_spdu(Vehicle::ecdsa_spdu &spdu, bool valid) {
+    std::cout << "SPDU received!" << std::endl;
+    std::cout << "\tValid:\t";
+    valid ? std::cout << "TRUE" : std::cout << "FALSE";
+    std::cout << std::endl;
+
+    std::cout << "\tSent:\t" << std::chrono::system_clock::to_time_t(spdu.data.signedData.tbsData.headerInfo.timestamp) << std::endl;
 }
 
 void Vehicle::sign_message_ecdsa(Vehicle::ecdsa_spdu &spdu) {
@@ -206,49 +215,24 @@ void Vehicle::sign_message_ecdsa(Vehicle::ecdsa_spdu &spdu) {
 
 }
 
-void Vehicle::verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu) {
+bool Vehicle::verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> received_time) {
 
-    auto start = std::chrono::high_resolution_clock::now();
-
+    // Verify certificate signature
     unsigned char certificate_hash[SHA256_DIGEST_LENGTH];
     sha256sum(&spdu.data.signedData.cert, sizeof(spdu.data.signedData.cert), certificate_hash);
+    bool cert_result = ecdsa_verify(certificate_hash, spdu.data.certificate_signature, &spdu.certificate_signature_buffer_length, cert_private_ec_key);
 
-    int cert_result = ecdsa_verify(certificate_hash, spdu.data.certificate_signature, &spdu.certificate_signature_buffer_length, cert_private_ec_key);
-    switch(cert_result) {
-        case -1:
-            perror("Error in call to ECDSA_verify");
-            exit(EXIT_FAILURE);
-        case 0:
-            std::cout << "INVALID certificate signature" << std::endl;
-            break;
-        case 1:
-            std::cout << "Valid certificate signature" << std::endl;
-            break;
-        default:
-            break;
-    }
-
+    // Verify message signature
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256sum(&spdu.data.signedData.tbsData, sizeof(spdu.data.signedData.tbsData), hash);
+    bool sig_result = ecdsa_verify(hash, spdu.signature, &spdu.signature_buffer_length, private_ec_key);
 
-    int result = ecdsa_verify(hash, spdu.signature, &spdu.signature_buffer_length, private_ec_key);
+    // Verify time constraint: message is valid if less than 30 seconds (30000ms) have elapsed since transmission
+    std::chrono::duration<double, std::milli> elapsed_time =  received_time -  spdu.data.signedData.tbsData.headerInfo.timestamp;
+    bool recent = elapsed_time.count() < 30000;
 
-    switch(result) {
-        case -1:
-            perror("Error in call to ECDSA_verify");
-            exit(EXIT_FAILURE);
-        case 0:
-            std::cout << "INVALID message signature" << std::endl;
-            break;
-        case 1:
-            std::cout << "Valid message signature" << std::endl;
-            break;
-        default:
-            break;
-    }
-    auto stop = std::chrono::high_resolution_clock::now();
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-    verify_times.push_back(duration.count());
+    // Return result
+    return cert_result && sig_result && recent;
 }
 
 void Vehicle::load_key_from_file_ecdsa(const char* filepath, EC_KEY *&key_to_store){
@@ -267,6 +251,7 @@ void Vehicle::load_key_from_file_ecdsa(const char* filepath, EC_KEY *&key_to_sto
         }
     }
     else {
+        std::cout << filepath << std::endl;
         std::cout << "Error while opening file from path. Error number : " << errno << std::endl;
         exit(EXIT_FAILURE);
     }

@@ -46,20 +46,26 @@ private:
 
     static bsm generate_bsm();
     static void print_bsm(Vehicle::ecdsa_spdu &spdu);
-    static void print_spdu(Vehicle::ecdsa_spdu & spdu);
+    static void print_spdu(Vehicle::ecdsa_spdu &spdu, bool valid);
 
     static void load_key_from_file_ecdsa(const char* filepath, EC_KEY *&key_to_store);
 
     void sign_message_ecdsa(Vehicle::ecdsa_spdu &spdu);
-    void verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu);
+    bool verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> received_time);
 
 public:
     Vehicle() {
         hostname = "null_hostname";
 
-        const char *cert_key_filepath = "cert_keys/0/p256.key";
-        const char *key_filepath = "keys/0/p256.key";
+        /*************************************************************************
+         * TODO: fix this to be relative paths rather than unique to dev machine
+         * */
+        const char *cert_key_filepath = "/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/cert_keys/0/p256.key";
+        const char *key_filepath = "/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/keys/0/p256.key";
+        /*************************************************************************/
+
         Vehicle::load_key_from_file_ecdsa(key_filepath, private_ec_key);
+        std::cout << "test" << std:: endl;
         Vehicle::load_key_from_file_ecdsa(cert_key_filepath, cert_private_ec_key);
 
     };
