@@ -1,7 +1,24 @@
 # Changelog
 Notable changes to this project will be tracked here. Additions, deprecations, etc. are described per version release.
 
-## Unreleased changes
+## [3.0] - May 2022
+Version 3.0 is a major overhaul of the testbed. Most prominently, V2Verifier is now a C++ project. Several factors 
+informed the change from Python to C++; most significantly, V2Verifier code now runs at speeds much closer to real
+V2V software and therefore more accurately reflects real-world performance (e.g., ECDSA verifications are performed)
+at a more realistic pace. 
+
+### Added
+- C++ implementations of all V2Verifier files.
+### Changed
+- V2Verifer is now a C++ project
+### Fixed
+### Deprecated
+- All Python-based versions of V2Verifier (<3.0) are no longer supported.
+### Removed
+- All Python (.py,.pyc) files.
+
+## [2.0] - 2021-10-10
+V2Verifier 2.0 introduced several major changes including support for C-V2X and additional IEEE 1609.2 features.
 ### Added
 - Implicit certificate and certificate digest structures (see IEEE 1609.2 Section 6.4) are now included with V2Verifier messages. \*_Note that full cryptographic support for certificate generation and verification, including 1609.2 pseudonym generation and linkage, is not yet included but is currently under active development_.
 - A new, browser-based GUI (built with JavaScript as an Electron app) features a Google Maps integration and support for GNSS-based vehicle locations.
