@@ -22,7 +22,7 @@ void print_run_config(std::string mode, std::string signature_alg, std::string c
     std::cout << "Running " << mode << " with " << signature_alg << " signatures and " << cert_alg << " certificates" << std::endl;
 }
 
-void Vehicle::transmit(int num_msgs,ArgumentParser arg_pars) {
+void Vehicle::transmit(int num_msgs, bool test) {
 
     // create socket and send data
 
@@ -37,7 +37,7 @@ void Vehicle::transmit(int num_msgs,ArgumentParser arg_pars) {
     memset(&servaddr, 0, sizeof(servaddr));
 
     servaddr.sin_family = AF_INET;
-    if(arg_pars.istest)
+    if(test)
         servaddr.sin_port = htons(6666);
     else
         servaddr.sin_port = htons(52001);
@@ -45,18 +45,12 @@ void Vehicle::transmit(int num_msgs,ArgumentParser arg_pars) {
 
     int n, len;
 
-    if(arg_pars.sig_alg == ECDSA && arg_pars.cert_alg == ECDSA)
-        print_run_config("transmitter", "ECDSA", "ECDSA");
-
     for(int i =0; i < num_msgs; i++) {
 
-        if(arg_pars.sig_alg == ECDSA && arg_pars.cert_alg == ECDSA) {
-
-            ecdsa_spdu next_spdu;
-            generate_ecdsa_spdu(next_spdu);
-            sendto(sockfd, (struct ecdsa_spdu *) &next_spdu, sizeof(next_spdu), MSG_CONFIRM,
-                   (const struct sockaddr *) &servaddr, sizeof(servaddr));
-        }
+        ecdsa_spdu next_spdu;
+        generate_ecdsa_spdu(next_spdu);
+        sendto(sockfd, (struct ecdsa_spdu *) &next_spdu, sizeof(next_spdu), MSG_CONFIRM,
+               (const struct sockaddr *) &servaddr, sizeof(servaddr));
 
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
@@ -66,7 +60,7 @@ void Vehicle::transmit(int num_msgs,ArgumentParser arg_pars) {
 
 }
 
-void Vehicle::receive(int num_msgs, ArgumentParser arg_pars) {
+void Vehicle::receive(int num_msgs, bool test) {
 
     int sockfd;
     struct sockaddr_in servaddr, cliaddr;
@@ -81,8 +75,9 @@ void Vehicle::receive(int num_msgs, ArgumentParser arg_pars) {
 
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;
-    std::cout << arg_pars.istest << std::endl;
-    uint16_t port = arg_pars.istest ? 6666 : 4444;
+    //std::cout << arg_pars.istest << std::endl;
+
+    uint16_t port = test ? 6666 : 4444;
     std::cout << port << std::endl;
     servaddr.sin_port = htons(port);
 
@@ -95,33 +90,28 @@ void Vehicle::receive(int num_msgs, ArgumentParser arg_pars) {
 
     len = sizeof(cliaddr);
 
-    if(arg_pars.sig_alg == ECDSA && arg_pars.cert_alg == ECDSA) {
-        print_run_config("receiver", "ECDSA", "ECDSA");
-        ecdsa_spdu incoming_spdu;
+    ecdsa_spdu incoming_spdu;
 
-        // this is to prevent a truly infinite loop
-        int received_message_counter = 0;
+    // this is to prevent a truly infinite loop
+    int received_message_counter = 0;
 
-        // for getting times when BSMs are received (security check for replay attacks)
-        using timestamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds>;
+    // for getting times when BSMs are received (security check for replay attacks)
+    using timestamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds>;
 
-        while (received_message_counter < num_msgs) {
-            recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
-                     (socklen_t *) len);
+    while (received_message_counter < num_msgs) {
+        recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
+                 (socklen_t *) len);
 
-            timestamp received_time = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
+        timestamp received_time = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
 
-            bool valid_spdu = verify_message_ecdsa(incoming_spdu, received_time);
-            print_spdu(incoming_spdu, valid_spdu);
+        bool valid_spdu = verify_message_ecdsa(incoming_spdu, received_time);
+        print_spdu(incoming_spdu, valid_spdu);
 
-            received_message_counter++;
-
-        }
-
-        exit(0);
+        received_message_counter++;
 
     }
 
+    exit(0);
 
 }
 

@@ -7,7 +7,6 @@
 
 #include <string>
 #include <openssl/sha.h>
-#include "VehicleUtil.h"
 #include "ieee16092.h"
 #include "bsm.h"
 #include <openssl/crypto.h>
@@ -71,8 +70,8 @@ public:
     };
 
     std::string get_hostname();
-    void transmit(int num_msgs,ArgumentParser arg_pars);
-    void receive(int num_msgs, ArgumentParser arg_pars);
+    void transmit(int num_msgs, bool test);
+    void receive(int num_msgs, bool test);
     void get_average_sign_times();
     void get_average_verify_times();
 };
