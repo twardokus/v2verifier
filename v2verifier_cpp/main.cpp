@@ -1,5 +1,7 @@
 #include <iostream>
 #include <thread>
+#include <boost/property_tree/ptree.hpp>
+#include <boost/property_tree/json_parser.hpp>
 
 #include "Vehicle.h"
 #include "arguments.h"
@@ -49,14 +51,20 @@ int main(int argc, char *argv[]) {
         }
     }
 
-    int num_msgs = 10000;
+    boost::property_tree::ptree tree;
+    boost::property_tree::json_parser::read_json("../config.json",tree);
+
+    auto num_vehicles = tree.get<uint8_t>("scenario.numVehicles");
+    auto num_msgs = tree.get<uint16_t>("scenario.numMessages");
 
     if(args.sim_mode == TRANSMITTER) {
-        Vehicle v1;
+        Vehicle v1("/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/cert_keys/0/p256.key",
+                   "/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/keys/0/p256.key");
         v1.transmit(num_msgs, args.test);
     }
     else if (args.sim_mode == RECEIVER) {
-        Vehicle v1;
+        Vehicle v1("/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/cert_keys/0/p256.key",
+                   "/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/keys/0/p256.key");;
         v1.receive(num_msgs, args.test);
     }
 
