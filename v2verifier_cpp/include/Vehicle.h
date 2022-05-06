@@ -24,9 +24,6 @@ private:
     unsigned char certificate_signature[72];
     unsigned int certificate_buffer_length;
 
-    std::vector<int64_t> sign_times;
-    std::vector<int64_t> verify_times;
-
     struct ecdsa_spdu {
         uint32_t llc_dsap_ssap = 43690;
         uint8_t  llc_control = 3;
@@ -53,18 +50,10 @@ private:
     bool verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> received_time);
 
 public:
-    Vehicle() {
+    Vehicle(const char *cert_key_filepath, const char *key_filepath) {
         hostname = "null_hostname";
 
-        /*************************************************************************
-         * TODO: fix this to be relative paths rather than unique to dev machine
-         * */
-        const char *cert_key_filepath = "/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/cert_keys/0/p256.key";
-        const char *key_filepath = "/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/keys/0/p256.key";
-        /*************************************************************************/
-
         Vehicle::load_key_from_file_ecdsa(key_filepath, private_ec_key);
-        std::cout << "test" << std:: endl;
         Vehicle::load_key_from_file_ecdsa(cert_key_filepath, cert_private_ec_key);
 
     };
@@ -72,8 +61,6 @@ public:
     std::string get_hostname();
     void transmit(int num_msgs, bool test);
     void receive(int num_msgs, bool test);
-    void get_average_sign_times();
-    void get_average_verify_times();
 };
 
 
