@@ -14,14 +14,6 @@ std::string Vehicle::get_hostname() {
    return hostname;
 }
 
-struct test {
-    std::string word = "hello";
-};
-
-void print_run_config(std::string mode, std::string signature_alg, std::string cert_alg) {
-    std::cout << "Running " << mode << " with " << signature_alg << " signatures and " << cert_alg << " certificates" << std::endl;
-}
-
 void Vehicle::transmit(int num_msgs, bool test) {
 
     // create socket and send data
@@ -105,8 +97,9 @@ void Vehicle::receive(int num_msgs, bool test) {
         timestamp received_time = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
 
         bool valid_spdu = verify_message_ecdsa(incoming_spdu, received_time);
+        for(int i = 0; i < 80; i++) std::cout << "-"; std::cout << std::endl;
         print_spdu(incoming_spdu, valid_spdu);
-
+        print_bsm(incoming_spdu);
         received_message_counter++;
 
     }
@@ -125,24 +118,12 @@ void Vehicle::generate_ecdsa_spdu(Vehicle::ecdsa_spdu &spdu) {
     timestamp ts = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
     spdu.data.signedData.tbsData.headerInfo.timestamp = ts;
 
-    size_t size = sizeof(spdu.data.signedData.tbsData);
-
     spdu.data.signedData.cert = vehicle_certificate_ecdsa;
 
     // sign the certificate
-    auto start = std::chrono::high_resolution_clock::now();
-
     unsigned char certificate_digest[SHA256_DIGEST_LENGTH];
     sha256sum(&spdu.data.signedData.cert,sizeof(spdu.data.signedData.cert), certificate_digest);
     ecdsa_sign(certificate_digest, cert_private_ec_key, &certificate_buffer_length, certificate_signature);
-
-    auto stop = std::chrono::high_resolution_clock::now();
-
-    auto duration = std::chrono::duration_cast<std::chrono::microseconds>(stop - start);
-
-    // std::cout << "Sign time: " << duration.count() << std::endl;
-
-    sign_times.push_back(duration.count());
 
     // copy the certificate signature buffer and certificate signature into the SPDU
     spdu.certificate_signature_buffer_length = certificate_buffer_length;
@@ -160,19 +141,17 @@ bsm Vehicle::generate_bsm() {
 }
 
 void Vehicle::print_bsm(Vehicle::ecdsa_spdu &spdu) {
-    for(int i = 0; i < 80; i++)
-        std::cout << "-";
-    std::cout << std::endl;
+
     std::cout << "BSM received!" << std::endl;
-    std::cout << "Location:\t";
+    std::cout << "\tLocation:\t";
     std::cout << spdu.data.signedData.tbsData.message.latitude;
     std::cout << ", ";
     std::cout << spdu.data.signedData.tbsData.message.longitude;
     std::cout <<", ";
     std::cout << spdu.data.signedData.tbsData.message.elevation;
     std::cout << std::endl;
-    std::cout << "Speed:\t\t" << spdu.data.signedData.tbsData.message.speed << std::endl;
-    std::cout << "Heading:\t" << spdu.data.signedData.tbsData.message.heading << std::endl;
+    std::cout << "\tSpeed:\t\t" << spdu.data.signedData.tbsData.message.speed << std::endl;
+    std::cout << "\tHeading:\t" << spdu.data.signedData.tbsData.message.heading << std::endl;
 }
 
 /*
@@ -246,33 +225,4 @@ void Vehicle::load_key_from_file_ecdsa(const char* filepath, EC_KEY *&key_to_sto
         exit(EXIT_FAILURE);
     }
 
-}
-
-void Vehicle::get_average_sign_times() {
-
-    long int total = 0;
-
-    for(int64_t i : sign_times) {
-        total += i;
-    }
-
-    long double average = total / sign_times.size();
-
-    std::cout << "Average sign time for " << sign_times.size();
-    std::cout << " runs was " << average << " microseconds" << std::endl;
-
-}
-
-void Vehicle::get_average_verify_times() {
-
-    long int total = 0;
-
-    for(int64_t i : verify_times) {
-        total += i;
-    }
-
-    long double average = total / verify_times.size();
-
-    std::cout << "Average verify time for " << verify_times.size();
-    std::cout << " runs was " << average << " microseconds" << std::endl;
 }
