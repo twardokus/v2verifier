@@ -79,7 +79,7 @@ int main(int argc, char *argv[]) {
     }
     else if (args.sim_mode == RECEIVER) {
         Vehicle v1(0);
-        v1.receive(num_msgs, args.test);
+        v1.receive(num_msgs * num_vehicles, args.test);
     }
 
 
