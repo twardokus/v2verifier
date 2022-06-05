@@ -71,7 +71,6 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
     //std::cout << arg_pars.istest << std::endl;
 
     uint16_t port = test ? 6666 : 4444;
-    std::cout << port << std::endl;
     servaddr.sin_port = htons(port);
 
     if(bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
@@ -136,8 +135,6 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
             sendto(sockfd2, (struct packed_bsm_for_gui *) &data_for_gui, sizeof(data_for_gui),
                     MSG_CONFIRM, (const struct sockaddr *) &servaddr2, sizeof(servaddr2));
         }
-        std::cout << "sizeof(struct): " << sizeof(packed_bsm_for_gui) << std::endl;
-
         // print results
         for(int i = 0; i < 80; i++) std::cout << "-"; std::cout << std::endl;
         print_spdu(incoming_spdu, valid_spdu);
