@@ -1,3 +1,6 @@
+// Copyright (c) 2022. Geoff Twardokus
+// Reuse permitted under the MIT License as specified in the LICENSE file within this project.
+
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <cstring>

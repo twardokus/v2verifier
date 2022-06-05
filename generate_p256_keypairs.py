@@ -1,3 +1,6 @@
+#  Copyright (c) 2022. Geoff Twardokus
+#  Reuse permitted under the MIT License as specified in the LICENSE file within this project.
+
 from fastecdsa import keys, curve, ecdsa
 from fastecdsa.keys import import_key, export_key
 from hashlib import sha256

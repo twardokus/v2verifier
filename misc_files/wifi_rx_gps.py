@@ -1,5 +1,9 @@
 #!/usr/bin/env python2
 # -*- coding: utf-8 -*-
+
+#  Copyright (c) 2022. Geoff Twardokus
+#  Reuse permitted under the MIT License as specified in the LICENSE file within this project.
+
 ##################################################
 # GNU Radio Python Flow Graph
 # Title: Wifi Rx

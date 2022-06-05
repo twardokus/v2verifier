@@ -1,3 +1,6 @@
+#  Copyright (c) 2022. Geoff Twardokus
+#  Reuse permitted under the MIT License as specified in the LICENSE file within this project.
+
 import struct
 from tkinter.ttk import *
 import tkinter as tk

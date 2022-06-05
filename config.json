@@ -1,6 +1,6 @@
 {
   "scenario": {
-    "numVehicles":2,
-    "numMessages":10
+    "numVehicles":3,
+    "numMessages":100
   }
 }

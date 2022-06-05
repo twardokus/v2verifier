@@ -1,3 +1,6 @@
+// Copyright (c) 2022. Geoff Twardokus
+// Reuse permitted under the MIT License as specified in the LICENSE file within this project.
+
 #ifndef CPP_IEEE16092_H
 #define CPP_IEEE16092_H
 
