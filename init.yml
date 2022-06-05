@@ -1,0 +1,17 @@
+scenario:
+   numberOfVehicles: 4
+   traceFiles:
+      - tk_trace.csv
+      - tk_trace_2.csv
+      - tk_trace_3.csv
+      - tk_trace_4.csv
+      - test_gps_coords.csv
+      - single_coordinate_test.csv
+   traceLength:
+      6
+local:
+   tracefile:
+      tk_trace.csv
+spoofer:
+   traceFile:
+      coords/test_coords
