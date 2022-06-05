@@ -58,8 +58,24 @@ int main(int argc, char *argv[]) {
     auto num_msgs = tree.get<uint16_t>("scenario.numMessages");
 
     if(args.sim_mode == TRANSMITTER) {
-        Vehicle v1(0);
-        v1.transmit(num_msgs, args.test);
+        std::vector<Vehicle> vehicles;
+        std::vector<std::thread> workers;
+
+        // initialize vehicles - has to be in a separate loop to prevent vector issues
+        for(int i = 0; i < num_vehicles; i++) {
+            vehicles.emplace_back(Vehicle(i));
+        }
+
+        // start a thread for each vehicle
+        for(int i = 0; i < num_vehicles; i++) {
+            workers.emplace_back(std::thread(vehicles.at(i).transmit_static, &vehicles.at(i), num_msgs, args.test));
+        }
+
+        // wait for each vehicle thread to finish
+        for(int i = 0; i < num_vehicles; i++) {
+            workers.at(i).join();
+        }
+
     }
     else if (args.sim_mode == RECEIVER) {
         Vehicle v1(0);

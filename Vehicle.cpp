@@ -18,6 +18,7 @@ std::string Vehicle::get_hostname() {
 void Vehicle::transmit(int num_msgs, bool test) {
 
     // create socket and send data
+    //std::cout << "Vehicle " << this->number << " made it here" << std::endl;
 
     int sockfd;
     struct sockaddr_in servaddr;

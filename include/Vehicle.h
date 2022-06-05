@@ -18,6 +18,7 @@ class Vehicle {
 
 private:
     std::string hostname;
+    int number;
     EC_KEY *private_ec_key = nullptr, *cert_private_ec_key = nullptr;
     ecdsa_explicit_certificate vehicle_certificate_ecdsa;
 
@@ -52,7 +53,7 @@ private:
 public:
     Vehicle(int number) {
         hostname = "null_hostname";
-
+        this->number = number;
         Vehicle::load_key(number, false, private_ec_key);
         Vehicle::load_key(number, true, cert_private_ec_key);
 
@@ -60,6 +61,10 @@ public:
 
     std::string get_hostname();
     void transmit(int num_msgs, bool test);
+    static void transmit_static(void* arg, int num_msgs, bool test) {
+        auto* v = (Vehicle*) arg;
+        v->transmit(num_msgs, test);
+    };
     void receive(int num_msgs, bool test);
 };
 
