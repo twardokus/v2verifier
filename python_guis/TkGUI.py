@@ -141,7 +141,7 @@ class TkGUI:
         self.textWidget.tag_configure("attack", foreground="red")
         self.textWidget.tag_configure("information", foreground="orange")
 
-        background = ImageTk.PhotoImage(Image.open("pictures/background.jpg"))
+        background = ImageTk.PhotoImage(Image.open("python_guis/pictures/background.jpg"))
         self.backgroundImage = background
         self.canvas.create_image(400, 300, image=self.backgroundImage, anchor=tk.CENTER)
 
@@ -245,12 +245,12 @@ class TkGUI:
         # load the appropriate image, depending on signature validation and whether the packet is local
         i = None
         if isReceiver:
-            i = ImageTk.PhotoImage(Image.open("pictures/receiver/" + heading + ".png"))
+            i = ImageTk.PhotoImage(Image.open("python_guis/pictures/receiver/" + heading + ".png"))
         else:
             if isValid:
-                i = ImageTk.PhotoImage(Image.open("pictures/" + heading + ".png"))
+                i = ImageTk.PhotoImage(Image.open("python_guis/pictures/" + heading + ".png"))
             else:
-                i = ImageTk.PhotoImage(Image.open("pictures/phantom/" + heading + ".png"))
+                i = ImageTk.PhotoImage(Image.open("python_guis/pictures/phantom/" + heading + ".png"))
 
         self.canvas.create_image(x, y, image=i, anchor=tk.CENTER, tags="car" + str(threading.currentThread().ident))
 
@@ -378,8 +378,8 @@ class TkGUI:
         self.receiverRowLabel = Label(self.legend, text="  is the receiving vehicle")
         self.otherRowLabel = Label(self.legend, text="  are vehicles sendings BSMs")
 
-        self.receiverImg = ImageTk.PhotoImage(Image.open("pictures/receiver/E.png"))
-        self.otherImg = ImageTk.PhotoImage(Image.open("pictures/E.png"))
+        self.receiverImg = ImageTk.PhotoImage(Image.open("python_guis/pictures/receiver/E.png"))
+        self.otherImg = ImageTk.PhotoImage(Image.open("python_guis/pictures/E.png"))
 
         self.receiverImage = Label(self.legend, image=self.receiverImg)
         self.otherImage = Label(self.legend, image=self.otherImg)
