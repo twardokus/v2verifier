@@ -204,7 +204,10 @@ bool Vehicle::verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_
     return cert_result && sig_result && recent;
 }
 
-void Vehicle::load_key_from_file_ecdsa(const char* filepath, EC_KEY *&key_to_store){
+void Vehicle::load_key(int number,  bool certificate, EC_KEY *&key_to_store){
+    const char* filepath = certificate ? "../cert_keys/0/p256.key" : "../keys/0/p256.key";
+    //const char* filepath = certificate ?
+    //        "../cert_keys/" + std::to_string(number) + "/p256.key" : "../keys/" + std::to_string(number) + "/p256.key";
     FILE *fp = fopen(filepath,"r");
     if(fp != nullptr) {
         EVP_PKEY *key = nullptr;

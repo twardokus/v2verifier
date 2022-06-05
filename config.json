@@ -1,8 +1,6 @@
 {
   "scenario": {
     "numVehicles":5,
-    "numMessages":10000,
-    "certificate_key_dir":"/home/geoff/CLionProjects/v2verifier/cert_keys/",
-    "key_dir":"/home/geoff/CLionProjects/v2verifier/keys/"
+    "numMessages":10000
   }
 }
