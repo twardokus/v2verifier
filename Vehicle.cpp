@@ -8,6 +8,7 @@
 #include "Vehicle.h"
 #include <openssl/pem.h>
 #include <thread>
+#include <sstream>
 
 
 std::string Vehicle::get_hostname() {
@@ -205,9 +206,12 @@ bool Vehicle::verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_
 }
 
 void Vehicle::load_key(int number,  bool certificate, EC_KEY *&key_to_store){
-    const char* filepath = certificate ? "../cert_keys/0/p256.key" : "../keys/0/p256.key";
-    //const char* filepath = certificate ?
-    //        "../cert_keys/" + std::to_string(number) + "/p256.key" : "../keys/" + std::to_string(number) + "/p256.key";
+
+    std::string temp = certificate ? "../cert_keys/" + std::to_string(number) + "/p256.key" :
+            "../keys/" + std::to_string(number) + "/p256.key";
+
+    const char* filepath = temp.c_str();
+
     FILE *fp = fopen(filepath,"r");
     if(fp != nullptr) {
         EVP_PKEY *key = nullptr;
