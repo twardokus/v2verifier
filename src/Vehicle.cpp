@@ -19,8 +19,6 @@ std::string Vehicle::get_hostname() {
 void Vehicle::transmit(int num_msgs, bool test) {
 
     // create socket and send data
-    //std::cout << "Vehicle " << this->number << " made it here" << std::endl;
-
     int sockfd;
     struct sockaddr_in servaddr;
 
@@ -55,7 +53,7 @@ void Vehicle::transmit(int num_msgs, bool test) {
 
 }
 
-void Vehicle::receive(int num_msgs, bool test) {
+void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
 
     int sockfd;
     struct sockaddr_in servaddr, cliaddr;
@@ -81,8 +79,27 @@ void Vehicle::receive(int num_msgs, bool test) {
         exit(EXIT_FAILURE);
     }
 
-    unsigned int len;
+    /***********************************/
+    // tkgui socket
+    int sockfd2;
+    struct sockaddr_in servaddr2;
 
+    if ((sockfd2 = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("socket creation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(&servaddr2, 0, sizeof(servaddr2));
+
+    servaddr2.sin_family = AF_INET;
+    servaddr2.sin_port = htons(9999);
+    servaddr2.sin_addr.s_addr = INADDR_ANY;
+
+    int n2, len2;
+    /***********************************/
+
+
+    unsigned int len;
     len = sizeof(cliaddr);
 
     ecdsa_spdu incoming_spdu;
@@ -104,13 +121,31 @@ void Vehicle::receive(int num_msgs, bool test) {
 
 
         bool valid_spdu = verify_message_ecdsa(incoming_spdu, received_time, vehicle_id_number);
+
+        // forward to GUI if applicable
+        if(tkgui) {
+            packed_bsm_for_gui data_for_gui = {incoming_spdu.data.signedData.tbsData.message.latitude,
+                                               incoming_spdu.data.signedData.tbsData.message.longitude,
+                                               incoming_spdu.data.signedData.tbsData.message.elevation,
+                                               incoming_spdu.data.signedData.tbsData.message.speed,
+                                               incoming_spdu.data.signedData.tbsData.message.heading,
+                                               valid_spdu,
+                                               true,
+                                               7,
+                                               (float) vehicle_id_number};
+            sendto(sockfd2, (struct packed_bsm_for_gui *) &data_for_gui, sizeof(data_for_gui),
+                    MSG_CONFIRM, (const struct sockaddr *) &servaddr2, sizeof(servaddr2));
+        }
+        std::cout << "sizeof(struct): " << sizeof(packed_bsm_for_gui) << std::endl;
+
+        // print results
         for(int i = 0; i < 80; i++) std::cout << "-"; std::cout << std::endl;
         print_spdu(incoming_spdu, valid_spdu);
         print_bsm(incoming_spdu);
         received_message_counter++;
 
     }
-
+    close(sockfd2);
     exit(0);
 
 }

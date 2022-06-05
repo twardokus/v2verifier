@@ -19,6 +19,7 @@ struct program_arguments {
     mode sim_mode = RECEIVER;
     technology tech_choice = DSRC;
     bool test = false;
+    bool gui = false;
 };
 
 #endif //V2VERIFIER_ARGUMENTS_H

@@ -71,7 +71,7 @@ public:
         auto* v = (Vehicle*) arg;
         v->transmit(num_msgs, test);
     };
-    void receive(int num_msgs, bool test);
+    void receive(int num_msgs, bool test, bool tkgui);
 };
 
 
