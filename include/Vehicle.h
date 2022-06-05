@@ -18,7 +18,7 @@ class Vehicle {
 
 private:
     std::string hostname;
-    int number;
+    uint8_t number;
     EC_KEY *private_ec_key = nullptr, *cert_private_ec_key = nullptr;
     ecdsa_explicit_certificate vehicle_certificate_ecdsa;
 
@@ -26,6 +26,7 @@ private:
     unsigned int certificate_buffer_length;
 
     struct ecdsa_spdu {
+        uint8_t vehicle_id;
         uint32_t llc_dsap_ssap = 43690;
         uint8_t  llc_control = 3;
         uint32_t llc_type = 35036;
@@ -48,7 +49,8 @@ private:
     static void load_key(int number, bool certificate, EC_KEY *&key_to_store);
 
     void sign_message_ecdsa(Vehicle::ecdsa_spdu &spdu);
-    bool verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> received_time);
+    bool verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_point<std::chrono::system_clock,
+                              std::chrono::microseconds> received_time, int vehicle_id);
 
 public:
     Vehicle(int number) {

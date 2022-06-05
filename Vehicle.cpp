@@ -98,7 +98,11 @@ void Vehicle::receive(int num_msgs, bool test) {
 
         timestamp received_time = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
 
-        bool valid_spdu = verify_message_ecdsa(incoming_spdu, received_time);
+        std::cout << incoming_spdu.vehicle_id << std::endl;
+        int vehicle_id_number = incoming_spdu.vehicle_id;
+
+
+        bool valid_spdu = verify_message_ecdsa(incoming_spdu, received_time, vehicle_id_number);
         for(int i = 0; i < 80; i++) std::cout << "-"; std::cout << std::endl;
         print_spdu(incoming_spdu, valid_spdu);
         print_bsm(incoming_spdu);
@@ -111,6 +115,7 @@ void Vehicle::receive(int num_msgs, bool test) {
 }
 
 void Vehicle::generate_ecdsa_spdu(Vehicle::ecdsa_spdu &spdu) {
+    spdu.vehicle_id = this->number;
 
     // BSM
     spdu.data.signedData.tbsData.message = generate_bsm();
@@ -162,6 +167,7 @@ void Vehicle::print_bsm(Vehicle::ecdsa_spdu &spdu) {
  */
 void Vehicle::print_spdu(Vehicle::ecdsa_spdu &spdu, bool valid) {
     std::cout << "SPDU received!" << std::endl;
+    std::cout << "\tID:\t" << (int) spdu.vehicle_id << std::endl;
     std::cout << "\tValid:\t";
     valid ? std::cout << "TRUE" : std::cout << "FALSE";
     std::cout << std::endl;
@@ -186,17 +192,22 @@ void Vehicle::sign_message_ecdsa(Vehicle::ecdsa_spdu &spdu) {
 
 }
 
-bool Vehicle::verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> received_time) {
+bool Vehicle::verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> received_time, int vehicle_id) {
+
+    EC_KEY *verification_private_ec_key = nullptr, *verification_cert_private_ec_key = nullptr;
+
+    load_key(vehicle_id, false, verification_private_ec_key);
+    load_key(vehicle_id, true, verification_cert_private_ec_key);
 
     // Verify certificate signature
     unsigned char certificate_hash[SHA256_DIGEST_LENGTH];
     sha256sum(&spdu.data.signedData.cert, sizeof(spdu.data.signedData.cert), certificate_hash);
-    bool cert_result = ecdsa_verify(certificate_hash, spdu.data.certificate_signature, &spdu.certificate_signature_buffer_length, cert_private_ec_key);
+    bool cert_result = ecdsa_verify(certificate_hash, spdu.data.certificate_signature, &spdu.certificate_signature_buffer_length, verification_cert_private_ec_key);
 
     // Verify message signature
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256sum(&spdu.data.signedData.tbsData, sizeof(spdu.data.signedData.tbsData), hash);
-    bool sig_result = ecdsa_verify(hash, spdu.signature, &spdu.signature_buffer_length, private_ec_key);
+    bool sig_result = ecdsa_verify(hash, spdu.signature, &spdu.signature_buffer_length, verification_private_ec_key);
 
     // Verify time constraint: message is valid if less than 30 seconds (30000ms) have elapsed since transmission
     std::chrono::duration<double, std::milli> elapsed_time =  received_time -  spdu.data.signedData.tbsData.headerInfo.timestamp;
