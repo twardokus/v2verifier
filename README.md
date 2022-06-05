@@ -31,10 +31,14 @@ IEEE ICC 2021. Additional publications involving V2Verifier are listed on the
 same page.
 
 ## Requirements
-V2Verifier is designed to be run with software-defined radios (SDRs); 
-specifically, we recommend either the USRP B210 or, preferably, the USRP N210, 
-both available from Ettus Research. When using N210s, 6 GHz daughterboards 
-(e.g., UBX 40) are required for each N210 device.
+V2Verifier is designed for over-the-air experiments with software-defined radios 
+(SDRs).
+For C-V2X, you _**must**_ use SDRs with GPSDO modules installed. We recommend
+the USRP B210 and TCXO GPSDO module from Ettus Research (we have not tested and 
+do not officially support the use of other SDRs for C-V2X).
+For DSRC, you may use USRP B210s (GPSDO not required for DSRC) or, preferably, 
+USRP N210s (also available from Ettus Research). If you are using N210s, a 6 GHz 
+daughterboard (e.g., UBX 40) is required for each N210 device.
 
 If you do not have access to SDRs, V2Verifier can also be run as a pure 
 simulation environment that only requires a modern PC to run. With or without
@@ -44,8 +48,15 @@ operating system. **Windows operating systems are not supported.**
 
 ## Installing V2Verifier
 
-**Important:** These instructions must be completed for _each_ PC you wish 
-to use for running V2Verifier experiments.
+To install V2Verifier, follow the general instructions below, as well as the specific
+instructions for the V2V technology you want to experiment with, for _each_ PC
+that you will use to run experiments.
+
+### C-V2X
+
+
+
+### DSRC
 
 [GNURadio](https://github.com/gnuradio/gnuradio) version 3.8 is required to run
 DSRC experiments in V2Verifier. Additionally, GNURadio modules from the 
@@ -73,73 +84,50 @@ Next, on each Ubuntu PC, you must install the following dependencies:
 
 	sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil 
 	python3-pil.imagetk
-		
-Finally, install and/or upgrade some Python 3 libraries.
 
-	pip3 install -U image fastecdsa pyyaml eel folium pynmea2
 
 ## Running V2Verifier
-Connect one USRP to each PC. On both PCs, launch GNURadio with the command `gnuradio-companion` from a terminal. 
+
+Begin by connecting one USRP to each PC.
+
+### Radio layer: C-V2X
+*Note C-V2X communication requires equipment capable of both cellular
+communication and GPS clock synchronization (e.g., USRP B210 w/ GPSDO or
+[Cohda Wireless MK6c](https://cohdawireless.com/solutions/hardware/mk6c-evk/)) as well as access to either an outdoor
+testing environment or synthesized GPS source.*
+
+On each PC, open a new terminal....
+
+
+### Radio layer: DSRC
+
+On both PCs, launch GNURadio with the command `gnuradio-companion` from a terminal. 
 On one PC, open the `wifi_tx.grc` file from the `v2verifier/grc` project subdirectory. On the other PC, open 
 the `wifi_rx.grc` file from the same subdirectory. Click the green play button at the top of GNURadio to launch the 
 flowgraphs on both PCs. You will need to configure the communication options (e.g., bandwith, frequency) to suit your 
 needs. The default is a 10 MHz channel on 5.89 GHz.
 
-On each PC, navigate to the v2verifier directory. For the receiver, run the command
+On each PC, `cd` into the `build` directory. For the receiver, run the command
 
-    python3 v2verifier.py receiver -t {dsrc cv2x} [-g {web tk}] [--test]
+    ./v2verifier dsrc receiver [--test] [--gui]
 
-to launch the receiver (include the `-g` option for GUI support). For the transmitter, run the command
+For the transmitter, run the command
 
-    python3 v2verifier.py transmitter [--test]
+    ./v2verifier dsrc transmitter [--test]
     
-to begin transmitting messages. See the command-line help (`python3 v2verifier.py --help`) for information about the
-optional arguments noted for each command.
+See the command-line help (`./v2verifier -h`) for optional arguments.
 
-*Note that V2Verifier also supports C-V2X communication, but this requires equipment capable of both cellular
-communication and GPS clock synchronization (e.g., USRP B210 w/ GPSDO or 
-[Cohda Wireless MK6c](https://cohdawireless.com/solutions/hardware/mk6c-evk/)) as well as access to either an outdoor
-testing environment or synthesized GPS source.*
 
-**Important note about GUI usage:** V2Verifier currently offers two graphical 
+
+## Important note about GUIs
+V2Verifier currently offers two graphical 
 interfaces. The first is a web-based interface that interacts with Google Maps. 
 To use this GUI, you will need to purchase a Google Maps API key through Google 
 Cloud services and create `config.js` file in the `web` directory of V2Verifier
-(some familiarity with JavaScript is helpful). Our second interface is based on
+(some familiarity with JavaScript is helpful). 
+
+Our second interface is based on
 TkGUI. To use this option, open a separate terminal window before running any 
-`v2verifier.py` commands and run `python3 tkgui_execute.py` to launch the 
+`v2verifier` commands above and run `python3 tkgui_execute.py` to launch the 
 TkGUI interface as a separate process. We encourage you to open a GitHub issue
 with any questions or problems using either graphical interface.
-
-## Replay attack with V2Verifier
-**Note - these instructions apply to versions of V2Verifier through the beta release of version 2.0. While updates are in progress, please ensure you use an appropriate release of V2Verifier as these instructions will not work with release 2.0**
-
-Conducting a replay attack requires three USRPs and three PCs. Note that these instructions apply only to DSRC at present.
-One USRP, which will be used to conduct the attack, will require two antennas.
-
-Set up two PCs as above and run the normal transmitter and receiver programs. Make sure to use the `-g` option with 
-the `local` program to launch the receiver GUI.
-
-    python3 ./main.py [local | remote] dsrc [-g]
-    
-On the third PC, connected to the USRP with two antennas, open the `wifi_rx.grc` and `wifi_tx.grc` flowgraphs in 
-GNURadio. Also, open a terminal and navigate to the `replay_attack` directory in the V2Verifier directory.
-- Run the `wifi_rx.grc` flowgraph
-- Switch to the terminal and run `python3 ./replay_attack.py <seconds_to_collect>`
-- When the script prompts to press Enter, *wait!* Go back to GNURadio, stop the `wifi_rx.grc` flowgraph and run 
-the `wifi_tx.grc` flowgraph
-- Return to the terminal and press Enter. The attacker will begin replaying messages.
-- Look at the receiver you started at the beginning. You should see the effects of the replay attack (e.g., warning 
-messages in yellow text on the message feed) on the GUI.
-
-# CPP Instructions
-
-## Required packages
-
-`sudo apt install -y libssl-dev`
-
-## Build
-
-    mkdir build
-    cmake ../
-    make
