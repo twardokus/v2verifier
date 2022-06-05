@@ -15,7 +15,7 @@ class GPSVehicle:
         self.lock = gui_lock
         self.wave_builder = WAVEPacketBuilder()
         self.util = Utility()
-        self.key = "keys/0/p256.key"
+        self.key = "keys_old/0/p256.key"
 
     def start(self):
         last_nmea = pynmea2.parse("$GPGGA,000000.00,0000.0000,N,00000.0000,E,0,99,1.0,0.0,M,0.0,M,,*5C")

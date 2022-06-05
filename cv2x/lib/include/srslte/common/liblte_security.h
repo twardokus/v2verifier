@@ -93,7 +93,7 @@ LIBLTE_ERROR_ENUM liblte_security_generate_nh(uint8_t* k_asme, uint8_t* sync, ui
 /*********************************************************************
     Name: liblte_security_generate_k_nas
 
-    Description: Generate the NAS security keys KNASenc and KNASint.
+    Description: Generate the NAS security keys_old KNASenc and KNASint.
 
     Document Reference: 33.401 v10.0.0 Annex A.2
 *********************************************************************/
@@ -132,7 +132,7 @@ LIBLTE_ERROR_ENUM liblte_security_generate_k_nas(uint8*                         
 /*********************************************************************
     Name: liblte_security_generate_k_rrc
 
-    Description: Generate the RRC security keys KRRCenc and KRRCint.
+    Description: Generate the RRC security keys_old KRRCenc and KRRCint.
 
     Document Reference: 33.401 v10.0.0 Annex A.2
 *********************************************************************/
@@ -149,7 +149,7 @@ LIBLTE_ERROR_ENUM liblte_security_generate_k_rrc(uint8*                         
 /*********************************************************************
     Name: liblte_security_generate_k_up
 
-    Description: Generate the user plane security keys KUPenc and
+    Description: Generate the user plane security keys_old KUPenc and
                  KUPint.
 
     Document Reference: 33.401 v10.0.0 Annex A.2

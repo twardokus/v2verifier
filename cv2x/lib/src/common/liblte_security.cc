@@ -142,7 +142,7 @@ void rijndael_key_schedule(uint8* key, ROUND_KEY_STRUCT* rk);
 /*********************************************************************
     Name: rijndael_encrypt
 
-    Description: Computes output using input and round keys.
+    Description: Computes output using input and round keys_old.
 
     Document Reference: 35.206 v10.0.0 Annex 3
 *********************************************************************/
@@ -478,7 +478,7 @@ LIBLTE_ERROR_ENUM liblte_security_generate_nh(uint8_t* k_asme, uint8_t* sync, ui
 /*********************************************************************
     Name: liblte_security_generate_k_nas
 
-    Description: Generate the NAS security keys KNASenc and KNASint.
+    Description: Generate the NAS security keys_old KNASenc and KNASint.
 
     Document Reference: 33.401 v10.0.0 Annex A.2
 *********************************************************************/
@@ -525,7 +525,7 @@ LIBLTE_ERROR_ENUM liblte_security_generate_k_nas(uint8*                         
 /*********************************************************************
     Name: liblte_security_generate_k_rrc
 
-    Description: Generate the RRC security keys KRRCenc and KRRCint.
+    Description: Generate the RRC security keys_old KRRCenc and KRRCint.
 
     Document Reference: 33.401 v10.0.0 Annex A.2
 *********************************************************************/
@@ -572,7 +572,7 @@ LIBLTE_ERROR_ENUM liblte_security_generate_k_rrc(uint8*                         
 /*********************************************************************
     Name: liblte_security_generate_k_up
 
-    Description: Generate the user plane security keys KUPenc and
+    Description: Generate the user plane security keys_old KUPenc and
                  KUPint.
 
     Document Reference: 33.401 v10.0.0 Annex A.2
@@ -1182,7 +1182,7 @@ LIBLTE_ERROR_ENUM liblte_security_milenage_f1(uint8* k, uint8* op_c, uint8* rand
   uint8             rijndael_input[16];
 
   if (k != NULL && op_c != NULL && rand != NULL && sqn != NULL && amf != NULL && mac_a != NULL) {
-    // Initialize the round keys
+    // Initialize the round keys_old
     rijndael_key_schedule(k, &round_keys);
 
     // Compute temp
@@ -1246,7 +1246,7 @@ liblte_security_milenage_f1_star(uint8* k, uint8* op_c, uint8* rand, uint8* sqn,
   uint8             rijndael_input[16];
 
   if (k != NULL && op_c != NULL && rand != NULL && sqn != NULL && amf != NULL && mac_s != NULL) {
-    // Initialize the round keys
+    // Initialize the round keys_old
     rijndael_key_schedule(k, &round_keys);
 
     // Compute temp
@@ -1309,7 +1309,7 @@ liblte_security_milenage_f2345(uint8* k, uint8* op_c, uint8* rand, uint8* res, u
   uint8             rijndael_input[16];
 
   if (k != NULL && op_c != NULL && rand != NULL && res != NULL && ck != NULL && ik != NULL && ak != NULL) {
-    // Initialize the round keys
+    // Initialize the round keys_old
     rijndael_key_schedule(k, &round_keys);
 
     // Compute temp
@@ -1393,7 +1393,7 @@ LIBLTE_ERROR_ENUM liblte_security_milenage_f5_star(uint8* k, uint8* op_c, uint8*
   uint8             rijndael_input[16];
 
   if (k != NULL && op_c != NULL && rand != NULL && ak != NULL) {
-    // Initialize the round keys
+    // Initialize the round keys_old
     rijndael_key_schedule(k, &round_keys);
 
     // Compute temp
@@ -1471,7 +1471,7 @@ void rijndael_key_schedule(uint8* key, ROUND_KEY_STRUCT* rk)
 
   round_const = 1;
 
-  // Compute the remaining round keys
+  // Compute the remaining round keys_old
   for (i = 1; i < 11; i++) {
     rk->rk[i][0][0] = S[rk->rk[i - 1][1][3]] ^ rk->rk[i - 1][0][0] ^ round_const;
     rk->rk[i][1][0] = S[rk->rk[i - 1][2][3]] ^ rk->rk[i - 1][1][0];
@@ -1491,7 +1491,7 @@ void rijndael_key_schedule(uint8* key, ROUND_KEY_STRUCT* rk)
 /*********************************************************************
     Name: rijndael_encrypt
 
-    Description: Computes output using input and round keys.
+    Description: Computes output using input and round keys_old.
 
     Document Reference: 35.206 v10.0.0 Annex 3
 *********************************************************************/

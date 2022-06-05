@@ -5,7 +5,7 @@ from fastecdsa import ecdsa
 from hashlib import sha256
 from datetime import datetime
 
-import v2verifier.V2VCertificates
+import v2verifier_python.V2VCertificates
 
 
 def generate_v2v_bsm(latitude: float, longitude: float, elevation: float, speed: float, heading: float) -> bytes:
@@ -95,7 +95,7 @@ def generate_1609_spdu(bsm: bytes, private_key: int, vehicle_hostname: str) -> b
                                       signer_identifier,
                                       )
 
-    ieee1609_dot2_data += v2verifier.V2VCertificates.get_implicit_certificate(vehicle_hostname)
+    ieee1609_dot2_data += v2verifier_python.V2VCertificates.get_implicit_certificate(vehicle_hostname)
 
     signature_format = 128  # 0x80 -> x-only for signature value
 

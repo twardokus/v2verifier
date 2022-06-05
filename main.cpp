@@ -58,13 +58,13 @@ int main(int argc, char *argv[]) {
     auto num_msgs = tree.get<uint16_t>("scenario.numMessages");
 
     if(args.sim_mode == TRANSMITTER) {
-        Vehicle v1("/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/cert_keys/0/p256.key",
-                   "/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/keys/0/p256.key");
+        Vehicle v1("/home/geoff/CLionProjects/v2verifier/cert_keys/0/p256.key",
+                   "/home/geoff/CLionProjects/v2verifier/keys/0/p256.key");
         v1.transmit(num_msgs, args.test);
     }
     else if (args.sim_mode == RECEIVER) {
-        Vehicle v1("/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/cert_keys/0/p256.key",
-                   "/home/geoff/CLionProjects/v2verifier/v2verifier_cpp/keys/0/p256.key");;
+        Vehicle v1("/home/geoff/CLionProjects/v2verifier/cert_keys/0/p256.key",
+                   "/home/geoff/CLionProjects/v2verifier/keys/0/p256.key");;
         v1.receive(num_msgs, args.test);
     }
 

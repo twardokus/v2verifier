@@ -1,5 +1,5 @@
 import tkinter as tk
-from v2verifier.TkGUI import TkGUI
+from v2verifier_python.TkGUI import TkGUI
 
 if __name__ == "__main__":
     root = tk.Tk()

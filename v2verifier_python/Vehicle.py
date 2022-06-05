@@ -4,9 +4,9 @@ from threading import Thread
 
 import yaml
 
-import v2verifier.V2VReceive
-import v2verifier.V2VTransmit
-import v2verifier.Utility
+import v2verifier_python.V2VReceive
+import v2verifier_python.V2VTransmit
+import v2verifier_python.Utility
 from fastecdsa import point
 
 
@@ -55,18 +55,18 @@ class Vehicle:
             else:
                 for pvm_element in pvm_list:
                     latitude, longitude, elevation, speed, heading = pvm_element.split(",")
-                    bsm = v2verifier.V2VTransmit.generate_v2v_bsm(float(latitude),
-                                                                  float(longitude),
-                                                                  float(elevation),
-                                                                  float(speed),
-                                                                  float(heading))
+                    bsm = v2verifier_python.V2VTransmit.generate_v2v_bsm(float(latitude),
+                                                                         float(longitude),
+                                                                         float(elevation),
+                                                                         float(speed),
+                                                                         float(heading))
 
-                spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key, hostname)
+                spdu = v2verifier_python.V2VTransmit.generate_1609_spdu(bsm, self.private_key, hostname)
 
                     if test_mode:  # in test mode, send directly to receiver on port 4444
-                        v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
+                        v2verifier_python.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
                     else:  # otherwise, send to wifi_tx.grc listener on port 52001 to become 802.11 payload
-                        v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 52001)
+                        v2verifier_python.V2VTransmit.send_v2v_message(spdu, "localhost", 52001)
 
                     time.sleep(self.bsm_interval)
 
@@ -81,31 +81,31 @@ class Vehicle:
                     data = sock.recv(2048)
 
                     if test_mode:  # in test mode, there are no 802.11 headers, so parse all received data
-                        spdu_data = v2verifier.V2VReceive.parse_received_spdu(data)
+                        spdu_data = v2verifier_python.V2VReceive.parse_received_spdu(data)
                     else:  # otherwise (i.e., w/ GNURadio), 802.11 PHY/MAC headers must be stripped before parsing SPDU
-                        spdu_data = v2verifier.V2VReceive.parse_received_spdu(data[57:])
+                        spdu_data = v2verifier_python.V2VReceive.parse_received_spdu(data[57:])
 
-                    verification_data = v2verifier.V2VReceive.verify_spdu(spdu_data, self.public_key)
+                    verification_data = v2verifier_python.V2VReceive.verify_spdu(spdu_data, self.public_key)
 
-                    bsm_data_tuple = v2verifier.V2VReceive.extract_bsm_data(spdu_data["tbs_data"]["unsecured_data"],
-                                                                            verification_data)
+                    bsm_data_tuple = v2verifier_python.V2VReceive.extract_bsm_data(spdu_data["tbs_data"]["unsecured_data"],
+                                                                                   verification_data)
                     self.update_known_vehicles(spdu_data["certificate"]["hostname"], bsm_data_tuple,
                                                verification_data)
 
-                    print(v2verifier.V2VReceive.get_bsm_report(spdu_data["tbs_data"]["unsecured_data"],
-                                                               verification_data))
-                    v2verifier.V2VReceive.report_bsm_gui(bsm_data_tuple, verification_data, "127.0.0.1", 6666,
-                                                         self.get_vehicle_number_by_id(
+                    print(v2verifier_python.V2VReceive.get_bsm_report(spdu_data["tbs_data"]["unsecured_data"],
+                                                                      verification_data))
+                    v2verifier_python.V2VReceive.report_bsm_gui(bsm_data_tuple, verification_data, "127.0.0.1", 6666,
+                                                                self.get_vehicle_number_by_id(
                                                              spdu_data["certificate"]["hostname"]
                                                          )
-                                                         )
+                                                                )
 
 # =======             
-                    # bsm_data_tuple = v2verifier.V2VReceive.extract_bsm_data(spdu_data["tbs_data"]["unsecured_data"], verification_data)
+                    # bsm_data_tuple = v2verifier_python.V2VReceive.extract_bsm_data(spdu_data["tbs_data"]["unsecured_data"], verification_data)
                     # self.update_known_vehicles(spdu_data["certificate"]["hostname"], bsm_data_tuple, verification_data)
 
-                    # print(v2verifier.V2VReceive.get_bsm_report(spdu_data["tbs_data"]["unsecured_data"], verification_data))
-                    # v2verifier.V2VReceive.report_bsm_gui(bsm_data_tuple, verification_data, "127.0.0.1", 6666)
+                    # print(v2verifier_python.V2VReceive.get_bsm_report(spdu_data["tbs_data"]["unsecured_data"], verification_data))
+                    # v2verifier_python.V2VReceive.report_bsm_gui(bsm_data_tuple, verification_data, "127.0.0.1", 6666)
 # >>>>>>> cv2x-integration
             elif tech == "cv2x":
                 print("C-V2X is currently not supported")
@@ -116,15 +116,15 @@ class Vehicle:
                 sock.bind(("fe80::ca89:f53:4108:d142%enp3s0", 4444, 0, 2))
                 while True:
                     data = sock.recv(2048)
-                    bsm_data = v2verifier.V2VReceive.parse_received_cv2x_spdu(data)
+                    bsm_data = v2verifier_python.V2VReceive.parse_received_cv2x_spdu(data)
 
-                    # v2verifier.V2VReceive.parse_received_cv2x_spdu() returns empty dict if
+                    # v2verifier_python.V2VReceive.parse_received_cv2x_spdu() returns empty dict if
                     # the SPDU is below a certain length threshold. This prevents attempting
                     # to parse non-BSMs, e.g., control messages, as if they were BSMs
                     if bsm_data == {}:
                         continue
 
-                    print(v2verifier.V2VReceive.report_cots_cv2x_bsm(bsm_data))
+                    print(v2verifier_python.V2VReceive.report_cots_cv2x_bsm(bsm_data))
             else:
                 raise Exception("Technology must be specified as \"dsrc\" or \"cv2x\".")
 
@@ -180,19 +180,19 @@ class Vehicle:
         with open("init.yml") as config_file:
             config = yaml.load(config_file, Loader=yaml.FullLoader)
 
-        pvm_list = v2verifier.Utility.read_data_from_file("trace_files/" + config["local"]["tracefile"])
+        pvm_list = v2verifier_python.Utility.read_data_from_file("trace_files/" + config["local"]["tracefile"])
         for pvm_element in pvm_list:
             latitude, longitude, elevation, speed, heading = pvm_element.split(",")
-            bsm = v2verifier.V2VTransmit.generate_v2v_bsm(float(latitude),
-                                                          float(longitude),
-                                                          float(elevation),
-                                                          float(speed),
-                                                          float(heading))
+            bsm = v2verifier_python.V2VTransmit.generate_v2v_bsm(float(latitude),
+                                                                 float(longitude),
+                                                                 float(elevation),
+                                                                 float(speed),
+                                                                 float(heading))
 
-            spdu = v2verifier.V2VTransmit.generate_1609_spdu(bsm, self.private_key, "reserved9999")
+            spdu = v2verifier_python.V2VTransmit.generate_1609_spdu(bsm, self.private_key, "reserved9999")
             if not test_mode:
                 spdu = b'\xFE'*57 + spdu
 
-            v2verifier.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
+            v2verifier_python.V2VTransmit.send_v2v_message(spdu, "localhost", 4444)
 
             time.sleep(self.bsm_interval)

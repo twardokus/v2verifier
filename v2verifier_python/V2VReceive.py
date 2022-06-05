@@ -1,6 +1,6 @@
 from typing import Tuple
 
-import v2verifier.V2VCertificates
+import v2verifier_python.V2VCertificates
 import struct
 import os
 import math
@@ -252,7 +252,7 @@ def verify_spdu(spdu_dict: dict, public_key: point.Point) -> dict:
 def report_bsm_gui(bsm: tuple, verification_dict: dict, ip_address: str, port: int, vehicle_id: float) -> None:
     """Send BSM data and verification status to the V2Verifier GUI via UDP datagram
 
-    :param bsm: a tuple of BSM information matching the format returned by v2verifier.V2VTransmit.generate_v2v_bsm()
+    :param bsm: a tuple of BSM information matching the format returned by v2verifier_python.V2VTransmit.generate_v2v_bsm()
     :type bsm: tuple
     :param verification_dict: a dictionary containing verification information about the BSM
     :type verification_dict: dict
@@ -295,7 +295,7 @@ def extract_bsm_data(bsm: bytes, verification_dict: dict) -> tuple:
 def get_bsm_report(bsm: bytes, verification_dict: dict) -> str:
     """Create a report about a received SPDU. Intended to generate output for printing to console.
 
-    :param bsm: BSM data in byte format as packed by v2verifier.V2VTransmit.generate_bsm()
+    :param bsm: BSM data in byte format as packed by v2verifier_python.V2VTransmit.generate_bsm()
     :type bsm: bytes
     :param verification_dict: a dictionary containing verification information about an SPDU
     :type verification_dict: dict
