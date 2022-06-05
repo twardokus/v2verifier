@@ -25,6 +25,9 @@ private:
     unsigned char certificate_signature[72];
     unsigned int certificate_buffer_length;
 
+    std::vector<std::vector<float>> timestep;
+    std::vector<float> timestep_data;
+
     struct ecdsa_spdu {
         uint8_t vehicle_id;
         uint32_t llc_dsap_ssap = 43690;
@@ -40,13 +43,14 @@ private:
         unsigned char signature[72]; // 72 bytes is the size of the DER-encoded ECDSA signature
     };
 
-    void generate_ecdsa_spdu(Vehicle::ecdsa_spdu &spdu);
+    void generate_ecdsa_spdu(Vehicle::ecdsa_spdu &spdu, int timestep);
 
-    static bsm generate_bsm();
+    bsm generate_bsm(int timestep);
     static void print_bsm(Vehicle::ecdsa_spdu &spdu);
     static void print_spdu(Vehicle::ecdsa_spdu &spdu, bool valid);
 
     static void load_key(int number, bool certificate, EC_KEY *&key_to_store);
+    void load_trace(int number);
 
     void sign_message_ecdsa(Vehicle::ecdsa_spdu &spdu);
     bool verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_point<std::chrono::system_clock,
@@ -58,7 +62,7 @@ public:
         this->number = number;
         Vehicle::load_key(number, false, private_ec_key);
         Vehicle::load_key(number, true, cert_private_ec_key);
-
+        Vehicle::load_trace(number);
     };
 
     std::string get_hostname();

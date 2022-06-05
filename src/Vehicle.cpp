@@ -9,6 +9,7 @@
 #include <openssl/pem.h>
 #include <thread>
 #include <sstream>
+#include <fstream>
 
 
 std::string Vehicle::get_hostname() {
@@ -42,7 +43,7 @@ void Vehicle::transmit(int num_msgs, bool test) {
     for(int i =0; i < num_msgs; i++) {
 
         ecdsa_spdu next_spdu;
-        generate_ecdsa_spdu(next_spdu);
+        generate_ecdsa_spdu(next_spdu, i);
         sendto(sockfd, (struct ecdsa_spdu *) &next_spdu, sizeof(next_spdu), MSG_CONFIRM,
                (const struct sockaddr *) &servaddr, sizeof(servaddr));
 
@@ -114,11 +115,11 @@ void Vehicle::receive(int num_msgs, bool test) {
 
 }
 
-void Vehicle::generate_ecdsa_spdu(Vehicle::ecdsa_spdu &spdu) {
+void Vehicle::generate_ecdsa_spdu(Vehicle::ecdsa_spdu &spdu, int timestep) {
     spdu.vehicle_id = this->number;
 
     // BSM
-    spdu.data.signedData.tbsData.message = generate_bsm();
+    spdu.data.signedData.tbsData.message = generate_bsm(timestep);
 
     // timestamp
     using timestamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds>;
@@ -142,8 +143,26 @@ void Vehicle::generate_ecdsa_spdu(Vehicle::ecdsa_spdu &spdu) {
 
 }
 
-bsm Vehicle::generate_bsm() {
-    bsm new_bsm = {10, 10, 10, 30, 0};
+
+bsm Vehicle::generate_bsm(int timestep) {
+    float latitude = this->timestep[timestep][0];
+    float longitude = this->timestep[timestep][1];
+    float elevation = this->timestep[timestep][2];
+    float speed = 0;
+    float heading = 0;
+    if(timestep != 0) {
+        speed = calculate_speed_kph(this->timestep[timestep - 1][0],
+                                    latitude,
+                                    this->timestep[timestep - 1][1],
+                                    longitude,
+                                    100);
+
+        heading = calculate_heading(this->timestep[timestep - 1][0],
+                                    latitude,
+                                    this->timestep[timestep - 1][1],
+                                    longitude);
+    }
+    bsm new_bsm = {latitude, longitude, elevation, speed, heading};
     return new_bsm;
 }
 
@@ -244,4 +263,25 @@ void Vehicle::load_key(int number,  bool certificate, EC_KEY *&key_to_store){
         exit(EXIT_FAILURE);
     }
 
+}
+
+void Vehicle::load_trace(int number) {
+    std::string line;
+    std::string word;
+
+    std::fstream file("../trace_files/" + std::to_string(number) + ".csv", std::ios::in);
+    if(file.is_open()) {
+        while(getline(file, line)) {
+            timestep_data.clear();
+            std::stringstream str(line);
+            while(getline(str, word, ',')) {
+                timestep_data.push_back(std::stof(word));
+            }
+            timestep.push_back(timestep_data);
+        }
+    }
+    else {
+        perror(("Error opening trace file for vehicle " + std::to_string(number)).c_str());
+        exit(EXIT_FAILURE);
+    }
 }
