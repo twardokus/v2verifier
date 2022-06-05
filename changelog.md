@@ -1,7 +1,7 @@
 # Changelog
 Notable changes to this project will be tracked here. Additions, deprecations, etc. are described per version release.
 
-## [3.0] - May 2022
+## [3.0] - 2022-06
 Version 3.0 is a major overhaul of the testbed. Most prominently, V2Verifier is now a C++ project. Several factors 
 informed the change from Python to C++; most significantly, V2Verifier code now runs at speeds much closer to real
 V2V software and therefore more accurately reflects real-world performance (e.g., ECDSA verifications are performed)
@@ -9,13 +9,17 @@ at a more realistic pace.
 
 ### Added
 - C++ implementations of all V2Verifier files.
+- Support for GNURadio version 3.8
 ### Changed
-- V2Verifer is now a C++ project
+- V2Verifier is now a C++ project
+- TkGUI is now a standalone utility included with the project that can be run alongside,
+but not as a direct part of, the main C++ code.
 ### Fixed
 ### Deprecated
 - All Python-based versions of V2Verifier (<3.0) are no longer supported.
+- GNURadio 3.7 is no longer supported. 
 ### Removed
-- All Python (.py,.pyc) files.
+- All Python (.py,.pyc) files except some utilities and GUI source files.
 
 ## [2.0] - 2021-10-10
 V2Verifier 2.0 introduced several major changes including support for C-V2X and additional IEEE 1609.2 features.
