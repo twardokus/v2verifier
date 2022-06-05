@@ -8,7 +8,6 @@ import threading
 from threading import Thread
 import json
 import socket
-import yaml
 
 
 def heading_to_direction(heading):
@@ -65,10 +64,8 @@ class TkGUI:
 
         self.threadlock = threading.Lock()
 
-        with open("init.yml", "r") as confFile:
-            self.config = yaml.load(confFile, Loader=yaml.FullLoader)
-        self.numVehicles = 1  # self.config["remoteConfig"]["numberOfVehicles"] + 1
-        self.totalPackets = 100  # self.config["remoteConfig"]["traceLength"] * (self.numVehicles - 1)
+        self.numVehicles = 1
+        self.totalPackets = 100
 
         self.receivedPacketCount = 0
         self.processedPacketCount = 0
@@ -190,7 +187,7 @@ class TkGUI:
     def run_gui_receiver(self):
         # Start the GUI service on port 6666
         s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        s.bind(('127.0.0.1', 6666))
+        s.bind(('127.0.0.1', 9999))
 
         labelThread = Thread(target=self.update_statistics_labels)
         labelThread.start()
@@ -209,7 +206,7 @@ class TkGUI:
             msg = s.recvfrom(1024)[0]
             print("Received", msg)
 
-            data = struct.unpack("!5f??ff", msg)
+            data = struct.unpack("<5f??ff", msg)
 
             if not data[8] == 99:
                 self.receivedPacketCount += 1
