@@ -71,7 +71,6 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
 
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;
-    //std::cout << arg_pars.istest << std::endl;
 
     uint16_t port = test ? 6666 : 4444;
     servaddr.sin_port = htons(port);

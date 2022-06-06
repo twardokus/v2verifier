@@ -9,13 +9,15 @@
 #define CPP_VEHICLE_H
 
 #include <string>
+#include <vector>
 #include <openssl/sha.h>
-#include "ieee16092.h"
-#include "bsm.h"
 #include <openssl/crypto.h>
 #include <openssl/ec.h>
+
+#include "ieee16092.h"
+#include "bsm.h"
 #include "v2vcrypto.h"
-#include <vector>
+
 
 class Vehicle {
 

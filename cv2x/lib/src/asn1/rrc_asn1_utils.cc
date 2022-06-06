@@ -214,7 +214,6 @@ srslte::pdcp_config_t make_drb_pdcp_config_t(const uint8_t bearer_id, bool is_ue
 
 srslte::pdcp_config_t make_drb_pdcp_config_t(const uint8_t bearer_id, bool is_ue, const asn1::rrc::pdcp_cfg_s& pdcp_cfg)
 {
-  // TODO: complete config processing 
   pdcp_discard_timer_t discard_timer =  pdcp_discard_timer_t::infinity;
   if (pdcp_cfg.discard_timer_present) {
     switch (pdcp_cfg.discard_timer.to_number()) {

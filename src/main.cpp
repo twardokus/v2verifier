@@ -9,7 +9,6 @@
 #include "Vehicle.h"
 #include "arguments.h"
 
-//#include "VehicleUtil.h"
 
 void print_usage() {
     std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver} [--test] " << std::endl;
