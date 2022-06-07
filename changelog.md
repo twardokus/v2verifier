@@ -1,11 +1,13 @@
 # Changelog
 Notable changes to this project will be tracked here. Additions, deprecations, etc. are described per version release.
 
-## [3.0] - 2022-06
-Version 3.0 is a major overhaul of the testbed. Most prominently, V2Verifier is now a C++ project. Several factors 
+## [3.0.0] - 2022-06
+Version 3.0.0, a preliminary release, is a major overhaul of the testbed. Most prominently, V2Verifier is now a C++ project. Several factors 
 informed the change from Python to C++; most significantly, V2Verifier code now runs at speeds much closer to real
 V2V software and therefore more accurately reflects real-world performance (e.g., ECDSA verifications are performed)
 at a more realistic pace. 
+
+Version 3.0.1 will be released in the near future to supersede this version and restore C-V2X support to the project.
 
 ### Added
 - C++ implementations of all V2Verifier files.
@@ -14,8 +16,9 @@ at a more realistic pace.
 - V2Verifier is now a C++ project
 - TkGUI is now a standalone utility included with the project that can be run alongside,
 but not as a direct part of, the main C++ code.
+- C-V2X is temporarily not supported pending bug fixes in third-party source code that this project relies on.
 ### Fixed
-- Sidelink communication (C-V2X) from the srsRAN project
+- Sidelink communication (C-V2X) in V2Verifier based on the srsRAN project ([issue #34](https://github.com/twardokus/v2verifier/issues/34)) was fixed by srsRAN developers (see that project's [issue #838](https://github.com/srsran/srsRAN/issues/838)).
 ### Deprecated
 - All Python-based versions of V2Verifier (<3.0) are no longer supported.
 - GNURadio 3.7 is no longer supported. 
