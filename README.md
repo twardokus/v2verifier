@@ -1,5 +1,11 @@
 # V2Verifier
 
+****Important** - this version of V2Verifier (v3.0.0) is a _preliminary release._ 
+As we await bug fixes in third-party open-source projects that V2Verifier relies on
+for C-V2X sidelink communication, **this version of V2Verifier temporarily does 
+not support C-V2X**. We thank you for your patience as we work towards resolving this
+issue.**
+
 V2Verifer is an open-source testbed for experimental evaluation of security in
 vehicle-to-vehicle (V2V) communication. V2Verifier supports a broad range of 
 experimentation with V2V technologies and security protocols using a 
@@ -11,9 +17,9 @@ message signing and verification and V2V certificates
 - Dedicated Short Range Communication (DSRC) - adapted from 
 the [WiME Project's](http://dx.doi.org/10.1109/TMC.2017.2751474)
 IEEE 802.11p transceiver
-- Cellular Vehicle-to-Everything (C-V2X) - based on the 
+- ~~Cellular Vehicle-to-Everything (C-V2X) - based on the 
 [srsRAN](https://github.com/srsRAN/srsRAN) project (formerly
-srsLTE)
+srsLTE)~~ (temporarily not supported)
 
 Check out our 
 [YouTube page](https://www.youtube.com/channel/UC5lY5D4KYgfKu3FXtfjHP7A)
@@ -54,7 +60,9 @@ that you will use to run experiments.
 
 ### C-V2X
 
-
+**C-V2X support has been temporarily removed as we await bug fixes in third-party code
+that V2Verifier relies on. Thank you for your patience as we work to restore this
+functionality as soon as possible.**
 
 ### DSRC
 
@@ -83,8 +91,24 @@ run GNURadio Companion.
 Next, on each Ubuntu PC, you must install the following dependencies:
 
 	sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil 
-	python3-pil.imagetk
+	python3-pil.imagetk 
 
+If you have not already cloned the repository, do so with the commands
+
+    cd ~
+    git clone https://github.com/twardokus/v2verifier.git
+
+Move into the V2Verifier directory and build the project using the standard CMake
+build process:
+
+    cd v2verifier
+    mkdir build
+    cd build
+    cmake ../
+    make
+
+Once the project is built, proceed to the next section for instructions on how to
+run experiments in V2Verifier.
 
 ## Running V2Verifier
 
@@ -96,7 +120,9 @@ communication and GPS clock synchronization (e.g., USRP B210 w/ GPSDO or
 [Cohda Wireless MK6c](https://cohdawireless.com/solutions/hardware/mk6c-evk/)) as well as access to either an outdoor
 testing environment or synthesized GPS source.*
 
-On each PC, open a new terminal....
+**C-V2X support has been temporarily removed as we await bug fixes in third-party code
+that V2Verifier relies on. Thank you for your patience as we work to restore this
+functionality as soon as possible.**
 
 
 ### Radio layer: DSRC
@@ -109,11 +135,11 @@ needs. The default is a 10 MHz channel on 5.89 GHz.
 
 On each PC, `cd` into the `build` directory. For the receiver, run the command
 
-    ./v2verifier dsrc receiver [--test] [--gui]
+    ./src/v2verifier dsrc receiver [--test] [--gui]
 
 For the transmitter, run the command
 
-    ./v2verifier dsrc transmitter [--test]
+    ./src/v2verifier dsrc transmitter [--test]
     
 See the command-line help (`./v2verifier -h`) for optional arguments.
 

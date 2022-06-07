@@ -15,6 +15,7 @@ at a more realistic pace.
 - TkGUI is now a standalone utility included with the project that can be run alongside,
 but not as a direct part of, the main C++ code.
 ### Fixed
+- Sidelink communication (C-V2X) from the srsRAN project
 ### Deprecated
 - All Python-based versions of V2Verifier (<3.0) are no longer supported.
 - GNURadio 3.7 is no longer supported. 
