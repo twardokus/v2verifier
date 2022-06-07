@@ -7,7 +7,7 @@ informed the change from Python to C++; most significantly, V2Verifier code now 
 V2V software and therefore more accurately reflects real-world performance (e.g., ECDSA verifications are performed)
 at a more realistic pace. 
 
-Version 3.0.1 will be released in the near future to supersede this version and restore C-V2X support to the project.
+Version 3.0.1 will be released in the near future as a hotfix to restore C-V2X support.
 
 ### Added
 - C++ implementations of all V2Verifier files.
