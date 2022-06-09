@@ -36,7 +36,7 @@ If you use V2Verifier or any of its components in your work, please cite
 IEEE ICC 2021. Additional publications involving V2Verifier are listed on the 
 same page.
 
-## Requirements
+## Equipment Requirements
 V2Verifier is designed for over-the-air experiments with software-defined radios 
 (SDRs).
 For C-V2X, you _**must**_ use SDRs with GPSDO modules installed. We recommend
@@ -54,17 +54,26 @@ operating system. **Windows operating systems are not supported.**
 
 ## Installing V2Verifier
 
-To install V2Verifier, follow the general instructions below, as well as the specific
-instructions for the V2V technology you want to experiment with, for _each_ PC
-that you will use to run experiments.
+Installation consists of two parts.
 
-### C-V2X
+### Part 1 - V2V Protocols
+Follow the instructions for DSRC, C-V2X, or both to install the software needed
+for your PC to communicate with your software-defined radios and send V2V
+messages over the air.
 
-**C-V2X support has been temporarily removed as we await bug fixes in third-party code
+#### C-V2X
+
+V2Verifier's implementation of C-V2X sidelink communication is based on the
+open-source srsRAN project.
+
+_C-V2X support has been temporarily removed as we await bug fixes in third-party code
 that V2Verifier relies on. Thank you for your patience as we work to restore this
-functionality as soon as possible.**
+functionality as soon as possible._
 
-### DSRC
+#### DSRC
+
+V2Verifier's implementation of DSRC is based on the open-source GNURadio 
+and WiME Project implementation of IEEE 802.11p.
 
 [GNURadio](https://github.com/gnuradio/gnuradio) version 3.8 is required to run
 DSRC experiments in V2Verifier. Additionally, GNURadio modules from the 
@@ -88,12 +97,15 @@ run GNURadio Companion.
 
     pybombs run gnuradio-companion
 
-Next, on each Ubuntu PC, you must install the following dependencies:
+### Part 2 - V2Verifier
+
+Now that you have installed the communication software, you can install V2Verifier. 
+Begin by installing several dependencies:
 
 	sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil 
 	python3-pil.imagetk 
 
-If you have not already cloned the repository, do so with the commands
+If you have not already cloned the V2Verifier repository, do so with the commands
 
     cd ~
     git clone https://github.com/twardokus/v2verifier.git
@@ -107,12 +119,30 @@ build process:
     cmake ../
     make
 
-Once the project is built, proceed to the next section for instructions on how to
+If you have missed any dependencies, CMake will warn you at this point.
+Once V2Verifier is built, proceed to the next section for instructions on how to
 run experiments in V2Verifier.
 
 ## Running V2Verifier
 
-Begin by connecting one USRP to each PC.
+Before running V2Verifier, connect one USRP (with appropriate antennas) to each Ubuntu PC.
+Assuming you have two PCs with one USRP each, designate one USRP as the "receiver" and the other
+as the "transmitter." In this configuration, the receiver will show you how a single vehicle 
+responds to V2V transmissions (e.g., using a GUI) while the transmitter can generate V2V
+traffic for up to ten vehicles. On each PC, begin by launching the C-V2X or DSRC code (follow 
+the respective instructions below) to run in the background and manage your SDR transmitting
+or receiving. Then, on each PC, `cd` into the `build` directory. For the receiver, run the command
+
+    ./src/v2verifier dsrc receiver [--test] [--gui]
+
+For the transmitter, run the command
+
+    ./src/v2verifier dsrc transmitter [--test]
+
+See the command-line help (`./v2verifier -h`) for optional arguments. You should not use the `--test`
+option unless you are not using SDRs (this option allows you to run transmitter and receiver on a 
+single PC with communication via network socket). Use `--gui` on the receiver if you want to use 
+a graphical interface on the receiver (see additional instructions for GUIs below).
 
 ### Radio layer: C-V2X
 *Note C-V2X communication requires equipment capable of both cellular
@@ -133,19 +163,7 @@ the `wifi_rx.grc` file from the same subdirectory. Click the green play button a
 flowgraphs on both PCs. You will need to configure the communication options (e.g., bandwith, frequency) to suit your 
 needs. The default is a 10 MHz channel on 5.89 GHz.
 
-On each PC, `cd` into the `build` directory. For the receiver, run the command
-
-    ./src/v2verifier dsrc receiver [--test] [--gui]
-
-For the transmitter, run the command
-
-    ./src/v2verifier dsrc transmitter [--test]
-    
-See the command-line help (`./v2verifier -h`) for optional arguments.
-
-
-
-## Important note about GUIs
+### Using GUIs
 V2Verifier currently offers two graphical 
 interfaces. The first is a web-based interface that interacts with Google Maps. 
 To use this GUI, you will need to purchase a Google Maps API key through Google 
@@ -155,5 +173,7 @@ Cloud services and create `config.js` file in the `web` directory of V2Verifier
 Our second interface is based on
 TkGUI. To use this option, open a separate terminal window before running any 
 `v2verifier` commands above and run `python3 tkgui_execute.py` to launch the 
-TkGUI interface as a separate process. We encourage you to open a GitHub issue
+TkGUI interface as a separate process. 
+
+We encourage you to open a GitHub issue
 with any questions or problems using either graphical interface.
