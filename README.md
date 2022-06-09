@@ -129,7 +129,10 @@ Before running V2Verifier, connect one USRP (with appropriate antennas) to each 
 Assuming you have two PCs with one USRP each, designate one USRP as the "receiver" and the other
 as the "transmitter." In this configuration, the receiver will show you how a single vehicle 
 responds to V2V transmissions (e.g., using a GUI) while the transmitter can generate V2V
-traffic for up to ten vehicles. On each PC, begin by launching the C-V2X or DSRC code (follow 
+traffic for up to ten vehicles. You can specify the number of vehicles by changing the relevant
+parameter in `config.json`.
+
+On each PC, begin by launching the C-V2X or DSRC code (follow 
 the respective instructions below) to run in the background and manage your SDR transmitting
 or receiving. Then, on each PC, `cd` into the `build` directory. For the receiver, run the command
 
