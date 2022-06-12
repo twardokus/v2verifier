@@ -112,9 +112,24 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
     using timestamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds>;
 
     while (received_message_counter < num_msgs) {
-        recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
-                 (socklen_t *) len);
+        if(test) {
+            recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
+                     (socklen_t *) len);
+        }
+        else {
+            // with DSRC headers (when data is from SDR), we have an extra 57 bytes (304 + 57 = 361)
+            uint8_t buffer[361];
+            recvfrom(sockfd,  &buffer, 361, 0, (struct sockaddr *) &cliaddr,
+                     (socklen_t *) len);
 
+            uint8_t spdu_buffer[sizeof(incoming_spdu)];
+            for(int i = 360, j = sizeof(incoming_spdu) - 1; i > 57; i--, j--) {
+                spdu_buffer[j] = buffer[i];
+            }
+
+            memcpy(&incoming_spdu, spdu_buffer, sizeof(incoming_spdu));
+
+        }
         timestamp received_time = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
 
         std::cout << incoming_spdu.vehicle_id << std::endl;

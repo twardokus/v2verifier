@@ -11,7 +11,7 @@
 
 
 void print_usage() {
-    std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver} [--test] " << std::endl;
+    std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver} [--test] [--gui]" << std::endl;
 }
 
 int main(int argc, char *argv[]) {
@@ -33,8 +33,9 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if(std::string(argv[2]) == "transmitter")
+    if(std::string(argv[2]) == "transmitter") {
         args.sim_mode = TRANSMITTER;
+    }
     else if(std::string(argv[2]) == "receiver")
         args.sim_mode = RECEIVER;
     else {
@@ -43,15 +44,17 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if(argc >= 4) {
-        if(std::string(argv[3]) == "--test")
+    if(argc == 4) {
+        if (std::string(argv[3]) == "--test")
             args.test = true;
         else {
             std::cout << R"(Error: optional third argument can only be "--test")" << std::endl;
             print_usage();
             exit(EXIT_FAILURE);
         }
+    }
 
+    if(argc == 5) {
         if(std::string(argv[4]) == "--gui")
             args.gui = true;
         else{
