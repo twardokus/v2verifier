@@ -77,9 +77,9 @@ and WiME Project implementation of IEEE 802.11p.
 
 [GNURadio](https://github.com/gnuradio/gnuradio) version 3.8 is required to run
 DSRC experiments in V2Verifier. Additionally, GNURadio modules from the 
-[WiME project](https://www.wime-project.net/)] are required. Install GNURadio
+[WiME project](https://www.wime-project.net/) are required. Install GNURadio
 as well as the required WiME modules with the following commands. If you
-encounter any errors, please visit the GNURadio project for their most recent
+encounter any errors, please visit the GNURadio project on GitHub for their most recent
 installation instructions and troubleshooting guide.
 
     sudo apt install -y python3-pip
@@ -160,7 +160,7 @@ functionality as soon as possible.**
 
 ### Radio layer: DSRC
 
-On both PCs, launch GNURadio with the command `gnuradio-companion` from a terminal. 
+On both PCs, launch GNURadio with `pybombs run gnuradio-companion`. 
 On one PC, open the `wifi_tx.grc` file from the `v2verifier/grc` project subdirectory. On the other PC, open 
 the `wifi_rx.grc` file from the same subdirectory. Click the green play button at the top of GNURadio to launch the 
 flowgraphs on both PCs. You will need to configure the communication options (e.g., bandwith, frequency) to suit your 
@@ -171,7 +171,8 @@ V2Verifier currently offers two graphical
 interfaces. The first is a web-based interface that interacts with Google Maps. 
 To use this GUI, you will need to purchase a Google Maps API key through Google 
 Cloud services and create `config.js` file in the `web` directory of V2Verifier
-(some familiarity with JavaScript is helpful). 
+(some familiarity with JavaScript is helpful). Please contact us for assistance 
+if you want to use this GUI.
 
 Our second interface is based on
 TkGUI. To use this option, open a separate terminal window before running any 
