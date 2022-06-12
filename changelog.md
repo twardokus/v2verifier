@@ -1,7 +1,34 @@
 # Changelog
 Notable changes to this project will be tracked here. Additions, deprecations, etc. are described per version release.
 
-## Unreleased changes
+## [3.0.0] - 2022-06
+Version 3.0.0, a preliminary release, is a major overhaul of the testbed. Most prominently, V2Verifier is now a C++ project. Several factors 
+informed the change from Python to C++; most significantly, V2Verifier code now runs at speeds much closer to real
+V2V software and therefore more accurately reflects real-world performance (e.g., ECDSA verifications are performed)
+at a more realistic pace. 
+
+**While we await bug fixes in third-pary software that our C-V2X transceiver relies on,
+we have _temporarily_ removed C-V2X support.** Please see the README for details.
+Version 3.0.1 will be released in the near future as a hotfix to restore C-V2X support.
+
+### Added
+- C++ implementations of all V2Verifier files.
+- Support for GNURadio version 3.8
+### Changed
+- V2Verifier is now a C++ project
+- TkGUI is now a standalone utility included with the project that can be run alongside,
+but not as a direct part of, the main C++ code.
+- C-V2X is temporarily not supported pending bug fixes in third-party source code that this project relies on.
+### Fixed
+- Sidelink communication (C-V2X) in V2Verifier based on the srsRAN project ([issue #34](https://github.com/twardokus/v2verifier/issues/34)) was fixed by srsRAN developers (see that project's [issue #838](https://github.com/srsran/srsRAN/issues/838)).
+### Deprecated
+- All Python-based versions of V2Verifier (<3.0) are no longer supported.
+- GNURadio 3.7 is no longer supported. 
+### Removed
+- All Python (.py,.pyc) files except some utilities and GUI source files.
+
+## [2.0] - 2021-10-10
+V2Verifier 2.0 introduced several major changes including support for C-V2X and additional IEEE 1609.2 features.
 ### Added
 - Implicit certificate and certificate digest structures (see IEEE 1609.2 Section 6.4) are now included with V2Verifier messages. \*_Note that full cryptographic support for certificate generation and verification, including 1609.2 pseudonym generation and linkage, is not yet included but is currently under active development_.
 - A new, browser-based GUI (built with JavaScript as an Electron app) features a Google Maps integration and support for GNSS-based vehicle locations.
