@@ -123,6 +123,9 @@ If you have missed any dependencies, CMake will warn you at this point.
 Once V2Verifier is built, proceed to the next section for instructions on how to
 run experiments in V2Verifier.
 
+Finally, download the ZIP file for the latest stable release of V2Verifier, extract the project, and you are ready 
+to start using V2Verifier!
+
 ## Running V2Verifier
 
 Before running V2Verifier, connect one USRP (with appropriate antennas) to each Ubuntu PC.
