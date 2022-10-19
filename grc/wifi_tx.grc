@@ -645,9 +645,9 @@ blocks:
     affinity: ''
     alias: ''
     bandwidth: samp_rate
-    chan_est: '0'
+    chan_est: ieee802_11.LS
     comment: ''
-    encoding: encoding
+    encoding: ieee802_11.Encoding(encoding)
     frequency: freq
     maxoutbuf: '0'
     minoutbuf: '0'

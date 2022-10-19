@@ -44,14 +44,14 @@ blocks:
     label2: ''
     label3: ''
     label4: ''
-    labels: '["LS", "LMS", "STA", "Linear Comb"]'
+    labels: '["LS", "LMS", "Linear Comb", "STA"]'
     num_opts: '0'
     option0: '0'
     option1: '1'
     option2: '2'
     option3: '3'
     option4: '4'
-    options: '[ieee802_11.LS, ieee802_11.LMS, ieee802_11.STA, ieee802_11.COMB]'
+    options: '[0, 1, 2, 3]'
     orient: Qt.QHBoxLayout
     type: int
     value: '0'
@@ -487,7 +487,7 @@ blocks:
   id: ieee802_11_frame_equalizer
   parameters:
     affinity: ''
-    algo: chan_est
+    algo: ieee802_11.Equalizer(chan_est)
     alias: ''
     bw: samp_rate
     comment: ''
