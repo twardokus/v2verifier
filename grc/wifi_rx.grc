@@ -992,7 +992,7 @@ blocks:
     gain7: '0'
     gain8: '0'
     gain9: '0'
-    gain_type0: default
+    gain_type0: normalized
     gain_type1: default
     gain_type10: default
     gain_type11: default
