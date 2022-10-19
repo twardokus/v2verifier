@@ -321,7 +321,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [736, 396.0]
+    coordinate: [704, 400.0]
     rotation: 180
     state: true
 - name: foo_packet_pad2_0
@@ -636,7 +636,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [512, 556.0]
+    coordinate: [400, 560.0]
     rotation: 0
     state: enabled
 - name: wifi_phy_hier_0
@@ -656,7 +656,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [464, 396.0]
+    coordinate: [440, 400.0]
     rotation: 180
     state: enabled
 

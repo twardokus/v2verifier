@@ -60,7 +60,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [312, 12.0]
+    coordinate: [296, 16.0]
     rotation: 0
     state: enabled
 - name: freq
@@ -121,7 +121,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [624, 12.0]
+    coordinate: [608, 16.0]
     rotation: 0
     state: enabled
 - name: gain
@@ -144,7 +144,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [488, 12.0]
+    coordinate: [472, 16.0]
     rotation: 0
     state: enabled
 - name: lo_offset
@@ -174,7 +174,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [176, 12.0]
+    coordinate: [176, 16.0]
     rotation: 0
     state: enabled
 - name: samp_rate
@@ -204,7 +204,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [800, 12.0]
+    coordinate: [784, 16.0]
     rotation: 0
     state: enabled
 - name: sync_length
@@ -216,7 +216,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [8, 133]
+    coordinate: [8, 148.0]
     rotation: 0
     state: enabled
 - name: window_size
@@ -275,7 +275,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [424, 328]
+    coordinate: [440, 328.0]
     rotation: 0
     state: enabled
 - name: blocks_delay_0
@@ -313,7 +313,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [264, 324]
+    coordinate: [280, 312.0]
     rotation: 0
     state: enabled
 - name: blocks_divide_xx_0
@@ -349,7 +349,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [608, 908.0]
+    coordinate: [768, 912.0]
     rotation: 180
     state: disabled
 - name: blocks_moving_average_xx_0
@@ -442,7 +442,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [944, 536.0]
+    coordinate: [944, 528.0]
     rotation: 0
     state: enabled
 - name: blocks_udp_sink_0
@@ -553,7 +553,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [984, 804]
+    coordinate: [872, 796.0]
     rotation: 180
     state: enabled
 - name: ieee802_11_sync_long_0
