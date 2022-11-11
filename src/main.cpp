@@ -53,10 +53,12 @@ int main(int argc, char *argv[]) {
             exit(EXIT_FAILURE);
         }
         if(argc == 5) {
-            if(std::string(argv[4]) == "--gui")
-                args.gui = true;
+            if(std::string(argv[4]) == "--tkgui")
+                args.tkgui = true;
+            else if(std::string(argv[4]) == "--webgui")
+                args.webgui = true;
             else{
-                std::cout << R"(Error: optional fourth argument must be "--gui")" << std::endl;
+                std::cout << R"(Error: optional fourth argument must be "--tkgui or --webgui")" << std::endl;
                 print_usage();
                 exit(EXIT_FAILURE);
             }
@@ -91,7 +93,7 @@ int main(int argc, char *argv[]) {
     }
     else if (args.sim_mode == RECEIVER) {
         Vehicle v1(0);
-        v1.receive(num_msgs * num_vehicles, args.test, args.gui);
+        v1.receive(num_msgs * num_vehicles, args.test, args.tkgui, args.webgui);
     }
 
 

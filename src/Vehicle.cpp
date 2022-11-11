@@ -56,7 +56,7 @@ void Vehicle::transmit(int num_msgs, bool test) {
 
 }
 
-void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
+void Vehicle::receive(int num_msgs, bool test, bool tkgui, bool webgui) {
 
     int sockfd;
     struct sockaddr_in servaddr, cliaddr;
@@ -81,7 +81,7 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
     }
 
     /***********************************/
-    // tkgui socket
+    // gui socket
     int sockfd2;
     struct sockaddr_in servaddr2;
 
@@ -93,7 +93,14 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
     memset(&servaddr2, 0, sizeof(servaddr2));
 
     servaddr2.sin_family = AF_INET;
-    servaddr2.sin_port = htons(9999);
+
+    int gui_port = -1;
+    if(tkgui)
+        gui_port = 9999;
+    else
+        gui_port = 8888;
+
+    servaddr2.sin_port = htons(gui_port);
     servaddr2.sin_addr.s_addr = INADDR_ANY;
 
     int n2, len2;
@@ -112,7 +119,9 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
     using timestamp = std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds>;
 
     while (received_message_counter < num_msgs) {
+
         if(test) {
+
             recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
                      (socklen_t *) len);
         }
@@ -130,6 +139,7 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
             memcpy(&incoming_spdu, spdu_buffer, sizeof(incoming_spdu));
 
         }
+
         timestamp received_time = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
 
         std::cout << incoming_spdu.vehicle_id << std::endl;
@@ -139,7 +149,8 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
         bool valid_spdu = verify_message_ecdsa(incoming_spdu, received_time, vehicle_id_number);
 
         // forward to GUI if applicable
-        if(tkgui) {
+        if(tkgui || webgui) {
+            std::cout << "Heading:\t" << incoming_spdu.data.signedData.tbsData.message.heading << std::endl;
             packed_bsm_for_gui data_for_gui = {incoming_spdu.data.signedData.tbsData.message.latitude,
                                                incoming_spdu.data.signedData.tbsData.message.longitude,
                                                incoming_spdu.data.signedData.tbsData.message.elevation,
@@ -211,6 +222,7 @@ bsm Vehicle::generate_bsm(int timestep) {
                                     this->timestep[timestep - 1][1],
                                     longitude);
     }
+    std::cout << "Calculated heading:\t" << heading << std::endl;
     bsm new_bsm = {latitude, longitude, elevation, speed, heading};
     return new_bsm;
 }
