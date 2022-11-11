@@ -287,8 +287,8 @@ bool Vehicle::verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_
 
 void Vehicle::load_key(int number,  bool certificate, EC_KEY *&key_to_store){
 
-    std::string temp = certificate ? "../cert_keys/" + std::to_string(number) + "/p256.key" :
-            "../keys/" + std::to_string(number) + "/p256.key";
+    std::string temp = certificate ? "cert_keys/" + std::to_string(number) + "/p256.key" :
+            "keys/" + std::to_string(number) + "/p256.key";
 
     const char* filepath = temp.c_str();
 
@@ -318,7 +318,7 @@ void Vehicle::load_trace(int number) {
     std::string line;
     std::string word;
 
-    std::fstream file("../trace_files/" + std::to_string(number) + ".csv", std::ios::in);
+    std::fstream file("trace_files/" + std::to_string(number) + ".csv", std::ios::in);
     if(file.is_open()) {
         while(getline(file, line)) {
             timestep_data.clear();

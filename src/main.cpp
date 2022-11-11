@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
     }
 
     boost::property_tree::ptree tree;
-    boost::property_tree::json_parser::read_json("../config.json",tree);
+    boost::property_tree::json_parser::read_json("config.json",tree);
 
     auto num_vehicles = tree.get<uint8_t>("scenario.numVehicles");
     auto num_msgs = tree.get<uint16_t>("scenario.numMessages");
