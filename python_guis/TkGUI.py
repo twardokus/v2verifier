@@ -39,24 +39,22 @@ def numerical_heading_to_direction(heading):
     elif heading > 359:
         corrected_heading = heading % 360
 
-    if corrected_heading <= 22.5:
-        return "N"
+    if corrected_heading <= 22.5 or corrected_heading > 337.5:
+        return "E"
     elif 22.5 < corrected_heading <= 67.5:
         return "NE"
     elif 67.5 < corrected_heading <= 112.5:
-        return "E"
+        return "N"
     elif 112.5 < corrected_heading <= 157.5:
-        return "SE"
+        return "NW"
     elif 157.5 < corrected_heading <= 202.5:
-        return "S"
+        return "W"
     elif 202.5 < corrected_heading <= 247.5:
         return "SW"
     elif 247.5 < corrected_heading <= 292.5:
-        return "W"
+        return "S"
     elif 292.5 < corrected_heading <= 337.5:
-        return "NW"
-    elif 337.5 < corrected_heading:
-        return "N"
+        return "SE"
 
 
 class TkGUI:
