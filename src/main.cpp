@@ -13,7 +13,7 @@
 void print_usage() {
     std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver} [--test] [--gui]" << std::endl;
 }
-
+// TODO: change this to use boost::program_options
 int main(int argc, char *argv[]) {
 
     if(argc < 3 || argc > 5) {
@@ -44,7 +44,7 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if(argc == 4) {
+    if(argc >= 4) {
         if (std::string(argv[3]) == "--test")
             args.test = true;
         else {
@@ -52,15 +52,14 @@ int main(int argc, char *argv[]) {
             print_usage();
             exit(EXIT_FAILURE);
         }
-    }
-
-    if(argc == 5) {
-        if(std::string(argv[4]) == "--gui")
-            args.gui = true;
-        else{
-            std::cout << R"(Error: optional fourth argument must be "--gui")" << std::endl;
-            print_usage();
-            exit(EXIT_FAILURE);
+        if(argc == 5) {
+            if(std::string(argv[4]) == "--gui")
+                args.gui = true;
+            else{
+                std::cout << R"(Error: optional fourth argument must be "--gui")" << std::endl;
+                print_usage();
+                exit(EXIT_FAILURE);
+            }
         }
     }
 
