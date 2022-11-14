@@ -113,8 +113,10 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
 
     while (received_message_counter < num_msgs) {
         if(test) {
+
             recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
                      (socklen_t *) len);
+
         }
         else {
             // with DSRC headers (when data is from SDR), we have an extra 57 bytes (304 + 57 = 361)
@@ -140,6 +142,7 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
 
         // forward to GUI if applicable
         if(tkgui) {
+
             packed_bsm_for_gui data_for_gui = {incoming_spdu.data.signedData.tbsData.message.latitude,
                                                incoming_spdu.data.signedData.tbsData.message.longitude,
                                                incoming_spdu.data.signedData.tbsData.message.elevation,
