@@ -7,7 +7,7 @@ import socket
 import logging
 import struct
 
-
+@eel.expose
 class WebGUI:
     """A class to represent the Web-based V2Verifier GUI
 
@@ -98,7 +98,7 @@ class WebGUI:
             self.logger.info("called start_receiver, creating socket")
 
         self.receive_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-        self.receive_socket.bind(("127.0.0.1", 6666))
+        self.receive_socket.bind(("127.0.0.1", 8888))
 
         label_thread = threading.Thread(target=self.update_stats_labels)
         label_thread.start()
@@ -138,7 +138,7 @@ class WebGUI:
 
         while True:
             msg = self.receive_socket.recv(2048)
-            data = struct.unpack("!5f??f", msg)
+            data = struct.unpack("<5f??ff", msg)
 
             if self.logging_enabled:
                 self.logger.info("received data")
