@@ -45,23 +45,26 @@ int main(int argc, char *argv[]) {
     }
 
     if(argc >= 4) {
-        if (std::string(argv[3]) == "--test")
-            args.test = true;
-        else {
-            std::cout << R"(Error: optional third argument can only be "--test")" << std::endl;
+
+        if(std::string(argv[3]) == "--tkgui")
+            args.tkgui = true;
+        else if(std::string(argv[3]) == "--webgui")
+            args.webgui = true;
+        else{
+            std::cout << R"(Error: optional third argument must be "--tkgui or --webgui")" << std::endl;
             print_usage();
             exit(EXIT_FAILURE);
         }
         if(argc == 5) {
-            if(std::string(argv[4]) == "--tkgui")
-                args.tkgui = true;
-            else if(std::string(argv[4]) == "--webgui")
-                args.webgui = true;
-            else{
-                std::cout << R"(Error: optional fourth argument must be "--tkgui or --webgui")" << std::endl;
+
+            if (std::string(argv[4]) == "--test")
+                args.test = true;
+            else {
+                std::cout << R"(Error: optional third argument can only be "--test")" << std::endl;
                 print_usage();
                 exit(EXIT_FAILURE);
             }
+
         }
     }
 

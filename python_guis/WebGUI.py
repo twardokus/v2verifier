@@ -65,6 +65,7 @@ class WebGUI:
             self.logger.info(f"moving vehicle {vehicle_id} to {latitude}, {longitude}")
 
         # EEL exposes this function in main.html
+        print("Updating vehicle", vehicle_id)
         eel.updateMarker(vehicle_id, latitude, longitude, icon_path)
 
     def add_message(self, message: str) -> None:
@@ -155,7 +156,7 @@ class WebGUI:
             update = threading.Thread(
                 target=self.process_new_packet,
                 args=(
-                    0,  # data["id"],
+                    data[8],  # data["id"],
                     data[0],  # latitude (formerly data["x"])
                     data[1],  # longitude (formerly data["y"])
                     data[2],  # elevation
