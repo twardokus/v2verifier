@@ -28,11 +28,11 @@ def get_gps_trace(start_coord: tuple, end_coord: tuple, speed_kph: float) -> lis
 
 if __name__=="__main__":
 
-    c1 = (43.0923826,-77.6704622)
-    c2 = (43.0929162,-77.6575104)
+    c1 = (43.089128, -77.667734)
+    c2 = (43.092441, -77.665928)
 
 
-    trace = get_gps_trace(c1, c2, 36)
+    trace = get_gps_trace(c1, c2, 20)
 
     with open('test_trace.csv', 'w') as outfile:
         for i in range(len(trace)):
