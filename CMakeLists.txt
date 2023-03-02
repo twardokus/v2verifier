@@ -6,7 +6,7 @@ set(SOURCE_FILES
     src/Vehicle.cpp
     src/v2vcrypto.cpp
     src/bsm.cpp
-)
+        include/threading.h src/threading.cpp)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
