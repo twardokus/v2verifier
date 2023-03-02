@@ -38,6 +38,9 @@ int main(int argc, char *argv[]) {
     }
     else if(std::string(argv[2]) == "receiver")
         args.sim_mode = RECEIVER;
+    else if(std::string(argv[2]) == "both")
+        //create threads here
+        std::cout << "making threads";
     else {
         std::cout << R"(Error: second argument must be "transmitter" or "receiver")" << std::endl;
         print_usage();
