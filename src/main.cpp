@@ -11,7 +11,7 @@
 
 
 void print_usage() {
-    std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver} [--test] [--gui]" << std::endl;
+    std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver | both} [--test] [--gui]" << std::endl;
 }
 
 int main(int argc, char *argv[]) {
