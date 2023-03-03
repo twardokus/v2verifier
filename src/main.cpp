@@ -8,7 +8,7 @@
 
 #include "Vehicle.h"
 #include "arguments.h"
-
+#include "threading.cpp"
 
 void print_usage() {
     std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver | both} [--test] [--gui]" << std::endl;
@@ -38,9 +38,11 @@ int main(int argc, char *argv[]) {
     }
     else if(std::string(argv[2]) == "receiver")
         args.sim_mode = RECEIVER;
-    else if(std::string(argv[2]) == "both")
+    else if(std::string(argv[2]) == "both") {
         //create threads here
         std::cout << "making threads";
+        args.sim_mode = BOTH;
+    }
     else {
         std::cout << R"(Error: second argument must be "transmitter" or "receiver")" << std::endl;
         print_usage();
@@ -74,30 +76,13 @@ int main(int argc, char *argv[]) {
     auto num_msgs = tree.get<uint16_t>("scenario.numMessages");
 
     if(args.sim_mode == TRANSMITTER) {
-        std::vector<Vehicle> vehicles;
-        std::vector<std::thread> workers;
-
-        // initialize vehicles - has to be in a separate loop to prevent vector issues
-        for(int i = 0; i < num_vehicles; i++) {
-            vehicles.emplace_back(Vehicle(i));
-        }
-
-        // start a thread for each vehicle
-        for(int i = 0; i < num_vehicles; i++) {
-            workers.emplace_back(std::thread(vehicles.at(i).transmit_static, &vehicles.at(i), num_msgs, args.test));
-        }
-
-        // wait for each vehicle thread to finish
-        for(int i = 0; i < num_vehicles; i++) {
-            workers.at(i).join();
-        }
-
+        beginTransmitter(num_vehicles, num_msgs, args);
     }
     else if (args.sim_mode == RECEIVER) {
-        Vehicle v1(0);
-        v1.receive(num_msgs * num_vehicles, args.test, args.gui);
+        beginReceiver(num_vehicles, num_msgs, args);
     }
-
-
-
+    else if (args.sim_mode == BOTH) {
+        beginReceiver(num_vehicles, num_msgs, args); //TODO make this a thread
+        beginTransmitter(num_vehicles, num_msgs, args);
+    }
 }

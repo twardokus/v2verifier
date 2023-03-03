@@ -10,7 +10,8 @@
 
 enum mode {
     TRANSMITTER,
-    RECEIVER
+    RECEIVER,
+    BOTH
 };
 
 enum technology {
