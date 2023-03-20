@@ -8,7 +8,7 @@
 
 #include "Vehicle.h"
 #include "arguments.h"
-#include "threading.cpp"
+#include "threading.h"
 
 void print_usage() {
     std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver | both} [--test] [--gui]" << std::endl;
