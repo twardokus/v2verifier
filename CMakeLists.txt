@@ -6,8 +6,12 @@ set(SOURCE_FILES
     src/Vehicle.cpp
     src/v2vcrypto.cpp
     src/bsm.cpp
-        include/threading.h src/threading.cpp)
+    src/threading.cpp)
+
+
+set(OPENSSL_USE_STATIC_LIBS TRUE)
+find_package(OpenSSL REQUIRED)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
-
+target_link_libraries(${PROJECT_NAME} OpenSSL::Crypto)
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
