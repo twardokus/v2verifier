@@ -2,6 +2,7 @@
 // Reuse permitted under the MIT License as specified in the LICENSE file within this project.
 
 #include <iostream>
+#include <chrono>
 #include <thread>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
@@ -33,16 +34,14 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if(std::string(argv[2]) == "transmitter") {
+    if(std::string(argv[2]) == "transmitter")
         args.sim_mode = TRANSMITTER;
-    }
     else if(std::string(argv[2]) == "receiver")
         args.sim_mode = RECEIVER;
-    else if(std::string(argv[2]) == "both") {
-        //create threads here
-        std::cout << "making threads";
-        args.sim_mode = BOTH;
-    }
+    else if(std::string(argv[2]) == "initiate")
+        args.sim_mode = INITIATE;
+    else if (std::string(argv[2]) == "respond")
+        args.sim_mode = RESPOND;
     else {
         std::cout << R"(Error: second argument must be "transmitter" or "receiver")" << std::endl;
         print_usage();
@@ -76,13 +75,53 @@ int main(int argc, char *argv[]) {
     auto num_msgs = tree.get<uint16_t>("scenario.numMessages");
 
     if(args.sim_mode == TRANSMITTER) {
-        beginTransmitter(num_vehicles, num_msgs, args);
+        std::vector<Vehicle> vehicles;
+        std::vector<std::thread> workers;
+
+        // initialize vehicles - has to be in a separate loop to prevent vector issues
+        for(int i = 0; i < num_vehicles; i++) {
+            vehicles.emplace_back(Vehicle(i));
+        }
+
+        // start a thread for each vehicle
+        for(int i = 0; i < num_vehicles; i++) {
+            workers.emplace_back(std::thread(vehicles.at(i).transmit_static, &vehicles.at(i), num_msgs, args.test));
+        }
+
+        // wait for each vehicle thread to finish
+        for(int i = 0; i < num_vehicles; i++) {
+            workers.at(i).join();
+        }
     }
     else if (args.sim_mode == RECEIVER) {
-        beginReceiver(num_vehicles, num_msgs, args);
+        Vehicle v1(0);
+        v1.receive(num_msgs * num_vehicles, args.test, args.gui);
     }
-    else if (args.sim_mode == BOTH) {
-        beginReceiver(num_vehicles, num_msgs, args); //TODO make this a thread
-        beginTransmitter(num_vehicles, num_msgs, args);
+    // For the following 2 options, only one vehicle will initiate and one will respond
+    else if (args.sim_mode == INITIATE) {
+        // This vehicle will send an SPDU first, then it should receive the same one back and verify it.
+
+        // Allows us to wait for specified units of time like seconds, ms, etc
+        using namespace std::chrono_literals;
+
+        Vehicle v1(0); // number is arbitrary
+        v1.transmit(num_msgs, args.test);
+
+        std::this_thread::sleep_for(200ms);
+
+        v1.receive(num_msgs, args.test, args.gui);
+    }
+    else if (args.sim_mode == RESPOND) {
+        // This vehicle will receive an SPDU, then perform necessary tasks, then send it back.
+
+        // Allows us to wait for specified units of time like seconds, ms, etc
+        using namespace std::chrono_literals;
+
+        Vehicle v1(1);
+        v1.receive(num_msgs, args.test, args.gui);
+
+        std::this_thread::sleep_for(400ms);
+
+        v1.transmit(num_msgs, args.test);
     }
 }

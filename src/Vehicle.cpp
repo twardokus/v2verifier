@@ -160,8 +160,7 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
 
     }
     close(sockfd2);
-    exit(0);
-
+    close(sockfd);
 }
 
 void Vehicle::generate_ecdsa_spdu(Vehicle::ecdsa_spdu &spdu, int timestep) {

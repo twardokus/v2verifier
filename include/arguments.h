@@ -11,7 +11,8 @@
 enum mode {
     TRANSMITTER,
     RECEIVER,
-    BOTH
+    INITIATE,
+    RESPOND
 };
 
 enum technology {
