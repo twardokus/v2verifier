@@ -100,28 +100,20 @@ int main(int argc, char *argv[]) {
     // For the following 2 options, only one vehicle will initiate and one will respond
     else if (args.sim_mode == INITIATE) {
         // This vehicle will send an SPDU first, then it should receive the same one back and verify it.
-
-        // Allows us to wait for specified units of time like seconds, ms, etc
-        using namespace std::chrono_literals;
-
         Vehicle v1(0); // number is arbitrary
-        v1.transmit(num_msgs, args.test);
+        v1.transmitLearnRequest(args.test);
 
-        std::this_thread::sleep_for(200ms);
+        /*std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-        v1.receive(num_msgs, args.test, args.gui);
+        v1.receive(num_msgs, args.test, args.gui);*/
     }
     else if (args.sim_mode == RESPOND) {
         // This vehicle will receive an SPDU, then perform necessary tasks, then send it back.
-
-        // Allows us to wait for specified units of time like seconds, ms, etc
-        using namespace std::chrono_literals;
-
         Vehicle v1(1);
-        v1.receive(num_msgs, args.test, args.gui);
+        v1.receiveLearnRequest(args.test, args.gui);
 
-        std::this_thread::sleep_for(400ms);
+        /*std::this_thread::sleep_for(std::chrono::milliseconds(400));
 
-        v1.transmit(num_msgs, args.test);
+        v1.transmit(num_msgs, args.test);*/
     }
 }

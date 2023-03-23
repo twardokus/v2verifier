@@ -10,6 +10,7 @@
 struct header_info {
     uint8_t psid = 32;
     std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> timestamp;
+    char p2pLearningRequest[4] = "000";
 };
 
 struct to_be_signed_data {

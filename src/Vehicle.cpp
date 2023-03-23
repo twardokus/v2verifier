@@ -13,6 +13,7 @@
 #include <thread>
 #include <sstream>
 #include <fstream>
+#include <stdio.h>
 
 
 std::string Vehicle::get_hostname() {
@@ -54,6 +55,36 @@ void Vehicle::transmit(int num_msgs, bool test) {
 
     close(sockfd);
 
+}
+
+void Vehicle::transmitLearnRequest(bool test) {
+    int sockfd;
+    struct sockaddr_in servaddr;
+
+    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("socket creation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(&servaddr, 0, sizeof(servaddr));
+
+    servaddr.sin_family = AF_INET;
+    if(test)
+        servaddr.sin_port = htons(6666);
+    else
+        servaddr.sin_port = htons(52001);
+    servaddr.sin_addr.s_addr = INADDR_ANY;
+
+    ecdsa_spdu spdu;
+    generate_ecdsa_spdu(spdu, 0);
+
+    //TODO: Once certs are fully utilized, this should a randomly chosen hash of one of the certs (only last 3 bytes)
+    char certHash[4] = "123";
+    strncpy(spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, certHash, 4);
+
+    sendto(sockfd, (struct ecdsa_spdu *) &spdu, sizeof(spdu), MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
+
+    close(sockfd);
 }
 
 void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
@@ -163,6 +194,109 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
     close(sockfd);
 }
 
+void Vehicle::receiveLearnRequest(bool test, bool tkgui) {
+    int sockfd;
+
+    struct sockaddr_in servaddr, cliaddr;
+
+    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("socket creation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(&servaddr, 0, sizeof(servaddr));
+    memset(&cliaddr, 0, sizeof(cliaddr));
+
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = INADDR_ANY;
+
+    uint16_t port = test ? 6666 : 4444;
+    servaddr.sin_port = htons(port);
+
+    if(bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
+        perror("Socket bind failed");
+        exit(EXIT_FAILURE);
+    }
+
+    /***********************************/
+    // tkgui socket
+    int sockfd2;
+    struct sockaddr_in servaddr2;
+
+    if ((sockfd2 = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("socket creation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(&servaddr2, 0, sizeof(servaddr2));
+
+    servaddr2.sin_family = AF_INET;
+    servaddr2.sin_port = htons(9999);
+    servaddr2.sin_addr.s_addr = INADDR_ANY;
+
+    int n2, len2;
+    /***********************************/
+
+
+    unsigned int len;
+    len = sizeof(cliaddr);
+
+    ecdsa_spdu incoming_spdu;
+
+    if(test) {
+        recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
+                 (socklen_t *) len);
+    }
+    else {
+        // with DSRC headers (when data is from SDR), we have an extra 57 bytes (304 + 57 = 361)
+        uint8_t buffer[361];
+        recvfrom(sockfd,  &buffer, 361, 0, (struct sockaddr *) &cliaddr,
+                 (socklen_t *) len);
+
+        uint8_t spdu_buffer[sizeof(incoming_spdu)];
+        for(int i = 360, j = sizeof(incoming_spdu) - 1; i > 57; i--, j--) {
+            spdu_buffer[j] = buffer[i];
+        }
+
+        memcpy(&incoming_spdu, spdu_buffer, sizeof(incoming_spdu));
+
+    }
+    std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> received_time =
+            std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
+
+    std::cout << incoming_spdu.vehicle_id << std::endl;
+    int vehicle_id_number = incoming_spdu.vehicle_id;
+
+
+    bool valid_spdu = verify_message_ecdsa(incoming_spdu, received_time, vehicle_id_number);
+    bool learnRequestPresent = strcmp(incoming_spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, "000"); //TODO: may cause issues if the \0 isn't implicit
+
+    /******************************************************************************************************************/
+    // forward to GUI if applicable
+    if(tkgui) {
+        packed_bsm_for_gui data_for_gui = {incoming_spdu.data.signedData.tbsData.message.latitude,
+                                           incoming_spdu.data.signedData.tbsData.message.longitude,
+                                           incoming_spdu.data.signedData.tbsData.message.elevation,
+                                           incoming_spdu.data.signedData.tbsData.message.speed,
+                                           incoming_spdu.data.signedData.tbsData.message.heading,
+                                           valid_spdu,
+                                           true,
+                                           7,
+                                           (float) vehicle_id_number};
+        sendto(sockfd2, (struct packed_bsm_for_gui *) &data_for_gui, sizeof(data_for_gui),
+               MSG_CONFIRM, (const struct sockaddr *) &servaddr2, sizeof(servaddr2));
+    }
+    /******************************************************************************************************************/
+
+    // print results
+    for(int i = 0; i < 80; i++) std::cout << "-"; std::cout << std::endl;
+    print_spdu(incoming_spdu, valid_spdu, learnRequestPresent);
+
+    close(sockfd);
+}
+
+void Vehicle::receiveLearnResponse(bool test, bool tkgui) {}
+
 void Vehicle::generate_ecdsa_spdu(Vehicle::ecdsa_spdu &spdu, int timestep) {
     spdu.vehicle_id = this->number;
 
@@ -239,6 +373,13 @@ void Vehicle::print_spdu(Vehicle::ecdsa_spdu &spdu, bool valid) {
     valid ? std::cout << "TRUE" : std::cout << "FALSE";
     std::cout << std::endl;
 
+    std::cout << "\tSent:\t" << std::chrono::system_clock::to_time_t(spdu.data.signedData.tbsData.headerInfo.timestamp) << std::endl;
+}
+
+void Vehicle::print_spdu(Vehicle::ecdsa_spdu &spdu, bool valid, bool learnRequest) {
+    std::cout << "SPDU received!" << std::endl;
+    std::cout << "\tID:\t" << (int) spdu.vehicle_id << std::endl;
+    std::cout << "\tLearning Request Field contains: " << spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest << std::endl;
     std::cout << "\tSent:\t" << std::chrono::system_clock::to_time_t(spdu.data.signedData.tbsData.headerInfo.timestamp) << std::endl;
 }
 
