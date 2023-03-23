@@ -103,17 +103,17 @@ int main(int argc, char *argv[]) {
         Vehicle v1(0); // number is arbitrary
         v1.transmitLearnRequest(args.test);
 
-        /*std::this_thread::sleep_for(std::chrono::milliseconds(200));
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-        v1.receive(num_msgs, args.test, args.gui);*/
+        v1.receiveLearnResponse(args.test, args.gui);
     }
     else if (args.sim_mode == RESPOND) {
         // This vehicle will receive an SPDU, then perform necessary tasks, then send it back.
         Vehicle v1(1);
         v1.receiveLearnRequest(args.test, args.gui);
 
-        /*std::this_thread::sleep_for(std::chrono::milliseconds(400));
+        std::this_thread::sleep_for(std::chrono::milliseconds(400));
 
-        v1.transmit(num_msgs, args.test);*/
+        v1.transmitLearnResponse(args.test);
     }
 }
