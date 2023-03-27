@@ -87,6 +87,10 @@ void Vehicle::transmitLearnRequest(bool test) {
     close(sockfd);
 }
 
+void Vehicle::transmitLearnResponse(bool test) {
+
+}
+
 void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
 
     int sockfd;
@@ -293,6 +297,11 @@ void Vehicle::receiveLearnRequest(bool test, bool tkgui) {
     print_spdu(incoming_spdu, valid_spdu, learnRequestPresent);
 
     close(sockfd);
+
+    char certHash[4];
+    strncpy(certHash, incoming_spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, 4);
+    // TODO: Use certHash to determine what certificate to respond with
+
 }
 
 void Vehicle::receiveLearnResponse(bool test, bool tkgui) {}
