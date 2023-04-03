@@ -79,8 +79,18 @@ void Vehicle::transmitLearnRequest(bool test) {
     generate_ecdsa_spdu(spdu, 0);
 
     //TODO: Once certs are fully utilized, this should a randomly chosen hash of one of the certs (only last 3 bytes)
-    char certHash[4] = "123";
+    int len = sizeof(spdu.signature);
+    char certHash[4];
+    certHash[0] = spdu.signature[len-3];
+    certHash[1] = spdu.signature[len-2];
+    certHash[2] = spdu.signature[len-1];
+    std::cout << len;
+    std::cout << "\n";
+    std::cout << certHash;
+    std::cout << "\n";
+    std::cout << spdu.signature;
     strncpy(spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, certHash, 4);
+
 
     sendto(sockfd, (struct ecdsa_spdu *) &spdu, sizeof(spdu), MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
 
