@@ -14,6 +14,7 @@
 #include <sstream>
 #include <fstream>
 #include <stdio.h>
+#include <bitset>
 
 
 std::string Vehicle::get_hostname() {
@@ -79,17 +80,19 @@ void Vehicle::transmitLearnRequest(bool test) {
     generate_ecdsa_spdu(spdu, 0);
 
     //TODO: Once certs are fully utilized, this should a randomly chosen hash of one of the certs (only last 3 bytes)
-    int len = sizeof(spdu.signature);
-    char certHash[4];
-    certHash[0] = spdu.signature[len-3];
-    certHash[1] = spdu.signature[len-2];
-    certHash[2] = spdu.signature[len-1];
-    std::cout << len;
-    std::cout << "\n";
-    std::cout << certHash;
-    std::cout << "\n";
-    std::cout << spdu.signature;
-    strncpy(spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, certHash, 4);
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    sha256sum(&spdu.data.signedData.cert, sizeof(spdu.data.signedData.cert), hash);
+    unsigned char certHash[4];
+    certHash[0] = hash[28];
+    certHash[1] = hash[29];
+    certHash[2] = hash[30];
+    std::cout << sizeof(hash) << std::endl;
+    for (int i = 0; i < sizeof(hash); i++){
+        std::cout << hash[i] << std::endl;
+    }
+    std::cout << hash << std::endl;
+    std::cout << certHash << std::endl;
+    strncpy(spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, (const char *) certHash, 4);
 
 
     sendto(sockfd, (struct ecdsa_spdu *) &spdu, sizeof(spdu), MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
@@ -311,6 +314,7 @@ void Vehicle::receiveLearnRequest(bool test, bool tkgui) {
     char certHash[4];
     strncpy(certHash, incoming_spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, 4);
     // TODO: Use certHash to determine what certificate to respond with
+
 
 }
 
