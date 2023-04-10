@@ -86,10 +86,19 @@ void Vehicle::transmitLearnRequest(bool test) {
     certHash[0] = hash[28];
     certHash[1] = hash[29];
     certHash[2] = hash[30];
+    unsigned char certHashTwo[4];
     std::cout << sizeof(hash) << std::endl;
     for (int i = 0; i < sizeof(hash); i++){
         std::cout << hash[i] << std::endl;
+        if(i == sizeof(hash) - 3) {
+            certHashTwo[0] = hash[i];
+        } else if (i == sizeof(hash) - 2) {
+            certHashTwo[1] = hash[i];
+        } else if (i == sizeof(hash) - 1) {
+            certHashTwo[2] = hash[i];
+        }
     }
+    std::cout << certHashTwo << std::endl;
     std::cout << hash << std::endl;
     std::cout << certHash << std::endl;
     strncpy(spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, (const char *) certHash, 4);
