@@ -80,7 +80,7 @@ public:
         v->transmit(num_msgs, test);
     };
     void receive(int num_msgs, bool test, bool tkgui);
-    void receiveLearnRequest(bool test, bool tkgui);
+    char* receiveLearnRequest(bool test, bool tkgui);
     void receiveLearnResponse(bool test, bool tkgui);
     void printHex(void* ptr, int size);
 };

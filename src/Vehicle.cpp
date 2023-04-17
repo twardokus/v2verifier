@@ -214,7 +214,7 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
     close(sockfd);
 }
 
-void Vehicle::receiveLearnRequest(bool test, bool tkgui) {
+char* Vehicle::receiveLearnRequest(bool test, bool tkgui) {
     int sockfd;
 
     struct sockaddr_in servaddr, cliaddr;
@@ -289,7 +289,7 @@ void Vehicle::receiveLearnRequest(bool test, bool tkgui) {
 
 
     bool valid_spdu = verify_message_ecdsa(incoming_spdu, received_time, vehicle_id_number);
-    bool learnRequestPresent = strcmp(incoming_spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, "000"); //TODO: may cause issues if the \0 isn't implicit
+    bool learnRequestPresent = strcmp(incoming_spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, "000");
 
     /******************************************************************************************************************/
     // forward to GUI if applicable
@@ -308,17 +308,15 @@ void Vehicle::receiveLearnRequest(bool test, bool tkgui) {
     }
     /******************************************************************************************************************/
 
-    // print results
-    for(int i = 0; i < 80; i++) std::cout << "-"; std::cout << std::endl;
-    print_spdu(incoming_spdu, valid_spdu, learnRequestPresent);
-
     close(sockfd);
 
     char certHash[4];
     strncpy(certHash, incoming_spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, 4);
-    // TODO: Use certHash to determine what certificate to respond with
 
+    std::cout << "Received HashedID3: " << std::endl;
+    printHex(&certHash, sizeof(certHash));
 
+    return certHash;
 }
 
 void Vehicle::receiveLearnResponse(bool test, bool tkgui) {}
