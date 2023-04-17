@@ -82,6 +82,7 @@ public:
     void receive(int num_msgs, bool test, bool tkgui);
     void receiveLearnRequest(bool test, bool tkgui);
     void receiveLearnResponse(bool test, bool tkgui);
+    void printHex(void* ptr, int size);
 };
 
 

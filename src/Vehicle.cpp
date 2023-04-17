@@ -80,29 +80,18 @@ void Vehicle::transmitLearnRequest(bool test) {
     generate_ecdsa_spdu(spdu, 0);
 
     //TODO: Once certs are fully utilized, this should a randomly chosen hash of one of the certs (only last 3 bytes)
+    printHex(&spdu.data.signedData.cert.commonCertFields, sizeof(spdu.data.signedData.cert.commonCertFields));
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256sum(&spdu.data.signedData.cert, sizeof(spdu.data.signedData.cert), hash);
     unsigned char certHash[4];
-    certHash[0] = hash[28];
-    certHash[1] = hash[29];
-    certHash[2] = hash[30];
-    unsigned char certHashTwo[4];
-    std::cout << sizeof(hash) << std::endl;
-    for (int i = 0; i < sizeof(hash); i++){
-        std::cout << hash[i] << std::endl;
-        if(i == sizeof(hash) - 3) {
-            certHashTwo[0] = hash[i];
-        } else if (i == sizeof(hash) - 2) {
-            certHashTwo[1] = hash[i];
-        } else if (i == sizeof(hash) - 1) {
-            certHashTwo[2] = hash[i];
-        }
-    }
-    std::cout << certHashTwo << std::endl;
-    std::cout << hash << std::endl;
-    std::cout << certHash << std::endl;
+    certHash[0] = hash[29];
+    certHash[1] = hash[30];
+    certHash[2] = hash[31];
+    //std::cout << sizeof(hash) << std::endl;
+    for (int i = 0; i < sizeof(hash); i++) std::cout << hash[i]; std::cout << std::endl;
+    std::cout << std::hex << certHash << std::endl << std::flush;
     strncpy(spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, (const char *) certHash, 4);
-
+    //std::cout << "Time since epoch in cert: " << std::chrono::system_clock::to_time_t(spdu.data.signedData.cert.commonCertFields.validity_period_start) << std::endl;
 
     sendto(sockfd, (struct ecdsa_spdu *) &spdu, sizeof(spdu), MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
 
@@ -505,4 +494,22 @@ void Vehicle::load_trace(int number) {
         perror(("Error opening trace file for vehicle " + std::to_string(number)).c_str());
         exit(EXIT_FAILURE);
     }
+}
+
+/**
+ * Debugging method for checking byte-level values. Added to investigate inconsistent hash values.
+ * Prints hexadecimal values in batches of shorts with alignment.
+ * @param ptr A pointer to the object to print out
+ * @param size The size of the object in bytes. sizeof() will suffice.
+ */
+void Vehicle::printHex(void* ptr, int size) {
+    int N = size % 2 == 1 ? size / 2 + 1 : size / 2; // never tested with an odd size just beware
+
+    for (int i = 0; i < N; i++) {
+        if (i % 4 == 0) std::cout << std::endl;
+        uint16_t c = ((uint16_t *)ptr)[i]; // We cast ptr to uint16_t* to treat it as an array of shorts
+        std::cout << std::hex << c << ' ';
+    }
+
+    std::cout << std::endl << std::endl << std::flush;
 }
