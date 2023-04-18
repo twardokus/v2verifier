@@ -132,7 +132,7 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[5] = 0x84;
     printHex(&pdu, sizeof(pdu));
 
-    //sendto(sockfd, (struct ecdsa_spdu *) &spdu, sizeof(spdu), MSG_CONFIRM,(const struct sockaddr *) &servaddr, sizeof(servaddr));
+    sendto(sockfd, (struct ecdsa_spdu *) &pdu, sizeof(pdu), MSG_CONFIRM,(const struct sockaddr *) &servaddr, sizeof(servaddr));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
@@ -352,7 +352,90 @@ void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
 }
 
 void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
+    int sockfd;
 
+    struct sockaddr_in servaddr, cliaddr;
+
+    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("socket creation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(&servaddr, 0, sizeof(servaddr));
+    memset(&cliaddr, 0, sizeof(cliaddr));
+
+    servaddr.sin_family = AF_INET;
+    servaddr.sin_addr.s_addr = INADDR_ANY;
+
+    uint16_t port = test ? 6666 : 4444;
+    servaddr.sin_port = htons(port);
+
+    if(bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
+        perror("Socket bind failed");
+        exit(EXIT_FAILURE);
+    }
+
+    /***********************************/
+    // tkgui socket
+    int sockfd2;
+    struct sockaddr_in servaddr2;
+
+    if ((sockfd2 = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("socket creation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(&servaddr2, 0, sizeof(servaddr2));
+
+    servaddr2.sin_family = AF_INET;
+    servaddr2.sin_port = htons(9999);
+    servaddr2.sin_addr.s_addr = INADDR_ANY;
+
+    int n2, len2;
+    /***********************************/
+
+
+    unsigned int len;
+    len = sizeof(cliaddr);
+
+    Ieee1609dot2Peer2PeerPDU incoming_pdu;
+
+    if(test) {
+        recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_pdu, sizeof(incoming_pdu), 0, (struct sockaddr *) &cliaddr,
+                 (socklen_t *) len);
+    }
+    else {
+        // with DSRC headers (when data is from SDR), we have an extra 57 bytes (304 + 57 = 361)
+        size_t N = sizeof(Ieee1609dot2Peer2PeerPDU) + 57;
+        uint8_t buffer[N];//TODO: N may be an issue while testing on the SDRs
+        recvfrom(sockfd,  &buffer, N, 0, (struct sockaddr *) &cliaddr,
+                 (socklen_t *) len);
+
+        uint8_t spdu_buffer[sizeof(incoming_pdu)];
+        for(int i = N-1, j = sizeof(incoming_pdu) - 1; i > 57; i--, j--) {
+            spdu_buffer[j] = buffer[i];
+        }
+
+        memcpy(&incoming_pdu, spdu_buffer, sizeof(incoming_pdu));
+
+    }
+    std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> received_time =
+            std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
+
+    close(sockfd);
+
+    std::cout << "Received Ieee1609dot2Peer2PeerPDU:";
+    printHex(&incoming_pdu, sizeof(incoming_pdu));
+
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    sha256sum(&incoming_pdu.caCerts[0], sizeof(incoming_pdu.caCerts[0]), hash);
+
+    std::cout << "Received HashedID3:";
+    unsigned char certHash[4];
+    certHash[0] = hash[29];
+    certHash[1] = hash[30];
+    certHash[2] = hash[31];
+    printHex(certHash, 3);
 }
 
 void Vehicle::generate_ecdsa_spdu(Vehicle::ecdsa_spdu &spdu, int timestep) {
