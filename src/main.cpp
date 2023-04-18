@@ -110,10 +110,11 @@ int main(int argc, char *argv[]) {
     else if (args.sim_mode == RESPOND) {
         // This vehicle will receive an SPDU, then perform necessary tasks, then send it back.
         Vehicle v1(1);
-        v1.receiveLearnRequest(args.test, args.gui);
+        char hashedID3[4];
+        v1.receiveLearnRequest(hashedID3, args.test, args.gui);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(400));
 
-        v1.transmitLearnResponse(args.test);
+        v1.transmitLearnResponse(hashedID3, args.test);
     }
 }

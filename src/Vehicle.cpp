@@ -93,8 +93,8 @@ void Vehicle::transmitLearnRequest(bool test) {
     certHash[1] = hash[30];
     certHash[2] = hash[31];
 
-    printHex(hash, sizeof(hash));
-    printHex(certHash, sizeof(certHash));
+    //printHex(hash, sizeof(hash));
+    //printHex(certHash, sizeof(certHash));
 
     strncpy(spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, (const char *) certHash, 4);
 
@@ -103,8 +103,40 @@ void Vehicle::transmitLearnRequest(bool test) {
     close(sockfd);
 }
 
-void Vehicle::transmitLearnResponse(bool test) {
+void Vehicle::transmitLearnResponse(char* cert, bool test) {
+    // create socket and send data
+    int sockfd;
+    struct sockaddr_in servaddr;
 
+    if ((sockfd = socket(AF_INET, SOCK_DGRAM, 0)) < 0) {
+        perror("socket creation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    memset(&servaddr, 0, sizeof(servaddr));
+
+    servaddr.sin_family = AF_INET;
+    if(test)
+        servaddr.sin_port = htons(6666);
+    else
+        servaddr.sin_port = htons(52001);
+    servaddr.sin_addr.s_addr = INADDR_ANY;
+
+    int n, len;
+
+    // Create a P2PCD response PDU
+    std::cout << "Making PDU:";
+    Ieee1609dot2Peer2PeerPDU pdu;
+    ((uint16_t *)&pdu.caCerts[0].commonCertFields)[1] = 0;
+    ((uint16_t *)&pdu.caCerts[0].commonCertFields)[11] = 0;
+    ((uint16_t *)&pdu.caCerts[0].commonCertFields)[5] = 0x84;
+    printHex(&pdu, sizeof(pdu));
+
+    //sendto(sockfd, (struct ecdsa_spdu *) &spdu, sizeof(spdu), MSG_CONFIRM,(const struct sockaddr *) &servaddr, sizeof(servaddr));
+
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+    close(sockfd);
 }
 
 void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
@@ -214,7 +246,7 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
     close(sockfd);
 }
 
-char* Vehicle::receiveLearnRequest(bool test, bool tkgui) {
+void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
     int sockfd;
 
     struct sockaddr_in servaddr, cliaddr;
@@ -316,10 +348,12 @@ char* Vehicle::receiveLearnRequest(bool test, bool tkgui) {
     std::cout << "Received HashedID3: " << std::endl;
     printHex(&certHash, sizeof(certHash));
 
-    return certHash;
+    strncpy(dest, certHash, 3);
 }
 
-void Vehicle::receiveLearnResponse(bool test, bool tkgui) {}
+void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
+
+}
 
 void Vehicle::generate_ecdsa_spdu(Vehicle::ecdsa_spdu &spdu, int timestep) {
     spdu.vehicle_id = this->number;

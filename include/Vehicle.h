@@ -74,13 +74,13 @@ public:
     std::string get_hostname();
     void transmit(int num_msgs, bool test);
     void transmitLearnRequest(bool test);
-    void transmitLearnResponse(bool test);
+    void transmitLearnResponse(char* cert, bool test);
     static void transmit_static(void* arg, int num_msgs, bool test) {
         auto* v = (Vehicle*) arg;
         v->transmit(num_msgs, test);
     };
     void receive(int num_msgs, bool test, bool tkgui);
-    char* receiveLearnRequest(bool test, bool tkgui);
+    void receiveLearnRequest(char* dest, bool test, bool tkgui);
     void receiveLearnResponse(bool test, bool tkgui);
     void printHex(void* ptr, int size);
 };

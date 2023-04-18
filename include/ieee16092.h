@@ -52,4 +52,13 @@ struct ieee1609dot2data {
     signed_data signedData;
 };
 
+/**
+ * P2PCD response PDU. Contains a variable length array of certificates beginning with the requested cert, followed by
+ * the cert chain leading to the CA cert. Currently only one cert is contained in implementation.
+ */
+struct Ieee1609dot2Peer2PeerPDU {
+    uint8_t version = 3;
+    ecdsa_explicit_certificate caCerts[1];
+};
+
 #endif //CPP_IEEE16092_H
