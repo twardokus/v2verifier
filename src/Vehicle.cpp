@@ -300,13 +300,13 @@ void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
                  (socklen_t *) len);
     }
     else {
-        // with DSRC headers (when data is from SDR), we have an extra 57 bytes (304 + 57 = 361)
-        uint8_t buffer[361];
-        recvfrom(sockfd,  &buffer, 361, 0, (struct sockaddr *) &cliaddr,
+        // with DSRC headers (when data is from SDR transceiver), we have an extra 72 bytes (304 + 72 = 376)
+        uint8_t buffer[376];
+        recvfrom(sockfd,  &buffer, 376, 0, (struct sockaddr *) &cliaddr,
                  (socklen_t *) len);
 
         uint8_t spdu_buffer[sizeof(incoming_spdu)];
-        for(int i = 360, j = sizeof(incoming_spdu) - 1; i > 57; i--, j--) {
+        for(int i = 376, j = sizeof(incoming_spdu) - 1; i > 72; i--, j--) {
             spdu_buffer[j] = buffer[i];
         }
 
@@ -405,14 +405,14 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
                  (socklen_t *) len);
     }
     else {
-        // with DSRC headers (when data is from SDR), we have an extra 57 bytes (304 + 57 = 361)
-        size_t N = sizeof(Ieee1609dot2Peer2PeerPDU) + 57;
+        // with DSRC headers (when data is from SDR), we have an extra 57 bytes (sizeof(PDU) + 72)
+        size_t N = sizeof(Ieee1609dot2Peer2PeerPDU) + 72;
         uint8_t buffer[N];//TODO: N may be an issue while testing on the SDRs
         recvfrom(sockfd,  &buffer, N, 0, (struct sockaddr *) &cliaddr,
                  (socklen_t *) len);
 
         uint8_t spdu_buffer[sizeof(incoming_pdu)];
-        for(int i = N-1, j = sizeof(incoming_pdu) - 1; i > 57; i--, j--) {
+        for(int i = N-1, j = sizeof(incoming_pdu) - 1; i > 72; i--, j--) {
             spdu_buffer[j] = buffer[i];
         }
 
