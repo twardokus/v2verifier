@@ -300,13 +300,13 @@ void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
                  (socklen_t *) len);
     }
     else {
-        // with DSRC headers (when data is from SDR transceiver), we have an extra 72 bytes (304 + 42 = 346)
-        uint8_t buffer[346];
-        recvfrom(sockfd,  &buffer, 346, 0, (struct sockaddr *) &cliaddr,
+        // with DSRC headers (when data is from SDR transceiver), we have an extra 42 bytes (14072 + 42 = 14114)
+        uint8_t buffer[14114];
+        recvfrom(sockfd,  &buffer, 14114, 0, (struct sockaddr *) &cliaddr,
                  (socklen_t *) len);
 
         uint8_t spdu_buffer[sizeof(incoming_spdu)];
-        for(int i = 346, j = sizeof(incoming_spdu) - 1; i > 42; i--, j--) {
+        for(int i = 14114, j = sizeof(incoming_spdu) - 1; i > 42; i--, j--) {
             spdu_buffer[j] = buffer[i];
         }
 
