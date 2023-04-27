@@ -98,6 +98,9 @@ void Vehicle::transmitLearnRequest(bool test) {
 
     strncpy(spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, (const char *) certHash, 4);
 
+    std::cout << "Outbound learn request";
+    printHex(&spdu, sizeof(spdu));
+    std::cout << std::endl;
     sendto(sockfd, (struct ecdsa_spdu *) &spdu, sizeof(spdu), MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
 
     close(sockfd);
@@ -298,6 +301,9 @@ void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
     if(test) {
         recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
                  (socklen_t *) len);
+        std::cout << "Inbound learn request:";
+        printHex(&incoming_spdu, sizeof(incoming_spdu));
+        std::cout << std::endl;
     }
     else {
         // with DSRC headers (when data is from SDR transceiver), we have an extra 42 bytes (280 + 42 = 1514)
@@ -312,6 +318,9 @@ void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
 
         memcpy(&incoming_spdu, spdu_buffer, sizeof(incoming_spdu));
 
+        std::cout << "Inbound SPDU from radio";
+        printHex(&incoming_spdu, sizeof(incoming_spdu));
+        std::cout << std::endl;
     }
     std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> received_time =
             std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
