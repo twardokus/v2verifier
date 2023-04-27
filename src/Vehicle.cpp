@@ -159,7 +159,7 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
     servaddr.sin_addr.s_addr = INADDR_ANY;
 
     uint16_t port = test ? 6666 : 4444;
-    servaddr.sin_port = htons(port);
+    servaddr.sin_port = ntohs(port);
 
     if(bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
         perror("Socket bind failed");
@@ -179,7 +179,7 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui) {
     memset(&servaddr2, 0, sizeof(servaddr2));
 
     servaddr2.sin_family = AF_INET;
-    servaddr2.sin_port = htons(9999);
+    servaddr2.sin_port = ntohs(9999);
     servaddr2.sin_addr.s_addr = INADDR_ANY;
 
     int n2, len2;
@@ -266,7 +266,7 @@ void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
     servaddr.sin_addr.s_addr = INADDR_ANY;
 
     uint16_t port = test ? 6666 : 4444;
-    servaddr.sin_port = htons(port);
+    servaddr.sin_port = ntohs(port);
 
     if(bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
         perror("Socket bind failed");
@@ -286,7 +286,7 @@ void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
     memset(&servaddr2, 0, sizeof(servaddr2));
 
     servaddr2.sin_family = AF_INET;
-    servaddr2.sin_port = htons(9999);
+    servaddr2.sin_port = ntohs(9999);
     servaddr2.sin_addr.s_addr = INADDR_ANY;
 
     int n2, len2;
@@ -377,7 +377,7 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
     servaddr.sin_addr.s_addr = INADDR_ANY;
 
     uint16_t port = test ? 6666 : 4444;
-    servaddr.sin_port = htons(port);
+    servaddr.sin_port = ntohs(port);
 
     if(bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
         perror("Socket bind failed");
@@ -397,7 +397,7 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
     memset(&servaddr2, 0, sizeof(servaddr2));
 
     servaddr2.sin_family = AF_INET;
-    servaddr2.sin_port = htons(9999);
+    servaddr2.sin_port = ntohs(9999);
     servaddr2.sin_addr.s_addr = INADDR_ANY;
 
     int n2, len2;
