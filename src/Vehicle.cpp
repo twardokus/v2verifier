@@ -376,7 +376,9 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
     servaddr.sin_family = AF_INET;
     servaddr.sin_addr.s_addr = INADDR_ANY;
 
-    uint16_t port = test ? 6666 : 4444;
+    // The response uses a separate port because GNUradio needs a separate UDP sink block to listen for a smaller
+    // packet. This block needs a new port num.
+    uint16_t port = test ? 6666 : 4445;
     servaddr.sin_port = ntohs(port);
 
     if(bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0) {
@@ -414,14 +416,13 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
                  (socklen_t *) len);
     }
     else {
-        // with DSRC headers (when data is from SDR), we have an extra 122 bytes (sizeof(PDU) + 122)
-        size_t N = sizeof(Ieee1609dot2Peer2PeerPDU) + 122;
-        uint8_t buffer[N];//TODO: N may be an issue while testing on the SDRs
-        recvfrom(sockfd,  &buffer, N, 0, (struct sockaddr *) &cliaddr,
+        // with DSRC headers (when data is from SDR), we have an extra 80 bytes (48 + 80 = 128)
+        uint8_t buffer[128];
+        recvfrom(sockfd,  &buffer, 128, 0, (struct sockaddr *) &cliaddr,
                  (socklen_t *) len);
 
         uint8_t spdu_buffer[sizeof(incoming_pdu)];
-        for(int i = N-1, j = sizeof(incoming_pdu) - 1; i > 122; i--, j--) {
+        for(int i = 128-1, j = sizeof(incoming_pdu) - 1; i > 80; i--, j--) {
             spdu_buffer[j] = buffer[i];
         }
 
