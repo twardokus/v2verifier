@@ -297,6 +297,7 @@ void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
     len = sizeof(cliaddr);
 
     ecdsa_spdu incoming_spdu;
+    std::cout << "Request length: " << sizeof(ecdsa_spdu) << std::endl;
 
     if(test) {
         recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
@@ -410,6 +411,7 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
     len = sizeof(cliaddr);
 
     Ieee1609dot2Peer2PeerPDU incoming_pdu; // size 48 bytes
+    std::cout << "Response length: " << sizeof(Ieee1609dot2Peer2PeerPDU) << std::endl;
 
     if(test) {
         recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_pdu, sizeof(incoming_pdu), 0, (struct sockaddr *) &cliaddr,
