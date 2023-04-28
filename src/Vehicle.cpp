@@ -629,7 +629,6 @@ void Vehicle::load_trace(int number) {
 /**
  * Debugging method for checking byte-level values. Added to investigate inconsistent hash values.
  * Prints hexadecimal values in batches of shorts with alignment.
- * ***PLEASE NOTE bytes in each short are reversed from how you expect them to print. 'hostname' gets printed as 'ohtsanem' in hex values.***
  * @param ptr A pointer to the object to print out
  * @param size The size of the object in bytes. sizeof() will suffice.
  */
@@ -638,7 +637,7 @@ void Vehicle::printHex(void* ptr, int size) {
 
     for (int i = 0; i < N; i++) {
         if (i % 4 == 0) std::cout << std::endl; //new line every 4 shorts/8bytes to show memory alignment
-        uint16_t c = ((uint16_t *)ptr)[i]; // We cast ptr to uint16_t* to treat it as an array of shorts
+        uint16_t c = htons(((uint16_t *)ptr)[i]); // We cast ptr to uint16_t* to treat it as an array of shorts
         std::cout << std::hex << c << ' ';
     }
 
