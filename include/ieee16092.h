@@ -59,7 +59,6 @@ struct ieee1609dot2data {
 struct Ieee1609dot2Peer2PeerPDU {
     uint8_t version = 3;
     ecdsa_explicit_certificate caCerts[1];
-    char padding = 'A';
 };
 
 #endif //CPP_IEEE16092_H
