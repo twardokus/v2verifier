@@ -139,6 +139,9 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
     std::cout << "Certificate placed into response PDU:";
     printHex(&pdu.caCerts[0], sizeof(pdu.caCerts[0]));
 
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    sha256sum(&pdu.caCerts[0], sizeof(pdu.caCerts[0]), hash);
+
     sendto(sockfd, (struct ecdsa_spdu *) &pdu, sizeof(pdu), MSG_CONFIRM,(const struct sockaddr *) &servaddr, sizeof(servaddr));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -455,6 +458,9 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
 
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256sum(&incoming_pdu.caCerts[0], sizeof(incoming_pdu.caCerts[0]), hash);
+
+    std::cout << "sha256sum of received certificate:";
+    printHex(hash, SHA256_DIGEST_LENGTH);
 
     std::cout << "Received HashedID3:";
     unsigned char certHash[4];
