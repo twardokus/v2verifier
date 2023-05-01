@@ -134,7 +134,8 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[1] = 0;
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[11] = 0;
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[5] = 0x84;
-    ((uint8_t *)&pdu.caCerts[0].commonCertFields)[37] = 0;
+    ((uint8_t *)&pdu.caCerts[0])[37] = 0;
+    ((uint16_t *)&pdu.caCerts[0])[31] = 0x0000;
     printHex(&pdu, sizeof(pdu));
 
     ecdsa_explicit_certificate testCert;
