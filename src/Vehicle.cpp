@@ -436,6 +436,7 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
         printHex(buffer, sizeof(buffer));
 
         uint8_t spdu_buffer[sizeof(incoming_pdu)];
+        std::memset(&spdu_buffer, 0, sizeof(incoming_pdu));
         /*for(int i = 128, j = sizeof(incoming_pdu) - 1; i > 80; i--, j--) {
             spdu_buffer[j] = buffer[i];
         }*/
