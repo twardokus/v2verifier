@@ -141,6 +141,8 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
 
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256sum(&pdu.caCerts[0], sizeof(pdu.caCerts[0]), hash);
+    std::cout << "sha256sum of response cert:";
+    printHex(hash, SHA256_DIGEST_LENGTH);
 
     sendto(sockfd, (struct ecdsa_spdu *) &pdu, sizeof(pdu), MSG_CONFIRM,(const struct sockaddr *) &servaddr, sizeof(servaddr));
 
