@@ -660,17 +660,17 @@ void Vehicle::load_trace(int number) {
 void Vehicle::printHex(void* ptr, int size) {
     int N = size % 2 == 1 ? size / 2 + 1 : size / 2; // never tested with an odd size just beware
 
-    /*for (int i = 0; i < N; i++) {
+    for (int i = 0; i < N; i++) {
         if (i % 4 == 0) std::cout << std::endl; //new line every 4 shorts/8bytes to show memory alignment
         uint16_t c = htons(((uint16_t *)ptr)[i]); // We cast ptr to uint16_t* to treat it as an array of shorts
         std::cout << std::hex << c << ' ';
-    }*/
-    for (int i = 0; i < size; i++) {
+    }
+    /*for (int i = 0; i < size; i++) {
         if (i % 8 == 0) std::cout << std::endl;
         unsigned int c = ((unsigned int*)ptr)[i];
         std::cout << std::hex << c;
         if (i % 2 == 0) std::cout << ' ';
-    }
+    }*/
 
     std::cout << std::endl << std::endl << std::flush;
 }
