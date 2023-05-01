@@ -83,7 +83,7 @@ void Vehicle::transmitLearnRequest(bool test) {
     ((uint16_t *)&spdu.data.signedData.cert.commonCertFields)[1] = 0;
     ((uint16_t *)&spdu.data.signedData.cert.commonCertFields)[11] = 0;
     ((uint16_t *)&spdu.data.signedData.cert.commonCertFields)[5] = 0x84;
-    printHex(&spdu.data.signedData.cert, sizeof(spdu.data.signedData.cert));
+    //printHex(&spdu.data.signedData.cert, sizeof(spdu.data.signedData.cert));
 
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256sum(&spdu.data.signedData.cert, sizeof(spdu.data.signedData.cert), hash);
@@ -129,7 +129,7 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
     int n, len;
 
     // Create a P2PCD response PDU
-    std::cout << "Making PDU:";
+    std::cout << "Making Response PDU:";
     Ieee1609dot2Peer2PeerPDU pdu;
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[1] = 0;
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[11] = 0;
@@ -137,15 +137,15 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
     ((uint8_t *)&pdu.caCerts[0])[37] = 0;
     printHex(&pdu, sizeof(pdu));
 
-    ecdsa_explicit_certificate testCert;
+    /*ecdsa_explicit_certificate testCert;
     ((uint16_t *)&testCert.commonCertFields)[1] = 0;
     ((uint16_t *)&testCert.commonCertFields)[11] = 0;
     ((uint16_t *)&testCert.commonCertFields)[5] = 0x84;
     std::cout << "The certificate that should be placed into response PDU:";
-    printHex(&testCert, sizeof(ecdsa_explicit_certificate));
+    printHex(&testCert, sizeof(ecdsa_explicit_certificate));*/
 
-    std::cout << "Certificate placed into response PDU:";
-    printHex(&pdu.caCerts[0], sizeof(pdu.caCerts[0]));
+    /*std::cout << "Certificate placed into response PDU:";
+    printHex(&pdu.caCerts[0], sizeof(pdu.caCerts[0]));*/
 
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256sum(&pdu.caCerts[0], sizeof(ecdsa_explicit_certificate), hash);
@@ -319,8 +319,8 @@ void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
     if(test) {
         recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
                  (socklen_t *) len);
-        std::cout << "Inbound learn request:";
-        printHex(&incoming_spdu, sizeof(incoming_spdu));
+        /*std::cout << "Inbound learn request:";
+        printHex(&incoming_spdu, sizeof(incoming_spdu));*/
         std::cout << std::endl;
     }
     else {
@@ -372,7 +372,7 @@ void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
     char certHash[4];
     strncpy(certHash, incoming_spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, 4);
 
-    std::cout << "Received HashedID3: " << std::endl;
+    std::cout << "Requested HashedID3: " << std::endl;
     printHex(&certHash, sizeof(certHash));
 
     strncpy(dest, certHash, 3);
@@ -428,7 +428,7 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
     len = sizeof(cliaddr);
 
     Ieee1609dot2Peer2PeerPDU incoming_pdu;
-    std::cout << "Response length: " << sizeof(incoming_pdu) << std::endl;
+    //std::cout << "Response length: " << sizeof(incoming_pdu) << std::endl;
 
     if(test) {
         recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_pdu, sizeof(incoming_pdu), 0, (struct sockaddr *) &cliaddr,
@@ -440,8 +440,8 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
         recvfrom(sockfd,  &buffer, 128, 0, (struct sockaddr *) &cliaddr,
                  (socklen_t *) len);
 
-        std::cout << "raw buffer contains:";
-        printHex(buffer, sizeof(buffer));
+        /*std::cout << "raw buffer contains:";
+        printHex(buffer, sizeof(buffer));*/
 
         uint8_t spdu_buffer[sizeof(incoming_pdu)];
         std::memset(&spdu_buffer, 0, sizeof(incoming_pdu));
@@ -450,8 +450,8 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
         }*/
         for (int i = 81, j = 0; i < 127; i++, j++) spdu_buffer[j] = buffer[i];
 
-        std::cout << "spdu_buffer contains: ";
-        printHex(spdu_buffer, sizeof(spdu_buffer));
+        /*std::cout << "spdu_buffer contains: ";
+        printHex(spdu_buffer, sizeof(spdu_buffer));*/
 
         memcpy(&incoming_pdu, spdu_buffer, sizeof(incoming_pdu));
 
@@ -464,8 +464,8 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
     std::cout << "Received Ieee1609dot2Peer2PeerPDU:";
     printHex(&incoming_pdu, sizeof(incoming_pdu));
 
-    std::cout << "Received certificate";
-    printHex(&incoming_pdu.caCerts[0], sizeof(incoming_pdu.caCerts[0]));
+    /*std::cout << "Received certificate";
+    printHex(&incoming_pdu.caCerts[0], sizeof(incoming_pdu.caCerts[0]));*/
 
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256sum(&incoming_pdu.caCerts[0], sizeof(ecdsa_explicit_certificate), hash);
