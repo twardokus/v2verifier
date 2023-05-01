@@ -136,6 +136,13 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[5] = 0x84;
     printHex(&pdu, sizeof(pdu));
 
+    ecdsa_explicit_certificate testCert;
+    ((uint16_t *)&testCert.commonCertFields)[1] = 0;
+    ((uint16_t *)&testCert.commonCertFields)[11] = 0;
+    ((uint16_t *)&testCert.commonCertFields)[5] = 0x84;
+    std::cout << "The certificate that should be placed into response PDU:";
+    printHex(&testCert, sizeof(ecdsa_explicit_certificate));
+
     std::cout << "Certificate placed into response PDU:";
     printHex(&pdu.caCerts[0], sizeof(pdu.caCerts[0]));
 
