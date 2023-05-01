@@ -135,7 +135,6 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[11] = 0;
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[5] = 0x84;
     ((uint8_t *)&pdu.caCerts[0])[37] = 0;
-    ((uint16_t *)&pdu.caCerts[0])[31] = 0x0000;
     printHex(&pdu, sizeof(pdu));
 
     ecdsa_explicit_certificate testCert;
@@ -449,7 +448,7 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
         /*for(int i = 128, j = sizeof(incoming_pdu) - 1; i > 80; i--, j--) {
             spdu_buffer[j] = buffer[i];
         }*/
-        for (int i = 81, j = 0; i < 140; i++, j++) spdu_buffer[j] = buffer[i];
+        for (int i = 81, j = 0; i < 139; i++, j++) spdu_buffer[j] = buffer[i];
 
         std::cout << "spdu_buffer contains: ";
         printHex(spdu_buffer, sizeof(spdu_buffer));
