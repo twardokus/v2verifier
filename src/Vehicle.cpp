@@ -136,6 +136,9 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[5] = 0x84;
     printHex(&pdu, sizeof(pdu));
 
+    std::cout << "Certificate placed into response PDU:";
+    printHex(&pdu.caCerts[0], sizeof(pdu.caCerts[0]));
+
     sendto(sockfd, (struct ecdsa_spdu *) &pdu, sizeof(pdu), MSG_CONFIRM,(const struct sockaddr *) &servaddr, sizeof(servaddr));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -411,7 +414,7 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
     unsigned int len;
     len = sizeof(cliaddr);
 
-    Ieee1609dot2Peer2PeerPDU incoming_pdu; // size 48 bytes
+    Ieee1609dot2Peer2PeerPDU incoming_pdu;
     std::cout << "Response length: " << sizeof(incoming_pdu) << std::endl;
 
     if(test) {
@@ -446,6 +449,9 @@ void Vehicle::receiveLearnResponse(bool test, bool tkgui) {
 
     std::cout << "Received Ieee1609dot2Peer2PeerPDU:";
     printHex(&incoming_pdu, sizeof(incoming_pdu));
+
+    std::cout << "Received certificate";
+    printHex(&incoming_pdu.caCerts[0], sizeof(incoming_pdu.caCerts[0]));
 
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256sum(&incoming_pdu.caCerts[0], sizeof(incoming_pdu.caCerts[0]), hash);
