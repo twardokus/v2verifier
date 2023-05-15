@@ -33,19 +33,7 @@ https://rit.edu/cybersecurity).
 ### Citing V2Verifier
 If you use V2Verifier or any of its components in your work, please cite 
 [our paper](https://github.com/twardokus/v2verifier/wiki/Publications) from 
-IEEE ICC 2021. 
-
-	@inproceedings{twardokus2021targeted,
-	    author = "Geoff Twardokus and Jaime Ponicki and Samantha Baker and Peter Carenzo and Hanif Rahbari and Sumita Mishra",
-	    title = "Targeted Discreditation Attack Against Trust Management in Connected Vehicles",
-	    booktitle = "Proc. IEEE Int. Conf. Communications (ICC)",
-	    month =  jun,
-	    year = "2021",
-	    address = "(Virtual Conference) Montreal, QC, Canada",
-	    doi = "10.1109/ICC42927.2021.9500246"
-	}
-
-Additional publications involving V2Verifier are listed on the 
+IEEE ICC 2021. Additional publications involving V2Verifier are listed on the 
 same page.
 
 ## Equipment Requirements
