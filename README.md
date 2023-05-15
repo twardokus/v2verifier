@@ -75,27 +75,48 @@ functionality as soon as possible._
 V2Verifier's implementation of DSRC is based on the open-source GNURadio 
 and WiME Project implementation of IEEE 802.11p.
 
-[GNURadio](https://github.com/gnuradio/gnuradio) version 3.8 is required to run
+[GNURadio](https://github.com/gnuradio/gnuradio) version 3.10 is required to run
 DSRC experiments in V2Verifier. Additionally, GNURadio modules from the 
 [WiME project](https://www.wime-project.net/) are required. Install GNURadio
 as well as the required WiME modules with the following commands. If you
 encounter any errors, please visit the GNURadio project on GitHub for their most recent
 installation instructions and troubleshooting guide.
 
-    sudo apt install -y python3-pip
-    sudo -H pip3 install PyBOMBS
+    pip install pybombs
     pybombs auto-config
     pybombs recipes add-defaults
-    mkdir ~/gr38
-    pybombs prefix init ~/gr38 -R gnuradio-default
-   
-    pybombs install gr-foo
-    pybombs install gr-ieee-80211
+    pybombs prefix init ~/gr-3.10 -R gnuradio-default
 
-To ensure installation was successful, execute the following command to 
+To finish configuring the environment and ensure installation was successful, execute the following commands to 
 run GNURadio Companion.
 
-    pybombs run gnuradio-companion
+    source ~/gr-3.10/setup_env.sh
+    gnuradio-companion
+
+Now, install the WiME project code. You will need to install from source, as the `pybombs` installation method (e.g., `pybombs install gr-foo`) will likely fail due to Swig issues in GNURadio 3.10.
+
+    cd ~
+    git clone https://github.com/bastibl/gr-foo.git
+    cd gr-foo
+    git checkout maint-3.10
+    mkdir build && cd build
+    cmake ../
+    make
+    sudo make install
+    sudo ldconfig
+    
+    cd ~
+    git clone https://github.com/bastibl/gr=ieee802-11.git
+    cd gr-ieee802-11
+    git checkout maint-3.10
+    mkdir build && cd build
+    cmake ../
+    make
+    sudo make install 
+    sudo ldconfig
+
+You can confirm everything installed correctly by launching GNURadio Companion and opening the flowgraph file at `~/gr-ieee802-11/examples/wifi-loopback.grc`. If 
+you encounter any errors, some of the above commands did not work correctly. Do not proceed until you have fixed any issues running the example flowgraph.
 
 ### Part 2 - V2Verifier
 
