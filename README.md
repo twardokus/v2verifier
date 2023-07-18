@@ -106,7 +106,7 @@ Now, install the WiME project code. You will need to install from source, as the
     sudo ldconfig
     
     cd ~
-    git clone https://github.com/bastibl/gr=ieee802-11.git
+    git clone https://github.com/bastibl/gr-ieee802-11.git
     cd gr-ieee802-11
     git checkout maint-3.10
     mkdir build && cd build
