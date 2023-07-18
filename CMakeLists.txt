@@ -7,7 +7,8 @@ set(SOURCE_FILES
     src/v2vcrypto.cpp
     src/bsm.cpp
 )
-
+find_package(OpenSSL REQUIRED)
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${PROJECT_SOURCE_DIR}/include)
+target_link_libraries(${PROJECT_NAME} OpenSSL::Crypto)

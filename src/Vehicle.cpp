@@ -7,6 +7,7 @@
 #include <unistd.h>
 #include <iostream>
 #include <chrono>
+#include <openssl/ec.h>
 #include <openssl/err.h>
 #include "Vehicle.h"
 #include <openssl/pem.h>
