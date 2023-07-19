@@ -12,7 +12,7 @@
 #include "threading.h"
 
 void print_usage() {
-    std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver | initiate | respond} [--test] [--gui]" << std::endl;
+    std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver | initiate | respond} {tkgui | webgui | nogui} [--test]" << std::endl;
 }
 
 int main(int argc, char *argv[]) {
@@ -48,28 +48,32 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if(argc == 4) {
-        if (std::string(argv[3]) == "--test")
-            args.test = true;
-        else {
-            std::cout << R"(Error: optional third argument can only be "--test")" << std::endl;
-            print_usage();
-            exit(EXIT_FAILURE);
-        }
+    if(std::string(argv[3]) == "tkgui")
+    args.tkgui = true;
+    else if(std::string(argv[3]) == "webgui")
+        args.webgui = true;
+    else if(std::string(argv[3]) == "nogui")
+        args.tkgui, args.webgui = false;
+    else {
+        std::cout << R"(Error: third argument must be "tkgui, webgui, or nogui")" << std::endl;
+        print_usage();
+        exit(EXIT_FAILURE);
     }
 
-    if(argc == 5) {
-        if(std::string(argv[4]) == "--gui")
-            args.gui = true;
-        else{
-            std::cout << R"(Error: optional fourth argument must be "--gui")" << std::endl;
-            print_usage();
-            exit(EXIT_FAILURE);
+    if(argc >= 4) {
+        if(argc == 5) {
+            if (std::string(argv[4]) == "--test")
+                args.test = true;
+            else {
+                std::cout << R"(Error: optional third argument can only be "--test")" << std::endl;
+                print_usage();
+                exit(EXIT_FAILURE);
+            }
         }
     }
 
     boost::property_tree::ptree tree;
-    boost::property_tree::json_parser::read_json("../config.json",tree);
+    boost::property_tree::json_parser::read_json("config.json",tree);
 
     auto num_vehicles = tree.get<uint8_t>("scenario.numVehicles");
     auto num_msgs = tree.get<uint16_t>("scenario.numMessages");
@@ -95,7 +99,7 @@ int main(int argc, char *argv[]) {
     }
     else if (args.sim_mode == RECEIVER) {
         Vehicle v1(0);
-        v1.receive(num_msgs * num_vehicles, args.test, args.gui);
+        v1.receive(num_msgs * num_vehicles, args.test, args.tkgui, args.webgui);
     }
     // For the following 2 options, only one vehicle will initiate and one will respond
     else if (args.sim_mode == INITIATE) {

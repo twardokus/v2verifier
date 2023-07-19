@@ -8,8 +8,6 @@ set(SOURCE_FILES
     src/bsm.cpp
     src/threading.cpp)
 
-
-set(OPENSSL_USE_STATIC_LIBS TRUE)
 find_package(OpenSSL REQUIRED)
 
 add_executable(${PROJECT_NAME} ${SOURCE_FILES})

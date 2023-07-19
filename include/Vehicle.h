@@ -79,7 +79,7 @@ public:
         auto* v = (Vehicle*) arg;
         v->transmit(num_msgs, test);
     };
-    void receive(int num_msgs, bool test, bool tkgui);
+    void receive(int num_msgs, bool test, bool tkgui, bool webgui);
     void receiveLearnRequest(char* dest, bool test, bool tkgui);
     void receiveLearnResponse(bool test, bool tkgui);
     void printHex(void* ptr, int size);
