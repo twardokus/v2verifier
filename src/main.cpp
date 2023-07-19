@@ -2,16 +2,17 @@
 // Reuse permitted under the MIT License as specified in the LICENSE file within this project.
 
 #include <iostream>
+#include <chrono>
 #include <thread>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/json_parser.hpp>
 
 #include "Vehicle.h"
 #include "arguments.h"
-
+#include "threading.h"
 
 void print_usage() {
-    std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver} {tkgui | webgui | nogui} [--test]" << std::endl;
+    std::cout << "Usage: v2verifer {dsrc | cv2x} {transmitter | receiver | initiate | respond} {tkgui | webgui | nogui} [--test]" << std::endl;
 }
 
 int main(int argc, char *argv[]) {
@@ -33,11 +34,14 @@ int main(int argc, char *argv[]) {
         exit(EXIT_FAILURE);
     }
 
-    if(std::string(argv[2]) == "transmitter") {
+    if(std::string(argv[2]) == "transmitter")
         args.sim_mode = TRANSMITTER;
-    }
     else if(std::string(argv[2]) == "receiver")
         args.sim_mode = RECEIVER;
+    else if(std::string(argv[2]) == "initiate")
+        args.sim_mode = INITIATE;
+    else if (std::string(argv[2]) == "respond")
+        args.sim_mode = RESPOND;
     else {
         std::cout << R"(Error: second argument must be "transmitter" or "receiver")" << std::endl;
         print_usage();
@@ -92,13 +96,29 @@ int main(int argc, char *argv[]) {
         for(int i = 0; i < num_vehicles; i++) {
             workers.at(i).join();
         }
-
     }
     else if (args.sim_mode == RECEIVER) {
         Vehicle v1(0);
         v1.receive(num_msgs * num_vehicles, args.test, args.tkgui, args.webgui);
     }
+    // For the following 2 options, only one vehicle will initiate and one will respond
+    else if (args.sim_mode == INITIATE) {
+        // This vehicle will send an SPDU first, then it should receive the same one back and verify it.
+        Vehicle v1(0); // number is arbitrary
+        v1.transmitLearnRequest(args.test);
 
+        std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
+        v1.receiveLearnResponse(args.test, args.gui);
+    }
+    else if (args.sim_mode == RESPOND) {
+        // This vehicle will receive an SPDU, then perform necessary tasks, then send it back.
+        Vehicle v1(1);
+        char hashedID3[4];
+        v1.receiveLearnRequest(hashedID3, args.test, args.gui);
 
+        std::this_thread::sleep_for(std::chrono::milliseconds(400));
+
+        v1.transmitLearnResponse(hashedID3, args.test);
+    }
 }

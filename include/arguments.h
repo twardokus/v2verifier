@@ -10,7 +10,9 @@
 
 enum mode {
     TRANSMITTER,
-    RECEIVER
+    RECEIVER,
+    INITIATE,
+    RESPOND
 };
 
 enum technology {

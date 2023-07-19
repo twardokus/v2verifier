@@ -53,6 +53,7 @@ private:
     bsm generate_bsm(int timestep);
     static void print_bsm(Vehicle::ecdsa_spdu &spdu);
     static void print_spdu(Vehicle::ecdsa_spdu &spdu, bool valid);
+    static void print_spdu(Vehicle::ecdsa_spdu &spdu, bool valid, bool learnRequest);
 
     static void load_key(int number, bool certificate, EC_KEY *&key_to_store);
     void load_trace(int number);
@@ -72,11 +73,16 @@ public:
 
     std::string get_hostname();
     void transmit(int num_msgs, bool test);
+    void transmitLearnRequest(bool test);
+    void transmitLearnResponse(char* cert, bool test);
     static void transmit_static(void* arg, int num_msgs, bool test) {
         auto* v = (Vehicle*) arg;
         v->transmit(num_msgs, test);
     };
     void receive(int num_msgs, bool test, bool tkgui, bool webgui);
+    void receiveLearnRequest(char* dest, bool test, bool tkgui);
+    void receiveLearnResponse(bool test, bool tkgui);
+    void printHex(void* ptr, int size);
 };
 
 
