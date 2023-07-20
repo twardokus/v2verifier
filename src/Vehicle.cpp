@@ -1,21 +1,24 @@
 // Copyright (c) 2022. Geoff Twardokus
 // Reuse permitted under the MIT License as specified in the LICENSE file within this project.
 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <cstring>
-#include <unistd.h>
-#include <iostream>
 #include <chrono>
+#include <cstring>
+#include <fstream>
+#include <iostream>
+#include <netinet/in.h>
 #include <openssl/ec.h>
 #include <openssl/err.h>
-#include "Vehicle.h"
 #include <openssl/pem.h>
+#include <sstream>
+#include <sys/socket.h>
 #include <thread>
 #include <sstream>
 #include <fstream>
 #include <stdio.h>
 #include <bitset>
+#include <unistd.h>
+
+#include "Vehicle.h"
 
 
 std::string Vehicle::get_hostname() {
@@ -101,7 +104,7 @@ void Vehicle::transmitLearnRequest(bool test) {
     strncpy(spdu.data.signedData.tbsData.headerInfo.p2pLearningRequest, (const char *) certHash, 4);
 
     std::cout << "Outbound learn request";
-    printHex(&spdu, sizeof(spdu));
+//    printHex(&spdu, sizeof(spdu));
     std::cout << std::endl;
     sendto(sockfd, (struct ecdsa_spdu *) &spdu, sizeof(spdu), MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
 
@@ -136,7 +139,7 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[11] = 0;
     ((uint16_t *)&pdu.caCerts[0].commonCertFields)[5] = 0x84;
     ((uint8_t *)&pdu.caCerts[0])[37] = 0;
-    printHex(&pdu, sizeof(pdu));
+//    printHex(&pdu, sizeof(pdu));
 
     /*ecdsa_explicit_certificate testCert;
     ((uint16_t *)&testCert.commonCertFields)[1] = 0;
@@ -151,13 +154,14 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
     unsigned char hash[SHA256_DIGEST_LENGTH];
     sha256sum(&pdu.caCerts[0], sizeof(ecdsa_explicit_certificate), hash);
     std::cout << "sha256sum of response cert:";
-    printHex(hash, SHA256_DIGEST_LENGTH);
+//    printHex(hash, SHA256_DIGEST_LENGTH);
 
     sendto(sockfd, (struct ecdsa_spdu *) &pdu, sizeof(pdu), MSG_CONFIRM,(const struct sockaddr *) &servaddr, sizeof(servaddr));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
     close(sockfd);
+
 }
 
 void Vehicle::receive(int num_msgs, bool test, bool tkgui, bool webgui) {
@@ -205,7 +209,6 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui, bool webgui) {
         gui_port = 8888;
 
     servaddr2.sin_port = ntohs(gui_port);
-
     servaddr2.sin_addr.s_addr = INADDR_ANY;
 
     int n2, len2;
@@ -229,6 +232,8 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui, bool webgui) {
 
             recvfrom(sockfd, (struct ecdsa_spdu *) &incoming_spdu, sizeof(ecdsa_spdu), 0, (struct sockaddr *) &cliaddr,
                      (socklen_t *) len);
+
+//            printHex(&incoming_spdu, sizeof(incoming_spdu));
         }
         else {
             // with DSRC headers (when data is from SDR), we have an extra 57 bytes (304 + 57 = 361)
@@ -237,12 +242,12 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui, bool webgui) {
                      (socklen_t *) len);
 
             uint8_t spdu_buffer[sizeof(incoming_spdu)];
-            for(int i = 360, j = sizeof(incoming_spdu) - 1; i > 57; i--, j--) {
+            for(int i = 360, j = sizeof(incoming_spdu) - 1; i > 66; i--, j--) {
                 spdu_buffer[j] = buffer[i];
             }
 
             memcpy(&incoming_spdu, spdu_buffer, sizeof(incoming_spdu));
-
+//            printHex(&incoming_spdu, sizeof(incoming_spdu));
         }
 
         timestamp received_time = std::chrono::time_point_cast<std::chrono::microseconds>(std::chrono::system_clock::now());
@@ -542,7 +547,6 @@ bsm Vehicle::generate_bsm(int timestep) {
                                     this->timestep[timestep - 1][1],
                                     longitude);
     }
-    std::cout << "Calculated heading:\t" << heading << std::endl;
     bsm new_bsm = {latitude, longitude, elevation, speed, heading};
     return new_bsm;
 }
@@ -596,7 +600,6 @@ void Vehicle::sign_message_ecdsa(Vehicle::ecdsa_spdu &spdu) {
     for(int i = 0; i < signature_buffer_length; i++) {
         spdu.signature[i] = signature[i];
     }
-
 }
 
 bool Vehicle::verify_message_ecdsa(Vehicle::ecdsa_spdu &spdu, std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> received_time, int vehicle_id) {

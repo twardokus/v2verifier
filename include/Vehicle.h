@@ -8,14 +8,14 @@
 #ifndef CPP_VEHICLE_H
 #define CPP_VEHICLE_H
 
-#include <string>
-#include <vector>
-#include <openssl/sha.h>
 #include <openssl/crypto.h>
 #include <openssl/ec.h>
+#include <openssl/sha.h>
+#include <string>
+#include <vector>
 
-#include "ieee16092.h"
 #include "bsm.h"
+#include "ieee16092.h"
 #include "v2vcrypto.h"
 
 

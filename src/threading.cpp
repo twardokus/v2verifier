@@ -10,7 +10,7 @@
 
 void beginReceiver(int num_vehicles, int num_msgs, program_arguments args) {
     Vehicle v1(0);
-    v1.receive(num_msgs * num_vehicles, args.test, args.gui);
+    v1.receive(num_msgs * num_vehicles, args.test, args.tkgui, args.webgui);
 }
 
 void beginTransmitter(int num_vehicles, int num_msgs, program_arguments args) {

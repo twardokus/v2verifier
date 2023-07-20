@@ -109,13 +109,13 @@ int main(int argc, char *argv[]) {
 
         std::this_thread::sleep_for(std::chrono::milliseconds(200));
 
-        v1.receiveLearnResponse(args.test, args.gui);
+        v1.receiveLearnResponse(args.test, args.tkgui);
     }
     else if (args.sim_mode == RESPOND) {
         // This vehicle will receive an SPDU, then perform necessary tasks, then send it back.
         Vehicle v1(1);
         char hashedID3[4];
-        v1.receiveLearnRequest(hashedID3, args.test, args.gui);
+        v1.receiveLearnRequest(hashedID3, args.test, args.tkgui);
 
         std::this_thread::sleep_for(std::chrono::milliseconds(400));
 
