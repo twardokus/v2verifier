@@ -337,7 +337,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    append: 'True'
+    append: 'False'
     comment: ''
     file: /tmp/wifi.pcap
     type: byte
@@ -347,9 +347,9 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [768, 908]
+    coordinate: [712, 908.0]
     rotation: 180
-    state: disabled
+    state: enabled
 - name: blocks_moving_average_xx_0
   id: blocks_moving_average_xx
   parameters:
@@ -563,7 +563,7 @@ blocks:
     alias: ''
     comment: ''
     header: '0'
-    payloadsize: '1472'
+    payloadsize: '337'
     port: '4444'
     send_eof: 'False'
     type: byte
@@ -572,7 +572,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [904, 1004.0]
+    coordinate: [952, 996.0]
     rotation: 0
     state: true
 - name: pdu_pdu_to_tagged_stream_0
