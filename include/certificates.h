@@ -10,12 +10,12 @@
 struct common_cert_fields {
     uint8_t version = 3;
     uint8_t issuer = 128;
-    std::string hostname = "hostname";
     uint32_t craca_id = 0;
     uint16_t crlseries = 0;
-    std::chrono::time_point<std::chrono::system_clock, std::chrono::seconds> validity_period_start;
     uint8_t validity_period_choice = 132;
     uint16_t validity_period_duration = 24;
+    char hostname[9] = "hostname"; // If you want to update this to use std::string in future, remember the struct needs to be properly serialized before sending over the wire.
+    std::chrono::time_point<std::chrono::system_clock, std::chrono::seconds> validity_period_start;
 };
 
 struct ecdsa_implicit_certificate {

@@ -10,6 +10,7 @@
 struct header_info {
     uint8_t psid = 32;
     std::chrono::time_point<std::chrono::system_clock, std::chrono::microseconds> timestamp;
+    char p2pLearningRequest[4] = "000";
 };
 
 struct to_be_signed_data {
@@ -49,6 +50,15 @@ struct ieee1609dot2data_ecdsa_explicit {
 struct ieee1609dot2data {
     uint8_t protocol_version = 3;
     signed_data signedData;
+};
+
+/**
+ * P2PCD response PDU. Contains a variable length array of certificates beginning with the requested cert, followed by
+ * the cert chain leading to the CA cert. Currently only one cert is contained in implementation.
+ */
+struct Ieee1609dot2Peer2PeerPDU {
+    uint8_t version = 3;
+    ecdsa_explicit_certificate caCerts[1];
 };
 
 #endif //CPP_IEEE16092_H

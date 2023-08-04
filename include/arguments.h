@@ -10,7 +10,9 @@
 
 enum mode {
     TRANSMITTER,
-    RECEIVER
+    RECEIVER,
+    INITIATE,
+    RESPOND
 };
 
 enum technology {
@@ -22,7 +24,8 @@ struct program_arguments {
     mode sim_mode = RECEIVER;
     technology tech_choice = DSRC;
     bool test = false;
-    bool gui = false;
+    bool tkgui = false;
+    bool webgui = false;
 };
 
 #endif //V2VERIFIER_ARGUMENTS_H
