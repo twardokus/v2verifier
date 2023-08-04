@@ -786,7 +786,7 @@ blocks:
   parameters:
     affinity: ''
     alias: ''
-    ant0: ''
+    ant0: '"TX/RX"'
     ant1: ''
     ant10: ''
     ant11: ''

@@ -274,7 +274,7 @@ blocks:
     bus_sink: false
     bus_source: false
     bus_structure: null
-    coordinate: [168, 164]
+    coordinate: [128, 172.0]
     rotation: 0
     state: disabled
 - name: blocks_multiply_const_vxx_0
