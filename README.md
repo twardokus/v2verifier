@@ -19,7 +19,7 @@ the [WiME Project's](http://dx.doi.org/10.1109/TMC.2017.2751474)
 IEEE 802.11p transceiver
 - ~~Cellular Vehicle-to-Everything (C-V2X) - based on the 
 [srsRAN](https://github.com/srsRAN/srsRAN) project (formerly
-srsLTE)~~ (temporarily not supported)
+srsLTE)~~ (temporarily not supported - see above)
 
 Check out our 
 [YouTube page](https://www.youtube.com/channel/UC5lY5D4KYgfKu3FXtfjHP7A)
