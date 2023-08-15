@@ -1,6 +1,6 @@
 # V2Verifier
 
-****Important** - this version of V2Verifier (v3.0.0) is a _preliminary_ release of V2Verifier 3.0. 
+****Important** - this version of V2Verifier is a _preliminary_ release of V2Verifier 3.0. 
 As we await bug fixes in third-party open-source projects that V2Verifier relies on
 for C-V2X sidelink communication, **this version of V2Verifier temporarily does 
 not support C-V2X**. We thank you for your patience as we work towards resolving this
