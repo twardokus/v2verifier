@@ -91,6 +91,7 @@ To finish configuring the environment and ensure installation was successful, ex
 run GNURadio Companion.
 
     source ~/gr-3.10/setup_env.sh
+    python3 /home/wisp/gr-3.10/lib/uhd/utils/uhd_images_downloader.py
     gnuradio-companion
 
 Now, install the WiME project code. You will need to install from source, as the `pybombs` installation method (e.g., `pybombs install gr-foo`) will likely fail due to Swig issues in GNURadio 3.10.
