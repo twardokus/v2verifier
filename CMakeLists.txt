@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10)
 project(v2verifier)
 
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
 set(SOURCE_FILES
     src/main.cpp
     src/Vehicle.cpp
