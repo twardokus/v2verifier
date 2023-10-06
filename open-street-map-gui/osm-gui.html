@@ -1,12 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>3D Terrain</title>
-    <meta property="og:description" content="Go beyond hillshade and show elevation in actual 3D." />
+    <title>V2Verifier - OpenStreetMaps GUI</title>
     <meta charset='utf-8'>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel='stylesheet' href='https://unpkg.com/maplibre-gl@3.3.0/dist/maplibre-gl.css' />
     <script src='https://unpkg.com/maplibre-gl@3.3.0/dist/maplibre-gl.js'></script>
+    <script type="text/javascript" src="/eel.js"></script>
     <style>
         body { margin: 0; padding: 0; }
         html, body, #map { height: 100%; }
@@ -103,7 +103,6 @@
         el.style.width = `${marker.properties.iconSize[0]}px`;
         el.style.height = `${marker.properties.iconSize[1]}px`;
         el.style.backgroundRepeat = `no-repeat`;
-        // el.style.backgroundSize = `auto`;
 
         el.addEventListener('click', () => {
             window.alert(marker.properties.message);

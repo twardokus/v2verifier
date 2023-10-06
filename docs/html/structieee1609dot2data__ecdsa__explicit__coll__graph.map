@@ -1,0 +1,9 @@
+<map id="ieee1609dot2data_ecdsa_explicit" name="ieee1609dot2data_ecdsa_explicit">
+<area shape="rect" id="node1" title=" " alt="" coords="110,288,295,329"/>
+<area shape="rect" id="node2" href="$structsigned__data__ecdsa__explicit__certificate.html" title=" " alt="" coords="102,184,303,225"/>
+<area shape="rect" id="node3" href="$structto__be__signed__data.html" title=" " alt="" coords="37,95,181,121"/>
+<area shape="rect" id="node4" href="$structbsm.html" title=" " alt="" coords="5,5,56,32"/>
+<area shape="rect" id="node5" href="$structheader__info.html" title=" " alt="" coords="80,5,179,32"/>
+<area shape="rect" id="node6" href="$structecdsa__explicit__certificate.html" title=" " alt="" coords="205,95,392,121"/>
+<area shape="rect" id="node7" href="$structcommon__cert__fields.html" title=" " alt="" coords="222,5,375,32"/>
+</map>
