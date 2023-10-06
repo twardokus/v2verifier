@@ -8,4 +8,3 @@ eel.init(path='webapp',
 
 # Start the webapp (will open in Chrome/Chromium)
 eel.start('osm-gui.html')
-

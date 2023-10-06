@@ -64,12 +64,29 @@ const geojson = {
         {
             'type': 'Feature',
             'properties': {
-                'message': 'Foo',
+                'message': 'Vehicle_1: (-77.681361, 43.081066)',
                 'iconSize': [60, 60]
             },
             'geometry': {
                 'type': 'Point',
-                'coordinates': [-77.681562, 43.081050]
+                'coordinates': [-77.681361, 43.081066]
+            },
+            'image': {
+                'path': `url(/E.png)`
+            }
+        },
+        {
+            'type': 'Feature',
+            'properties': {
+                'message': 'Vehicle_2: (-77.679376, 43.082474)',
+                'iconSize': [60, 60]
+            },
+            'geometry': {
+                'type': 'Point',
+                'coordinates': [-77.679376, 43.082474]
+            },
+            'image': {
+                'path': `url(/N.png)`
             }
         }
     ]
@@ -81,8 +98,7 @@ geojson.features.forEach((marker) => {
     // create a DOM element for the marker
     const el = document.createElement('div');
     el.className = 'marker';
-    el.style.backgroundImage =
-        `url(/v2verifier/web/images/regular/E.png)`;
+    el.style.backgroundImage = `${marker.image.path}`;
     el.style.width = `${marker.properties.iconSize[0]}px`;
     el.style.height = `${marker.properties.iconSize[1]}px`;
     el.style.backgroundRepeat = `no-repeat`;
@@ -98,3 +114,4 @@ geojson.features.forEach((marker) => {
 });
 
 map.scrollZoom.disable();
+map.doubleClickZoom.disable();
