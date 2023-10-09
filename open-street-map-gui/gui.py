@@ -19,7 +19,15 @@ def render_all_vehicles(vehicles: pd.DataFrame) -> None:
 
 
 def update_vehicles_from_json(vehicle_json_data: dict, vehicles: pd.DataFrame) -> pd.DataFrame:
-    """Test"""
+    """ Update vehicles tracked in the GUI from JSON input data. JSON is expected to be a
+        dictionary parsed out of JSON with a single key (`vehicles`) that maps to a list of
+        dictionaries of vehicle data, where each dictionary contains an id_number,
+        longitude, latitude, and heading value for one vehicle.
+
+    :param vehicle_json_data: dictionary extracted from JSON containing an array of vehicle data
+    :param vehicles: DataFrame used to track vehicles represented on the GUI
+    :return: an updated copy of vehicles with the new information included
+    """
 
     v_df = pd.DataFrame(vehicle_json_data['vehicles'])
 
