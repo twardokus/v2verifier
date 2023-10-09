@@ -4,16 +4,19 @@ class Vehicle:
     """Class to represent a vehicle in the GUI"""
 
     def __init__(self,
+                 id_number: int,
                  longitude: float,
                  latitude: float,
                  heading: float) -> None:
         """
         Create a new Vehicle instance
 
+        :param id_number: vehicle ID
         :param longitude: longitude
         :param latitude: latitude
         :param heading: heading in degrees (offset clockwise from 0 being due North)
         """
+        self.id_number = id_number
         self.longitude = longitude
         self.latitude = latitude
         self.heading = heading
