@@ -7,15 +7,17 @@ import pandas as pd
 from src.Vehicle import Vehicle
 
 
-def render_all_vehicles(vehicles: list[Vehicle]) -> None:
+def render_all_vehicles(vehicles: pd.DataFrame) -> None:
     """ Clear existing vehicle markers and generate new markers by invoking JS functions via EEL
 
-    :param vehicles: list of vehicles that are represented in the GUI
+    :param vehicles: DataFrame storing the vehicles represented in the GUI
     :return: None
     """
     eel.reset_markers()
-    for v in vehicles:
-        eel.add_new_vehicle(v.longitude, v.latitude, v.heading)
+    for i in range(len(vehicles)):
+        eel.add_new_vehicle(vehicles.loc[i, 'longitude'],
+                            vehicles.loc[i, 'latitude'],
+                            vehicles.loc[i, 'heading'].astype(float))
     eel.update_markers()
 
 
@@ -49,22 +51,20 @@ def main():
     # Start the webapp (will open in Chrome/Chromium)
     eel.start('osm-gui.html', block=False)
 
-    vehicle_test_data = pd.read_excel(os.path.join(os.getcwd(), 'data', 'vehicle_test_data.xlsx'))
+    vehicles = pd.read_excel(os.path.join(os.getcwd(), 'data', 'vehicle_test_data.xlsx'))
 
-    vehicles = []
-
-    for i in range(len(vehicle_test_data)):
-        vehicles.append(Vehicle(id_number=vehicle_test_data.loc[i, 'vehicle_number'],
-                                longitude=vehicle_test_data.loc[i, 'longitude'],
-                                latitude=vehicle_test_data.loc[i, 'latitude'],
-                                heading=vehicle_test_data.loc[i, 'heading']))
+    # for i in range(len(vehicle_test_data)):
+    #     vehicles.append(Vehicle(id_number=vehicle_test_data.loc[i, 'vehicle_number'],
+    #                             longitude=vehicle_test_data.loc[i, 'longitude'],
+    #                             latitude=vehicle_test_data.loc[i, 'latitude'],
+    #                             heading=vehicle_test_data.loc[i, 'heading']))
 
     while True:
         eel.sleep(3)
         render_all_vehicles(vehicles)
-        with open(os.path.join(os.getcwd(), "data", "vehicle_update.json")) as infile:
-            data = json.load(infile)
-        vehicles = update_vehicles_from_json(data, vehicles)
+        # with open(os.path.join(os.getcwd(), "data", "vehicle_update.json")) as infile:
+        #     data = json.load(infile)
+        # vehicles = update_vehicles_from_json(data, vehicles)
 
 
 if __name__ == "__main__":
