@@ -1,9 +1,14 @@
+/**
+ * Update all marker positions and rotations.
+ *
+ * @return {void}
+ */
 function update_markers() {
     geojson.features.forEach((marker) => {
 
         // create a DOM element for the marker
         const el = document.createElement('div');
-        el.className = 'marker';
+        el.className = 'vehicle';
         el.style.backgroundImage = `${marker.image.path}`;
         el.style.width = `${marker.properties.iconSize[0]}px`;
         el.style.height = `${marker.properties.iconSize[1]}px`;

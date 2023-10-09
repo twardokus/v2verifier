@@ -1,3 +1,12 @@
+/**
+ * Add a new vehicle to the GUI.
+ *
+ * @param {float} lng       longitude of the vehicle
+ * @param {float} lat       latitude of the vehicle
+ * @param {float} heading   heading of the vehicle
+ *
+ * @return {void}
+ */
 function add_new_vehicle(lng, lat, heading) {
     geojson.features.push(
         {
