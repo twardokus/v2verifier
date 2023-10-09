@@ -1,9 +1,8 @@
 /**
  * Load OpenStreetMap focused on RIT campus.
  *
- * This code loads a map centered on the RIT campus and sets bounds
- * to keep the map located at/around RIT. Scrolling and zooming is
- * locked out to keep the map on-location.
+ * This code loads a map centered on the RIT campus and sets bounds to keep the map located at/around RIT. Scrolling and
+ * zooming is locked out to keep the map on-location.
  */
 
 var longitudeRIT = -77.675250;
