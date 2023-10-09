@@ -6,7 +6,7 @@
  */
 function reset_markers() {
     geojson.features.length = 0;
-    const vehicleElements = document.getElementsByClassName("vehicle");
+    const vehicleElements = document.getElementsByClassName(vehicleClassName);
     for(let i = vehicleElements.length - 1; i >= 0; --i) {
         vehicleElements[i].remove();
     }

@@ -8,7 +8,7 @@ function update_markers() {
 
         // create a DOM element for the marker
         const el = document.createElement('div');
-        el.className = 'vehicle';
+        el.className = vehicleClassName;
         el.style.backgroundImage = `${marker.image.path}`;
         el.style.width = `${marker.properties.iconSize[0]}px`;
         el.style.height = `${marker.properties.iconSize[1]}px`;

@@ -1,0 +1,1 @@
+const vehicleClassName = "v2verifier-vehicle";
