@@ -60,58 +60,8 @@ const map = (window.map = new maplibregl.Map({
 
 const geojson = {
     'type': 'FeatureCollection',
-    'features': [
-        {
-            'type': 'Feature',
-            'properties': {
-                'message': 'Vehicle_1: (-77.681361, 43.081066)',
-                'iconSize': [60, 60]
-            },
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [-77.681361, 43.081066]
-            },
-            'image': {
-                'path': `url(/E.png)`
-            }
-        },
-        {
-            'type': 'Feature',
-            'properties': {
-                'message': 'Vehicle_2: (-77.679376, 43.082474)',
-                'iconSize': [60, 60]
-            },
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [-77.679376, 43.082474]
-            },
-            'image': {
-                'path': `url(/N.png)`
-            }
-        }
-    ]
+    'features': []
 };
-
-
-// add markers to map
-geojson.features.forEach((marker) => {
-    // create a DOM element for the marker
-    const el = document.createElement('div');
-    el.className = 'marker';
-    el.style.backgroundImage = `${marker.image.path}`;
-    el.style.width = `${marker.properties.iconSize[0]}px`;
-    el.style.height = `${marker.properties.iconSize[1]}px`;
-    el.style.backgroundRepeat = `no-repeat`;
-
-    el.addEventListener('click', () => {
-        window.alert(marker.properties.message);
-    });
-
-    // add marker to map
-    new maplibregl.Marker({element: el})
-        .setLngLat(marker.geometry.coordinates)
-        .addTo(map);
-});
 
 map.scrollZoom.disable();
 map.doubleClickZoom.disable();
