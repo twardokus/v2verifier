@@ -13,7 +13,7 @@ function update_markers() {
         el.style.width = `${marker.properties.iconSize[0]}px`;
         el.style.height = `${marker.properties.iconSize[1]}px`;
         el.style.backgroundRepeat = `no-repeat`;
-        console.log(marker.geometry.heading)
+
         // add marker to map
         new maplibregl.Marker({element: el})
             .setLngLat(marker.geometry.coordinates)

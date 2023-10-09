@@ -8,7 +8,7 @@
  * @return {void}
  */
 function add_new_vehicle(lng, lat, heading) {
-    console.log(heading);
+
     geojson.features.push(
         {
             'type': 'Feature',
