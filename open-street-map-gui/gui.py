@@ -7,6 +7,11 @@ from src.Vehicle import Vehicle
 
 
 def render_all_vehicles(vehicles: list[Vehicle]) -> None:
+    """ Clear existing vehicle markers and generate new markers by invoking JS functions via EEL
+
+    :param vehicles: list of vehicles that are represented in the GUI
+    :return: None
+    """
     eel.reset_markers()
     for v in vehicles:
         eel.add_new_vehicle(v.longitude, v.latitude, v.heading)
@@ -14,7 +19,6 @@ def render_all_vehicles(vehicles: list[Vehicle]) -> None:
 
 
 def main():
-
     # Initialize EEL
     eel.init(path='webapp',
              allowed_extensions=['.js', 'html', '.css'])
@@ -22,10 +26,7 @@ def main():
     # Start the webapp (will open in Chrome/Chromium)
     eel.start('osm-gui.html', block=False)
 
-    vehicle_test_data = pd.read_excel(os.path.join(os.getcwd(),
-                                                   'data',
-                                                   'vehicle_test_data.xlsx')
-                                      )
+    vehicle_test_data = pd.read_excel(os.path.join(os.getcwd(), 'data', 'vehicle_test_data.xlsx'))
 
     vehicles = []
 
