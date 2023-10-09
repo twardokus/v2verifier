@@ -4,9 +4,6 @@ import os
 import pandas as pd
 
 
-from src.Vehicle import Vehicle
-
-
 def render_all_vehicles(vehicles: pd.DataFrame) -> None:
     """ Clear existing vehicle markers and generate new markers by invoking JS functions via EEL
 
@@ -21,25 +18,29 @@ def render_all_vehicles(vehicles: pd.DataFrame) -> None:
     eel.update_markers()
 
 
-def update_vehicles_from_json(vehicle_json_data: dict, vehicles: list[Vehicle]) -> list[Vehicle]:
+def update_vehicles_from_json(vehicle_json_data: dict, vehicles: pd.DataFrame) -> pd.DataFrame:
     """Test"""
 
     v_df = pd.DataFrame(vehicle_json_data['vehicles'])
 
+    # For each vehicle that we got new information about in the JSON
     for i in range(len(v_df)):
-        if not v_df.loc[i, 'id_number'] in [x.id_number for x in vehicles]:
-            vehicles.append(Vehicle(id_number=v_df.loc[i, 'id_number'],
-                                    longitude=v_df.loc[i, 'longitude'],
-                                    latitude=v_df.loc[i, 'latitude'],
-                                    heading=v_df.loc[i, 'heading']
-                                    ))
+
+        # If this is a new vehicle, make note of it
+        if not v_df.loc[i, 'id_number'] in list(vehicles['id_number']):
+            vehicles.loc[len(vehicles.index)] = [v_df.loc[i, 'id_number'],
+                                                 v_df.loc[i, 'latitude'],
+                                                 v_df.loc[i, 'longitude'],
+                                                 v_df.loc[i, 'heading']]
+
+        # Otherwise, update the relevant row in the vehicles DataFrame
         else:
-            for j in range(len(vehicles)):
-                if vehicles[j].id_number == v_df.loc[i, 'id_number']:
-                    vehicles[j].update_position(new_longitude=v_df.loc[i, 'longitude'],
-                                                new_latitude=v_df.loc[i, 'latitude'],
-                                                new_heading=v_df.loc[i, 'heading'])
-                    break
+            v_idx = vehicles[vehicles['id_number'] == v_df.loc[i, 'id_number']].index
+            vehicles.loc[v_idx] = v_df[i].tolist()
+
+        print(vehicles)
+        exit()
+
     return vehicles
 
 
@@ -53,18 +54,12 @@ def main():
 
     vehicles = pd.read_excel(os.path.join(os.getcwd(), 'data', 'vehicle_test_data.xlsx'))
 
-    # for i in range(len(vehicle_test_data)):
-    #     vehicles.append(Vehicle(id_number=vehicle_test_data.loc[i, 'vehicle_number'],
-    #                             longitude=vehicle_test_data.loc[i, 'longitude'],
-    #                             latitude=vehicle_test_data.loc[i, 'latitude'],
-    #                             heading=vehicle_test_data.loc[i, 'heading']))
-
     while True:
         eel.sleep(3)
         render_all_vehicles(vehicles)
-        # with open(os.path.join(os.getcwd(), "data", "vehicle_update.json")) as infile:
-        #     data = json.load(infile)
-        # vehicles = update_vehicles_from_json(data, vehicles)
+        with open(os.path.join(os.getcwd(), "data", "vehicle_update.json")) as infile:
+            data = json.load(infile)
+        vehicles = update_vehicles_from_json(data, vehicles)
 
 
 if __name__ == "__main__":
