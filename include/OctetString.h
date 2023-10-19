@@ -11,6 +11,20 @@
 
 class OctetString {
 
+public:
+
+    OctetString() = default;
+    OctetString(OctetString& octetString) {
+        this->data = octetString.getData();
+    }
+
+    OctetString(std::vector<uint8_t> _data) {
+        this->data = _data;
+    }
+
+    const std::vector<uint8_t>& getData();
+    void setData(std::vector<uint8_t> _data);
+
 private:
     std::vector<uint8_t> data;
 

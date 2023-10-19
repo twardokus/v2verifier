@@ -7,6 +7,7 @@
 
 class Ieee1609Dot2Content {
 
+
 };
 
 #endif //V2VERIFIER_IEEE1609DOT2CONTENT_H

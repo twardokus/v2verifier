@@ -7,12 +7,16 @@
 
 
 #include "SignedDataPayload.h"
+#include "HeaderInfo.h"
 
 class ToBeSignedData {
 
+public:
+
+
 private:
     SignedDataPayload payload;
-//    HeaderInfo headerInfo;
+    HeaderInfo headerInfo;
 
 };
 

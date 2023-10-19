@@ -19,6 +19,8 @@ set(SOURCE_FILES
         include/HeaderInfo.h
         src/OctetString.cpp
         include/OctetString.h
+        src/UnsecuredData.cpp
+        include/UnsecuredData.h
 )
 
 ##------------------------------------------------------------
