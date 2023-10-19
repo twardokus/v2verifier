@@ -1,0 +1,12 @@
+//
+// Created by Geoff Twardokus on 10/19/23.
+//
+
+#ifndef V2VERIFIER_IEEE1609DOT2CONTENT_H
+#define V2VERIFIER_IEEE1609DOT2CONTENT_H
+
+class Ieee1609Dot2Content {
+
+};
+
+#endif //V2VERIFIER_IEEE1609DOT2CONTENT_H
