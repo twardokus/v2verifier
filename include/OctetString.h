@@ -14,15 +14,11 @@ class OctetString {
 public:
 
     OctetString() = default;
-    OctetString(OctetString& octetString) {
-        this->data = octetString.getData();
-    }
+    OctetString(OctetString& octetString);
+    OctetString(const OctetString& octetString);
+    OctetString(std::vector<uint8_t> _data);
 
-    OctetString(std::vector<uint8_t> _data) {
-        this->data = _data;
-    }
-
-    const std::vector<uint8_t>& getData();
+    std::vector<uint8_t> getData() const;
     void setData(std::vector<uint8_t> _data);
 
 private:

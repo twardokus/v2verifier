@@ -4,15 +4,15 @@
 
 #include "HeaderInfo.h"
 
-uint8_t HeaderInfo::getPsid() {
+uint8_t HeaderInfo::getPsid() const {
     return this->psid;
 }
 
-uint64_t HeaderInfo::getGenerationTime() {
+uint64_t HeaderInfo::getGenerationTime() const {
     return this->generationTime;
 }
 
-uint64_t HeaderInfo::getExpiryTime() {
+uint64_t HeaderInfo::getExpiryTime() const {
     return this->expiryTime;
 }
 

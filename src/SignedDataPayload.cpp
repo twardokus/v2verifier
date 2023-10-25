@@ -3,3 +3,11 @@
 //
 
 #include "SignedDataPayload.h"
+
+SignedDataPayload::SignedDataPayload(Ieee1609Dot2Data &_data) {
+
+}
+
+Ieee1609Dot2Data SignedDataPayload::getData() const {
+    return this->data;
+}

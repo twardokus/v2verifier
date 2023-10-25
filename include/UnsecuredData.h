@@ -13,6 +13,9 @@ class UnsecuredData : Ieee1609Dot2Content {
 
 public:
 
+    UnsecuredData() = default;
+    UnsecuredData(UnsecuredData& _data);
+
     UnsecuredData(OctetString _unsecuredData) {
         this->unsecuredData = OctetString(_unsecuredData);
     }

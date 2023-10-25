@@ -21,6 +21,12 @@ set(SOURCE_FILES
         include/OctetString.h
         src/UnsecuredData.cpp
         include/UnsecuredData.h
+        src/SignerIdentifier.cpp
+        include/SignerIdentifier.h
+        src/CertificateBase.cpp
+        include/CertificateBase.h
+        src/ToBeSignedCertificate.cpp
+        include/ToBeSignedCertificate.h
 )
 
 ##------------------------------------------------------------

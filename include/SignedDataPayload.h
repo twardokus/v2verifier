@@ -10,6 +10,9 @@
 
 class SignedDataPayload {
 
+public:
+    SignedDataPayload(Ieee1609Dot2Data& _data);
+
 private:
     Ieee1609Dot2Data data;
 };

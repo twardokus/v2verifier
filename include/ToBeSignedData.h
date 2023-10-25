@@ -13,9 +13,10 @@ class ToBeSignedData {
 
 public:
 
+    ToBeSignedData(Ieee1609Dot2Data& _payload);
 
 private:
-    SignedDataPayload payload;
+    Ieee1609Dot2Data payload;
     HeaderInfo headerInfo;
 
 };

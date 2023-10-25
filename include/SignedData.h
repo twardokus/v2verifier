@@ -6,16 +6,20 @@
 #define V2VERIFIER_SIGNEDDATA_H
 
 #include "HashAlgorithm.h"
-#include "Ieee1609Dot2Content.h"
 #include "ToBeSignedData.h"
+#include "SignerIdentifier.h"
 
-class SignedData : Ieee1609Dot2Content{
+class SignedData {
+
+    SignedData() = default;
+
 
 private:
-    HashAlgorithm hashId;
+    /** Always SHA-256 by default */
+    HashAlgorithm hashId = sha256;
     ToBeSignedData tbsData;
-//    SignerIdentifier signer;
-//    Signature signature;
+    SignerIdentifier signer;
+    // TODO: Signature signature;
 
 };
 

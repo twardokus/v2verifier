@@ -13,7 +13,7 @@ class HeaderInfo {
 public:
 
     HeaderInfo() = default;
-    HeaderInfo(HeaderInfo& headerInfo) {
+    HeaderInfo(const HeaderInfo& headerInfo) {
         this->psid = headerInfo.getPsid();
         this->generationTime = headerInfo.getGenerationTime();
         this->expiryTime = headerInfo.getExpiryTime();
@@ -24,9 +24,9 @@ public:
         this->expiryTime = _expiryTime;
     }
 
-    uint8_t getPsid();
-    uint64_t getGenerationTime();
-    uint64_t getExpiryTime();
+    uint8_t getPsid() const;
+    uint64_t getGenerationTime() const;
+    uint64_t getExpiryTime() const;
 
     void setPsid(uint8_t _psid);
     void setGenerationTime(uint64_t _generationTime);

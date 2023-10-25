@@ -4,6 +4,10 @@
 
 #include "UnsecuredData.h"
 
+UnsecuredData::UnsecuredData(UnsecuredData &_data) {
+    this->unsecuredData = OctetString(_data.getUnsecuredData());
+}
+
 OctetString UnsecuredData::getUnsecuredData() {
     return {this->unsecuredData};
 }
