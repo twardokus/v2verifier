@@ -8,7 +8,8 @@ set(SOURCE_FILES
     src/bsm.cpp
     src/threading.cpp)
 
-if(CMAKE_SYSTEM_NAME==Darwin)
+
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
     ##------------------------------------------------------------
     ## macOS stuff
     set(CMAKE_OSX_ARCHITECTURES arm64)
@@ -26,7 +27,7 @@ add_executable(${PROJECT_NAME} ${SOURCE_FILES})
 
 target_link_libraries(${PROJECT_NAME} OpenSSL::Crypto)
 
-if(CMAKE_SYSTEM_NAME==Darwin)
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
     ##------------------------------------------------------------
     ## macOS stuff
     target_link_libraries(${PROJECT_NAME} Boost::boost)
