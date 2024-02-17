@@ -44,10 +44,8 @@ def update_vehicles_from_json(vehicle_json_data: dict, vehicles: pd.DataFrame) -
         # Otherwise, update the relevant row in the vehicles DataFrame
         else:
             v_idx = vehicles[vehicles['id_number'] == v_df.loc[i, 'id_number']].index
-            vehicles.loc[v_idx] = v_df[i].tolist()
 
-        print(vehicles)
-        exit()
+            vehicles.loc[v_idx] = v_df.loc[i,:].tolist()
 
     return vehicles
 
@@ -62,11 +60,13 @@ def main():
 
     vehicles = pd.read_excel(os.path.join(os.getcwd(), 'data', 'vehicle_test_data.xlsx'))
 
+    with open(os.path.join(os.getcwd(), "data", "vehicle_update.json")) as infile:
+        data = json.load(infile)
+
     while True:
-        eel.sleep(3)
+        eel.sleep(1)
         render_all_vehicles(vehicles)
-        with open(os.path.join(os.getcwd(), "data", "vehicle_update.json")) as infile:
-            data = json.load(infile)
+
         vehicles = update_vehicles_from_json(data, vehicles)
 
 
