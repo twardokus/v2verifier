@@ -20,6 +20,9 @@
 
 #include "Vehicle.h"
 
+#ifndef MSG_CONFIRM
+#define MSG_CONFIRM 0
+#endif
 
 std::string Vehicle::get_hostname() {
    return hostname;
