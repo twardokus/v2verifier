@@ -9,22 +9,14 @@
  */
 function add_new_vehicle(lng, lat, heading) {
 
-    geojson.features.push(
-        {
-            'type': 'Feature',
-            'properties': {
-                'message': '',
-                'iconSize': [60, 60]
-            },
-            'geometry': {
-                'type': 'Point',
-                'coordinates': [lng, lat],
-                'heading': heading
-            },
-            'image': {
-                'path': `url(/car.png)`
-            }
-        }
-    );
+    const el = document.createElement('div');
+    el.className = vehicleClassName;
+    el.style.backgroundImage = `url(/car.png)`;
+    el.style.width = `60px`;
+    el.style.height = `60px`;
+    el.style.backgroundRepeat = `no-repeat`;
+
+    vehicle_markers.push(new maplibregl.Marker({element: el}).setLngLat([-77.675250, 43.084132]));
+    vehicle_markers.at(0).addTo(map);
 }
 eel.expose(add_new_vehicle)

@@ -12,9 +12,9 @@ if(CMAKE_SYSTEM_NAME==Darwin)
     ##------------------------------------------------------------
     ## macOS stuff
     set(CMAKE_OSX_ARCHITECTURES arm64)
-    set(OPENSSL_ROOT_DIR /opt/homebrew/Cellar/openssl@3/3.1.3)
+    set(OPENSSL_ROOT_DIR /opt/homebrew/Cellar/openssl@3/3.2.1)
     set(Boost_NO_SYSTEM_PATHS TRUE)
-    set(BOOST_ROOT /opt/homebrew/Cellar/boost/1.82.0_1)
+    set(BOOST_ROOT /opt/homebrew/Cellar/boost/1.84.0)
     set(Boost_LIBRARY_DIRS "${BOOST_ROOT}/lib/")
     ##------------------------------------------------------------
 endif()

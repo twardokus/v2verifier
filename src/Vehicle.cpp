@@ -51,7 +51,7 @@ void Vehicle::transmit(int num_msgs, bool test) {
 
         ecdsa_spdu next_spdu;
         generate_ecdsa_spdu(next_spdu, i);
-        sendto(sockfd, (struct ecdsa_spdu *) &next_spdu, sizeof(next_spdu), MSG_CONFIRM,
+        sendto(sockfd, (struct ecdsa_spdu *) &next_spdu, sizeof(next_spdu), 0,
                (const struct sockaddr *) &servaddr, sizeof(servaddr));
 
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
@@ -106,7 +106,7 @@ void Vehicle::transmitLearnRequest(bool test) {
     std::cout << "Outbound learn request";
 //    printHex(&spdu, sizeof(spdu));
     std::cout << std::endl;
-    sendto(sockfd, (struct ecdsa_spdu *) &spdu, sizeof(spdu), MSG_CONFIRM, (const struct sockaddr *) &servaddr, sizeof(servaddr));
+    sendto(sockfd, (struct ecdsa_spdu *) &spdu, sizeof(spdu), 0, (const struct sockaddr *) &servaddr, sizeof(servaddr));
 
     close(sockfd);
 }
@@ -156,7 +156,7 @@ void Vehicle::transmitLearnResponse(char* cert, bool test) {
     std::cout << "sha256sum of response cert:";
 //    printHex(hash, SHA256_DIGEST_LENGTH);
 
-    sendto(sockfd, (struct ecdsa_spdu *) &pdu, sizeof(pdu), MSG_CONFIRM,(const struct sockaddr *) &servaddr, sizeof(servaddr));
+    sendto(sockfd, (struct ecdsa_spdu *) &pdu, sizeof(pdu), 0,(const struct sockaddr *) &servaddr, sizeof(servaddr));
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
@@ -271,7 +271,7 @@ void Vehicle::receive(int num_msgs, bool test, bool tkgui, bool webgui) {
                                                7,
                                                (float) vehicle_id_number};
             sendto(sockfd2, (struct packed_bsm_for_gui *) &data_for_gui, sizeof(data_for_gui),
-                    MSG_CONFIRM, (const struct sockaddr *) &servaddr2, sizeof(servaddr2));
+                    0, (const struct sockaddr *) &servaddr2, sizeof(servaddr2));
         }
         // print results
         for(int i = 0; i < 80; i++) std::cout << "-"; std::cout << std::endl;
@@ -381,7 +381,7 @@ void Vehicle::receiveLearnRequest(char* dest, bool test, bool tkgui) {
                                            7,
                                            (float) vehicle_id_number};
         sendto(sockfd2, (struct packed_bsm_for_gui *) &data_for_gui, sizeof(data_for_gui),
-               MSG_CONFIRM, (const struct sockaddr *) &servaddr2, sizeof(servaddr2));
+               0, (const struct sockaddr *) &servaddr2, sizeof(servaddr2));
     }
     /******************************************************************************************************************/
 

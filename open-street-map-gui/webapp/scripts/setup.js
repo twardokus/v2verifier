@@ -5,3 +5,4 @@
  */
 
 const vehicleClassName = "v2verifier-vehicle";
+let vehicle_markers = [];
