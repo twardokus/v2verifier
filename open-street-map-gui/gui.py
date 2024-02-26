@@ -58,24 +58,14 @@ def main():
     # Start the webapp (will open in Chrome/Chromium)
     eel.start('osm-gui.html', block=False)
 
-    # eel.add_new_vehicle(1,1,1)
-    # eel.update_markers()
-    #
-    # vehicles = pd.read_excel(os.path.join(os.getcwd(), 'data', 'vehicle_test_data.xlsx'))
-    #
-    # with open(os.path.join(os.getcwd(), "data", "vehicle_update.json")) as infile:
-    #     data = json.load(infile)
 
     while True:
         eel.sleep(1)
-        eel.update_markers()
         eel.add_new_vehicle(1,1,1)
+        eel.add_vehicle_markers_to_map()
         eel.sleep(1)
         eel.reset_markers()
         eel.sleep(1)
-        # render_all_vehicles(vehicles)
-    #
-    #     vehicles = update_vehicles_from_json(data, vehicles)
 
 
 if __name__ == "__main__":

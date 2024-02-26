@@ -9,11 +9,6 @@ function reset_markers() {
     vehicle_markers.forEach((marker) => {
         marker.remove();
     });
-    // geojson.features.length = 0;
-    // const vehicleElements = document.getElementsByClassName(vehicleClassName);
-    // for(let i = vehicleElements.length - 1; i >= 0; --i) {
-    //     vehicleElements[i].remove();
-    // }
-
+    vehicle_markers = [];
 }
 eel.expose(reset_markers)
