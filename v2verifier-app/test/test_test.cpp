@@ -4,6 +4,7 @@
 
 #include "../include/test.hpp"
 
-int test::add_two_numbers(int a, int b) {
-    return a + b;
+int main() {
+    test T;
+    return T.add_two_numbers(2,5) == 7 ? 0 : 1;
 }

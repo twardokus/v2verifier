@@ -8,6 +8,9 @@
 
 class test {
 
+public:
+    int add_two_numbers(int,int);
+
 };
 
 
