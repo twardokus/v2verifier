@@ -10,8 +10,9 @@
 int main() {
 
     std::vector<std::byte> testBytes;
-    testBytes.push_back(std::byte{3});
-    testBytes.push_back(std::byte{15});
+    testBytes.push_back(std::byte{0x03});
+    testBytes.push_back(std::byte{0x80});
+    testBytes.push_back(std::byte{0x11});
 
     IEEE1609Dot2Data t(testBytes);
 

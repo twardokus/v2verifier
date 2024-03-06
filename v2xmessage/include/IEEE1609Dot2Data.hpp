@@ -11,6 +11,7 @@ class IEEE1609Dot2Data : V2XMessage {
 
 public:
 
+    IEEE1609Dot2Data() = default;
     IEEE1609Dot2Data(const std::vector<std::byte> &coerBytes) {
         this->protocolVersion = (uint8_t) coerBytes.at(0);
     }
