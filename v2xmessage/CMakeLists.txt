@@ -12,7 +12,8 @@ set(SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/include/UnsecuredData.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/HeaderInfo.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/SignerIdentifier.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/Signature.hpp)
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/Signature.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/Utility.hpp)
 
 set(LIB_NAME v2xmessage)
 

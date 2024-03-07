@@ -42,7 +42,32 @@ public:
 
     }
 
-    std::vector<std::byte> getCOER() {}
+    std::vector<std::byte> getCOER() {
+
+        std::vector<std::byte> coerBytes;
+
+        auto psidBytes = Utility::vectorFromUint32(this->psid);
+        auto generationTimeBytes = Utility::vectorFromUint64(this->generationTime);
+        auto expiryTimeBytes = Utility::vectorFromUint64(this->expiryTime);
+
+        coerBytes.insert(coerBytes.end(), psidBytes.begin(), psidBytes.end());
+        coerBytes.insert(coerBytes.end(), generationTimeBytes.begin(), generationTimeBytes.end());
+        coerBytes.insert(coerBytes.end(), expiryTimeBytes.begin(), expiryTimeBytes.end());
+
+        return coerBytes;
+    }
+
+    [[nodiscard]] uint32_t getPsid() const {
+        return this->psid;
+    }
+
+    [[nodiscard]] uint64_t getGenerationTime() const {
+        return this->generationTime;
+    }
+
+    [[nodiscard]] uint64_t getExpiryTime() const {
+        return this->expiryTime;
+    }
 
 private:
 
