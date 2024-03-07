@@ -8,6 +8,7 @@
 #include <vector>
 
 #include "IEEE1609Dot2DataTypes.hpp"
+#include "Utility.hpp"
 
 class V2XMessage {
 

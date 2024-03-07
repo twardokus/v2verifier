@@ -1,7 +1,6 @@
 //
 // Created by Geoff Twardokus on 3/6/24.
 //
-
 #ifndef V2VERIFIER_IEEE1609DOT2DATATYPES_HPP
 #define V2VERIFIER_IEEE1609DOT2DATATYPES_HPP
 
