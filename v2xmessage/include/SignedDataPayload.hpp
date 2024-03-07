@@ -17,7 +17,8 @@ SignedDataPayload ::= SEQUENCE {
 */
 
 #include "V2XMessage.hpp"
-#include "IEEE1609Dot2Data.hpp"
+//#include "IEEE1609Dot2Data.hpp"
+
 
 class SignedDataPayload : V2XMessage {
 
@@ -29,7 +30,7 @@ public:
     std::vector<std::byte> getCOER() {}
 
 private:
-    IEEE1609Dot2Data data;
+//    IEEE1609Dot2Data data;
 };
 
 #endif //V2VERIFIER_SIGNEDDATAPAYLOAD_HPP

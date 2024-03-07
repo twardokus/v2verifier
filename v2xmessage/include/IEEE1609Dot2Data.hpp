@@ -6,6 +6,7 @@
 #define V2VERIFIER_IEEE1609DOT2DATA_HPP
 
 #include "V2XMessage.hpp"
+#include "IEEE1609Dot2Content.hpp"
 
 class IEEE1609Dot2Data : V2XMessage {
 
@@ -24,9 +25,7 @@ public:
 
 private:
     uint8_t protocolVersion;
-
-
-
+    IEEE1609Dot2Content t;
 };
 
 #endif //V2VERIFIER_IEEE1609DOT2DATA_HPP

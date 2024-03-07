@@ -9,7 +9,7 @@
 
 namespace Utility {
 
-    std::vector<std::byte> vectorFromUint64(const uint64_t &val) {
+    static std::vector<std::byte> vectorFromUint64(const uint64_t &val) {
 
         auto returnVec = std::vector<std::byte>(sizeof(uint64_t));
         std::fill(returnVec.begin(), returnVec.end(), std::byte{0});
@@ -19,7 +19,7 @@ namespace Utility {
         return returnVec;
     }
 
-    std::vector<std::byte> vectorFromUint32(const uint32_t &val) {
+    static std::vector<std::byte> vectorFromUint32(const uint32_t &val) {
 
         auto returnVec = std::vector<std::byte>(sizeof(uint32_t));
 
