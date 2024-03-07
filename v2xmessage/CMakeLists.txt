@@ -1,7 +1,4 @@
 set(SOURCE_FILES
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/test.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/test.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/test.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/V2XMessage.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/IEEE1609Dot2Content.cpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/IEEE1609Dot2Content.hpp
@@ -15,6 +12,8 @@ set(SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/include/SignerIdentifier.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/Signature.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/Utility.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/EcdsaP256Signature.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/EccP256CurvePoint.hpp
 )
 
 set(LIB_NAME v2xmessage)

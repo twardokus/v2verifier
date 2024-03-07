@@ -30,7 +30,10 @@ public:
     std::vector<std::byte> getCOER() {}
 
 private:
-//    IEEE1609Dot2Data data;
+    std::vector<std::byte> data;    // This is technically supposed to be IEEE1609Dot2Data, but that causes no end of
+                                    // circular inheritance issues, so just put the data here. Only omits a byte of
+                                    // "real" COER because the skipped substructure has a single byte indicating
+                                    // protocol version (which is fixed at 3 anyway) and then the octet string here.
 };
 
 #endif //V2VERIFIER_SIGNEDDATAPAYLOAD_HPP
