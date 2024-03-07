@@ -17,7 +17,6 @@ SignedDataPayload ::= SEQUENCE {
 */
 
 #include "V2XMessage.hpp"
-//#include "IEEE1609Dot2Data.hpp"
 
 
 class SignedDataPayload : V2XMessage {
@@ -25,9 +24,16 @@ class SignedDataPayload : V2XMessage {
 public:
     SignedDataPayload() = default;
     SignedDataPayload(std::vector<std::byte> &coerBytes) {
-
+        this->data = coerBytes;
     }
-    std::vector<std::byte> getCOER() {}
+
+    std::vector<std::byte> getCOER() {
+        return this->data;
+    }
+
+    std::vector<std::byte> getData() const {
+        return this->data;
+    }
 
 private:
     std::vector<std::byte> data;    // This is technically supposed to be IEEE1609Dot2Data, but that causes no end of

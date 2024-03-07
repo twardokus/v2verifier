@@ -28,10 +28,12 @@ class HeaderInfo : V2XMessage {
 
 public:
 
+    static const uint16_t HEADERINFO_SIZE_BYTES = 20;
+
     HeaderInfo() = default;
     HeaderInfo(std::vector<std::byte> &coerBytes) {
 
-        if(coerBytes.size() == 20) {
+        if(coerBytes.size() == HEADERINFO_SIZE_BYTES) {
             std::memcpy(&psid, coerBytes.data(), sizeof(std::uint32_t));
             std::memcpy(&generationTime, coerBytes.data() + 4, sizeof(std::uint64_t));
             std::memcpy(&expiryTime, coerBytes.data() + 12, sizeof(std::uint64_t));
