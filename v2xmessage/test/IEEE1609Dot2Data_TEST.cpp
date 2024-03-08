@@ -9,12 +9,26 @@
 
 int main() {
 
+    // UnsecuredData version
+
     std::vector<std::byte> testBytes;
     testBytes.push_back(std::byte{0x03});
     testBytes.push_back(std::byte{0x80});
-    testBytes.push_back(std::byte{0x11});
+
+    auto randomBytes = Utility::randomBytesOfLength(100);
+
+    testBytes.insert(testBytes.end(), randomBytes.begin(), randomBytes.end());
 
     IEEE1609Dot2Data t(testBytes);
 
-    return t.getProtocolVersion() == 3 ? 0 : 1;
+    if(t.getProtocolVersion() != 3)
+        return 1;
+
+    auto test = t.getContent().getCOER();
+    if(t.getCOER() != testBytes)
+        return 2;
+
+    // SignedData test
+
+    return 0;
 }

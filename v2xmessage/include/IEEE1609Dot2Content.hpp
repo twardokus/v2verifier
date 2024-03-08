@@ -22,7 +22,29 @@ class IEEE1609Dot2Content : V2XMessage {
 public:
     IEEE1609Dot2Content() = default;
     IEEE1609Dot2Content(std::vector<std::byte> &coerBytes);
-    std::vector<std::byte> getCOER() {};
+    std::vector<std::byte> getCOER() {
+
+        std::vector<std::byte> coerBytes;
+
+
+        if(this->contentChoice == IEEE1609Dot2ContentChoice::unsecuredData) {
+            coerBytes.push_back(std::byte{0x80} | std::byte{(uint8_t) IEEE1609Dot2ContentChoice::unsecuredData});
+            auto contentBytes = this->unsecuredData.getCOER();
+            coerBytes.insert(coerBytes.end(), contentBytes.begin(), contentBytes.end());
+
+            return coerBytes;
+        }
+        else if(this->contentChoice == IEEE1609Dot2ContentChoice::signedData) {
+            coerBytes.push_back(std::byte{0x80} | std::byte{(uint8_t) IEEE1609Dot2ContentChoice::signedData});
+            auto contentBytes = this->signedData.getCOER();
+            coerBytes.insert(coerBytes.end(), contentBytes.begin(), contentBytes.end());
+
+            return coerBytes;
+        }
+        else {
+            throw std::runtime_error("Somehow this got an invalid content type. Aborting.");
+        }
+    }
 
     [[nodiscard]] IEEE1609Dot2ContentChoice getContentChoice() const {
         return this->contentChoice;

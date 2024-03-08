@@ -16,24 +16,24 @@ IEEE1609Dot2Content::IEEE1609Dot2Content(std::vector<std::byte> &coerBytes) {
     auto tag = (uint8_t) (choiceTag & std::byte{0b00111111});
     if(0 <= tag && tag <= 3) {
 
-    this->contentChoice = IEEE1609Dot2ContentChoice(tag);
-    auto newCOER = std::vector<std::byte>(coerBytes.begin() + 1, coerBytes.end());
+        this->contentChoice = IEEE1609Dot2ContentChoice(tag);
+        auto newCOER = std::vector<std::byte>(coerBytes.begin() + 1, coerBytes.end());
 
-    switch(this->contentChoice) {
+        switch(this->contentChoice) {
 
-    case IEEE1609Dot2ContentChoice::unsecuredData:
-    this->unsecuredData = UnsecuredData(newCOER);
-    break;
-    case IEEE1609Dot2ContentChoice::signedData:
-    this->signedData = SignedData(newCOER);
-    break;
+        case IEEE1609Dot2ContentChoice::unsecuredData:
+            this->unsecuredData = UnsecuredData(newCOER);
+            break;
+        case IEEE1609Dot2ContentChoice::signedData:
+            this->signedData = SignedData(newCOER);
+            break;
 
-    // For now, we only support unsecuredData and signedData. TODO: eventually - implement other types.
-    case IEEE1609Dot2ContentChoice::encryptedData:
-    case IEEE1609Dot2ContentChoice::signedCertificateRequest:
-    default:
-    throw   std::runtime_error("Unsupported IEEE1609Dot2Content type requested.");
-    }
+        // For now, we only support unsecuredData and signedData. TODO: eventually - implement other types.
+        case IEEE1609Dot2ContentChoice::encryptedData:
+        case IEEE1609Dot2ContentChoice::signedCertificateRequest:
+            default:
+            throw   std::runtime_error("Unsupported IEEE1609Dot2Content type requested.");
+        }
     }
     else {
     throw std::out_of_range("Invalid choice tag number");

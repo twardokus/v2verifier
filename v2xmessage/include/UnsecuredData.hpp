@@ -15,7 +15,12 @@ public:
         this->opaqueData = coerBytes;
     }
 
-    std::vector<std::byte> getCOER() {}
+    std::vector<std::byte> getCOER() {
+        std::vector<std::byte> coerBytes;
+        auto opaqueBytes = this->opaqueData;
+        coerBytes.insert(coerBytes.end(), opaqueBytes.begin(), opaqueBytes.end());
+        return coerBytes;
+    }
 
 private:
     std::vector<std::byte> opaqueData;
