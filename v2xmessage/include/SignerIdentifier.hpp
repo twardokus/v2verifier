@@ -25,6 +25,9 @@ enum SignerIdentifierChoice {
 class SignerIdentifier : V2XMessage {
 
 public:
+
+    static const uint16_t SIGNER_IDENTIFIER_SIZE_BYTES = 1;
+
     SignerIdentifier() = default;
     SignerIdentifier(std::vector<std::byte> &coerBytes) {
 

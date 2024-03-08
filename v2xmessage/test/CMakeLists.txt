@@ -22,6 +22,9 @@ set(ECDSAP256_SIGNATURE_TEST_SOURCE_FILES
 set(SIGNATURE_TEST_SOURCE_FILES
     ${CMAKE_CURRENT_SOURCE_DIR}/Signature_TEST.cpp)
 
+set(SIGNEDDATA_TEST_SOURCE_FILES
+    ${CMAKE_CURRENT_SOURCE_DIR}/SignedData_TEST.cpp)
+
 add_executable(ieee16092data_test           ${IEEE1609DOT2DATA_TEST_SOURCE_FILES}       ${SOURCE_FILES})
 add_executable(ieee1609Dot2Content_test     ${IEEE1609DOT2CONTENT_TEST_SOURCE_FILES}    ${SOURCE_FILES})
 add_executable(headerInfo_test              ${HEADERINFO_TEST_SOURCE_FILES}             ${SOURCE_FILES})
@@ -30,6 +33,7 @@ add_executable(signerIdentifier_test        ${SIGNERIDENTIFIER_TEST_SOURCE_FILES
 add_executable(toBeSignedData_test          ${TOBESIGNEDDATA_TEST_SOURCE_FILES}         ${SOURCE_FILES})
 add_executable(ecdsaP256Signature_test      ${ECDSAP256_SIGNATURE_TEST_SOURCE_FILES}    ${SOURCE_FILES})
 add_executable(signature_test               ${SIGNATURE_TEST_SOURCE_FILES}              ${SOURCE_FILES})
+add_executable(signedData_test              ${SIGNEDDATA_TEST_SOURCE_FILES}             ${SOURCE_FILES})
 
 add_test(
         NAME ieee16092data_test
@@ -69,4 +73,9 @@ add_test(
 add_test(
         NAME signature_test
         COMMAND $<TARGET_FILE:signature_test>
+)
+
+add_test(
+        NAME signedData_test
+        COMMAND $<TARGET_FILE:signedData_test>
 )
