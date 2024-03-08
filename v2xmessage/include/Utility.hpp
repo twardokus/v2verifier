@@ -5,6 +5,7 @@
 #ifndef V2VERIFIER_UTILITY_HPP
 #define V2VERIFIER_UTILITY_HPP
 
+#include <random>
 #include <vector>
 
 namespace Utility {
@@ -26,6 +27,23 @@ namespace Utility {
         std::memcpy(returnVec.data(), &val, sizeof(val));
 
         return returnVec;
+    }
+
+    static std::vector<std::byte> randomBytesOfLength(const uint32_t &n) {
+        std::random_device rd;
+        std::mt19937 gen(rd());
+        std::uniform_int_distribution<> distr(0, 255);
+
+        std::vector<std::byte> randomBytes;
+        randomBytes.reserve(n);
+        randomBytes.assign(n,std::byte{0});
+
+
+        for(auto & i : randomBytes) {
+            i = std::byte{(uint8_t) distr(gen)};
+        }
+
+        return randomBytes;
     }
 
 }

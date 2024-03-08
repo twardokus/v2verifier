@@ -30,9 +30,12 @@ enum CurvePointChoice {
 class EccP256CurvePoint {
 
 public:
+
+    static const uint16_t ECC_P256_CURVE_POINT_SIZE_BYTES = 33;
+
     EccP256CurvePoint() = default;
     EccP256CurvePoint(std::vector<std::byte> &coerBytes) {
-        if(coerBytes.size() != 33) {
+        if(coerBytes.size() != ECC_P256_CURVE_POINT_SIZE_BYTES) {
             throw std::runtime_error("Invalid COER (wrong length) provided for EccP256CurvePoint");
         }
 
@@ -44,6 +47,7 @@ public:
         ) {
             if(0 <= choiceTag && choiceTag <= 4) {
                 if (choiceTag == 0) {
+                    this->curvePointChoice = (CurvePointChoice) choiceTag;
                     auto start = coerBytes.begin() + 1;
                     auto end = coerBytes.end();
                     this->compressedValue = std::vector<std::byte>(start, end);

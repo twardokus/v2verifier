@@ -17,6 +17,7 @@ Signature ::= CHOICE {
 #define V2VERIFIER_SIGNATURE_HPP
 
 #include "V2XMessage.hpp"
+#include "EcdsaP256Signature.hpp"
 
 enum SignatureChoice {
     ecdsaNistP256Signature,
@@ -33,13 +34,17 @@ public:
 
     Signature(std::vector<std::byte> &coerBytes) {
 
+        auto signatureChoiceByte = coerBytes.at(0);
+
+
+
     }
 
     std::vector<std::byte> getCOER() {}
 
 private:
     SignatureChoice signatureChoice;
-
+    EcdsaP256Signature ecdsaP256Signature;
 };
 
 #endif //V2VERIFIER_SIGNATURE_HPP

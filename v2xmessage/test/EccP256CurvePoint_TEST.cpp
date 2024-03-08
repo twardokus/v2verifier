@@ -9,18 +9,7 @@
 
 int main() {
 
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<> distr(0, 255);
-
-    std::vector<std::byte> testPoint;
-    testPoint.reserve(33);
-    testPoint.assign(33,std::byte{0});
-
-
-    for(auto & i : testPoint) {
-        i = std::byte{(uint8_t) distr(gen)};
-    }
+    auto testPoint = Utility::randomBytesOfLength(33);
     testPoint[0] = std::byte{0x80};
 
     EccP256CurvePoint e(testPoint);
