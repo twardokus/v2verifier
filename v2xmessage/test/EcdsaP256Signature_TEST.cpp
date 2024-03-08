@@ -8,6 +8,7 @@ int main() {
 
     auto sigBytes = Utility::randomBytesOfLength(EcdsaP256Signature::ECDSAP256_SIGNATURE_SIZE_BYTES);
     sigBytes[0] = std::byte{0x80};
+    sigBytes[1] = std::byte{0x80};
 
     EcdsaP256Signature e(sigBytes);
 
