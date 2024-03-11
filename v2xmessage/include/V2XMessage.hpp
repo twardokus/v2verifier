@@ -5,6 +5,7 @@
 #ifndef V2VERIFIER_V2XMESSAGE_HPP
 #define V2VERIFIER_V2XMESSAGE_HPP
 
+#include <chrono>
 #include <cstddef>
 #include <stdexcept>
 #include <vector>
