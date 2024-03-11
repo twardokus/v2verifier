@@ -1,15 +1,8 @@
-dist: trusty
+dist: focal
 
 language: cpp
 compiler: gcc
 os: linux
-
-addons:
-  apt:
-    sources:
-      - ubuntu-toolchain-r-test
-    packages:
-      - cmake
 
 script:
   - cmake --version
