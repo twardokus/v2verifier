@@ -6,6 +6,7 @@
 #define V2VERIFIER_V2XMESSAGE_HPP
 
 #include <vector>
+#include <stdexcept>
 
 #include "IEEE1609Dot2DataTypes.hpp"
 #include "Utility.hpp"
