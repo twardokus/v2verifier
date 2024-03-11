@@ -9,8 +9,11 @@ matrix:
       compiler: clang
 
 script:
-  - cmake --version
-  - mkdir build
+  - cmake -S. build
   - cd build
-  - cmake ../
-  - make
+  - cd v2xmessage
+  - ctest
+  - cd ../
+  - cd v2verifier-app
+  - ctest
+  - cd ../
