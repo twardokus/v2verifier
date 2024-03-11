@@ -2,7 +2,12 @@ dist: trusty
 
 language: cpp
 
+addons:
+  packages:
+    - cmake
+
 script:
+  - cmake --version
   - mkdir build
   - cd build
   - cmake ../
