@@ -1,8 +1,12 @@
 dist: trusty
 
 language: cpp
+compiler: gcc
+os: linux
 
 addons:
+  sources:
+    - ubuntu-toolchain-r-test
   packages:
     - cmake
 
