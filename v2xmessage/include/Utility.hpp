@@ -5,6 +5,7 @@
 #ifndef V2VERIFIER_UTILITY_HPP
 #define V2VERIFIER_UTILITY_HPP
 
+#include <cstring>
 #include <random>
 #include <vector>
 
