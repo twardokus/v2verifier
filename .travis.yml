@@ -1,0 +1,15 @@
+dist: trusty
+
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      compiler: gcc
+      env: CTEST_TARGET_SYSTEM=Linux-gcc
+    - os: osx
+      compiler: clang
+      env: CTEST_TARGET_SYSTEM=MacOS-clang  CTEST_MODEL=Nightly
+
+script:
+  - ctest -VV -S 
