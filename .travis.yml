@@ -1,8 +1,12 @@
-dist: focal
-
 language: cpp
-compiler: gcc
-os: linux
+
+matrix:
+  include:
+    - os: linux
+      dist: focal
+      compiler: gcc
+    - os: osx
+      compiler: clang
 
 script:
   - cmake --version
