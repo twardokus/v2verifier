@@ -5,8 +5,9 @@
 #ifndef V2VERIFIER_V2XMESSAGE_HPP
 #define V2VERIFIER_V2XMESSAGE_HPP
 
-#include <vector>
+#include <cstddef>
 #include <stdexcept>
+#include <vector>
 
 #include "IEEE1609Dot2DataTypes.hpp"
 #include "Utility.hpp"
