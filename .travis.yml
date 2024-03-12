@@ -12,8 +12,10 @@ script:
   - cmake -S. build
   - cd build
   - cd v2xmessage
+  - make
   - ctest
   - cd ../
   - cd v2verifier-app
+  - make
   - ctest
   - cd ../
