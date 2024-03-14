@@ -1,9 +1,10 @@
-set(SOURCE_FILES
-    ${CMAKE_CURRENT_SOURCE_DIR}/include/test.hpp
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/test.cpp)
-
+#set(SOURCE_FILES
+#)
+#
 set(MAIN_SOURCE_FILE
-    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp)
+    ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
+        src/Vehicle.cpp
+        include/Vehicle.hpp)
 
 set(APP_NAME v2verifier)
 

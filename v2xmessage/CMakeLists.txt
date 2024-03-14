@@ -14,8 +14,6 @@ set(SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/include/Utility.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/EcdsaP256Signature.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/EccP256CurvePoint.hpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/src/V2XMessageService.cpp
-        ${CMAKE_CURRENT_SOURCE_DIR}/include/V2XMessageService.hpp
 )
 
 set(LIB_NAME v2xmessage)
