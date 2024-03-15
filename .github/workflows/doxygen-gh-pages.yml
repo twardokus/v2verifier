@@ -14,4 +14,4 @@ jobs:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: docs
           folder: docs/
-          config_file: Doxyfile
+          config_file: docs/Doxyfile
