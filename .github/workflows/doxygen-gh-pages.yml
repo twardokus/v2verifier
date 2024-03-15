@@ -10,7 +10,7 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: twardokus/doxygen-github-pages-action@v0.1
+      - uses: twardokus/doxygen-github-pages-action@v0.11
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           branch: docs
