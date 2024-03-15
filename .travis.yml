@@ -1,0 +1,34 @@
+language: cpp
+
+matrix:
+  include:
+    - os: linux
+      dist: focal
+      compiler: gcc
+      script:
+        - cmake -S. build
+        - cd build
+        - cd v2xmessage
+        - make
+        - ctest
+        - cd ../
+        - cd v2verifier-app
+        - make
+        - ctest
+        - cd ../
+    - os: osx
+      compiler: clang
+      script:
+        - mkdir build
+        - cd build
+        - cmake ../
+        - cd v2xmessage
+        - make
+        - ctest
+        - cd ../
+        - cd v2verifier-app
+        - make
+        - ctest
+        - cd ../
+
+
