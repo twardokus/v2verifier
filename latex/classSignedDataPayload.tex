@@ -1,0 +1,78 @@
+\hypertarget{classSignedDataPayload}{}\doxysection{Signed\+Data\+Payload Class Reference}
+\label{classSignedDataPayload}\index{SignedDataPayload@{SignedDataPayload}}
+Inheritance diagram for Signed\+Data\+Payload\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classSignedDataPayload}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSignedDataPayload_a3036dfcf966be090f9268b98b47bf730}\label{classSignedDataPayload_a3036dfcf966be090f9268b98b47bf730}} 
+\mbox{\hyperlink{classSignedDataPayload_a3036dfcf966be090f9268b98b47bf730}{Signed\+Data\+Payload}} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSignedDataPayload_aa1e26dd8cfabaea65e01d8ed2ddec300}{Signed\+Data\+Payload}} (std\+::vector$<$ std\+::byte $>$ \&coer\+Bytes)
+\begin{DoxyCompactList}\small\item\em Create a new \mbox{\hyperlink{classSignedDataPayload}{Signed\+Data\+Payload}} from a COER encoding. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::byte $>$ \mbox{\hyperlink{classSignedDataPayload_a8fff20d62bee933b24fd676979346761}{get\+COER}} ()
+\begin{DoxyCompactList}\small\item\em Get the COER encoding of the object. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::byte $>$ \mbox{\hyperlink{classSignedDataPayload_a0d6f19b395f7bcaf8ce411e86022d0e3}{get\+Data}} () const
+\begin{DoxyCompactList}\small\item\em Get the data contained in this object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSignedDataPayload_aa1e26dd8cfabaea65e01d8ed2ddec300}\label{classSignedDataPayload_aa1e26dd8cfabaea65e01d8ed2ddec300}} 
+\index{SignedDataPayload@{SignedDataPayload}!SignedDataPayload@{SignedDataPayload}}
+\index{SignedDataPayload@{SignedDataPayload}!SignedDataPayload@{SignedDataPayload}}
+\doxysubsubsection{\texorpdfstring{SignedDataPayload()}{SignedDataPayload()}}
+{\footnotesize\ttfamily Signed\+Data\+Payload\+::\+Signed\+Data\+Payload (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::byte $>$ \&}]{coer\+Bytes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create a new \mbox{\hyperlink{classSignedDataPayload}{Signed\+Data\+Payload}} from a COER encoding. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em coer\+Bytes} & The COER encoding from which to create the object. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSignedDataPayload_a8fff20d62bee933b24fd676979346761}\label{classSignedDataPayload_a8fff20d62bee933b24fd676979346761}} 
+\index{SignedDataPayload@{SignedDataPayload}!getCOER@{getCOER}}
+\index{getCOER@{getCOER}!SignedDataPayload@{SignedDataPayload}}
+\doxysubsubsection{\texorpdfstring{getCOER()}{getCOER()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::byte$>$ Signed\+Data\+Payload\+::get\+COER (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Get the COER encoding of the object. 
+
+\begin{DoxyReturn}{Returns}
+The COER encoding of the object. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{classV2XMessage}{V2\+XMessage}}.
+
+\mbox{\Hypertarget{classSignedDataPayload_a0d6f19b395f7bcaf8ce411e86022d0e3}\label{classSignedDataPayload_a0d6f19b395f7bcaf8ce411e86022d0e3}} 
+\index{SignedDataPayload@{SignedDataPayload}!getData@{getData}}
+\index{getData@{getData}!SignedDataPayload@{SignedDataPayload}}
+\doxysubsubsection{\texorpdfstring{getData()}{getData()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::byte$>$ Signed\+Data\+Payload\+::get\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the data contained in this object. 
+
+This is supposed to be \mbox{\hyperlink{classIEEE1609Dot2Data}{IEEE1609\+Dot2\+Data}} under IEEE 1609.\+2; however, that creates a circular inheritance problem in C++. Since in practice this substructure would just contain an \mbox{\hyperlink{classUnsecuredData}{Unsecured\+Data}} object, which itself is just an OPAQUE octet string of indefinite length, we skip the substructure here and directly encapsulate a byte string of indefinitely length in this object.
+
+\begin{DoxyReturn}{Returns}
+The data (as bytes) contained in this object. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+v2xmessage/include/\mbox{\hyperlink{SignedDataPayload_8hpp}{Signed\+Data\+Payload.\+hpp}}\end{DoxyCompactItemize}
