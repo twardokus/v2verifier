@@ -1,0 +1,71 @@
+\hypertarget{Signature_8hpp}{}\doxysection{v2xmessage/include/\+Signature.hpp File Reference}
+\label{Signature_8hpp}\index{v2xmessage/include/Signature.hpp@{v2xmessage/include/Signature.hpp}}
+
+
+Implementation of the \mbox{\hyperlink{classSignature}{Signature}} ASN.\+1 structure defined in IEEE 1609.\+2-\/2022.  
+
+
+{\ttfamily \#include \char`\"{}V2\+XMessage.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Ecdsa\+P256\+Signature.\+hpp\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classSignature}{Signature}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631}{Signature\+Choice}} \{ \newline
+\mbox{\hyperlink{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631a950da8e71cab13830d1a9b5f19be2276}{ecdsa\+Nist\+P256\+Signature}}
+, \mbox{\hyperlink{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631aa94cbafba8715faaa3df302f5b7d63e0}{ecdsa\+Brainpool\+P256r1\+Signature}}
+, \mbox{\hyperlink{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631a4e4020774a8ba3aadc414b33cd937df6}{ecdsa\+Brainpool\+P384r1\+Signature}}
+, \mbox{\hyperlink{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631a5cd5138c01d5dcab1d4a5b309ae83074}{ecdsa\+Nist\+P384\+Signature}}
+, \newline
+\mbox{\hyperlink{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631aa60e717a2ed899676b8f4819c5af4726}{sm2\+Signature}}
+ \}
+\begin{DoxyCompactList}\small\item\em Choice of signature instantiated in this object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementation of the \mbox{\hyperlink{classSignature}{Signature}} ASN.\+1 structure defined in IEEE 1609.\+2-\/2022. 
+
+\begin{DoxyAuthor}{Author}
+Geoff Twardokus
+\end{DoxyAuthor}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000007}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631}\label{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631}} 
+\index{Signature.hpp@{Signature.hpp}!SignatureChoice@{SignatureChoice}}
+\index{SignatureChoice@{SignatureChoice}!Signature.hpp@{Signature.hpp}}
+\doxysubsubsection{\texorpdfstring{SignatureChoice}{SignatureChoice}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631}{Signature\+Choice}}}
+
+
+
+Choice of signature instantiated in this object. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ecdsaNistP256Signature@{ecdsaNistP256Signature}!Signature.hpp@{Signature.hpp}}\index{Signature.hpp@{Signature.hpp}!ecdsaNistP256Signature@{ecdsaNistP256Signature}}}\mbox{\Hypertarget{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631a950da8e71cab13830d1a9b5f19be2276}\label{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631a950da8e71cab13830d1a9b5f19be2276}} 
+ecdsa\+Nist\+P256\+Signature&ECDSA with the NIST P.\+256 curve. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ecdsaBrainpoolP256r1Signature@{ecdsaBrainpoolP256r1Signature}!Signature.hpp@{Signature.hpp}}\index{Signature.hpp@{Signature.hpp}!ecdsaBrainpoolP256r1Signature@{ecdsaBrainpoolP256r1Signature}}}\mbox{\Hypertarget{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631aa94cbafba8715faaa3df302f5b7d63e0}\label{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631aa94cbafba8715faaa3df302f5b7d63e0}} 
+ecdsa\+Brainpool\+P256r1\+Signature&ECDSA with the Brainpool P256r1 curve. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ecdsaBrainpoolP384r1Signature@{ecdsaBrainpoolP384r1Signature}!Signature.hpp@{Signature.hpp}}\index{Signature.hpp@{Signature.hpp}!ecdsaBrainpoolP384r1Signature@{ecdsaBrainpoolP384r1Signature}}}\mbox{\Hypertarget{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631a4e4020774a8ba3aadc414b33cd937df6}\label{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631a4e4020774a8ba3aadc414b33cd937df6}} 
+ecdsa\+Brainpool\+P384r1\+Signature&ECDSA with the Brainpool P384r1 curve. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{ecdsaNistP384Signature@{ecdsaNistP384Signature}!Signature.hpp@{Signature.hpp}}\index{Signature.hpp@{Signature.hpp}!ecdsaNistP384Signature@{ecdsaNistP384Signature}}}\mbox{\Hypertarget{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631a5cd5138c01d5dcab1d4a5b309ae83074}\label{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631a5cd5138c01d5dcab1d4a5b309ae83074}} 
+ecdsa\+Nist\+P384\+Signature&ECDSA with the NIST P.\+384 curve. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{sm2Signature@{sm2Signature}!Signature.hpp@{Signature.hpp}}\index{Signature.hpp@{Signature.hpp}!sm2Signature@{sm2Signature}}}\mbox{\Hypertarget{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631aa60e717a2ed899676b8f4819c5af4726}\label{Signature_8hpp_adf0b2810179f50c656845d5eb38c2631aa60e717a2ed899676b8f4819c5af4726}} 
+sm2\+Signature&SM2 (Chinese variant of ECDSA 256) \\
+\hline
+
+\end{DoxyEnumFields}
