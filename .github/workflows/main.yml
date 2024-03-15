@@ -1,0 +1,20 @@
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+jobs:
+  gen_docs:
+    name: Build documentation
+    runs-on: ubuntu-latest
+
+    steps:
+      
+      - uses: actions/checkout@v2
+      
+      - name: Doxygen
+        uses: mattnotmitt/doxygen-action@v1.9.5
+        with:
+          working-directory: docs/
+          doxyfile-path: "./Doxyfile"
