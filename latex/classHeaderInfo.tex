@@ -1,0 +1,95 @@
+\hypertarget{classHeaderInfo}{}\doxysection{Header\+Info Class Reference}
+\label{classHeaderInfo}\index{HeaderInfo@{HeaderInfo}}
+Inheritance diagram for Header\+Info\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classHeaderInfo}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classHeaderInfo_a880ceb554f65edfcfa97ddc1917a342e}\label{classHeaderInfo_a880ceb554f65edfcfa97ddc1917a342e}} 
+\mbox{\hyperlink{classHeaderInfo_a880ceb554f65edfcfa97ddc1917a342e}{Header\+Info}} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classHeaderInfo_a65c069ccabe2db1269d41a7ddd746269}\label{classHeaderInfo_a65c069ccabe2db1269d41a7ddd746269}} 
+\mbox{\hyperlink{classHeaderInfo_a65c069ccabe2db1269d41a7ddd746269}{Header\+Info}} (std\+::vector$<$ std\+::byte $>$ \&coer\+Bytes)
+\begin{DoxyCompactList}\small\item\em Create a new \mbox{\hyperlink{classHeaderInfo}{Header\+Info}} from a COER-\/encoded byte string. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::byte $>$ \mbox{\hyperlink{classHeaderInfo_a76aa3754b34ac0d35298a0e04144019d}{get\+COER}} ()
+\begin{DoxyCompactList}\small\item\em Get the COER encoding of this object as a byte string. \end{DoxyCompactList}\item 
+uint32\+\_\+t \mbox{\hyperlink{classHeaderInfo_a25fcecfb4f5875e6f0fe873123b0f06c}{get\+Psid}} () const
+\begin{DoxyCompactList}\small\item\em Get the PSID value. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{classHeaderInfo_a562efabd5954fccaa7db4e94a7eb7a54}{get\+Generation\+Time}} () const
+\begin{DoxyCompactList}\small\item\em Get the generation time. \end{DoxyCompactList}\item 
+uint64\+\_\+t \mbox{\hyperlink{classHeaderInfo_a6dbec10cf26ebd77619d38b8b5b65b4f}{get\+Expiry\+Time}} () const
+\begin{DoxyCompactList}\small\item\em Get the expiration time. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classHeaderInfo_a6d4751b7c698d617dbf1994ed48fbacb}\label{classHeaderInfo_a6d4751b7c698d617dbf1994ed48fbacb}} 
+static const uint16\+\_\+t \mbox{\hyperlink{classHeaderInfo_a6d4751b7c698d617dbf1994ed48fbacb}{HEADERINFO\+\_\+\+SIZE\+\_\+\+BYTES}} = 20
+\begin{DoxyCompactList}\small\item\em The size of the COER-\/encoded byte string for this object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classHeaderInfo_a76aa3754b34ac0d35298a0e04144019d}\label{classHeaderInfo_a76aa3754b34ac0d35298a0e04144019d}} 
+\index{HeaderInfo@{HeaderInfo}!getCOER@{getCOER}}
+\index{getCOER@{getCOER}!HeaderInfo@{HeaderInfo}}
+\doxysubsubsection{\texorpdfstring{getCOER()}{getCOER()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::byte$>$ Header\+Info\+::get\+COER (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Get the COER encoding of this object as a byte string. 
+
+\begin{DoxyReturn}{Returns}
+The COER encoding of the object. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{classV2XMessage}{V2\+XMessage}}.
+
+\mbox{\Hypertarget{classHeaderInfo_a6dbec10cf26ebd77619d38b8b5b65b4f}\label{classHeaderInfo_a6dbec10cf26ebd77619d38b8b5b65b4f}} 
+\index{HeaderInfo@{HeaderInfo}!getExpiryTime@{getExpiryTime}}
+\index{getExpiryTime@{getExpiryTime}!HeaderInfo@{HeaderInfo}}
+\doxysubsubsection{\texorpdfstring{getExpiryTime()}{getExpiryTime()}}
+{\footnotesize\ttfamily uint64\+\_\+t Header\+Info\+::get\+Expiry\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the expiration time. 
+
+\begin{DoxyReturn}{Returns}
+The expiration time. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classHeaderInfo_a562efabd5954fccaa7db4e94a7eb7a54}\label{classHeaderInfo_a562efabd5954fccaa7db4e94a7eb7a54}} 
+\index{HeaderInfo@{HeaderInfo}!getGenerationTime@{getGenerationTime}}
+\index{getGenerationTime@{getGenerationTime}!HeaderInfo@{HeaderInfo}}
+\doxysubsubsection{\texorpdfstring{getGenerationTime()}{getGenerationTime()}}
+{\footnotesize\ttfamily uint64\+\_\+t Header\+Info\+::get\+Generation\+Time (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the generation time. 
+
+\begin{DoxyReturn}{Returns}
+The generation time. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classHeaderInfo_a25fcecfb4f5875e6f0fe873123b0f06c}\label{classHeaderInfo_a25fcecfb4f5875e6f0fe873123b0f06c}} 
+\index{HeaderInfo@{HeaderInfo}!getPsid@{getPsid}}
+\index{getPsid@{getPsid}!HeaderInfo@{HeaderInfo}}
+\doxysubsubsection{\texorpdfstring{getPsid()}{getPsid()}}
+{\footnotesize\ttfamily uint32\+\_\+t Header\+Info\+::get\+Psid (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the PSID value. 
+
+\begin{DoxyReturn}{Returns}
+The PSID value. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+v2xmessage/include/\mbox{\hyperlink{HeaderInfo_8hpp}{Header\+Info.\+hpp}}\end{DoxyCompactItemize}

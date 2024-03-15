@@ -1,0 +1,70 @@
+\hypertarget{EccP256CurvePoint_8hpp}{}\doxysection{v2xmessage/include/\+Ecc\+P256\+Curve\+Point.hpp File Reference}
+\label{EccP256CurvePoint_8hpp}\index{v2xmessage/include/EccP256CurvePoint.hpp@{v2xmessage/include/EccP256CurvePoint.hpp}}
+
+
+Implementation of the \mbox{\hyperlink{classEccP256CurvePoint}{Ecc\+P256\+Curve\+Point}} ASN.\+1 defined in IEEE 1609.\+2-\/2022.  
+
+
+{\ttfamily \#include \char`\"{}V2\+XMessage.\+hpp\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classEccP256CurvePoint}{Ecc\+P256\+Curve\+Point}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783}{Curve\+Point\+Choice}} \{ \newline
+\mbox{\hyperlink{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783afcc70a929e68ac6e70cc9ffbad336f6b}{x\+Only}}
+, \mbox{\hyperlink{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a88ba2b8070417be66c343d93d6d3b1d1}{fill\+Null}}
+, \mbox{\hyperlink{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a0c7d8493fa5d2fb613ca7f810bd68c20}{compressed\+Y0}}
+, \mbox{\hyperlink{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a99ddc9de8eb8ef2e129d924e7ef0f097}{compressed\+Y1}}
+, \newline
+\mbox{\hyperlink{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a57740e328255690eb217a89773f3e81a}{uncompressed\+P256}}
+ \}
+\begin{DoxyCompactList}\small\item\em Options for how a curve point can be encoded under IEEE 1609.\+2. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementation of the \mbox{\hyperlink{classEccP256CurvePoint}{Ecc\+P256\+Curve\+Point}} ASN.\+1 defined in IEEE 1609.\+2-\/2022. 
+
+\begin{DoxyAuthor}{Author}
+Geoff Twardokus
+\end{DoxyAuthor}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000001}{Bug}}]No known bugs \end{DoxyRefDesc}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783}\label{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783}} 
+\index{EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}!CurvePointChoice@{CurvePointChoice}}
+\index{CurvePointChoice@{CurvePointChoice}!EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}}
+\doxysubsubsection{\texorpdfstring{CurvePointChoice}{CurvePointChoice}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783}{Curve\+Point\+Choice}}}
+
+
+
+Options for how a curve point can be encoded under IEEE 1609.\+2. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{xOnly@{xOnly}!EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}}\index{EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}!xOnly@{xOnly}}}\mbox{\Hypertarget{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783afcc70a929e68ac6e70cc9ffbad336f6b}\label{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783afcc70a929e68ac6e70cc9ffbad336f6b}} 
+x\+Only&x-\/coordinate of the point as a 32-\/byte unsigned integer \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{fillNull@{fillNull}!EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}}\index{EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}!fillNull@{fillNull}}}\mbox{\Hypertarget{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a88ba2b8070417be66c343d93d6d3b1d1}\label{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a88ba2b8070417be66c343d93d6d3b1d1}} 
+fill\+Null&no value (NULL) is provided \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{compressedY0@{compressedY0}!EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}}\index{EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}!compressedY0@{compressedY0}}}\mbox{\Hypertarget{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a0c7d8493fa5d2fb613ca7f810bd68c20}\label{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a0c7d8493fa5d2fb613ca7f810bd68c20}} 
+compressed\+Y0&y-\/coordinate of the point as a 32-\/byte unsigned integer when LSB is 0 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{compressedY1@{compressedY1}!EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}}\index{EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}!compressedY1@{compressedY1}}}\mbox{\Hypertarget{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a99ddc9de8eb8ef2e129d924e7ef0f097}\label{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a99ddc9de8eb8ef2e129d924e7ef0f097}} 
+compressed\+Y1&y-\/coordinate of the point as a 32-\/byte unsigned integer when LSB is 1 \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{uncompressedP256@{uncompressedP256}!EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}}\index{EccP256CurvePoint.hpp@{EccP256CurvePoint.hpp}!uncompressedP256@{uncompressedP256}}}\mbox{\Hypertarget{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a57740e328255690eb217a89773f3e81a}\label{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783a57740e328255690eb217a89773f3e81a}} 
+uncompressed\+P256&x-\/ and y-\/ coordinate provided in sequence as 32-\/byte unsigned integers \\
+\hline
+
+\end{DoxyEnumFields}

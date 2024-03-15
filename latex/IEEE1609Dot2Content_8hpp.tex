@@ -1,0 +1,65 @@
+\hypertarget{IEEE1609Dot2Content_8hpp}{}\doxysection{v2xmessage/include/\+IEEE1609\+Dot2\+Content.hpp File Reference}
+\label{IEEE1609Dot2Content_8hpp}\index{v2xmessage/include/IEEE1609Dot2Content.hpp@{v2xmessage/include/IEEE1609Dot2Content.hpp}}
+
+
+Implementation of the Ieee1609\+Dot2\+Content ASN.\+1 structure defined in IEEE 1609.\+2-\/2022.  
+
+
+{\ttfamily \#include \char`\"{}Signed\+Data.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}V2\+XMessage.\+hpp\char`\"{}}\newline
+{\ttfamily \#include \char`\"{}Unsecured\+Data.\+hpp\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classIEEE1609Dot2Content}{IEEE1609\+Dot2\+Content}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402b}{IEEE1609\+Dot2\+Content\+Choice}} \{ \mbox{\hyperlink{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba26783d79b4fde4af6acc9766f411c3c2}{unsecured\+Data}}
+, \mbox{\hyperlink{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba13a3b0e08b3acf52fa12c199df096adc}{signed\+Data}}
+, \mbox{\hyperlink{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba6dac50f076d424e9f4bd4fddcd294b03}{encrypted\+Data}}
+, \mbox{\hyperlink{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba00f0352ccbd6795740d3415377a1978c}{signed\+Certificate\+Request}}
+ \}
+\begin{DoxyCompactList}\small\item\em The type of content contained in this SPDU. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementation of the Ieee1609\+Dot2\+Content ASN.\+1 structure defined in IEEE 1609.\+2-\/2022. 
+
+\begin{DoxyAuthor}{Author}
+Geoff Twardokus
+\end{DoxyAuthor}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000004}{Bug}}]No known bugs \end{DoxyRefDesc}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402b}\label{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402b}} 
+\index{IEEE1609Dot2Content.hpp@{IEEE1609Dot2Content.hpp}!IEEE1609Dot2ContentChoice@{IEEE1609Dot2ContentChoice}}
+\index{IEEE1609Dot2ContentChoice@{IEEE1609Dot2ContentChoice}!IEEE1609Dot2Content.hpp@{IEEE1609Dot2Content.hpp}}
+\doxysubsubsection{\texorpdfstring{IEEE1609Dot2ContentChoice}{IEEE1609Dot2ContentChoice}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402b}{IEEE1609\+Dot2\+Content\+Choice}}}
+
+
+
+The type of content contained in this SPDU. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{unsecuredData@{unsecuredData}!IEEE1609Dot2Content.hpp@{IEEE1609Dot2Content.hpp}}\index{IEEE1609Dot2Content.hpp@{IEEE1609Dot2Content.hpp}!unsecuredData@{unsecuredData}}}\mbox{\Hypertarget{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba26783d79b4fde4af6acc9766f411c3c2}\label{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba26783d79b4fde4af6acc9766f411c3c2}} 
+unsecured\+Data&an arbitrary byte string of variable length \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{signedData@{signedData}!IEEE1609Dot2Content.hpp@{IEEE1609Dot2Content.hpp}}\index{IEEE1609Dot2Content.hpp@{IEEE1609Dot2Content.hpp}!signedData@{signedData}}}\mbox{\Hypertarget{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba13a3b0e08b3acf52fa12c199df096adc}\label{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba13a3b0e08b3acf52fa12c199df096adc}} 
+signed\+Data&a \mbox{\hyperlink{classSignedData}{Signed\+Data}} \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{encryptedData@{encryptedData}!IEEE1609Dot2Content.hpp@{IEEE1609Dot2Content.hpp}}\index{IEEE1609Dot2Content.hpp@{IEEE1609Dot2Content.hpp}!encryptedData@{encryptedData}}}\mbox{\Hypertarget{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba6dac50f076d424e9f4bd4fddcd294b03}\label{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba6dac50f076d424e9f4bd4fddcd294b03}} 
+encrypted\+Data&a Encrypted\+Data \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{signedCertificateRequest@{signedCertificateRequest}!IEEE1609Dot2Content.hpp@{IEEE1609Dot2Content.hpp}}\index{IEEE1609Dot2Content.hpp@{IEEE1609Dot2Content.hpp}!signedCertificateRequest@{signedCertificateRequest}}}\mbox{\Hypertarget{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba00f0352ccbd6795740d3415377a1978c}\label{IEEE1609Dot2Content_8hpp_a77305a542769e8c7d803a47df613402ba00f0352ccbd6795740d3415377a1978c}} 
+signed\+Certificate\+Request&a Signed\+Certificate\+Request \\
+\hline
+
+\end{DoxyEnumFields}

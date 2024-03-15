@@ -1,0 +1,58 @@
+\hypertarget{SignerIdentifier_8hpp}{}\doxysection{v2xmessage/include/\+Signer\+Identifier.hpp File Reference}
+\label{SignerIdentifier_8hpp}\index{v2xmessage/include/SignerIdentifier.hpp@{v2xmessage/include/SignerIdentifier.hpp}}
+
+
+Implementation of the \mbox{\hyperlink{classSignerIdentifier}{Signer\+Identifier}} ASN.\+1 structure defined in IEEE 1609.\+2-\/2022.  
+
+
+{\ttfamily \#include \char`\"{}V2\+XMessage.\+hpp\char`\"{}}\newline
+\doxysubsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+class \mbox{\hyperlink{classSignerIdentifier}{Signer\+Identifier}}
+\end{DoxyCompactItemize}
+\doxysubsection*{Enumerations}
+\begin{DoxyCompactItemize}
+\item 
+enum \mbox{\hyperlink{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567}{Signer\+Identifier\+Choice}} \{ \mbox{\hyperlink{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567aac7e37f33aa78262600409c440f40955}{digest}}
+, \mbox{\hyperlink{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567a1e4670e02c8973e69b6b6342bd974668}{certificate}}
+, \mbox{\hyperlink{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567acafa1d84a85b8a292934d480e73747ca}{self}}
+ \}
+\begin{DoxyCompactList}\small\item\em Choice of how the signer identifies itself. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+Implementation of the \mbox{\hyperlink{classSignerIdentifier}{Signer\+Identifier}} ASN.\+1 structure defined in IEEE 1609.\+2-\/2022. 
+
+\begin{DoxyAuthor}{Author}
+Geoff Twardokus
+\end{DoxyAuthor}
+\begin{DoxyRefDesc}{Bug}
+\item[\mbox{\hyperlink{bug__bug000010}{Bug}}]No known bugs. \end{DoxyRefDesc}
+
+
+\doxysubsection{Enumeration Type Documentation}
+\mbox{\Hypertarget{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567}\label{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567}} 
+\index{SignerIdentifier.hpp@{SignerIdentifier.hpp}!SignerIdentifierChoice@{SignerIdentifierChoice}}
+\index{SignerIdentifierChoice@{SignerIdentifierChoice}!SignerIdentifier.hpp@{SignerIdentifier.hpp}}
+\doxysubsubsection{\texorpdfstring{SignerIdentifierChoice}{SignerIdentifierChoice}}
+{\footnotesize\ttfamily enum \mbox{\hyperlink{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567}{Signer\+Identifier\+Choice}}}
+
+
+
+Choice of how the signer identifies itself. 
+
+\begin{DoxyEnumFields}{Enumerator}
+\raisebox{\heightof{T}}[0pt][0pt]{\index{digest@{digest}!SignerIdentifier.hpp@{SignerIdentifier.hpp}}\index{SignerIdentifier.hpp@{SignerIdentifier.hpp}!digest@{digest}}}\mbox{\Hypertarget{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567aac7e37f33aa78262600409c440f40955}\label{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567aac7e37f33aa78262600409c440f40955}} 
+digest&A truncated SHA-\/256 hash digest (Hashed\+ID3) of the signer\textquotesingle{}s certificate. \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{certificate@{certificate}!SignerIdentifier.hpp@{SignerIdentifier.hpp}}\index{SignerIdentifier.hpp@{SignerIdentifier.hpp}!certificate@{certificate}}}\mbox{\Hypertarget{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567a1e4670e02c8973e69b6b6342bd974668}\label{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567a1e4670e02c8973e69b6b6342bd974668}} 
+certificate&The full signer certificate (as a Certificate). \\
+\hline
+
+\raisebox{\heightof{T}}[0pt][0pt]{\index{self@{self}!SignerIdentifier.hpp@{SignerIdentifier.hpp}}\index{SignerIdentifier.hpp@{SignerIdentifier.hpp}!self@{self}}}\mbox{\Hypertarget{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567acafa1d84a85b8a292934d480e73747ca}\label{SignerIdentifier_8hpp_ab4698772f74fa03a7337c805f2807567acafa1d84a85b8a292934d480e73747ca}} 
+self&Self-\/signed (no credential provided). \\
+\hline
+
+\end{DoxyEnumFields}
