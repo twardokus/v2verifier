@@ -1,0 +1,89 @@
+\hypertarget{classEccP256CurvePoint}{}\doxysection{Ecc\+P256\+Curve\+Point Class Reference}
+\label{classEccP256CurvePoint}\index{EccP256CurvePoint@{EccP256CurvePoint}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classEccP256CurvePoint_ab7c92d0e3c86383e95ca7f2cc2515301}\label{classEccP256CurvePoint_ab7c92d0e3c86383e95ca7f2cc2515301}} 
+\mbox{\hyperlink{classEccP256CurvePoint_ab7c92d0e3c86383e95ca7f2cc2515301}{Ecc\+P256\+Curve\+Point}} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classEccP256CurvePoint_ac5ce9c221dae0955b8abfd440404ab47}{Ecc\+P256\+Curve\+Point}} (std\+::vector$<$ std\+::byte $>$ \&coer\+Bytes)
+\begin{DoxyCompactList}\small\item\em Create a new ECCP256\+Curve\+Point for a COER-\/encoded byte string. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::byte $>$ \mbox{\hyperlink{classEccP256CurvePoint_a42d27a67d7adbcae58257c9c41df64fe}{get\+COER}} ()
+\begin{DoxyCompactList}\small\item\em Get the object\textquotesingle{}s COER representation as a byte string. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783}{Curve\+Point\+Choice}} \mbox{\hyperlink{classEccP256CurvePoint_a0814dc134940ea090a17bca375a3db07}{get\+Curve\+Point\+Choice}} () const
+\begin{DoxyCompactList}\small\item\em Get the chosen curve point choice for this object. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::byte $>$ \mbox{\hyperlink{classEccP256CurvePoint_ab7201c0eebcc7260df1d75952058557c}{get\+Compressed\+Value}} () const
+\begin{DoxyCompactList}\small\item\em Get the compressed coordinate value for this curve point. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Static Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classEccP256CurvePoint_a7ecfe22a374cbb25363c6c3b50d2afeb}\label{classEccP256CurvePoint_a7ecfe22a374cbb25363c6c3b50d2afeb}} 
+static const uint16\+\_\+t \mbox{\hyperlink{classEccP256CurvePoint_a7ecfe22a374cbb25363c6c3b50d2afeb}{ECC\+\_\+\+P256\+\_\+\+CURVE\+\_\+\+POINT\+\_\+\+SIZE\+\_\+\+BYTES}} = 33
+\begin{DoxyCompactList}\small\item\em Size of the COER representation for instantiations of this object (in bytes) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classEccP256CurvePoint_ac5ce9c221dae0955b8abfd440404ab47}\label{classEccP256CurvePoint_ac5ce9c221dae0955b8abfd440404ab47}} 
+\index{EccP256CurvePoint@{EccP256CurvePoint}!EccP256CurvePoint@{EccP256CurvePoint}}
+\index{EccP256CurvePoint@{EccP256CurvePoint}!EccP256CurvePoint@{EccP256CurvePoint}}
+\doxysubsubsection{\texorpdfstring{EccP256CurvePoint()}{EccP256CurvePoint()}}
+{\footnotesize\ttfamily Ecc\+P256\+Curve\+Point\+::\+Ecc\+P256\+Curve\+Point (\begin{DoxyParamCaption}\item[{std\+::vector$<$ std\+::byte $>$ \&}]{coer\+Bytes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create a new ECCP256\+Curve\+Point for a COER-\/encoded byte string. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em coer\+Bytes} & COER encoding of an ECCP256\+Curve\+Point object \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classEccP256CurvePoint_a42d27a67d7adbcae58257c9c41df64fe}\label{classEccP256CurvePoint_a42d27a67d7adbcae58257c9c41df64fe}} 
+\index{EccP256CurvePoint@{EccP256CurvePoint}!getCOER@{getCOER}}
+\index{getCOER@{getCOER}!EccP256CurvePoint@{EccP256CurvePoint}}
+\doxysubsubsection{\texorpdfstring{getCOER()}{getCOER()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::byte$>$ Ecc\+P256\+Curve\+Point\+::get\+COER (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the object\textquotesingle{}s COER representation as a byte string. 
+
+\begin{DoxyReturn}{Returns}
+COER encoding of the object. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEccP256CurvePoint_ab7201c0eebcc7260df1d75952058557c}\label{classEccP256CurvePoint_ab7201c0eebcc7260df1d75952058557c}} 
+\index{EccP256CurvePoint@{EccP256CurvePoint}!getCompressedValue@{getCompressedValue}}
+\index{getCompressedValue@{getCompressedValue}!EccP256CurvePoint@{EccP256CurvePoint}}
+\doxysubsubsection{\texorpdfstring{getCompressedValue()}{getCompressedValue()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::byte$>$ Ecc\+P256\+Curve\+Point\+::get\+Compressed\+Value (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the compressed coordinate value for this curve point. 
+
+This could be x-\/ or y-\/coordinate, depending on the selection for this-\/$>$curve\+Point\+Choice. Queries should first call \mbox{\hyperlink{classEccP256CurvePoint_a0814dc134940ea090a17bca375a3db07}{Ecc\+P256\+Curve\+Point\+::get\+Curve\+Point\+Choice()}} to anticipate the correct coordinate encoding.
+
+\begin{DoxyReturn}{Returns}
+The compressed x-\/ or y-\/coordinate value for this curve point. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classEccP256CurvePoint_a0814dc134940ea090a17bca375a3db07}\label{classEccP256CurvePoint_a0814dc134940ea090a17bca375a3db07}} 
+\index{EccP256CurvePoint@{EccP256CurvePoint}!getCurvePointChoice@{getCurvePointChoice}}
+\index{getCurvePointChoice@{getCurvePointChoice}!EccP256CurvePoint@{EccP256CurvePoint}}
+\doxysubsubsection{\texorpdfstring{getCurvePointChoice()}{getCurvePointChoice()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{EccP256CurvePoint_8hpp_afb0123963c45f6ac627f588cddb6d783}{Curve\+Point\+Choice}} Ecc\+P256\+Curve\+Point\+::get\+Curve\+Point\+Choice (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the chosen curve point choice for this object. 
+
+\begin{DoxyReturn}{Returns}
+The Curve\+Point\+Choice for the object. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+v2xmessage/include/\mbox{\hyperlink{EccP256CurvePoint_8hpp}{Ecc\+P256\+Curve\+Point.\+hpp}}\end{DoxyCompactItemize}
