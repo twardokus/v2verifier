@@ -1,0 +1,76 @@
+\hypertarget{namespaceUtility}{}\doxysection{Utility Namespace Reference}
+\label{namespaceUtility}\index{Utility@{Utility}}
+
+
+\mbox{\hyperlink{namespaceUtility}{Utility}} functions to be reused throughout the project.  
+
+
+\doxysubsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+static std\+::vector$<$ std\+::byte $>$ \mbox{\hyperlink{namespaceUtility_a141e49b34b1568b692201a784ad14f36}{vector\+From\+Uint64}} (const uint64\+\_\+t \&val)
+\begin{DoxyCompactList}\small\item\em Get the COER encoding for a given uint64\+\_\+t. \end{DoxyCompactList}\item 
+static std\+::vector$<$ std\+::byte $>$ \mbox{\hyperlink{namespaceUtility_a179f5d47b4d94688a5304194c68a1df5}{vector\+From\+Uint32}} (const uint32\+\_\+t \&val)
+\begin{DoxyCompactList}\small\item\em Get the COER encoding for a given uint32\+\_\+t. \end{DoxyCompactList}\item 
+static std\+::vector$<$ std\+::byte $>$ \mbox{\hyperlink{namespaceUtility_a4cd6cc78fa8bfc19ab00d83675d2ca1f}{random\+Bytes\+Of\+Length}} (const uint32\+\_\+t \&n)
+\begin{DoxyCompactList}\small\item\em Get {\ttfamily n} random bytes. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Detailed Description}
+\mbox{\hyperlink{namespaceUtility}{Utility}} functions to be reused throughout the project. 
+
+\doxysubsection{Function Documentation}
+\mbox{\Hypertarget{namespaceUtility_a4cd6cc78fa8bfc19ab00d83675d2ca1f}\label{namespaceUtility_a4cd6cc78fa8bfc19ab00d83675d2ca1f}} 
+\index{Utility@{Utility}!randomBytesOfLength@{randomBytesOfLength}}
+\index{randomBytesOfLength@{randomBytesOfLength}!Utility@{Utility}}
+\doxysubsubsection{\texorpdfstring{randomBytesOfLength()}{randomBytesOfLength()}}
+{\footnotesize\ttfamily static std\+::vector$<$std\+::byte$>$ Utility\+::random\+Bytes\+Of\+Length (\begin{DoxyParamCaption}\item[{const uint32\+\_\+t \&}]{n }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get {\ttfamily n} random bytes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em n} & The length of the random byte string to return. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+A random byte string of length {\ttfamily n}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceUtility_a179f5d47b4d94688a5304194c68a1df5}\label{namespaceUtility_a179f5d47b4d94688a5304194c68a1df5}} 
+\index{Utility@{Utility}!vectorFromUint32@{vectorFromUint32}}
+\index{vectorFromUint32@{vectorFromUint32}!Utility@{Utility}}
+\doxysubsubsection{\texorpdfstring{vectorFromUint32()}{vectorFromUint32()}}
+{\footnotesize\ttfamily static std\+::vector$<$std\+::byte$>$ Utility\+::vector\+From\+Uint32 (\begin{DoxyParamCaption}\item[{const uint32\+\_\+t \&}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get the COER encoding for a given uint32\+\_\+t. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em val} & The integer for which a COER encoding is requested. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The COER encoding (4 octets) of {\ttfamily val}. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{namespaceUtility_a141e49b34b1568b692201a784ad14f36}\label{namespaceUtility_a141e49b34b1568b692201a784ad14f36}} 
+\index{Utility@{Utility}!vectorFromUint64@{vectorFromUint64}}
+\index{vectorFromUint64@{vectorFromUint64}!Utility@{Utility}}
+\doxysubsubsection{\texorpdfstring{vectorFromUint64()}{vectorFromUint64()}}
+{\footnotesize\ttfamily static std\+::vector$<$std\+::byte$>$ Utility\+::vector\+From\+Uint64 (\begin{DoxyParamCaption}\item[{const uint64\+\_\+t \&}]{val }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [static]}}
+
+
+
+Get the COER encoding for a given uint64\+\_\+t. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em val} & The integer for which a COER encoding is requested. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The COER encoding (8 octets) of {\ttfamily val} 
+\end{DoxyReturn}

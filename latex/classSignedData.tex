@@ -1,0 +1,121 @@
+\hypertarget{classSignedData}{}\doxysection{Signed\+Data Class Reference}
+\label{classSignedData}\index{SignedData@{SignedData}}
+Inheritance diagram for Signed\+Data\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{classSignedData}
+\end{center}
+\end{figure}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classSignedData_ab991a0cd79be9360d224f2d02299a3db}\label{classSignedData_ab991a0cd79be9360d224f2d02299a3db}} 
+\mbox{\hyperlink{classSignedData_ab991a0cd79be9360d224f2d02299a3db}{Signed\+Data}} ()=default
+\begin{DoxyCompactList}\small\item\em Default constructor. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSignedData_a935d82fecbe169c95aa0ef9935c459da}{Signed\+Data}} (const std\+::vector$<$ std\+::byte $>$ \&coer\+Bytes)
+\begin{DoxyCompactList}\small\item\em Create a new \mbox{\hyperlink{classSignedData}{Signed\+Data}} from a COER encoding. \end{DoxyCompactList}\item 
+std\+::vector$<$ std\+::byte $>$ \mbox{\hyperlink{classSignedData_a7fe32e8914ed4d80e1f1365da7348a8c}{get\+COER}} ()
+\begin{DoxyCompactList}\small\item\em Get the COER encoding of the object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{namespaceIEEE1609Dot2DataTypes_aa7006579f0dff45b4c3129f4764f49fb}{IEEE1609\+Dot2\+Data\+Types\+::\+Hash\+Algorithm}} \mbox{\hyperlink{classSignedData_a5608fd08d9e6d2da99338a80f9bf7552}{get\+Hash\+ID}} () const
+\begin{DoxyCompactList}\small\item\em Get the hash algorithm choice (Hash\+ID) for this object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classToBeSignedData}{To\+Be\+Signed\+Data}} \mbox{\hyperlink{classSignedData_a06fa9a0a9801c24666562152a2a2b037}{get\+Tbs\+Data}} () const
+\begin{DoxyCompactList}\small\item\em Get the \mbox{\hyperlink{classToBeSignedData}{To\+Be\+Signed\+Data}} object encapsulated in this object. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSignerIdentifier}{Signer\+Identifier}} \mbox{\hyperlink{classSignedData_a6b1bb4290b739d2719c99ed4181b022d}{get\+Signer}} () const
+\begin{DoxyCompactList}\small\item\em Get the signer\textquotesingle{}s identity. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classSignature}{Signature}} \mbox{\hyperlink{classSignedData_a6d82970e67219bddb5e981a78c71c682}{get\+Signature}} () const
+\begin{DoxyCompactList}\small\item\em Get the signature on this object. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classSignedData_a935d82fecbe169c95aa0ef9935c459da}\label{classSignedData_a935d82fecbe169c95aa0ef9935c459da}} 
+\index{SignedData@{SignedData}!SignedData@{SignedData}}
+\index{SignedData@{SignedData}!SignedData@{SignedData}}
+\doxysubsubsection{\texorpdfstring{SignedData()}{SignedData()}}
+{\footnotesize\ttfamily Signed\+Data\+::\+Signed\+Data (\begin{DoxyParamCaption}\item[{const std\+::vector$<$ std\+::byte $>$ \&}]{coer\+Bytes }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Create a new \mbox{\hyperlink{classSignedData}{Signed\+Data}} from a COER encoding. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em coer\+Bytes} & The COER encoding from which to create this object. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classSignedData_a7fe32e8914ed4d80e1f1365da7348a8c}\label{classSignedData_a7fe32e8914ed4d80e1f1365da7348a8c}} 
+\index{SignedData@{SignedData}!getCOER@{getCOER}}
+\index{getCOER@{getCOER}!SignedData@{SignedData}}
+\doxysubsubsection{\texorpdfstring{getCOER()}{getCOER()}}
+{\footnotesize\ttfamily std\+::vector$<$std\+::byte$>$ Signed\+Data\+::get\+COER (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [inline]}, {\ttfamily [virtual]}}
+
+
+
+Get the COER encoding of the object. 
+
+\begin{DoxyReturn}{Returns}
+The COER encoding of the object. 
+\end{DoxyReturn}
+
+
+Implements \mbox{\hyperlink{classV2XMessage}{V2\+XMessage}}.
+
+\mbox{\Hypertarget{classSignedData_a5608fd08d9e6d2da99338a80f9bf7552}\label{classSignedData_a5608fd08d9e6d2da99338a80f9bf7552}} 
+\index{SignedData@{SignedData}!getHashID@{getHashID}}
+\index{getHashID@{getHashID}!SignedData@{SignedData}}
+\doxysubsubsection{\texorpdfstring{getHashID()}{getHashID()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{namespaceIEEE1609Dot2DataTypes_aa7006579f0dff45b4c3129f4764f49fb}{IEEE1609\+Dot2\+Data\+Types\+::\+Hash\+Algorithm}} Signed\+Data\+::get\+Hash\+ID (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the hash algorithm choice (Hash\+ID) for this object. 
+
+\begin{DoxyReturn}{Returns}
+The hash algorithm represented by this object. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSignedData_a6d82970e67219bddb5e981a78c71c682}\label{classSignedData_a6d82970e67219bddb5e981a78c71c682}} 
+\index{SignedData@{SignedData}!getSignature@{getSignature}}
+\index{getSignature@{getSignature}!SignedData@{SignedData}}
+\doxysubsubsection{\texorpdfstring{getSignature()}{getSignature()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSignature}{Signature}} Signed\+Data\+::get\+Signature (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the signature on this object. 
+
+\begin{DoxyReturn}{Returns}
+The signature for this object. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSignedData_a6b1bb4290b739d2719c99ed4181b022d}\label{classSignedData_a6b1bb4290b739d2719c99ed4181b022d}} 
+\index{SignedData@{SignedData}!getSigner@{getSigner}}
+\index{getSigner@{getSigner}!SignedData@{SignedData}}
+\doxysubsubsection{\texorpdfstring{getSigner()}{getSigner()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classSignerIdentifier}{Signer\+Identifier}} Signed\+Data\+::get\+Signer (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the signer\textquotesingle{}s identity. 
+
+\begin{DoxyReturn}{Returns}
+The \mbox{\hyperlink{classSignerIdentifier}{Signer\+Identifier}} representing the signer identity. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classSignedData_a06fa9a0a9801c24666562152a2a2b037}\label{classSignedData_a06fa9a0a9801c24666562152a2a2b037}} 
+\index{SignedData@{SignedData}!getTbsData@{getTbsData}}
+\index{getTbsData@{getTbsData}!SignedData@{SignedData}}
+\doxysubsubsection{\texorpdfstring{getTbsData()}{getTbsData()}}
+{\footnotesize\ttfamily \mbox{\hyperlink{classToBeSignedData}{To\+Be\+Signed\+Data}} Signed\+Data\+::get\+Tbs\+Data (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption}) const\hspace{0.3cm}{\ttfamily [inline]}}
+
+
+
+Get the \mbox{\hyperlink{classToBeSignedData}{To\+Be\+Signed\+Data}} object encapsulated in this object. 
+
+\begin{DoxyReturn}{Returns}
+The \mbox{\hyperlink{classToBeSignedData}{To\+Be\+Signed\+Data}} object contained in this object. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following file\+:\begin{DoxyCompactItemize}
+\item 
+v2xmessage/include/\mbox{\hyperlink{SignedData_8hpp}{Signed\+Data.\+hpp}}\end{DoxyCompactItemize}
