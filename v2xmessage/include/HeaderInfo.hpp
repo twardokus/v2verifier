@@ -1,26 +1,28 @@
-//
-// Created by Geoff Twardokus on 3/6/24.
-//
-
+/** @file   HeaderInfo.hpp
+ *  @brief  Implementation of the HeaderInfo ASN.1 structure defined in IEEE 1609.2-2022
+ *
+ *  @author Geoff Twardokus
+ *
+ *  @bug    No known bugs
+ */
 #ifndef V2VERIFIER_HEADERINFO_HPP
 #define V2VERIFIER_HEADERINFO_HPP
 
-/*
-HeaderInfo ::= SEQUENCE {
-  psid                  Psid,
-  generationTime        Time64 OPTIONAL,
-  expiryTime            Time64 OPTIONAL,
-  generationLocation    ThreeDLocation OPTIONAL,
-  p2pcdLearningRequest  HashedId3 OPTIONAL,
-  missingCrlIdentifier  MissingCrlIdentifier OPTIONAL,
-  encryptionKey         EncryptionKey OPTIONAL,
-  ...,
-  inlineP2pcdRequest    SequenceOfHashedId3 OPTIONAL,
-  requestedCertificate  Certificate OPTIONAL,
-  pduFunctionalType     PduFunctionalType OPTIONAL,
-  contributedExtensions ContributedExtensionBlocks OPTIONAL
-}
-*/
+//HeaderInfo ::= SEQUENCE {
+//    psid                  Psid,
+//    generationTime        Time64 OPTIONAL,
+//    expiryTime            Time64 OPTIONAL,
+//    generationLocation    ThreeDLocation OPTIONAL,
+//    p2pcdLearningRequest  HashedId3 OPTIONAL,
+//    missingCrlIdentifier  MissingCrlIdentifier OPTIONAL,
+//    encryptionKey         EncryptionKey OPTIONAL,
+//    ...,
+//    inlineP2pcdRequest    SequenceOfHashedId3 OPTIONAL,
+//    requestedCertificate  Certificate OPTIONAL,
+//    pduFunctionalType     PduFunctionalType OPTIONAL,
+//    contributedExtensions ContributedExtensionBlocks OPTIONAL
+//}
+
 
 #include "V2XMessage.hpp"
 
@@ -28,9 +30,13 @@ class HeaderInfo : V2XMessage {
 
 public:
 
+    /** @brief The size of the COER-encoded byte string for this object */
     static const uint16_t HEADERINFO_SIZE_BYTES = 20;
 
+    /** @brief Default constructor. */
     HeaderInfo() = default;
+
+    /** @brief Create a new HeaderInfo from a COER-encoded byte string */
     HeaderInfo(std::vector<std::byte> &coerBytes) {
 
         if(coerBytes.size() == HEADERINFO_SIZE_BYTES) {
@@ -44,6 +50,10 @@ public:
 
     }
 
+    /** @brief Get the COER encoding of this object as a byte string
+     *
+     *  @return The COER encoding of the object.
+     */
     std::vector<std::byte> getCOER() {
 
         std::vector<std::byte> coerBytes;
@@ -59,14 +69,26 @@ public:
         return coerBytes;
     }
 
+    /** @brief Get the PSID value
+     *
+     *  @return The PSID value.
+     */
     [[nodiscard]] uint32_t getPsid() const {
         return this->psid;
     }
 
+    /** @brief  Get the generation time
+     *
+     *  @return The generation time.
+     */
     [[nodiscard]] uint64_t getGenerationTime() const {
         return this->generationTime;
     }
 
+    /** @brief Get the expiration time
+     *
+     *  @return The expiration time.
+     */
     [[nodiscard]] uint64_t getExpiryTime() const {
         return this->expiryTime;
     }

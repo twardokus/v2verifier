@@ -1,16 +1,18 @@
-//
-// Created by Geoff Twardokus on 3/6/24.
-//
+/** @file   ToBeSignedData.hpp
+ *  @brief  Implementation of the ToBeSignedData ASN.1 structure defined in IEEE 1609.2-2022.
+ *
+ *  @author Geoff Twardokus
+ *
+ *  @bug    No known bugs.
+ */
 
 #ifndef V2VERIFIER_TOBESIGNEDDATA_HPP
 #define V2VERIFIER_TOBESIGNEDDATA_HPP
 
-/*
-ToBeSignedData ::= SEQUENCE {
-  payload    SignedDataPayload,
-  headerInfo HeaderInfo
-}
-*/
+//ToBeSignedData ::= SEQUENCE {
+//  payload    SignedDataPayload,
+//  headerInfo HeaderInfo
+//}
 
 #include "SignedDataPayload.hpp"
 #include "V2XMessage.hpp"
@@ -20,7 +22,13 @@ class ToBeSignedData : V2XMessage {
 
 public:
 
+    /** @brief Default constructor. */
     ToBeSignedData() = default;
+
+    /** @brief Create a new ToBeSignedData from a COER encoding.
+     *
+     *  @param coerBytes The COER encoding from which to create a new object.
+     */
     ToBeSignedData(std::vector<std::byte> &coerBytes) {
 
         std::vector<std::byte> headerInfoBytes;
@@ -43,6 +51,11 @@ public:
         this->payload = SignedDataPayload(signedDataPayloadBytes);
 
     }
+
+    /** @brief Get the COER encoding of the object.
+     *
+     *  @return The COER encoding of the object.
+     */
     std::vector<std::byte> getCOER() {
         std::vector<std::byte> coerBytes;
 
@@ -55,10 +68,18 @@ public:
         return coerBytes;
     }
 
+    /** @brief Get the payload (SignedDataPayload) contained in this object.
+     *
+     *  @return The payload of the object.
+     */
     SignedDataPayload getPayload() const {
         return this->payload;
     }
 
+    /** @brief Get the header info (HeaderInfo) for this object.
+     *
+     *  @return The header information for this object.
+     */
     HeaderInfo getHeaderInfo() const {
         return this->headerInfo;
     }

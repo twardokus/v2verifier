@@ -1,16 +1,17 @@
-//
-// Created by Geoff Twardokus on 3/6/24.
-//
+/** @file   SignedData.hpp
+ *  @brief  Implementation of the SignedData ASN.1 structure defined in IEEE1609.2-2022.
+ *
+ *  @author Geoff Twardokus
+ *
+ *  @bug    No known bugs.
+ */
 
-
-/*
-SignedData ::= SEQUENCE {
-  hashId    HashAlgorithm,
-  tbsData   ToBeSignedData,
-  signer    SignerIdentifier,
-  signature Signature
-}
-*/
+//SignedData ::= SEQUENCE {
+//  hashId    HashAlgorithm,
+//  tbsData   ToBeSignedData,
+//  signer    SignerIdentifier,
+//  signature Signature
+//}
 
 #ifndef V2VERIFIER_SIGNEDDATA_HPP
 #define V2VERIFIER_SIGNEDDATA_HPP
@@ -23,7 +24,13 @@ SignedData ::= SEQUENCE {
 class SignedData : V2XMessage {
 
 public:
+    /** @brief Default constructor. */
     SignedData() = default;
+
+    /** @brief Create a new SignedData from a COER encoding
+     *
+     *  @param coerBytes The COER encoding from which to create this object.
+     */
     SignedData(const std::vector<std::byte> &coerBytes) {
 
         this->hashID = (IEEE1609Dot2DataTypes::HashAlgorithm) ((uint8_t) coerBytes.at(0));
@@ -47,6 +54,10 @@ public:
         this->signature = Signature(signatureBytes);
     }
 
+    /** @brief Get the COER encoding of the object.
+     *
+     *  @return The COER encoding of the object.
+     */
     std::vector<std::byte> getCOER() {
 
         std::vector<std::byte> coerBytes;
@@ -64,18 +75,34 @@ public:
         return coerBytes;
     }
 
+    /** @brief Get the hash algorithm choice (HashID) for this object.
+     *
+     *  @return The hash algorithm represented by this object.
+     */
     [[nodiscard]] IEEE1609Dot2DataTypes::HashAlgorithm getHashID() const {
         return this->hashID;
     }
 
+    /** @brief Get the ToBeSignedData object encapsulated in this object.
+     *
+     *  @return The ToBeSignedData object contained in this object.
+     */
     [[nodiscard]] ToBeSignedData getTbsData() const {
         return this->tbsData;
     }
 
+    /** @brief  Get the signer's identity.
+     *
+     *  @return The SignerIdentifier representing the signer identity.
+     */
     [[nodiscard]] SignerIdentifier getSigner() const {
         return this->signer;
     }
 
+    /** @brief Get the signature on this object.
+     *
+     *  @return The signature for this object.
+     */
     [[nodiscard]] Signature getSignature() const {
         return this->signature;
     }

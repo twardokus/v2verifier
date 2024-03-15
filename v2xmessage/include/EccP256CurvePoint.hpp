@@ -1,9 +1,9 @@
-/** @file EccP256CurvePoint.hpp
- *  @brief Implementation of the ECCP256CurvePoint ASN.1 defined in IEEE 1609.2-2022.
+/** @file   EccP256CurvePoint.hpp
+ *  @brief  Implementation of the EccP256CurvePoint ASN.1 defined in IEEE 1609.2-2022.
  *
  *  @author Geoff Twardokus
  *
- *  @bug no known bugs
+ *  @bug    No known bugs
 */
 
 //EccP256CurvePoint::= CHOICE {
