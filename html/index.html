@@ -124,6 +124,7 @@ sudo ldconfig
 Part 2 - V2Verifier</h2>
 <p>Now that you have installed the communication software, you can install V2Verifier. Begin by installing several dependencies: </p><pre class="fragment">sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil 
 python3-pil.imagetk 
+sudo apt install -y libssl-dev
 </pre><p> If you have not already cloned the V2Verifier repository, do so with the commands </p><pre class="fragment">cd ~
 git clone https://github.com/twardokus/v2verifier.git
 </pre><p> Move into the V2Verifier directory and build the project using the standard CMake build process: </p><pre class="fragment">cd v2verifier

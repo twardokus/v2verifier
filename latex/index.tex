@@ -55,6 +55,7 @@ sudo ldconfig
  You can confirm everything installed correctly by launching GNURadio Companion and opening the flowgraph file at {\ttfamily $\sim$/gr-\/ieee802-\/11/examples/wifi-\/loopback.grc}. If you encounter any errors, some of the above commands did not work correctly. Do not proceed until you have fixed any issues running the example flowgraph.\hypertarget{index_autotoc_md7}{}\doxysubsection{Part 2 -\/ V2\+Verifier}\label{index_autotoc_md7}
 Now that you have installed the communication software, you can install V2\+Verifier. Begin by installing several dependencies\+: \begin{DoxyVerb}sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil 
 python3-pil.imagetk 
+sudo apt install -y libssl-dev
 \end{DoxyVerb}
  If you have not already cloned the V2\+Verifier repository, do so with the commands \begin{DoxyVerb}cd ~
 git clone https://github.com/twardokus/v2verifier.git
