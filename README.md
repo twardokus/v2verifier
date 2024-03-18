@@ -125,6 +125,7 @@ Begin by installing several dependencies:
 
 	sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil 
 	python3-pil.imagetk 
+ 	sudo apt install -y libssl-dev
 
 If you have not already cloned the V2Verifier repository, do so with the commands
 
