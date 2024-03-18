@@ -115,8 +115,7 @@ Now, install the WiME project code. You will need to install from source, as the
     sudo make install 
     sudo ldconfig
 
-You can confirm everything installed correctly by launching GNURadio Companion and opening the flowgraph file at `~/gr-ieee802-11/examples/wifi-loopback.grc`. If 
-you encounter any errors, some of the above commands did not work correctly. Do not proceed until you have fixed any issues running the example flowgraph.
+You can confirm everything installed correctly by launching GNURadio Companion and first opening the flowgraph file at '~/gr-ieee802.11/examples/wifi_py_hier.grc' and running the flow to establish dependencies, and then opening the flowgraph file at `~/gr-ieee802-11/examples/wifi-loopback.grc`. If you encounter any errors, some of the above commands did not work correctly. Do not proceed until you have fixed any issues running the example flowgraph.
 
 ### Part 2 - V2Verifier
 
