@@ -2,6 +2,9 @@
 
 ![Status](https://app.travis-ci.com/twardokus/v2verifier.svg?token=WhbfH7DgNpqNXXem6qaq&branch=master)
 
+_Please note that V2Verifier is currently undergoing a major redesign. Cloning the_ `master` _branch will likely not work - the instructions below are accurate for the latest release, which can be downloaded
+from the sidebar._
+
 ****Important** - this version of V2Verifier is a _preliminary_ release of V2Verifier 3.0. 
 As we await bug fixes in third-party open-source projects that V2Verifier relies on
 for C-V2X sidelink communication, **this version of V2Verifier temporarily does 
