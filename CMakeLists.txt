@@ -3,8 +3,9 @@ project(v2verifier)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(V2V_LIBRARIES v2xmessage)
+set(V2V_LIBRARIES v2xmessage logger)
 
+add_subdirectory(logger)
 add_subdirectory(v2xmessage)
 add_subdirectory(v2verifier-app)
 

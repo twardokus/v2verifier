@@ -1,6 +1,3 @@
-#set(SOURCE_FILES
-#)
-#
 set(MAIN_SOURCE_FILE
     ${CMAKE_CURRENT_SOURCE_DIR}/src/main.cpp
         src/Vehicle.cpp
