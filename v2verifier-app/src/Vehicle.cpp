@@ -1,12 +1,17 @@
-//
-// Created by Geoff Twardokus on 3/12/24.
-//
+/** @file   Vehicle.cpp
+ *  @brief  Implementation of Vehicle class.
+ *
+ *  @author Geoff Twardokus
+ *
+ *  @bug    No known bugs.
+ */
 
 #include <iostream>
 
 #include "../../logger/Log.h"
 #include "../include/Vehicle.hpp"
 #include "../../v2xmessage/include/IEEE1609Dot2Data.hpp"
+
 
 Vehicle::Vehicle(double latitude, double longitude, double elevation, double speed, double heading) {
     if(initializePositionAndMotion(latitude,longitude,elevation,speed,heading) != 0) {

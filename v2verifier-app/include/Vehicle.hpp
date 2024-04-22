@@ -1,5 +1,5 @@
 /** @file   Vehicle.hpp
- *  @brief  Implementation of a class to represent a vehicle in the testbed environment.
+ *  @brief  Class to represent a vehicle in the testbed environment.
  *
  *  @author Geoff Twardokus
  *
@@ -57,8 +57,8 @@ public:
 
 private:
 
-    VehicleLocationData locationData{}{};
-    VehicleMotionData motionData{}{};
+    VehicleLocationData locationData;
+    VehicleMotionData motionData;
 
     /** @brief Initialized the position and motion data for the vehicle.
      *
@@ -134,6 +134,11 @@ private:
      *  @return formatted string error message
      */
     static std::string formatErrorForInvalidValue(std::string &field, int invalidValue);
+
+
+    std::vector<std::byte> generateBSMPayload() {
+
+    }
 
 };
 
