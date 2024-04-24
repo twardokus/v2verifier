@@ -136,9 +136,11 @@ private:
     static std::string formatErrorForInvalidValue(std::string &field, int invalidValue);
 
 
-    std::vector<std::byte> generateBSMPayload() {
-
-    }
+//    std::vector<std::byte> generateBSMPayload() {
+//
+//    }:vector<std::byte> generateBSMPayload() {
+////
+////    }
 
 };
 

@@ -1,9 +1,22 @@
 cmake_minimum_required(VERSION 3.10)
 project(v2verifier)
 
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 
 set(V2V_LIBRARIES v2xmessage logger)
+
+if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
+    ##------------------------------------------------------------
+    ## macOS stuff
+    set(CMAKE_OSX_ARCHITECTURES arm64)
+    set(OPENSSL_ROOT_DIR /opt/homebrew/Cellar/openssl@3/3.2.1)
+#    set(Boost_NO_SYSTEM_PATHS TRUE)
+#    set(BOOST_ROOT /opt/homebrew/Cellar/boost/1.84.0)
+#    set(Boost_LIBRARY_DIRS "${BOOST_ROOT}/lib/")
+    ##------------------------------------------------------------
+endif()
+
+find_package(OpenSSL REQUIRED)
 
 add_subdirectory(logger)
 add_subdirectory(v2xmessage)
@@ -18,18 +31,7 @@ add_subdirectory(v2verifier-app)
 #    src/threading.cpp)
 #
 #
-#if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
-#    ##------------------------------------------------------------
-#    ## macOS stuff
-#    set(CMAKE_OSX_ARCHITECTURES arm64)
-#    set(OPENSSL_ROOT_DIR /opt/homebrew/Cellar/openssl@3/3.2.1)
-#    set(Boost_NO_SYSTEM_PATHS TRUE)
-#    set(BOOST_ROOT /opt/homebrew/Cellar/boost/1.84.0)
-#    set(Boost_LIBRARY_DIRS "${BOOST_ROOT}/lib/")
-#    ##------------------------------------------------------------
-#endif()
-#
-#find_package(OpenSSL REQUIRED)
+
 #find_package(Boost REQUIRED)
 #
 #add_executable(${PROJECT_NAME} ${SOURCE_FILES})

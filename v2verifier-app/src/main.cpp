@@ -13,6 +13,7 @@
 #include "../../logger/Log.h"
 #include "../include/Vehicle.hpp"
 #include "../../v2xmessage/include/IEEE1609Dot2.hpp"
+#include "../include/V2VSecurity.hpp"
 
 int main() {
 
@@ -32,17 +33,29 @@ int main() {
     std::vector<std::byte> certDigest = {std::byte{0x00}};
     IEEE1609Dot2::Certificate cert;
 
+    uint64_t currentTime = Utility::getCurrentTimeAsUint64();
+
     auto spdu = IEEE1609Dot2Generation::generateSPDU(IEEE1609Dot2::IEEE1609Dot2ContentChoice::signedData,
                                                      payload,
-                                                     1,
-                                                     1,
-                                                     1,
+                                                     0x20,
+                                                     currentTime,
+                                                     currentTime + (1000*60*60) /*one hour in milliseconds */,
                                                      IEEE1609Dot2::HashAlgorithm::sha256,
                                                      IEEE1609Dot2::SignerIdentifierChoice::self,
                                                      certDigest,
                                                      cert);
 
+    auto spduBytes = IEEE1609Dot2Generation::encodeSPDU(spdu);
 
+    std::string pemFilename = "../../test_key.pem";
+    V2VSecurity secmgr(pemFilename);
+
+    std::string message = "Test";
+    bool result;
+    unsigned char* signature = nullptr;
+    size_t signature_length;
+
+    secmgr.signMessage(message.data(), signature, signature_length);
 
     return 0;
 }

@@ -8,6 +8,8 @@
 #include <cstdint>
 #include <vector>
 
+#include "Utility.hpp"
+
 namespace IEEE1609Dot2 {
 
     /** @brief The type of content contained in an SPDU */
@@ -64,9 +66,9 @@ namespace IEEE1609Dot2 {
     } SignerIdentifier;
 
     typedef struct HeaderInfo {
-        uint32_t psid;              // This is a 4-octet word under ASN.1 encoding rules
-        uint64_t generationTime;    // This is an 8-octet word under ASN.1 encoding rules
-        uint64_t expiryTime;        // This is an 8-octet word under ASN.1 encoding rules
+        uint8_t psid;
+        uint64_t generationTime;
+        uint64_t expiryTime;
     } HeaderInfo;
 
     typedef struct SignedDataPayload {
@@ -156,6 +158,74 @@ namespace IEEE1609Dot2Generation {
         spdu.content = spduContent;
 
         return spdu;
+    }
+
+    std::vector<std::byte> encodeSPDU(IEEE1609Dot2::IEEE1609Dot2Data &spdu) {
+
+        std::vector<std::byte> coerBytes;
+
+        // IEEE1609Dot2Data
+
+        coerBytes.push_back(std::byte{spdu.protocol_version}); // protocol version is always 0x03
+
+        // IEEE1609Dot2Content
+
+        uint8_t encodedSPDUType = 0x80 | spdu.content.contentChoice; // Choice for content type
+        coerBytes.push_back(std::byte{(encodedSPDUType)});
+
+        if(spdu.content.contentChoice == IEEE1609Dot2::IEEE1609Dot2ContentChoice::unsecuredData) {
+            uint8_t encodedLength = spdu.content.unsecuredData.payload.size();
+            coerBytes.push_back(std::byte{encodedLength});
+            coerBytes.insert(coerBytes.end(),
+                             spdu.content.unsecuredData.payload.begin(),
+                             spdu.content.unsecuredData.payload.end());
+        }
+        else if(spdu.content.contentChoice == IEEE1609Dot2::IEEE1609Dot2ContentChoice::signedData) {
+
+            // HashAlgorithm
+            uint8_t encodedHashID = spdu.content.signedData.hashID;
+            coerBytes.push_back(std::byte{encodedHashID});
+
+            // ToBeSignedData
+            coerBytes.push_back(std::byte{(0x40)}); // sequence item separator
+
+            coerBytes.push_back(std::byte{0x03}); // IEEE1609Dot2Data -> protocol version
+            coerBytes.push_back(std::byte{0x80}); // IEEE1609Dot2Data -> unsecuredData
+
+            uint8_t encodedLength = spdu.content.signedData.tbsData.payload.data.size();
+            coerBytes.push_back(std::byte{encodedLength}); // unsecuredData length
+
+            coerBytes.insert(coerBytes.end(), // unsecuredData payload
+                             spdu.content.signedData.tbsData.payload.data.begin(),
+                             spdu.content.signedData.tbsData.payload.data.end());
+
+
+            coerBytes.push_back(std::byte{0x40}); // sequence item separator
+
+            coerBytes.push_back(std::byte{0x02}); // headerInfo -> we use first two optional fields (for times), set flags
+
+            uint8_t encodedPSID = spdu.content.signedData.tbsData.headerInfo.psid;
+            coerBytes.push_back(std::byte{encodedPSID}); // headerInfo -> psid
+
+            auto encodedGenerationTime = Utility::vectorFromUint64(spdu.content.signedData.tbsData.headerInfo.generationTime);
+            coerBytes.insert(coerBytes.end(), encodedGenerationTime.begin(), encodedGenerationTime.end()); // headerInfo -> generationTime
+
+            auto encodedExpiryTime = Utility::vectorFromUint64(spdu.content.signedData.tbsData.headerInfo.expiryTime);
+            coerBytes.insert(coerBytes.end(), encodedExpiryTime.begin(), encodedExpiryTime.end()); // headerInfo -> expiryTime
+
+            // SignerIdentifier
+            coerBytes.push_back(std::byte{0x80}); // 0x80 -> self-signed, which we'll treat as null for now (TODO: finish + implement 0x81, certificate, and 0x82, digest)
+
+            // Signature
+
+
+
+        }
+        else {
+            throw std::runtime_error("Invalid content choice for encoding");
+        }
+
+        return coerBytes;
     }
 
 
