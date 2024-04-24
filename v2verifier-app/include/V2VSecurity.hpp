@@ -20,13 +20,16 @@ public:
     ~V2VSecurity();
 
     bool signMessage(char* msg, unsigned char* &sig, size_t &sig_len);
-//    bool verifyMessage(char* msg, )
+    bool verifyMessage(char *msg, evp_pkey_st *publicKey, const unsigned char* signature, size_t sig_len);
+
+    EVP_PKEY *pkey = nullptr;
 
 private:
 
     std::ifstream pemfile;
-    EVP_PKEY *pkey = nullptr;
-    EVP_MD_CTX *mdctx = nullptr;
+
+    EVP_MD_CTX *mdctx_sign = nullptr;
+    EVP_MD_CTX *mdctx_verify = nullptr;
 
     void loadPEMFile(std::string &filename);
 

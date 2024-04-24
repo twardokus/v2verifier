@@ -20,7 +20,7 @@ V2VSecurity::~V2VSecurity() {
     if(this->pemfile.is_open())
         this->pemfile.close();
 
-    EVP_MD_CTX_destroy(this->mdctx);
+    EVP_MD_CTX_destroy(this->mdctx_sign);
 }
 
 void V2VSecurity::loadPEMFile(std::string &filename) {
@@ -58,16 +58,20 @@ void V2VSecurity::loadPEMFile(std::string &filename) {
 
 void V2VSecurity::setupSigningState() {
 
-    this->mdctx = EVP_MD_CTX_create();
-    if(!this->mdctx) {
+    this->mdctx_sign = EVP_MD_CTX_create();
+    if(!this->mdctx_sign) {
         throw std::runtime_error("Fatal error - could not create signer context.");
     }
 
-    if(EVP_DigestSignInit(this->mdctx, nullptr, EVP_sha256(), nullptr, this->pkey) != 1) {
+    if(EVP_DigestSignInit(this->mdctx_sign, nullptr, EVP_sha256(), nullptr, this->pkey) != 1) {
         throw std::runtime_error("Fatal error - could not initialize EVP digest");
     }
 
+    this->mdctx_verify = EVP_MD_CTX_create();
+    if(!this->mdctx_verify) {
+        throw std::runtime_error("Fatal error - could not create verifier context");
 
+    }
 
 }
 
@@ -75,11 +79,11 @@ bool V2VSecurity::signMessage(char* msg, unsigned char* &sig, size_t &sig_len) {
 
     unsigned char* localSig = nullptr;
 
-    if(EVP_DigestSignUpdate(this->mdctx, msg, strlen(msg)) != 1) {
+    if(EVP_DigestSignUpdate(this->mdctx_sign, msg, strlen(msg)) != 1) {
         return false;
     }
 
-    if(EVP_DigestSignFinal(this->mdctx, nullptr, &sig_len) != 1) {
+    if(EVP_DigestSignFinal(this->mdctx_sign, nullptr, &sig_len) != 1) {
         return false;
     }
 
@@ -88,7 +92,7 @@ bool V2VSecurity::signMessage(char* msg, unsigned char* &sig, size_t &sig_len) {
         return false;
     }
 
-    if(EVP_DigestSignFinal(this->mdctx, localSig, &sig_len) != 1) {
+    if(EVP_DigestSignFinal(this->mdctx_sign, localSig, &sig_len) != 1) {
         return false;
     }
 
@@ -99,4 +103,24 @@ bool V2VSecurity::signMessage(char* msg, unsigned char* &sig, size_t &sig_len) {
     OPENSSL_free(localSig);
 
     return true;
+}
+
+bool V2VSecurity::verifyMessage(char *msg, evp_pkey_st *publicKey, const unsigned char* signature, size_t sig_len) {
+
+    if(EVP_DigestVerifyInit(this->mdctx_verify, nullptr, EVP_sha256(), nullptr, publicKey) != 1) {
+        return false;
+    }
+
+    if(EVP_DigestVerifyUpdate(this->mdctx_verify, msg, strlen(msg)) != 1) {
+        return false;
+    }
+
+    if(EVP_DigestVerifyFinal(this->mdctx_verify, signature, sig_len) == 1) {
+        return true;
+    }
+    else {
+        return false;
+    }
+
+
 }
