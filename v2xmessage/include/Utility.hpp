@@ -67,6 +67,13 @@ namespace Utility {
         return randomBytes;
     }
 
+    static uint64_t getCurrentTimeAsUint64() {
+        auto now = std::chrono::time_point_cast<std::chrono::milliseconds>(std::chrono::system_clock::now());
+        uint64_t generationTime = now.time_since_epoch().count();
+
+        return generationTime;
+    }
+
 }
 
 #endif //V2VERIFIER_UTILITY_HPP

@@ -14,6 +14,9 @@ set(SOURCE_FILES
         ${CMAKE_CURRENT_SOURCE_DIR}/include/EcdsaP256Signature.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/include/EccP256CurvePoint.hpp
         ${CMAKE_CURRENT_SOURCE_DIR}/src/V2XMessage.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/src/J2735BSM.cpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/J2735BSM.hpp
+        ${CMAKE_CURRENT_SOURCE_DIR}/include/IEEE1609Dot2.hpp
 )
 
 set(LIB_NAME v2xmessage)

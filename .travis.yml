@@ -1,8 +1,7 @@
-language: cpp
-
 matrix:
   include:
-    - os: linux
+    - language: cpp
+      os: linux
       dist: focal
       compiler: gcc
       script:
@@ -16,7 +15,8 @@ matrix:
         - make
         - ctest
         - cd ../
-    - os: osx
+    - language: cpp
+      os: osx
       compiler: clang
       script:
         - mkdir build
