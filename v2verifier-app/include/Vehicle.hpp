@@ -10,8 +10,9 @@
 #define V2VERIFIER_VEHICLE_HPP
 
 #include <cstddef>
-
 #include <vector>
+
+#include "../include/V2VSecurity.hpp"
 
 /** @brief Representation of vehicle position/location data to be kept updated and retrieved as needed.*/
 typedef struct VehicleLocationData {
@@ -35,7 +36,7 @@ public:
     /** Copy constructor */
     Vehicle(Vehicle &v) = default;
     /** Destructor */
-    ~Vehicle() = default;
+    ~Vehicle();
 
     /** @brief Create new vehicle with provided location and motion information
      *
@@ -45,7 +46,7 @@ public:
      *  @param speed the vehicle speed
      *  @param heading the vehicle heading
      */
-    Vehicle(double latitude, double longitude, double elevation, double speed, double heading);
+    Vehicle(double latitude, double longitude, double elevation, double speed, double heading, std::string &keyFilename);
 
     /** @brief Create new vehicle with location data but no motion information (for stopped/parked vehicles)
      *
@@ -53,12 +54,23 @@ public:
      *  @param longitude the vehicle longitude
      *  @param elevation the vehicle elevation
      */
-    Vehicle(double latitude, double longitude, double elevation);
+    Vehicle(double latitude, double longitude, double elevation, std::string &keyFilename);
 
 private:
 
     VehicleLocationData locationData;
     VehicleMotionData motionData;
+
+    V2VSecurity* securityManager = nullptr;
+
+    std::string keyFilepath = "../../test.pem"; // TODO: should be passed or loaded from config file
+
+    void initialize(std::string &keyFilename,
+                               double latitude,
+                               double longitude,
+                               double elevation,
+                               double speed = 0,
+                               double heading = 0);
 
     /** @brief Initialized the position and motion data for the vehicle.
      *
@@ -136,11 +148,6 @@ private:
     static std::string formatErrorForInvalidValue(std::string &field, int invalidValue);
 
 
-//    std::vector<std::byte> generateBSMPayload() {
-//
-//    }:vector<std::byte> generateBSMPayload() {
-////
-////    }
 
 };
 

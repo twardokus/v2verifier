@@ -1,6 +1,10 @@
-//
-// Created by Geoff Twardokus on 4/22/24.
-//
+/** @file   IEEE1609Dot2.cpp
+ *  @brief  Implementation of IEEE 1609.2 security structures and functions.
+ *
+ *  @author Geoff Twardokus
+ *
+ *  @bug    No known bugs.
+ */
 
 #ifndef V2VERIFIER_IEEE1609DOT2_HPP
 #define V2VERIFIER_IEEE1609DOT2_HPP
@@ -27,6 +31,7 @@ namespace IEEE1609Dot2 {
         sm3     ///< SM3 (Chinese variant of SHA)
     };
 
+    /** @brief SignatureChoice ASN.1 structure defined in IEEE 1609.2-2022. */
     enum SignatureChoice {
         ecdsaNistP256Signature,         ///< ECDSA with the NIST P.256 curve
         ecdsaBrainpoolP256r1Signature,  ///< ECDSA with the Brainpool P256r1 curve
@@ -35,40 +40,47 @@ namespace IEEE1609Dot2 {
         sm2Signature                    ///< SM2 (Chinese variant of ECDSA 256)
     };
 
+    /** @brief SignerIdentifierChoice ASN.1 structured defined in IEEE 1609.2-2022. */
     enum SignerIdentifierChoice {
         digest,         ///< A truncated SHA-256 hash digest (HashedID3) of the signer's certificate.
         certificate,    ///< The full signer certificate (as a Certificate).
         self            ///< Self-signed (no credential provided).
     };
 
+    /** @brief Certificate ASN.1 structured defined in IEEE 1609.2-2022. */
     typedef struct Certificate {
 
     } Certificate;
 
+    /** @brief EccP256CurvePoint ASN.1 structured defined in IEEE 1609.2-2022. */
     typedef struct EccP256CurvePoint {
 
     } EccP256CurvePoint;
 
+    /** @brief EcdsaP256Signature ASN.1 structured defined in IEEE 1609.2-2022. */
     typedef struct EcdsaP256Signature {
-        EccP256CurvePoint rSig;
-        std::vector<std::byte> sSig;
+        EccP256CurvePoint rSig;         ///< rSig encoded in EccP256CurvePoint
+        std::vector<std::byte> sSig;    ///< sSig value as bytes
     } EcdsaP256Signature;
 
+    /** @brief Signature ASN.1 structured defined in IEEE 1609.2-2022. */
     typedef struct Signature {
-        SignatureChoice signatureChoice;
-        EcdsaP256Signature ecdsaP256Signature;
+        SignatureChoice signatureChoice;        ///< selection of \ref IEEE1609Dot2::signatureChoice
+        EcdsaP256Signature ecdsaP256Signature;  ///< signature stored as \ref IEEE1609Dot2::EcdsaP256Signature
     } Signature;
 
+    /** @brief SignerIdentifier ASN.1 structured defined in IEEE 1609.2-2022. */
     typedef struct SignerIdentifier {
-        SignerIdentifierChoice signerIdentifierChoice;
-        std::vector<std::byte> digest;
-        Certificate certificate;
+        SignerIdentifierChoice signerIdentifierChoice;  ///< selection of signerIdentifier
+        std::vector<std::byte> digest;                  ///< hash digest of issuer certificate
+        Certificate certificate;                        ///< certificate \ref IEEE1609Dot2::Certificate
     } SignerIdentifier;
 
+    /** @brief HeaderInfo ASN.1 structured defined in IEEE 1609.2-2022. */
     typedef struct HeaderInfo {
-        uint8_t psid;
-        uint64_t generationTime;
-        uint64_t expiryTime;
+        uint8_t psid;               ///< service identifier (0x20 for BSM safety service)
+        uint64_t generationTime;    ///< generation time in milliseconds
+        uint64_t expiryTime;        ///< expiration time in milliseconds
     } HeaderInfo;
 
     typedef struct SignedDataPayload {

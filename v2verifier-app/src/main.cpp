@@ -27,7 +27,9 @@ int main() {
 //
 //    auto test = Vehicle::getUnsecurePduCOERForPayload(testBytes);
 
-    Vehicle v(43, 75, 100, 100, 40);
+    std::string pemFilename = "../../test_key.pem";
+
+    Vehicle v(43, 75, 100, 100, 40, pemFilename);
 
     std::vector<std::byte> payload = {std::byte{0x00}, std::byte{0x01}};
     std::vector<std::byte> certDigest = {std::byte{0x00}};
@@ -47,24 +49,7 @@ int main() {
 
     auto spduBytes = IEEE1609Dot2Generation::encodeSPDU(spdu);
 
-    std::string pemFilename = "../../test_key.pem";
-    V2VSecurity secmgr(pemFilename);
 
-    std::string message = "Test";
-    std::string wrongMessage = "ThisIsWrong";
-    bool result;
-    unsigned char* signature = nullptr;
-    size_t signature_length;
-
-    secmgr.signMessage(message.data(), signature, signature_length);
-
-    result = secmgr.verifyMessage(message.data(), secmgr.pkey, signature, signature_length);
-
-    std::cout << "Should be true: " << result << std::endl;
-
-    result = secmgr.verifyMessage(wrongMessage.data(), secmgr.pkey, signature, signature_length);
-
-    std::cout << "Should be false: " << result << std::endl;
 
     return 0;
 }

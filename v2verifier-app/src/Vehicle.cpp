@@ -10,21 +10,33 @@
 
 #include "../../logger/Log.h"
 #include "../include/Vehicle.hpp"
-#include "../../v2xmessage/include/IEEE1609Dot2Data.hpp"
 
 
-Vehicle::Vehicle(double latitude, double longitude, double elevation, double speed, double heading) {
+Vehicle::Vehicle(double latitude, double longitude, double elevation, double speed, double heading,
+                 std::string &keyFilename) {
+    initialize(keyFilename, latitude, longitude, elevation, speed, heading);
+}
+
+Vehicle::Vehicle(double latitude, double longitude, double elevation, std::string &keyFilename) {
+    initialize(keyFilename, latitude, longitude, elevation);
+}
+
+Vehicle::~Vehicle() {
+    delete this->securityManager;
+}
+
+void Vehicle::initialize(std::string &keyFilename,
+                         double latitude,
+                         double longitude,
+                         double elevation,
+                         double speed,
+                         double heading) {
+
     if(initializePositionAndMotion(latitude,longitude,elevation,speed,heading) != 0) {
         Logger::logFatal(std::string("Failed to initialize vehicle: invalid parameters provided."));
         exit(-1);
     }
-}
-
-Vehicle::Vehicle(double latitude, double longitude, double elevation) {
-    if(initializePositionAndMotion(latitude,longitude,elevation,0,0) != 0) {
-        Logger::logFatal(std::string("Failed to initialize vehicle: invalid parameters provided."));
-        exit(-1);
-    }
+    this->securityManager = new V2VSecurity(keyFilename);
 }
 
 int Vehicle::initializePositionAndMotion(double latitude,
@@ -139,3 +151,4 @@ std::string Vehicle::formatErrorForInvalidValue(std::string &field, const int in
                         field +
                         std::string(" (invalid value: ") + std::to_string(invalidValue) + std::string(")"));
 }
+

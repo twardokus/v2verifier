@@ -1,6 +1,10 @@
-//
-// Created by Geoff Twardokus on 4/23/24.
-//
+/** @file   V2VSecurity.cpp
+ *  @brief  Message signing and cryptomaterial management functions.
+ *
+ *  @author Geoff Twardokus
+ *
+ *  @bug    No known bugs.
+ */
 
 #include <openssl/pem.h>
 #include <iostream>
@@ -11,7 +15,7 @@
 
 V2VSecurity::V2VSecurity(std::string &pemFilename) {
     loadPEMFile(pemFilename);
-    this->setupSigningState();
+    this->setup();
 }
 
 V2VSecurity::~V2VSecurity() {
@@ -56,7 +60,7 @@ void V2VSecurity::loadPEMFile(std::string &filename) {
 
 }
 
-void V2VSecurity::setupSigningState() {
+void V2VSecurity::setup() {
 
     this->mdctx_sign = EVP_MD_CTX_create();
     if(!this->mdctx_sign) {
@@ -111,6 +115,7 @@ bool V2VSecurity::verifyMessage(char *msg, evp_pkey_st *publicKey, const unsigne
         return false;
     }
 
+    // strlen() might not work with binary data. Need to test.
     if(EVP_DigestVerifyUpdate(this->mdctx_verify, msg, strlen(msg)) != 1) {
         return false;
     }
@@ -121,6 +126,5 @@ bool V2VSecurity::verifyMessage(char *msg, evp_pkey_st *publicKey, const unsigne
     else {
         return false;
     }
-
 
 }
