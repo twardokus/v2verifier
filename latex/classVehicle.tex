@@ -3,18 +3,77 @@
 \doxysubsection*{Public Member Functions}
 \begin{DoxyCompactItemize}
 \item 
-\mbox{\Hypertarget{classVehicle_a6677f1cd7b4cc8a3c5011bef2fc0107e}\label{classVehicle_a6677f1cd7b4cc8a3c5011bef2fc0107e}} 
-{\bfseries Vehicle} (\mbox{\hyperlink{classVehicle}{Vehicle}} \&v)=default
-\end{DoxyCompactItemize}
-\doxysubsection*{Static Public Member Functions}
-\begin{DoxyCompactItemize}
+\mbox{\Hypertarget{classVehicle_a8b7885b66c0f4f46a50ec71a8570f8b3}\label{classVehicle_a8b7885b66c0f4f46a50ec71a8570f8b3}} 
+\mbox{\hyperlink{classVehicle_a8b7885b66c0f4f46a50ec71a8570f8b3}{Vehicle}} ()=default
+\begin{DoxyCompactList}\small\item\em default constructor \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classVehicle_a6677f1cd7b4cc8a3c5011bef2fc0107e}{Vehicle}} (\mbox{\hyperlink{classVehicle}{Vehicle}} \&v)=default
 \item 
-\mbox{\Hypertarget{classVehicle_a78baac48156c5c95c6215be9cebddbd5}\label{classVehicle_a78baac48156c5c95c6215be9cebddbd5}} 
-static std\+::vector$<$ std\+::byte $>$ {\bfseries get\+Unsecure\+Pdu\+COERFor\+Payload} (const std\+::vector$<$ std\+::byte $>$ \&payload)
-\end{DoxyCompactItemize}
+\mbox{\hyperlink{classVehicle_a61ab140c755b8e0e824d54117cf4546f}{$\sim$\+Vehicle}} ()
+\item 
+\mbox{\hyperlink{classVehicle_a189b0741d3d673b51495eac1cd4eade3}{Vehicle}} (double latitude, double longitude, double elevation, double speed, double heading, std\+::string \&key\+Filename)
+\begin{DoxyCompactList}\small\item\em Create new vehicle with provided location and motion information. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classVehicle_a7b0c443d886b2b5c273ec69a55940ca1}{Vehicle}} (double latitude, double longitude, double elevation, std\+::string \&key\+Filename)
+\begin{DoxyCompactList}\small\item\em Create new vehicle with location data but no motion information (for stopped/parked vehicles) \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classVehicle_a6677f1cd7b4cc8a3c5011bef2fc0107e}\label{classVehicle_a6677f1cd7b4cc8a3c5011bef2fc0107e}} 
+\index{Vehicle@{Vehicle}!Vehicle@{Vehicle}}
+\index{Vehicle@{Vehicle}!Vehicle@{Vehicle}}
+\doxysubsubsection{\texorpdfstring{Vehicle()}{Vehicle()}\hspace{0.1cm}{\footnotesize\ttfamily [1/3]}}
+{\footnotesize\ttfamily Vehicle\+::\+Vehicle (\begin{DoxyParamCaption}\item[{\mbox{\hyperlink{classVehicle}{Vehicle}} \&}]{v }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [default]}}
+
+Copy constructor \mbox{\Hypertarget{classVehicle_a61ab140c755b8e0e824d54117cf4546f}\label{classVehicle_a61ab140c755b8e0e824d54117cf4546f}} 
+\index{Vehicle@{Vehicle}!````~Vehicle@{$\sim$Vehicle}}
+\index{````~Vehicle@{$\sim$Vehicle}!Vehicle@{Vehicle}}
+\doxysubsubsection{\texorpdfstring{$\sim$Vehicle()}{~Vehicle()}}
+{\footnotesize\ttfamily Vehicle\+::$\sim$\+Vehicle (\begin{DoxyParamCaption}{ }\end{DoxyParamCaption})}
+
+Destructor \mbox{\Hypertarget{classVehicle_a189b0741d3d673b51495eac1cd4eade3}\label{classVehicle_a189b0741d3d673b51495eac1cd4eade3}} 
+\index{Vehicle@{Vehicle}!Vehicle@{Vehicle}}
+\index{Vehicle@{Vehicle}!Vehicle@{Vehicle}}
+\doxysubsubsection{\texorpdfstring{Vehicle()}{Vehicle()}\hspace{0.1cm}{\footnotesize\ttfamily [2/3]}}
+{\footnotesize\ttfamily Vehicle\+::\+Vehicle (\begin{DoxyParamCaption}\item[{double}]{latitude,  }\item[{double}]{longitude,  }\item[{double}]{elevation,  }\item[{double}]{speed,  }\item[{double}]{heading,  }\item[{std\+::string \&}]{key\+Filename }\end{DoxyParamCaption})}
+
+
+
+Create new vehicle with provided location and motion information. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em latitude} & the vehicle latitude \\
+\hline
+{\em longitude} & the vehicle longitude \\
+\hline
+{\em elevation} & the vehicle elevation \\
+\hline
+{\em speed} & the vehicle speed \\
+\hline
+{\em heading} & the vehicle heading \\
+\hline
+\end{DoxyParams}
+\mbox{\Hypertarget{classVehicle_a7b0c443d886b2b5c273ec69a55940ca1}\label{classVehicle_a7b0c443d886b2b5c273ec69a55940ca1}} 
+\index{Vehicle@{Vehicle}!Vehicle@{Vehicle}}
+\index{Vehicle@{Vehicle}!Vehicle@{Vehicle}}
+\doxysubsubsection{\texorpdfstring{Vehicle()}{Vehicle()}\hspace{0.1cm}{\footnotesize\ttfamily [3/3]}}
+{\footnotesize\ttfamily Vehicle\+::\+Vehicle (\begin{DoxyParamCaption}\item[{double}]{latitude,  }\item[{double}]{longitude,  }\item[{double}]{elevation,  }\item[{std\+::string \&}]{key\+Filename }\end{DoxyParamCaption})}
+
+
+
+Create new vehicle with location data but no motion information (for stopped/parked vehicles) 
+
+
+\begin{DoxyParams}{Parameters}
+{\em latitude} & the vehicle latitude \\
+\hline
+{\em longitude} & the vehicle longitude \\
+\hline
+{\em elevation} & the vehicle elevation \\
+\hline
+\end{DoxyParams}
 
 
 The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
 \item 
-v2verifier-\/app/include/Vehicle.\+hpp\item 
-v2verifier-\/app/src/Vehicle.\+cpp\end{DoxyCompactItemize}
+v2verifier-\/app/include/\mbox{\hyperlink{Vehicle_8hpp}{Vehicle.\+hpp}}\item 
+v2verifier-\/app/src/\mbox{\hyperlink{Vehicle_8cpp}{Vehicle.\+cpp}}\end{DoxyCompactItemize}

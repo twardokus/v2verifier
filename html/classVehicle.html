@@ -63,7 +63,6 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-methods">Public Member Functions</a> &#124;
-<a href="#pub-static-methods">Static Public Member Functions</a> &#124;
 <a href="classVehicle-members.html">List of all members</a>  </div>
   <div class="headertitle">
 <div class="title">Vehicle Class Reference</div>  </div>
@@ -72,19 +71,184 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a6677f1cd7b4cc8a3c5011bef2fc0107e"><td class="memItemLeft" align="right" valign="top"><a id="a6677f1cd7b4cc8a3c5011bef2fc0107e"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Vehicle</b> (<a class="el" href="classVehicle.html">Vehicle</a> &amp;v)=default</td></tr>
+<tr class="memitem:a8b7885b66c0f4f46a50ec71a8570f8b3"><td class="memItemLeft" align="right" valign="top"><a id="a8b7885b66c0f4f46a50ec71a8570f8b3"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVehicle.html#a8b7885b66c0f4f46a50ec71a8570f8b3">Vehicle</a> ()=default</td></tr>
+<tr class="memdesc:a8b7885b66c0f4f46a50ec71a8570f8b3"><td class="mdescLeft">&#160;</td><td class="mdescRight">default constructor <br /></td></tr>
+<tr class="separator:a8b7885b66c0f4f46a50ec71a8570f8b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6677f1cd7b4cc8a3c5011bef2fc0107e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVehicle.html#a6677f1cd7b4cc8a3c5011bef2fc0107e">Vehicle</a> (<a class="el" href="classVehicle.html">Vehicle</a> &amp;v)=default</td></tr>
 <tr class="separator:a6677f1cd7b4cc8a3c5011bef2fc0107e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-</table><table class="memberdecls">
-<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
-Static Public Member Functions</h2></td></tr>
-<tr class="memitem:a78baac48156c5c95c6215be9cebddbd5"><td class="memItemLeft" align="right" valign="top"><a id="a78baac48156c5c95c6215be9cebddbd5"></a>
-static std::vector&lt; std::byte &gt;&#160;</td><td class="memItemRight" valign="bottom"><b>getUnsecurePduCOERForPayload</b> (const std::vector&lt; std::byte &gt; &amp;payload)</td></tr>
-<tr class="separator:a78baac48156c5c95c6215be9cebddbd5"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a61ab140c755b8e0e824d54117cf4546f"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVehicle.html#a61ab140c755b8e0e824d54117cf4546f">~Vehicle</a> ()</td></tr>
+<tr class="separator:a61ab140c755b8e0e824d54117cf4546f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a189b0741d3d673b51495eac1cd4eade3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVehicle.html#a189b0741d3d673b51495eac1cd4eade3">Vehicle</a> (double latitude, double longitude, double elevation, double speed, double heading, std::string &amp;keyFilename)</td></tr>
+<tr class="memdesc:a189b0741d3d673b51495eac1cd4eade3"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create new vehicle with provided location and motion information.  <a href="classVehicle.html#a189b0741d3d673b51495eac1cd4eade3">More...</a><br /></td></tr>
+<tr class="separator:a189b0741d3d673b51495eac1cd4eade3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7b0c443d886b2b5c273ec69a55940ca1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classVehicle.html#a7b0c443d886b2b5c273ec69a55940ca1">Vehicle</a> (double latitude, double longitude, double elevation, std::string &amp;keyFilename)</td></tr>
+<tr class="memdesc:a7b0c443d886b2b5c273ec69a55940ca1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Create new vehicle with location data but no motion information (for stopped/parked vehicles)  <a href="classVehicle.html#a7b0c443d886b2b5c273ec69a55940ca1">More...</a><br /></td></tr>
+<tr class="separator:a7b0c443d886b2b5c273ec69a55940ca1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
+<a id="a6677f1cd7b4cc8a3c5011bef2fc0107e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6677f1cd7b4cc8a3c5011bef2fc0107e">&#9670;&nbsp;</a></span>Vehicle() <span class="overload">[1/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vehicle::Vehicle </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classVehicle.html">Vehicle</a> &amp;&#160;</td>
+          <td class="paramname"><em>v</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">default</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Copy constructor </p>
+
+</div>
+</div>
+<a id="a61ab140c755b8e0e824d54117cf4546f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a61ab140c755b8e0e824d54117cf4546f">&#9670;&nbsp;</a></span>~Vehicle()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vehicle::~Vehicle </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Destructor </p>
+
+</div>
+</div>
+<a id="a189b0741d3d673b51495eac1cd4eade3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a189b0741d3d673b51495eac1cd4eade3">&#9670;&nbsp;</a></span>Vehicle() <span class="overload">[2/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vehicle::Vehicle </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>latitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>longitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>elevation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>speed</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>heading</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>keyFilename</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create new vehicle with provided location and motion information. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">latitude</td><td>the vehicle latitude </td></tr>
+    <tr><td class="paramname">longitude</td><td>the vehicle longitude </td></tr>
+    <tr><td class="paramname">elevation</td><td>the vehicle elevation </td></tr>
+    <tr><td class="paramname">speed</td><td>the vehicle speed </td></tr>
+    <tr><td class="paramname">heading</td><td>the vehicle heading </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a7b0c443d886b2b5c273ec69a55940ca1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7b0c443d886b2b5c273ec69a55940ca1">&#9670;&nbsp;</a></span>Vehicle() <span class="overload">[3/3]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Vehicle::Vehicle </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>latitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>longitude</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>elevation</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">std::string &amp;&#160;</td>
+          <td class="paramname"><em>keyFilename</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Create new vehicle with location data but no motion information (for stopped/parked vehicles) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">latitude</td><td>the vehicle latitude </td></tr>
+    <tr><td class="paramname">longitude</td><td>the vehicle longitude </td></tr>
+    <tr><td class="paramname">elevation</td><td>the vehicle elevation </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>v2verifier-app/include/<a class="el" href="Vehicle_8hpp_source.html">Vehicle.hpp</a></li>
-<li>v2verifier-app/src/Vehicle.cpp</li>
+<li>v2verifier-app/src/<a class="el" href="Vehicle_8cpp.html">Vehicle.cpp</a></li>
 </ul>
 </div><!-- contents -->
 <!-- start footer part -->

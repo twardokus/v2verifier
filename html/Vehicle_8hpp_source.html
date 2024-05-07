@@ -69,32 +69,90 @@ $(function() {
 <div class="title">Vehicle.hpp</div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00002"></a><span class="lineno">    2</span>&#160;<span class="comment">// Created by Geoff Twardokus on 3/12/24.</span></div>
-<div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="comment">//</span></div>
-<div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160; </div>
-<div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160;<span class="preprocessor">#ifndef V2VERIFIER_VEHICLE_HPP</span></div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#define V2VERIFIER_VEHICLE_HPP</span></div>
-<div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160; </div>
-<div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#include &lt;cstddef&gt;</span></div>
-<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
-<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160; </div>
-<div class="line"><a name="l00011"></a><span class="lineno"><a class="line" href="classVehicle.html">   11</a></span>&#160;<span class="keyword">class </span><a class="code" href="classVehicle.html">Vehicle</a> {</div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160; </div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;    <a class="code" href="classVehicle.html">Vehicle</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;    <a class="code" href="classVehicle.html">Vehicle</a>(<a class="code" href="classVehicle.html">Vehicle</a> &amp;v) = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;    ~<a class="code" href="classVehicle.html">Vehicle</a>() = <span class="keywordflow">default</span>;</div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;    [[nodiscard]] <span class="keyword">static</span> std::vector&lt;std::byte&gt; getUnsecurePduCOERForPayload(<span class="keyword">const</span> std::vector&lt;std::byte&gt; &amp;payload);</div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">private</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;};</div>
+<a href="Vehicle_8hpp.html">Go to the documentation of this file.</a><div class="fragment"><div class="line"><a name="l00001"></a><span class="lineno">    1</span>&#160; </div>
+<div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#ifndef V2VERIFIER_VEHICLE_HPP</span></div>
+<div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#define V2VERIFIER_VEHICLE_HPP</span></div>
+<div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;cstddef&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160; </div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &quot;../include/V2VSecurity.hpp&quot;</span></div>
+<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160; </div>
+<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="structVehicleLocationData.html">   18</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structVehicleLocationData.html">VehicleLocationData</a> {</div>
+<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;    <span class="keywordtype">double</span> latitude;</div>
+<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;    <span class="keywordtype">double</span> longitude;</div>
+<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160;    <span class="keywordtype">double</span> elevation;</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="Vehicle_8hpp.html#adf3ef6b43e8fb357b6e1feb1900068ed">   22</a></span>&#160;} <a class="code" href="Vehicle_8hpp.html#adf3ef6b43e8fb357b6e1feb1900068ed">VehicleLocationData</a>;</div>
 <div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno">   24</span>&#160; </div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//V2VERIFIER_VEHICLE_HPP</span></div>
-<div class="ttc" id="aclassVehicle_html"><div class="ttname"><a href="classVehicle.html">Vehicle</a></div><div class="ttdef"><b>Definition:</b> Vehicle.hpp:11</div></div>
+<div class="line"><a name="l00025"></a><span class="lineno"><a class="line" href="structVehicleMotionData.html">   25</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="structVehicleMotionData.html">VehicleMotionData</a> {</div>
+<div class="line"><a name="l00026"></a><span class="lineno">   26</span>&#160;    <span class="keywordtype">double</span> speed;</div>
+<div class="line"><a name="l00027"></a><span class="lineno">   27</span>&#160;    <span class="keywordtype">double</span> heading;</div>
+<div class="line"><a name="l00028"></a><span class="lineno"><a class="line" href="Vehicle_8hpp.html#ade7d382a55434dc4903d678faa709bd4">   28</a></span>&#160;} <a class="code" href="Vehicle_8hpp.html#ade7d382a55434dc4903d678faa709bd4">VehicleMotionData</a>;</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno"><a class="line" href="classVehicle.html">   31</a></span>&#160;<span class="keyword">class </span><a class="code" href="classVehicle.html">Vehicle</a> {</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keyword">public</span>:</div>
+<div class="line"><a name="l00035"></a><span class="lineno"><a class="line" href="classVehicle.html#a8b7885b66c0f4f46a50ec71a8570f8b3">   35</a></span>&#160;    <a class="code" href="classVehicle.html#a8b7885b66c0f4f46a50ec71a8570f8b3">Vehicle</a>() = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno"><a class="line" href="classVehicle.html#a6677f1cd7b4cc8a3c5011bef2fc0107e">   37</a></span>&#160;    <a class="code" href="classVehicle.html#a6677f1cd7b4cc8a3c5011bef2fc0107e">Vehicle</a>(<a class="code" href="classVehicle.html">Vehicle</a> &amp;v) = <span class="keywordflow">default</span>;</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;    <a class="code" href="classVehicle.html#a61ab140c755b8e0e824d54117cf4546f">~Vehicle</a>();</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160; </div>
+<div class="line"><a name="l00049"></a><span class="lineno">   49</span>&#160;    <a class="code" href="classVehicle.html#a8b7885b66c0f4f46a50ec71a8570f8b3">Vehicle</a>(<span class="keywordtype">double</span> latitude, <span class="keywordtype">double</span> longitude, <span class="keywordtype">double</span> elevation, <span class="keywordtype">double</span> speed, <span class="keywordtype">double</span> heading, std::string &amp;keyFilename);</div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;    <a class="code" href="classVehicle.html#a8b7885b66c0f4f46a50ec71a8570f8b3">Vehicle</a>(<span class="keywordtype">double</span> latitude, <span class="keywordtype">double</span> longitude, <span class="keywordtype">double</span> elevation, std::string &amp;keyFilename);</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    <a class="code" href="structVehicleLocationData.html">VehicleLocationData</a> locationData;</div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;    <a class="code" href="structVehicleMotionData.html">VehicleMotionData</a> motionData;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;    <a class="code" href="classV2VSecurity.html">V2VSecurity</a>* securityManager = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;    std::string keyFilepath = <span class="stringliteral">&quot;../../test.pem&quot;</span>; <span class="comment">// TODO: should be passed or loaded from config file</span></div>
+<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> initialize(std::string &amp;keyFilename,</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160;                               <span class="keywordtype">double</span> latitude,</div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;                               <span class="keywordtype">double</span> longitude,</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;                               <span class="keywordtype">double</span> elevation,</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;                               <span class="keywordtype">double</span> speed = 0,</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;                               <span class="keywordtype">double</span> heading = 0);</div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
+<div class="line"><a name="l00084"></a><span class="lineno">   84</span>&#160;    <span class="keywordtype">int</span> initializePositionAndMotion(<span class="keywordtype">double</span> latitude,</div>
+<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;                                    <span class="keywordtype">double</span> longitude,</div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;                                    <span class="keywordtype">double</span> elevation,</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;                                    <span class="keywordtype">double</span> speed,</div>
+<div class="line"><a name="l00088"></a><span class="lineno">   88</span>&#160;                                    <span class="keywordtype">double</span> heading);</div>
+<div class="line"><a name="l00089"></a><span class="lineno">   89</span>&#160; </div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;    <span class="keywordtype">int</span> updateGPSPosition(<span class="keywordtype">double</span> latitude, <span class="keywordtype">double</span> longitude, <span class="keywordtype">double</span> elevation);</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;    <span class="keywordtype">int</span> updateLatitude(<span class="keywordtype">double</span> latitude);</div>
+<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
+<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;    <span class="keywordtype">int</span> updateLongitude(<span class="keywordtype">double</span> longitude);</div>
+<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160; </div>
+<div class="line"><a name="l00118"></a><span class="lineno">  118</span>&#160;    <span class="keywordtype">int</span> updateElevation(<span class="keywordtype">double</span> elevation);</div>
+<div class="line"><a name="l00119"></a><span class="lineno">  119</span>&#160; </div>
+<div class="line"><a name="l00125"></a><span class="lineno">  125</span>&#160;    <span class="keywordtype">int</span> updateSpeed(<span class="keywordtype">double</span> speed);</div>
+<div class="line"><a name="l00126"></a><span class="lineno">  126</span>&#160; </div>
+<div class="line"><a name="l00132"></a><span class="lineno">  132</span>&#160;    <span class="keywordtype">int</span> updateHeading(<span class="keywordtype">double</span> heading);</div>
+<div class="line"><a name="l00133"></a><span class="lineno">  133</span>&#160; </div>
+<div class="line"><a name="l00140"></a><span class="lineno">  140</span>&#160;    <span class="keyword">static</span> std::string formatErrorForInvalidValue(std::string &amp;field, <span class="keywordtype">double</span> invalidValue);</div>
+<div class="line"><a name="l00141"></a><span class="lineno">  141</span>&#160; </div>
+<div class="line"><a name="l00148"></a><span class="lineno">  148</span>&#160;    <span class="keyword">static</span> std::string formatErrorForInvalidValue(std::string &amp;field, <span class="keywordtype">int</span> invalidValue);</div>
+<div class="line"><a name="l00149"></a><span class="lineno">  149</span>&#160; </div>
+<div class="line"><a name="l00150"></a><span class="lineno">  150</span>&#160; </div>
+<div class="line"><a name="l00151"></a><span class="lineno">  151</span>&#160; </div>
+<div class="line"><a name="l00152"></a><span class="lineno">  152</span>&#160;};</div>
+<div class="line"><a name="l00153"></a><span class="lineno">  153</span>&#160; </div>
+<div class="line"><a name="l00154"></a><span class="lineno">  154</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//V2VERIFIER_VEHICLE_HPP</span></div>
+<div class="ttc" id="aVehicle_8hpp_html_ade7d382a55434dc4903d678faa709bd4"><div class="ttname"><a href="Vehicle_8hpp.html#ade7d382a55434dc4903d678faa709bd4">VehicleMotionData</a></div><div class="ttdeci">struct VehicleMotionData VehicleMotionData</div><div class="ttdoc">Representation of vehicle motion data to be kept updated and retrieved as needed.</div></div>
+<div class="ttc" id="aVehicle_8hpp_html_adf3ef6b43e8fb357b6e1feb1900068ed"><div class="ttname"><a href="Vehicle_8hpp.html#adf3ef6b43e8fb357b6e1feb1900068ed">VehicleLocationData</a></div><div class="ttdeci">struct VehicleLocationData VehicleLocationData</div><div class="ttdoc">Representation of vehicle position/location data to be kept updated and retrieved as needed.</div></div>
+<div class="ttc" id="aclassV2VSecurity_html"><div class="ttname"><a href="classV2VSecurity.html">V2VSecurity</a></div><div class="ttdef"><b>Definition:</b> V2VSecurity.hpp:18</div></div>
+<div class="ttc" id="aclassVehicle_html"><div class="ttname"><a href="classVehicle.html">Vehicle</a></div><div class="ttdef"><b>Definition:</b> Vehicle.hpp:31</div></div>
+<div class="ttc" id="aclassVehicle_html_a61ab140c755b8e0e824d54117cf4546f"><div class="ttname"><a href="classVehicle.html#a61ab140c755b8e0e824d54117cf4546f">Vehicle::~Vehicle</a></div><div class="ttdeci">~Vehicle()</div><div class="ttdef"><b>Definition:</b> Vehicle.cpp:24</div></div>
+<div class="ttc" id="aclassVehicle_html_a6677f1cd7b4cc8a3c5011bef2fc0107e"><div class="ttname"><a href="classVehicle.html#a6677f1cd7b4cc8a3c5011bef2fc0107e">Vehicle::Vehicle</a></div><div class="ttdeci">Vehicle(Vehicle &amp;v)=default</div></div>
+<div class="ttc" id="aclassVehicle_html_a8b7885b66c0f4f46a50ec71a8570f8b3"><div class="ttname"><a href="classVehicle.html#a8b7885b66c0f4f46a50ec71a8570f8b3">Vehicle::Vehicle</a></div><div class="ttdeci">Vehicle()=default</div><div class="ttdoc">default constructor</div></div>
+<div class="ttc" id="astructVehicleLocationData_html"><div class="ttname"><a href="structVehicleLocationData.html">VehicleLocationData</a></div><div class="ttdoc">Representation of vehicle position/location data to be kept updated and retrieved as needed.</div><div class="ttdef"><b>Definition:</b> Vehicle.hpp:18</div></div>
+<div class="ttc" id="astructVehicleMotionData_html"><div class="ttname"><a href="structVehicleMotionData.html">VehicleMotionData</a></div><div class="ttdoc">Representation of vehicle motion data to be kept updated and retrieved as needed.</div><div class="ttdef"><b>Definition:</b> Vehicle.hpp:25</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>

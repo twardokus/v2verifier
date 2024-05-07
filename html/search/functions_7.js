@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unsecureddata_146',['UnsecuredData',['../classUnsecuredData.html#a6c2eb12b403518ee9f3cbb1ba33a65d1',1,'UnsecuredData::UnsecuredData()=default'],['../classUnsecuredData.html#a258a4ff21ff92a1f73044c534f7ceea5',1,'UnsecuredData::UnsecuredData(std::vector&lt; std::byte &gt; &amp;coerBytes)']]]
+  ['tobesigneddata_186',['ToBeSignedData',['../classToBeSignedData.html#aaa5cc768fef5274288105fe690b78bd0',1,'ToBeSignedData::ToBeSignedData()=default'],['../classToBeSignedData.html#adb0153f892a5907b032f653a2f9b3dbe',1,'ToBeSignedData::ToBeSignedData(std::vector&lt; std::byte &gt; &amp;coerBytes)']]]
 ];

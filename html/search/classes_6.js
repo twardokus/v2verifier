@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['unsecureddata_96',['UnsecuredData',['../classUnsecuredData.html',1,'']]]
+  ['log_120',['Log',['../classLogger_1_1Log.html',1,'Logger']]]
 ];

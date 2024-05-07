@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['ieee1609dot2content_89',['IEEE1609Dot2Content',['../classIEEE1609Dot2Content.html',1,'']]],
-  ['ieee1609dot2data_90',['IEEE1609Dot2Data',['../classIEEE1609Dot2Data.html',1,'']]]
+  ['headerinfo_116',['HeaderInfo',['../classHeaderInfo.html',1,'HeaderInfo'],['../structIEEE1609Dot2_1_1HeaderInfo.html',1,'IEEE1609Dot2::HeaderInfo']]]
 ];

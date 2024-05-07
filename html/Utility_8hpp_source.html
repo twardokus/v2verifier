@@ -115,9 +115,16 @@ $(function() {
 <div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;        <span class="keywordflow">return</span> randomBytes;</div>
 <div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    }</div>
 <div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;}</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//V2VERIFIER_UTILITY_HPP</span></div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keyword">static</span> uint64_t getCurrentTimeAsUint64() {</div>
+<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160;        <span class="keyword">auto</span> now = std::chrono::time_point_cast&lt;std::chrono::milliseconds&gt;(std::chrono::system_clock::now());</div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        uint64_t generationTime = now.time_since_epoch().count();</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160;        <span class="keywordflow">return</span> generationTime;</div>
+<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;    }</div>
+<div class="line"><a name="l00076"></a><span class="lineno">   76</span>&#160; </div>
+<div class="line"><a name="l00077"></a><span class="lineno">   77</span>&#160;}</div>
+<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//V2VERIFIER_UTILITY_HPP</span></div>
 <div class="ttc" id="anamespaceUtility_html"><div class="ttname"><a href="namespaceUtility.html">Utility</a></div><div class="ttdoc">Utility functions to be reused throughout the project.</div><div class="ttdef"><b>Definition:</b> Utility.hpp:17</div></div>
 <div class="ttc" id="anamespaceUtility_html_a141e49b34b1568b692201a784ad14f36"><div class="ttname"><a href="namespaceUtility.html#a141e49b34b1568b692201a784ad14f36">Utility::vectorFromUint64</a></div><div class="ttdeci">static std::vector&lt; std::byte &gt; vectorFromUint64(const uint64_t &amp;val)</div><div class="ttdoc">Get the COER encoding for a given uint64_t.</div><div class="ttdef"><b>Definition:</b> Utility.hpp:24</div></div>
 <div class="ttc" id="anamespaceUtility_html_a179f5d47b4d94688a5304194c68a1df5"><div class="ttname"><a href="namespaceUtility.html#a179f5d47b4d94688a5304194c68a1df5">Utility::vectorFromUint32</a></div><div class="ttdeci">static std::vector&lt; std::byte &gt; vectorFromUint32(const uint32_t &amp;val)</div><div class="ttdoc">Get the COER encoding for a given uint32_t.</div><div class="ttdef"><b>Definition:</b> Utility.hpp:39</div></div>

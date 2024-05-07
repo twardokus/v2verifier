@@ -1,0 +1,96 @@
+\hypertarget{classV2VSecurity}{}\doxysection{V2\+VSecurity Class Reference}
+\label{classV2VSecurity}\index{V2VSecurity@{V2VSecurity}}
+\doxysubsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classV2VSecurity_aadfc94daf8014bd29b0cf3d3f5068522}\label{classV2VSecurity_aadfc94daf8014bd29b0cf3d3f5068522}} 
+\mbox{\hyperlink{classV2VSecurity_aadfc94daf8014bd29b0cf3d3f5068522}{V2\+VSecurity}} ()=delete
+\begin{DoxyCompactList}\small\item\em Explicitly deleted default constructor. We never want a security manager module that does not have a key loaded at initialization. \end{DoxyCompactList}\item 
+\mbox{\hyperlink{classV2VSecurity_a3db3a776183f5471c5621f1bee066ce9}{V2\+VSecurity}} (std\+::string \&pem\+Filename)
+\begin{DoxyCompactList}\small\item\em Create a new \mbox{\hyperlink{classV2VSecurity}{V2\+VSecurity}} module from a provided PEM key file. \end{DoxyCompactList}\item 
+\mbox{\Hypertarget{classV2VSecurity_a2959af625128cd12419a3c268ecfffb6}\label{classV2VSecurity_a2959af625128cd12419a3c268ecfffb6}} 
+\mbox{\hyperlink{classV2VSecurity_a2959af625128cd12419a3c268ecfffb6}{$\sim$\+V2\+VSecurity}} ()
+\begin{DoxyCompactList}\small\item\em Destructor. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classV2VSecurity_a474d6ee504471f8454f1bc270dfa6fa0}{sign\+Message}} (char $\ast$msg, unsigned char $\ast$\&sig, size\+\_\+t \&sig\+\_\+len)
+\begin{DoxyCompactList}\small\item\em Sign arbitrary data with ECDSA P.\+256. Allocates new memory on the heap to store the {\ttfamily sig} value. \end{DoxyCompactList}\item 
+bool \mbox{\hyperlink{classV2VSecurity_a96055736504fc720b7ff960009e2e730}{verify\+Message}} (char $\ast$msg, evp\+\_\+pkey\+\_\+st $\ast$public\+Key, const unsigned char $\ast$signature, size\+\_\+t sig\+\_\+len)
+\begin{DoxyCompactList}\small\item\em Verify ECDSA P.\+256 signature. \end{DoxyCompactList}\end{DoxyCompactItemize}
+\doxysubsection*{Public Attributes}
+\begin{DoxyCompactItemize}
+\item 
+\mbox{\Hypertarget{classV2VSecurity_a3ca70fc20b337cd66804e7428623be62}\label{classV2VSecurity_a3ca70fc20b337cd66804e7428623be62}} 
+EVP\+\_\+\+PKEY $\ast$ {\bfseries pkey} = nullptr
+\end{DoxyCompactItemize}
+
+
+\doxysubsection{Constructor \& Destructor Documentation}
+\mbox{\Hypertarget{classV2VSecurity_a3db3a776183f5471c5621f1bee066ce9}\label{classV2VSecurity_a3db3a776183f5471c5621f1bee066ce9}} 
+\index{V2VSecurity@{V2VSecurity}!V2VSecurity@{V2VSecurity}}
+\index{V2VSecurity@{V2VSecurity}!V2VSecurity@{V2VSecurity}}
+\doxysubsubsection{\texorpdfstring{V2VSecurity()}{V2VSecurity()}}
+{\footnotesize\ttfamily V2\+VSecurity\+::\+V2\+VSecurity (\begin{DoxyParamCaption}\item[{std\+::string \&}]{pem\+Filename }\end{DoxyParamCaption})\hspace{0.3cm}{\ttfamily [explicit]}}
+
+
+
+Create a new \mbox{\hyperlink{classV2VSecurity}{V2\+VSecurity}} module from a provided PEM key file. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pem\+Filename} & Filepath to the public/private keypair to be used for signing and verifying messages. \\
+\hline
+\end{DoxyParams}
+
+
+\doxysubsection{Member Function Documentation}
+\mbox{\Hypertarget{classV2VSecurity_a474d6ee504471f8454f1bc270dfa6fa0}\label{classV2VSecurity_a474d6ee504471f8454f1bc270dfa6fa0}} 
+\index{V2VSecurity@{V2VSecurity}!signMessage@{signMessage}}
+\index{signMessage@{signMessage}!V2VSecurity@{V2VSecurity}}
+\doxysubsubsection{\texorpdfstring{signMessage()}{signMessage()}}
+{\footnotesize\ttfamily bool V2\+VSecurity\+::sign\+Message (\begin{DoxyParamCaption}\item[{char $\ast$}]{msg,  }\item[{unsigned char $\ast$\&}]{sig,  }\item[{size\+\_\+t \&}]{sig\+\_\+len }\end{DoxyParamCaption})}
+
+
+
+Sign arbitrary data with ECDSA P.\+256. Allocates new memory on the heap to store the {\ttfamily sig} value. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & Pointer to the raw message data to be signed. \\
+\hline
+{\em sig} & Pointer to be used to store the signature. \\
+\hline
+{\em sig\+\_\+len} & Length of the generated signature \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True if signature is successfully generated, false if errors are encountered. 
+\end{DoxyReturn}
+\mbox{\Hypertarget{classV2VSecurity_a96055736504fc720b7ff960009e2e730}\label{classV2VSecurity_a96055736504fc720b7ff960009e2e730}} 
+\index{V2VSecurity@{V2VSecurity}!verifyMessage@{verifyMessage}}
+\index{verifyMessage@{verifyMessage}!V2VSecurity@{V2VSecurity}}
+\doxysubsubsection{\texorpdfstring{verifyMessage()}{verifyMessage()}}
+{\footnotesize\ttfamily bool V2\+VSecurity\+::verify\+Message (\begin{DoxyParamCaption}\item[{char $\ast$}]{msg,  }\item[{evp\+\_\+pkey\+\_\+st $\ast$}]{public\+Key,  }\item[{const unsigned char $\ast$}]{signature,  }\item[{size\+\_\+t}]{sig\+\_\+len }\end{DoxyParamCaption})}
+
+
+
+Verify ECDSA P.\+256 signature. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em msg} & Pointer to the raw message data to be verified. \\
+\hline
+{\em public\+Key} & Pointer to the public key to be used for verification. \\
+\hline
+{\em signature} & Pointer to the ECDSA signature to be verified. \\
+\hline
+{\em sig\+\_\+len} & Length of the signature to be verified. \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+True on successful verification, false on error or verification failure. 
+\end{DoxyReturn}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+v2verifier-\/app/include/\mbox{\hyperlink{V2VSecurity_8hpp}{V2\+VSecurity.\+hpp}}\item 
+v2verifier-\/app/src/\mbox{\hyperlink{V2VSecurity_8cpp}{V2\+VSecurity.\+cpp}}\end{DoxyCompactItemize}
