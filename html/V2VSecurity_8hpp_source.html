@@ -73,44 +73,42 @@ $(function() {
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160;<span class="preprocessor">#ifndef V2VERIFIER_V2VSECURITY_HPP</span></div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#define V2VERIFIER_V2VSECURITY_HPP</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#define ECDSA_P256_DER_LENGTH_BYTES 72</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;openssl/evp.h&gt;</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;openssl/evp.h&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#include &lt;fstream&gt;</span></div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00016"></a><span class="lineno"><a class="line" href="classV2VSecurity.html">   16</a></span>&#160;<span class="keyword">class </span><a class="code" href="classV2VSecurity.html">V2VSecurity</a> {</div>
 <div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160; </div>
-<div class="line"><a name="l00018"></a><span class="lineno"><a class="line" href="classV2VSecurity.html">   18</a></span>&#160;<span class="keyword">class </span><a class="code" href="classV2VSecurity.html">V2VSecurity</a> {</div>
+<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160;<span class="keyword">public</span>:</div>
 <div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160; </div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160;<span class="keyword">public</span>:</div>
-<div class="line"><a name="l00021"></a><span class="lineno">   21</span>&#160; </div>
-<div class="line"><a name="l00024"></a><span class="lineno"><a class="line" href="classV2VSecurity.html#aadfc94daf8014bd29b0cf3d3f5068522">   24</a></span>&#160;    <a class="code" href="classV2VSecurity.html#aadfc94daf8014bd29b0cf3d3f5068522">V2VSecurity</a>() = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00025"></a><span class="lineno">   25</span>&#160; </div>
-<div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classV2VSecurity.html#aadfc94daf8014bd29b0cf3d3f5068522">V2VSecurity</a>(std::string &amp;pemFilename);</div>
-<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160; </div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;    <a class="code" href="classV2VSecurity.html#a2959af625128cd12419a3c268ecfffb6">~V2VSecurity</a>();</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classV2VSecurity.html#a474d6ee504471f8454f1bc270dfa6fa0">signMessage</a>(<span class="keywordtype">char</span>* msg, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* &amp;sig, <span class="keywordtype">size_t</span> &amp;sig_len);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classV2VSecurity.html#a96055736504fc720b7ff960009e2e730">verifyMessage</a>(<span class="keywordtype">char</span> *msg, evp_pkey_st *publicKey, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* signature, <span class="keywordtype">size_t</span> sig_len);</div>
+<div class="line"><a name="l00022"></a><span class="lineno"><a class="line" href="classV2VSecurity.html#aadfc94daf8014bd29b0cf3d3f5068522">   22</a></span>&#160;    <a class="code" href="classV2VSecurity.html#aadfc94daf8014bd29b0cf3d3f5068522">V2VSecurity</a>() = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">explicit</span> <a class="code" href="classV2VSecurity.html#aadfc94daf8014bd29b0cf3d3f5068522">V2VSecurity</a>(std::string &amp;pemFilename);</div>
+<div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
+<div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;    <a class="code" href="classV2VSecurity.html#a2959af625128cd12419a3c268ecfffb6">~V2VSecurity</a>();</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160; </div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classV2VSecurity.html#a474d6ee504471f8454f1bc270dfa6fa0">signMessage</a>(<span class="keywordtype">char</span>* msg, <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* &amp;sig, <span class="keywordtype">size_t</span> &amp;sig_len);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160; </div>
+<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;    <span class="keywordtype">bool</span> <a class="code" href="classV2VSecurity.html#a96055736504fc720b7ff960009e2e730">verifyMessage</a>(<span class="keywordtype">char</span> *msg, evp_pkey_st *publicKey, <span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>* signature, <span class="keywordtype">size_t</span> sig_len);</div>
+<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;    EVP_PKEY *pkey = <span class="keyword">nullptr</span>;</div>
 <div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
-<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;    EVP_PKEY *pkey = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00054"></a><span class="lineno">   54</span>&#160;<span class="keyword">private</span>:</div>
 <div class="line"><a name="l00055"></a><span class="lineno">   55</span>&#160; </div>
-<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;<span class="keyword">private</span>:</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160;    std::ifstream pemfile;</div>
 <div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    std::ifstream pemfile;</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;    EVP_MD_CTX *mdctx_sign = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160;    EVP_MD_CTX *mdctx_verify = <span class="keyword">nullptr</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160;    <span class="keywordtype">void</span> loadPEMFile(std::string &amp;filename);</div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;    <span class="keywordtype">void</span> setup();</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;    EVP_MD_CTX *mdctx_sign = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160;    EVP_MD_CTX *mdctx_verify = <span class="keyword">nullptr</span>;</div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160; </div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160;    <span class="keywordtype">void</span> loadPEMFile(std::string &amp;filename);</div>
+<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160; </div>
+<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;    <span class="keywordtype">void</span> setup();</div>
+<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
+<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;};</div>
 <div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;};</div>
-<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
-<div class="line"><a name="l00074"></a><span class="lineno">   74</span>&#160; </div>
-<div class="line"><a name="l00075"></a><span class="lineno">   75</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//V2VERIFIER_V2VSECURITY_HPP</span></div>
-<div class="ttc" id="aclassV2VSecurity_html"><div class="ttname"><a href="classV2VSecurity.html">V2VSecurity</a></div><div class="ttdef"><b>Definition:</b> V2VSecurity.hpp:18</div></div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160; </div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160;<span class="preprocessor">#endif </span><span class="comment">//V2VERIFIER_V2VSECURITY_HPP</span></div>
+<div class="ttc" id="aclassV2VSecurity_html"><div class="ttname"><a href="classV2VSecurity.html">V2VSecurity</a></div><div class="ttdef"><b>Definition:</b> V2VSecurity.hpp:16</div></div>
 <div class="ttc" id="aclassV2VSecurity_html_a2959af625128cd12419a3c268ecfffb6"><div class="ttname"><a href="classV2VSecurity.html#a2959af625128cd12419a3c268ecfffb6">V2VSecurity::~V2VSecurity</a></div><div class="ttdeci">~V2VSecurity()</div><div class="ttdoc">Destructor.</div><div class="ttdef"><b>Definition:</b> V2VSecurity.cpp:21</div></div>
 <div class="ttc" id="aclassV2VSecurity_html_a474d6ee504471f8454f1bc270dfa6fa0"><div class="ttname"><a href="classV2VSecurity.html#a474d6ee504471f8454f1bc270dfa6fa0">V2VSecurity::signMessage</a></div><div class="ttdeci">bool signMessage(char *msg, unsigned char *&amp;sig, size_t &amp;sig_len)</div><div class="ttdoc">Sign arbitrary data with ECDSA P.256. Allocates new memory on the heap to store the sig value.</div><div class="ttdef"><b>Definition:</b> V2VSecurity.cpp:82</div></div>
 <div class="ttc" id="aclassV2VSecurity_html_a96055736504fc720b7ff960009e2e730"><div class="ttname"><a href="classV2VSecurity.html#a96055736504fc720b7ff960009e2e730">V2VSecurity::verifyMessage</a></div><div class="ttdeci">bool verifyMessage(char *msg, evp_pkey_st *publicKey, const unsigned char *signature, size_t sig_len)</div><div class="ttdoc">Verify ECDSA P.256 signature.</div><div class="ttdef"><b>Definition:</b> V2VSecurity.cpp:112</div></div>

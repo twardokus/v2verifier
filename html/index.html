@@ -5,7 +5,7 @@
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.9.1"/>
 <meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>v2verifier: V2Verifier</title>
+<title>v2verifier: osm-gui</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -62,98 +62,23 @@ $(function() {
 
 <div class="PageDoc"><div class="header">
   <div class="headertitle">
-<div class="title">V2Verifier </div>  </div>
+<div class="title">osm-gui </div>  </div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="md_README"></a> <img src="https://app.travis-ci.com/twardokus/v2verifier.svg?token=WhbfH7DgNpqNXXem6qaq&amp;branch=master" alt="Status" style="pointer-events: none;" class="inline"/></p>
-<p><em>Please note that V2Verifier is currently undergoing a major redesign. Cloning the</em> <code>master</code> <em>branch will likely not work - the instructions below are accurate for the latest release, which can be downloaded from the sidebar.</em></p>
-<p>****Important** - this version of V2Verifier is a <em>preliminary</em> release of V2Verifier 3.0. As we await bug fixes in third-party open-source projects that V2Verifier relies on for C-V2X sidelink communication, <b>this version of V2Verifier temporarily does not support C-V2X</b>. We thank you for your patience as we work towards resolving this issue.**</p>
-<p>V2Verifer is an open-source testbed for experimental evaluation of security in vehicle-to-vehicle (V2V) communication. V2Verifier supports a broad range of experimentation with V2V technologies and security protocols using a combination of software-defined radios (e.g., USRPs) and commercial V2V equipment. Among other features, V2Verifier includes implementations of:</p><ul>
-<li>Security features from the IEEE 1609.2 standard for V2V security, including message signing and verification and V2V certificates</li>
-<li>WAVE Short Message Protocol (IEEE 1609.3)</li>
-<li>Dedicated Short Range Communication (DSRC) - adapted from the <a href="http://dx.doi.org/10.1109/TMC.2017.2751474">WiME Project's</a> IEEE 802.11p transceiver</li>
-<li><strike>Cellular Vehicle-to-Everything (C-V2X) - based on the <a href="https://github.com/srsRAN/srsRAN">srsRAN</a> project (formerly srsLTE)</strike> (temporarily not supported - see above)</li>
-</ul>
-<p>Check out our <a href="https://www.youtube.com/channel/UC5lY5D4KYgfKu3FXtfjHP7A">YouTube page</a> for some of our past projects and publications that made use of V2Verifier!</p>
-<p>V2Verifier is developed and maintained in the <a href="https://www.rit.edu/wisplab/">Wireless and IoT Security and Privacy (WISP)</a> lab at Rochester Institute of Technology's <a href="https://rit.edu/cybersecurity">Global Cybersecurity Institute</a>.</p>
-<h2><a class="anchor" id="autotoc_md1"></a>
-Citing V2Verifier</h2>
-<p>If you use V2Verifier or any of its components in your work, please cite <a href="https://github.com/twardokus/v2verifier/wiki/Publications">our paper</a> from IEEE ICC 2021. Additional publications involving V2Verifier are listed on the same page.</p>
-<h1><a class="anchor" id="autotoc_md2"></a>
-Equipment Requirements</h1>
-<p>V2Verifier is designed for over-the-air experiments with software-defined radios (SDRs). For C-V2X, you <em><b>must</b></em> use SDRs with GPSDO modules installed. We recommend the USRP B210 and TCXO GPSDO module from Ettus Research (we have not tested and do not officially support the use of other SDRs for C-V2X). For DSRC, you may use USRP B210s (GPSDO not required for DSRC) or, preferably, USRP N210s (also available from Ettus Research). If you are using N210s, a 6 GHz daughterboard (e.g., UBX 40) is required for each N210 device.</p>
-<p>If you do not have access to SDRs, V2Verifier can also be run as a pure simulation environment that only requires a modern PC to run. With or without SDRs, we strongly discourage the use of virtual machines as this may incur testbed-breaking latency. Ubuntu 20.04 is currently the only supported operating system. <b>Windows operating systems are not supported.</b></p>
-<h1><a class="anchor" id="autotoc_md3"></a>
-Installing V2Verifier</h1>
-<p>Installation consists of two parts.</p>
-<h2><a class="anchor" id="autotoc_md4"></a>
-Part 1 - V2V Protocols</h2>
-<p>Follow the instructions for DSRC, C-V2X, or both to install the software needed for your PC to communicate with your software-defined radios and send V2V messages over the air.</p>
-<h3><a class="anchor" id="autotoc_md5"></a>
-C-V2X</h3>
-<p>V2Verifier's implementation of C-V2X sidelink communication is based on the open-source srsRAN project.</p>
-<p><em>C-V2X support has been temporarily removed as we await bug fixes in third-party code that V2Verifier relies on. Thank you for your patience as we work to restore this functionality as soon as possible.</em></p>
-<h3><a class="anchor" id="autotoc_md6"></a>
-DSRC</h3>
-<p>V2Verifier's implementation of DSRC is based on the open-source GNURadio and WiME Project implementation of IEEE 802.11p.</p>
-<p><a href="https://github.com/gnuradio/gnuradio">GNURadio</a> version 3.10 is required to run DSRC experiments in V2Verifier. Additionally, GNURadio modules from the <a href="https://www.wime-project.net/">WiME project</a> are required. Install GNURadio as well as the required WiME modules with the following commands. If you encounter any errors, please visit the GNURadio project on GitHub for their most recent installation instructions and troubleshooting guide. </p><pre class="fragment">pip install pybombs
-pybombs auto-config
-pybombs recipes add-defaults
-pybombs prefix init ~/gr-3.10 -R gnuradio-default
-</pre><p> To finish configuring the environment and ensure installation was successful, execute the following commands to run GNURadio Companion. </p><pre class="fragment">source ~/gr-3.10/setup_env.sh
-gnuradio-companion
-</pre><p> Now, install the WiME project code. You will need to install from source, as the <code>pybombs</code> installation method (e.g., <code>pybombs install gr-foo</code>) will likely fail due to Swig issues in GNURadio 3.10. </p><pre class="fragment">cd ~
-git clone https://github.com/bastibl/gr-foo.git
-cd gr-foo
-git checkout maint-3.10
-mkdir build &amp;&amp; cd build
-cmake ../
-make
-sudo make install
-sudo ldconfig
-
-cd ~
-git clone https://github.com/bastibl/gr-ieee802-11.git
-cd gr-ieee802-11
-git checkout maint-3.10
-mkdir build &amp;&amp; cd build
-cmake ../
-make
-sudo make install 
-sudo ldconfig
-</pre><p> You can confirm everything installed correctly by launching GNURadio Companion and opening the flowgraph file at <code>~/gr-ieee802-11/examples/wifi-loopback.grc</code>. If you encounter any errors, some of the above commands did not work correctly. Do not proceed until you have fixed any issues running the example flowgraph.</p>
-<h2><a class="anchor" id="autotoc_md7"></a>
-Part 2 - V2Verifier</h2>
-<p>Now that you have installed the communication software, you can install V2Verifier. Begin by installing several dependencies: </p><pre class="fragment">sudo apt install -y git cmake libuhd-dev uhd-host swig libgmp3-dev python3-pip python3-tk python3-pil 
-python3-pil.imagetk 
-sudo apt install -y libssl-dev
-</pre><p> If you have not already cloned the V2Verifier repository, do so with the commands </p><pre class="fragment">cd ~
-git clone https://github.com/twardokus/v2verifier.git
-</pre><p> Move into the V2Verifier directory and build the project using the standard CMake build process: </p><pre class="fragment">cd v2verifier
-mkdir build
-cd build
-cmake ../
-make
-</pre><p> If you have missed any dependencies, CMake will warn you at this point. Once V2Verifier is built, proceed to the next section for instructions on how to run experiments in V2Verifier.</p>
-<p>Finally, download the ZIP file for the latest stable release of V2Verifier, extract the project, and you are ready to start using V2Verifier!</p>
-<h1><a class="anchor" id="autotoc_md8"></a>
-Running V2Verifier</h1>
-<p>Before running V2Verifier, connect one USRP (with appropriate antennas) to each Ubuntu PC. Assuming you have two PCs with one USRP each, designate one USRP as the "receiver" and the other as the "transmitter." In this configuration, the receiver will show you how a single vehicle responds to V2V transmissions (e.g., using a GUI) while the transmitter can generate V2V traffic for up to ten vehicles. You can specify the number of vehicles by changing the relevant parameter in <code>config.json</code>.</p>
-<p>On each PC, begin by launching the C-V2X or DSRC code (follow the respective instructions below) to run in the background and manage your SDR transmitting or receiving. Then, on each PC, <code>cd</code> into the <code>build</code> directory. For the receiver, run the command </p><pre class="fragment">./src/v2verifier dsrc receiver [--test] [--gui]
-</pre><p> For the transmitter, run the command </p><pre class="fragment">./src/v2verifier dsrc transmitter [--test]
-</pre><p> See the command-line help (<code>./v2verifier -h</code>) for optional arguments. You should not use the <code>--test</code> option unless you are not using SDRs (this option allows you to run transmitter and receiver on a single PC with communication via network socket). Use <code>--gui</code> on the receiver if you want to use a graphical interface on the receiver (see additional instructions for GUIs below).</p>
-<h2><a class="anchor" id="autotoc_md9"></a>
-Radio layer: C-V2X</h2>
-<p><em>Note C-V2X communication requires equipment capable of both cellular communication and GPS clock synchronization (e.g., USRP B210 w/ GPSDO or <a href="https://cohdawireless.com/solutions/hardware/mk6c-evk/">Cohda Wireless MK6c</a>) as well as access to either an outdoor testing environment or synthesized GPS source.</em></p>
-<p><b>C-V2X support has been temporarily removed as we await bug fixes in third-party code that V2Verifier relies on. Thank you for your patience as we work to restore this functionality as soon as possible.</b></p>
-<h2><a class="anchor" id="autotoc_md10"></a>
-Radio layer: DSRC</h2>
-<p>On both PCs, launch GNURadio with <code>pybombs run gnuradio-companion</code>. On one PC, open the <code>wifi_tx.grc</code> file from the <code>v2verifier/grc</code> project subdirectory. On the other PC, open the <code>wifi_rx.grc</code> file from the same subdirectory. Click the green play button at the top of GNURadio to launch the flowgraphs on both PCs. You will need to configure the communication options (e.g., bandwith, frequency) to suit your needs. The default is a 10 MHz channel on 5.89 GHz.</p>
-<h2><a class="anchor" id="autotoc_md11"></a>
-Using GUIs</h2>
-<p>V2Verifier currently offers two graphical interfaces. The first is a web-based interface that interacts with Google Maps. To use this GUI, you will need to purchase a Google Maps API key through Google Cloud services and create <code>config.js</code> file in the <code>web</code> directory of V2Verifier (some familiarity with JavaScript is helpful). Please contact us for assistance if you want to use this GUI.</p>
-<p>Our second interface is based on TkGUI. To use this option, open a separate terminal window before running any <code>v2verifier</code> commands above and run <code>python3 tkgui_execute.py</code> to launch the TkGUI interface as a separate process.</p>
-<p>We encourage you to open a GitHub issue with any questions or problems using either graphical interface. </p>
+<div class="textblock"><p><a class="anchor" id="md_osm_gui_README"></a>WebGL front-end GUI for V2Verifier testbed. This interface shows real-time vehicle location, motion, and direction of travel (as shown below) rendered on a 3D map built from <a href="https://openstreetmap.org">OpenStreetMap</a> data.</p>
+<p><img src="img/sample-gui.png" alt="Screenshot showing GUI" class="inline"/></p>
+<h1><a class="anchor" id="autotoc_md1"></a>
+Installation</h1>
+<p><em>You will need a <a href="https://www.mapbox.com/">mapbox</a> key in order to render the GUI. Obtain a key (available for free) from <a href="https://www.mapbox.com/">mapbox</a>, and store it in a file called <code>key.js</code> in the <code>osm-gui/open-street-map-gui/webapp/scripts</code> directory.</em></p>
+<p>Open a terminal and <code>cd</code> into <code>osm-gui</code> directory. Create a new Python virtual environment (e.g., with <code>virtualenv</code>) and activate it.</p>
+<p>Install dependencies with </p><pre class="fragment">pip install -r requirements.txt
+</pre><h1><a class="anchor" id="autotoc_md2"></a>
+Usage</h1>
+<p>To run the GUI itself, open a separate terminal and <code>cd</code> into the <code>open-street-map-gui</code> subdirectory. Launce the GUI (it will open in Google Chrome, if installed) with </p><pre class="fragment">python gui.py
+</pre><p> In the original terminal, run the sample program that renders synthetic vehicle data on the GUI with </p><pre class="fragment">python main.py
+</pre> <h1><a class="anchor" id="autotoc_md3"></a>
+Notes</h1>
+<p>This is an in-progress and heavily under development component of the larger <a href="https://github.com/twardokus/v2verifier">V2Verifier</a> project. Currently, our GUI is built largely in Javascript, with data from OpenStreeMaps rendered using WebGL and the <a href="https://www.mapbox.com/">mapbox</a> toolkit. </p>
 </div></div><!-- PageDoc -->
 </div><!-- contents -->
 <!-- start footer part -->

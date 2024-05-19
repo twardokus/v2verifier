@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['certificate_112',['Certificate',['../structIEEE1609Dot2_1_1Certificate.html',1,'IEEE1609Dot2']]]
+  ['bsm_114',['BSM',['../classVehicle_1_1BSM.html',1,'Vehicle']]]
 ];
