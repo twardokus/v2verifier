@@ -9,8 +9,6 @@
 #ifndef V2VERIFIER_V2VSECURITY_HPP
 #define V2VERIFIER_V2VSECURITY_HPP
 
-#define ECDSA_P256_DER_LENGTH_BYTES 72
-
 #include <openssl/evp.h>
 #include <string>
 #include <fstream>
