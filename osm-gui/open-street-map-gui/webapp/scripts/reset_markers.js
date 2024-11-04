@@ -7,7 +7,9 @@
 
 function reset_markers() {
     vehicle_markers.forEach((marker) => {
-        marker.remove();
+        if(marker !== undefined) {
+            marker.remove();
+        }
     });
     vehicle_markers = [];
 }

@@ -29,8 +29,9 @@ class GUI:
 
         @param vehicle_info 
         """
+
         if self.vehicle_is_known(vehicle_info['id']):
-            self.vehicles.loc[self.vehicles['id']==vehicle_info['id']] = [pd.Series(vehicle_info)]
+            self.vehicles.loc[self.vehicles['id']==vehicle_info['id'], vehicle_info.keys()] = vehicle_info.values()
         else:
             new_record = pd.DataFrame(vehicle_info,index=[0])
             self.vehicles = pd.concat([self.vehicles, new_record]).reset_index(drop=True)
@@ -61,6 +62,7 @@ class GUI:
 
         while True:
             message, address = self.server_socket.recvfrom(1024)
+            print("Received:" + str(json.loads(message)))
             self.update_vehicle(json.loads(message))
 
 def load_route_from_csv(filename: str):

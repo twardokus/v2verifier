@@ -69,7 +69,7 @@ map.on('style.load', () => {
               map.addLayer(createCompositeLayer("3d-buildings"));
             }
           }
-    map.addLayer(createCustomLayer('3d-model'), 'waterway-label');
+    // map.addLayer(createCustomLayer('3d-model'), 'waterway-label');
 });
 
 window.tb = new Threebox(
