@@ -39,7 +39,7 @@ you need to install two components from that project.
     sudo ldconfig
 
 	cd ~
-	git clone git://github.com/bastibl/gr-ieee802-11.git
+	git clone https://github.com/bastibl/gr-ieee802-11.git
 	cd gr-ieee802-11
 	git checkout maint-3.7
 	mkdir build
