@@ -49,6 +49,8 @@ you need to install two components from that project.
 	sudo make install
 	sudo ldconfig
 		
+You will need to run `gnuradio-companion` in a terminal, then open the `wifi_phy_hier.grc` flowgraph from the `examples` directory in the `gr-ieee802-11` project. Run this flowgraph to build the dependencies needed for Wi-Fi signal processing.
+
 Next, install some Python 3 libraries.
 
 	pip3 install fastecdsa
